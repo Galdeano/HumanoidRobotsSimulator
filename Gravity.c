@@ -70,11 +70,12 @@ void Gravity(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector * t)
         CalcCoM(uLINK,com);
         if (j==Status->right_foot_ID)
         {
-            //right foot
+/*            //right foot*/
             gsl_vector_set (ftmp, 2, 9.81*TotalMass(uLINK,1));
             gsl_vector_scale(ftmp,-1*(1.0-Status->distribution_y));
-            //gsl_vector_scale(ftmp,-1*(Status->distribution_y));
-            //gsl_vector_scale(ftmp,0.5);
+/*             //gsl_vector_scale(ftmp,-1*(Status->distribution_y));
+ *             //gsl_vector_scale(ftmp,0.5);
+ */
 
             gsl_vector_add (f, ftmp);
             gsl_vector_memcpy (ttmp, Status->FootCenter_R);
@@ -82,25 +83,27 @@ void Gravity(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector * t)
             Cross(ttmp,ftmp,0);
             gsl_vector_add (t, ttmp);
 
-//            if (Status->right_scale!=0.0)
-//            {
-//                gsl_vector_memcpy (pos,Status->posCoP_R);
-//                gsl_vector_scale (pos, 1/Status->right_scale);
-//            }
-//            gsl_vector_memcpy (Visu,Status->forCoP_R);
-//            gsl_vector_add (f, Visu);
-//            Cross(pos,Visu,1);
-//            gsl_vector_add (t, Visu);
+/* //            if (Status->right_scale!=0.0)
+ * //            {
+ * //                gsl_vector_memcpy (pos,Status->posCoP_R);
+ * //                gsl_vector_scale (pos, 1/Status->right_scale);
+ * //            }
+ * //            gsl_vector_memcpy (Visu,Status->forCoP_R);
+ * //            gsl_vector_add (f, Visu);
+ * //            Cross(pos,Visu,1);
+ * //            gsl_vector_add (t, Visu);
+ */
         }
 
         if (j==Status->left_foot_ID)
         {
-            //left foot
+/*            //left foot*/
 
             gsl_vector_set (ftmp, 2, 9.81*TotalMass(uLINK,1));
             gsl_vector_scale(ftmp,-1*(Status->distribution_y));
-            //gsl_vector_scale(ftmp,-1*(1.0-Status->distribution_y));
-            //gsl_vector_scale(ftmp,0.5);
+/*             //gsl_vector_scale(ftmp,-1*(1.0-Status->distribution_y));
+ *             //gsl_vector_scale(ftmp,0.5);
+ */
 
             gsl_vector_add (f, ftmp);
             gsl_vector_memcpy (ttmp, Status->FootCenter_L);
@@ -108,34 +111,38 @@ void Gravity(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector * t)
             Cross(ttmp,ftmp,0);
             gsl_vector_add (t, ttmp);
 
-            //gsl_vector_add (f, ftmp);
-            //Cross(Status->FootCenter_L,ftmp,1);
-            //gsl_vector_add (t, ftmp);
-//            if (Status->left_scale!=0.0)
-//            {
-//                gsl_vector_memcpy (pos,Status->posCoP_L);
-//                gsl_vector_scale (pos, 1/Status->left_scale);
-//            }
-//            gsl_vector_memcpy (Visu,Status->forCoP_L);
-//            gsl_vector_add (f, Visu);
-//            Cross(pos,Visu,1);
-//            gsl_vector_add (t, Visu);
+/*             //gsl_vector_add (f, ftmp);
+ *             //Cross(Status->FootCenter_L,ftmp,1);
+ *             //gsl_vector_add (t, ftmp);
+ * //            if (Status->left_scale!=0.0)
+ * //            {
+ * //                gsl_vector_memcpy (pos,Status->posCoP_L);
+ * //                gsl_vector_scale (pos, 1/Status->left_scale);
+ * //            }
+ * //            gsl_vector_memcpy (Visu,Status->forCoP_L);
+ * //            gsl_vector_add (f, Visu);
+ * //            Cross(pos,Visu,1);
+ * //            gsl_vector_add (t, Visu);
+ */
 
         }
         gsl_vector_free(com);
     }
 
 
-//% from child link
-    //gsl_vector_set_zero(ftmp);
-    //gsl_vector_set_zero(ttmp);
+/* //% from child link
+ *     //gsl_vector_set_zero(ftmp);
+ *     //gsl_vector_set_zero(ttmp);
+ */
     Gravity(uLINK,Status,uLINK[j].child,ftmp,ttmp);
-//[f1,t1] = InverseDynamics(uLINK(j).child);
-//
+/* //[f1,t1] = InverseDynamics(uLINK(j).child);
+ * //
+ */
     gsl_vector_add (f, ftmp);
     gsl_vector_add (t, ttmp);
-//f = f + f1;
-//t = t + t1;
+/* //f = f + f1;
+ * //t = t + t1;
+ */
 
 
     if (j != 1)
@@ -145,20 +152,23 @@ void Gravity(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector * t)
         gsl_blas_ddot (uLINK[j].hw, t, &res);
         uLINK[j].ug = res + uLINK[j].ug ;
     }
-//if j ~= 1
-//    uLINK(j).u = uLINK(j).hv' * f + uLINK(j).hw' * t;  % joint driving force
-//end
+/* //if j ~= 1
+ * //    uLINK(j).u = uLINK(j).hv' * f + uLINK(j).hw' * t;  % joint driving force
+ * //end
+ */
 
 
-//% return force to mother, with sisters
-    //gsl_vector_set_zero(ftmp);
-    //gsl_vector_set_zero(ttmp);
+/* //% return force to mother, with sisters
+ *     //gsl_vector_set_zero(ftmp);
+ *     //gsl_vector_set_zero(ttmp);
+ */
     Gravity(uLINK,Status,uLINK[j].sister,ftmp,ttmp);
-//[f2,t2] = InverseDynamics(uLINK(j).sister);
+/*//[f2,t2] = InverseDynamics(uLINK(j).sister);*/
     gsl_vector_add (f, ftmp);
     gsl_vector_add (t, ttmp);
-//f = f + f2;
-//t = t + t2;
+/* //f = f + f2;
+ * //t = t + t2;
+ */
 
     gsl_vector_free(ftmp);
     gsl_vector_free(ttmp);
