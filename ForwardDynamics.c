@@ -70,8 +70,8 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
     }
 
 
-//    G
-//    externalforces
+//    Gravity
+//    ExternalForces
 
 /*         gsl_vector * f = gsl_vector_calloc (3);
  *         gsl_vector * tau = gsl_vector_calloc (3);
