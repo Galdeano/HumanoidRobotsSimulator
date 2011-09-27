@@ -13,6 +13,7 @@
 #include "DrawForceMarker.h"
 #include "Stabilizator.h"
 #include "Gravity.h"
+#include "ExternalForces.h"
 #include "ForwardDynamics.h"
 
 
@@ -53,6 +54,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
     gsl_vector * b = gsl_vector_calloc (nDoF);
     gsl_vector * tmp = gsl_vector_calloc (nDoF);
     gsl_vector * g = gsl_vector_calloc (nDoF);
+    gsl_vector * ef = gsl_vector_calloc (nDoF);
     gsl_vector * stab = gsl_vector_calloc (nDoF);
 
     //gsl_vector * qd = gsl_vector_calloc (nDoF);
@@ -73,35 +75,46 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
 //    Gravity
 //    ExternalForces
 
-/*         gsl_vector * f = gsl_vector_calloc (3);
- *         gsl_vector * tau = gsl_vector_calloc (3);
- *         Gravity(uLINK,Status,1,f,tau);
- *         gsl_vector_free(f);
- *         gsl_vector_free(tau);
- *         if (Status->desired_support!=0 || Suspendu)
- *         {
- *             for (n=0; n<nDoF-6; n++)
- *             {
- *                 gsl_vector_set (g, n+6,uLINK[n+2].ug);
- *             }
- *             gsl_vector_add (u,g);
- *         }
- *         if (Visualisation)
- *         {
- *             FILE *ug2_file=fopen("./../Simu_data/ug2.txt","a");
- *             for(n=0; n<nDoF-6; n++)
- *             {
- *                 fprintf(ug2_file,"%f ",uLINK[n+2].ug);
- *             }
- *             fprintf(ug2_file,"\n");
- *             fclose(ug2_file);
- *         }
- */
+   gsl_vector * f = gsl_vector_calloc (3);
+   gsl_vector * tau = gsl_vector_calloc (3);
 
+   Gravity(uLINK,Status,1,f,tau);
+   if (Status->desired_support!=0 || Suspendu)
+   {
+    for (n=0; n<3; n++)
+    {
+        gsl_vector_set (g, n,gsl_vector_get (f,n));
+    }
+    for (n=0; n<3; n++)
+    {
+        gsl_vector_set (g, n+3,gsl_vector_get (tau,n));
+    }
+    for (n=0; n<nDoF-6; n++)
+    {
+        gsl_vector_set (g, n+6,uLINK[n+2].ug);
+    }
+   }
 
-
-
-
+    gsl_vector_set_zero(f);
+    gsl_vector_set_zero(tau);
+   ExternalForces(uLINK,Status,1,f,tau);
+   if (Status->desired_support!=0 || Suspendu)
+   {
+    for (n=0; n<3; n++)
+    {
+        gsl_vector_set (ef, n,gsl_vector_get (f,n));
+    }
+    for (n=0; n<3; n++)
+    {
+        gsl_vector_set (ef, n+3,gsl_vector_get (tau,n));
+    }
+    for (n=0; n<nDoF-6; n++)
+    {
+        gsl_vector_set (ef, n+6,uLINK[n+2].uef);
+    }
+   }
+   gsl_vector_free(f);
+   gsl_vector_free(tau);
 
 //for n=1:nDoF
 //    A(:,n) = InvDyn(n) - b;
@@ -192,19 +205,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
         David_CalcCoM(uLINKc,com);
         //DrawMarkerf(com);
 
-//        DrawMarkerf(uLINKc[1].p);
-//        DrawMarkerf(uLINKc[2].p);
-//        DrawMarkerf(uLINKc[3].p);
-//        DrawMarkerf(uLINKc[4].p);
-//        DrawMarkerf(uLINKc[5].p);
-//        DrawMarkerf(uLINKc[6].p);
-//        DrawMarkerf(uLINKc[7].p);
-//        DrawMarkerf(uLINKc[8].p);
-//        DrawMarkerf(uLINKc[9].p);
-//        DrawMarkerf(uLINKc[10].p);
-//        DrawMarkerf(uLINKc[11].p);
-//        DrawMarkerf(uLINKc[12].p);
-//        DrawMarkerf(uLINKc[13].p);
+
 
         David_OneFoot(qd, t*Dtime, &Statusc.desired_support, &Statusc.distribution_y);
         David_OneFoot(dqd, t*Dtime-Dtime, &Statusc.desired_support, &Statusc.distribution_y);
@@ -221,23 +222,47 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
         David_OneFoot(dqd, t*Dtime-Dtime, &Status->desired_support, &Status->distribution_y);
 
 
-        #if Sherpa
-        float kd=3;
-        float kp=1000;
+        #if PD
+            #if Sherpa
+            float kd=3;
+            float kp=1000;
+            #endif
+            #if Generic
+            float kd=0.001;
+            float kp=1;
+            #endif
+
+            for(n=0; n<nDoF-6; n++)
+            {
+                uPD[n]=kd*(((qd[n]-dqd[n])/Te)-uLINKc[n+2].dq)+kp*(qd[n]-uLINKc[n+2].q);
+                //uPD[n]=kd*(((0)/Te)-uLINKc[n+2].dq)+kp*(0-uLINKc[n+2].q);
+                gsl_vector_set(u,n+6,uPD[n]);
+            }
+
+            static float uG[NbLinks-2], fG[NbLinks-2], tG[NbLinks-2];
+            David_Gravity( uLINKc, &Statusc, 1, fG, tG);
+            for (n=0; n<nDoF-6; n++)
+            {
+                uG[n]=uLINKc[n+2].ug;
+            }
+
+            //Stabilizator(uLINK,Status,stab,Dtime,t*Dtime);
+            //gsl_vector_add (u,stab);
+            static float uStab[NbLinks-2];
+            David_Stabilizator( uLINKc, &Statusc, uStab);
         #endif
 
-        #if Generic
-        float kd=0.001;
-        float kp=1;
+
+        #if Dynamic
+
+            for(n=0; n<nDoF-6; n++)
+            {
+                uPD[n]=kd*(((qd[n]-dqd[n])/Te)-uLINKc[n+2].dq)+kp*(qd[n]-uLINKc[n+2].q);
+                //uPD[n]=kd*(((0)/Te)-uLINKc[n+2].dq)+kp*(0-uLINKc[n+2].q);
+                gsl_vector_set(u,n+6,uPD[n]);
+            }
+
         #endif
-
-
-        for(n=0; n<nDoF-6; n++)
-        {
-            uPD[n]=kd*(((qd[n]-dqd[n])/Te)-uLINKc[n+2].dq)+kp*(qd[n]-uLINKc[n+2].q);
-            //uPD[n]=kd*(((0)/Te)-uLINKc[n+2].dq)+kp*(0-uLINKc[n+2].q);
-            gsl_vector_set(u,n+6,uPD[n]);
-        }
 
 
 
@@ -273,7 +298,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
             fclose(pBody_file);
 
 
-
+            #if PD
             FILE *uq_file=fopen("./../Simu_data/uq.txt","a");
             for(n=0; n<nDoF-6; n++)
             {
@@ -282,38 +307,6 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
             fprintf(uq_file,"\n");
             fclose(uq_file);
 
-        }
-
-
-
-        //Stabilizator(uLINK,Status,stab,Dtime,t*Dtime);
-        //gsl_vector_add (u,stab);
-        static float uStab[NbLinks-2];
-        David_Stabilizator( uLINKc, &Statusc, uStab);
-
-
-        if (Visualisation)
-        {
-            FILE *ustab_file=fopen("./../Simu_data/ustab.txt","a");
-            for(n=0; n<nDoF-6; n++)
-            {
-                fprintf(ustab_file,"%f ",uStab[n]);
-            }
-            fprintf(ustab_file,"\n");
-            fclose(ustab_file);
-        }
-
-
-
-
-        static float uG[NbLinks-2], fG[NbLinks-2], tG[NbLinks-2];
-        David_Gravity( uLINKc, &Statusc, 1, fG, tG);
-        for (n=0; n<nDoF-6; n++)
-        {
-            uG[n]=uLINKc[n+2].ug;
-        }
-        if (Visualisation)
-        {
             FILE *ug1_file=fopen("./../Simu_data/ug.txt","a");
             for(n=0; n<nDoF-6; n++)
             {
@@ -321,34 +314,25 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
             }
             fprintf(ug1_file,"\n");
             fclose(ug1_file);
+
+            FILE *ustab_file=fopen("./../Simu_data/ustab.txt","a");
+            for(n=0; n<nDoF-6; n++)
+            {
+                fprintf(ustab_file,"%f ",uStab[n]);
+            }
+            fprintf(ustab_file,"\n");
+            fclose(ustab_file);
+            #endif
+
         }
 
 
 
-/*         gsl_vector * f = gsl_vector_calloc (3);
- *         gsl_vector * tau = gsl_vector_calloc (3);
- *         Gravity2(uLINK,Status,1,f,tau);
- *         gsl_vector_free(f);
- *         gsl_vector_free(tau);
- *         if (Status->desired_support!=0 || Suspendu)
- *         {
- *             for (n=0; n<nDoF-6; n++)
- *             {
- *                 gsl_vector_set (g, n+6,uLINK[n+2].ug);
- *             }
- *             gsl_vector_add (u,g);
- *         }
- *         if (Visualisation)
- *         {
- *             FILE *ug2_file=fopen("./../Simu_data/ug2.txt","a");
- *             for(n=0; n<nDoF-6; n++)
- *             {
- *                 fprintf(ug2_file,"%f ",uLINK[n+2].ug);
- *             }
- *             fprintf(ug2_file,"\n");
- *             fclose(ug2_file);
- *         }
- */
+
+
+
+
+
 
 
         for(n=2; n<nDoF-6+2; n++)
@@ -379,6 +363,8 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
 
 //gsl_vector_set_zero(u);
 
+    gsl_vector_sub (u,g);
+    gsl_vector_sub (u,ef);
     gsl_vector_sub (u,b);
     gsl_vector * ddq = gsl_vector_alloc (nDoF);
     gsl_permutation * p = gsl_permutation_alloc (nDoF);
@@ -453,6 +439,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
     gsl_vector_free(b);
     gsl_vector_free(tmp);
     gsl_vector_free(g);
+    gsl_vector_free(ef);
     gsl_vector_free(stab);
     gsl_vector_free(u);
     //gsl_vector_free(qd);

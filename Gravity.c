@@ -28,9 +28,6 @@ void Gravity(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector * t)
     gsl_vector * ftmp = gsl_vector_calloc (3);
     gsl_vector * ttmp = gsl_vector_calloc (3);
 
-    gsl_vector * pos = gsl_vector_calloc (3);
-    gsl_vector * Visu = gsl_vector_calloc (3);
-
 
     gsl_vector_set_zero(ftmp);
     gsl_vector_set_zero(ttmp);
@@ -48,87 +45,10 @@ void Gravity(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector * t)
     gsl_vector_add (f, ftmp);
     gsl_vector_add (t, ttmp);
     gsl_vector_free(w_c);
-
-/* //    FILE *deb2_file=fopen("./../Simu_data/deb2.txt","a");
- * //    fprintf(deb2_file,"%f %f %f ",gsl_vector_get(f,0),gsl_vector_get(f,1),gsl_vector_get(f,2));
- * //    fprintf(deb2_file,"%f %f %f ",gsl_vector_get(t,0),gsl_vector_get(t,1),gsl_vector_get(t,2));
- * //    fprintf(deb2_file,"\n");
- * //    fclose(deb2_file);
- */
-
 /* ////f = f + f3;
  * ////t = t + t3;
  * ////
  */
-
-
-    gsl_vector_set_zero(ftmp);
-    gsl_vector_set_zero(ttmp);
-    if (uLINK[j].isPolygon==1 && !Suspendu)
-    {
-        gsl_vector * com = gsl_vector_calloc (3);
-        CalcCoM(uLINK,com);
-        if (j==Status->right_foot_ID)
-        {
-/*            //right foot*/
-            gsl_vector_set (ftmp, 2, 9.81*TotalMass(uLINK,1));
-            gsl_vector_scale(ftmp,-1*(1.0-Status->distribution_y));
-/*             //gsl_vector_scale(ftmp,-1*(Status->distribution_y));
- *             //gsl_vector_scale(ftmp,0.5);
- */
-
-            gsl_vector_add (f, ftmp);
-            gsl_vector_memcpy (ttmp, Status->FootCenter_R);
-            gsl_vector_set (ttmp,0,gsl_vector_get (com,0));
-            Cross(ttmp,ftmp,0);
-            gsl_vector_add (t, ttmp);
-
-/* //            if (Status->right_scale!=0.0)
- * //            {
- * //                gsl_vector_memcpy (pos,Status->posCoP_R);
- * //                gsl_vector_scale (pos, 1/Status->right_scale);
- * //            }
- * //            gsl_vector_memcpy (Visu,Status->forCoP_R);
- * //            gsl_vector_add (f, Visu);
- * //            Cross(pos,Visu,1);
- * //            gsl_vector_add (t, Visu);
- */
-        }
-
-        if (j==Status->left_foot_ID)
-        {
-/*            //left foot*/
-
-            gsl_vector_set (ftmp, 2, 9.81*TotalMass(uLINK,1));
-            gsl_vector_scale(ftmp,-1*(Status->distribution_y));
-/*             //gsl_vector_scale(ftmp,-1*(1.0-Status->distribution_y));
- *             //gsl_vector_scale(ftmp,0.5);
- */
-
-            gsl_vector_add (f, ftmp);
-            gsl_vector_memcpy (ttmp, Status->FootCenter_L);
-            gsl_vector_set (ttmp,0,gsl_vector_get (com,0));
-            Cross(ttmp,ftmp,0);
-            gsl_vector_add (t, ttmp);
-
-/*             //gsl_vector_add (f, ftmp);
- *             //Cross(Status->FootCenter_L,ftmp,1);
- *             //gsl_vector_add (t, ftmp);
- * //            if (Status->left_scale!=0.0)
- * //            {
- * //                gsl_vector_memcpy (pos,Status->posCoP_L);
- * //                gsl_vector_scale (pos, 1/Status->left_scale);
- * //            }
- * //            gsl_vector_memcpy (Visu,Status->forCoP_L);
- * //            gsl_vector_add (f, Visu);
- * //            Cross(pos,Visu,1);
- * //            gsl_vector_add (t, Visu);
- */
-
-        }
-        gsl_vector_free(com);
-    }
-
 
 /* //% from child link
  *     //gsl_vector_set_zero(ftmp);
@@ -173,8 +93,6 @@ void Gravity(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector * t)
     gsl_vector_free(ftmp);
     gsl_vector_free(ttmp);
 
-    gsl_vector_free(pos);
-    gsl_vector_free(Visu);
 }
 
 

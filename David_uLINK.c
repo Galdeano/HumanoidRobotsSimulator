@@ -38,6 +38,7 @@ void David_SetupRobot(Struct_uLINK uLINK[],Struct_State *Status)
         uLINK[i].ddq = 0.f;
         uLINK[i].u = 0.f;
         uLINK[i].ug = 0.f;
+        uLINK[i].uef = 0.f;
         uLINK[i].u_joint = 0.f;
 
         MatClrf(uLINK[i].a,3,1);
@@ -229,6 +230,7 @@ void David_SetupRobot(Struct_uLINK uLINK[],Struct_State *Status)
         uLINK[i].ddq = 0.f;
         uLINK[i].u = 0.f;
         uLINK[i].ug = 0.f;
+        uLINK[i].uef = 0.f;
         uLINK[i].u_joint = 0.f;
 
         MatClrf(uLINK[i].a,3,1);

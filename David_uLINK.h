@@ -6,7 +6,7 @@ typedef struct
 {
     char name[8];
     unsigned char sister,child,mother;
-    float m,q,dq,ddq,u,ug,u_joint;
+    float m,q,dq,ddq,u,ug,uef,u_joint;
     float a[3];
     float b[3];
     float c[3];

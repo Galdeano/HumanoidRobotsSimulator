@@ -42,6 +42,7 @@ void SetupRobot(SuLINK uLINK[],State *Status)
         uLINK[i].gr = 0.0;
         uLINK[i].u = 0.0;
         uLINK[i].ug = 0.0;
+        uLINK[i].uef = 0.0;
         uLINK[i].u_joint = 0.0;
         uLINK[i].isPolygon=0;
         uLINK[i].a = gsl_vector_calloc (3);
@@ -427,6 +428,7 @@ void SetupRobot(SuLINK uLINK[],State *Status)
         uLINK[i].gr = 0.0;
         uLINK[i].u = 0.0;
         uLINK[i].ug = 0.0;
+        uLINK[i].uef = 0.0;
         uLINK[i].u_joint = 0.0;
         uLINK[i].isPolygon=0;
         uLINK[i].a = gsl_vector_calloc (3);
@@ -734,8 +736,8 @@ void SetupRobot(SuLINK uLINK[],State *Status)
     strcpy(uLINK[SPINE+1].name, "SPINE_J1");
     uLINK[SPINE+1].m  = 0 ;
     uLINK[SPINE+1].color  = 4 ;
-    uLINK[SPINE+1].sister  = RARM ;
-    uLINK[SPINE+1].child  = 0 ;
+    uLINK[SPINE+1].sister  =  0 ;
+    uLINK[SPINE+1].child  = RARM ;
     gsl_vector_set (uLINK[SPINE+1].a, 2, 1);
     //gsl_vector_set (uLINK[SPINE+1].c, 0, 0.0068);
     //gsl_vector_set (uLINK[SPINE+1].c, 1, -0.0025);
@@ -882,14 +884,14 @@ void SetupRobot(SuLINK uLINK[],State *Status)
 
 
     // Contacts
-    //uLINK[1].shape[0]=0.1;
-    //uLINK[1].shape[1]=0.3;
-    //uLINK[1].shape[2]=0.04;
-    //uLINK[1].com[0]=0;
-    //uLINK[1].com[1]=0;
-    //uLINK[1].com[2]=0.05;
-    //SetupRigidBody(uLINK,1);
-    //uLINK[1].supportHeight=0.0;
+//    uLINK[1].shape[0]=0.1;
+//    uLINK[1].shape[1]=0.3;
+//    uLINK[1].shape[2]=0.04;
+//    uLINK[1].com[0]=0;
+//    uLINK[1].com[1]=0;
+//    uLINK[1].com[2]=0.05;
+//    SetupRigidBody(uLINK,1);
+//    uLINK[1].supportHeight=0.0;
 
     uLINK[RLEG+5].shape[0]=0.28;
     uLINK[RLEG+5].shape[1]=0.08;
@@ -929,6 +931,15 @@ void SetupRobot(SuLINK uLINK[],State *Status)
     SetupRigidBody(uLINK,LARM+2);
     uLINK[LARM+2].supportHeight=0.0;
 
+
+    uLINK[SPINE+1].shape[0]=0.05;
+    uLINK[SPINE+1].shape[1]=0.33;
+    uLINK[SPINE+1].shape[2]=0.4;
+    uLINK[SPINE+1].com[0]=0;
+    uLINK[SPINE+1].com[1]=0;
+    uLINK[SPINE+1].com[2]=0.25;
+    SetupRigidBody(uLINK,SPINE+1);
+    uLINK[SPINE+1].supportHeight=0.0;
 
 
 

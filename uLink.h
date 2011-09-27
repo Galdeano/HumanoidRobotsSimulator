@@ -10,7 +10,7 @@ typedef struct
 {
     char name[8];
     unsigned char sister,child,mother,color,isPolygon;
-    double m,q,dq,ddq,Ir,gr,u,ug,u_joint,supportHeight;
+    double m,q,dq,ddq,Ir,gr,u,ug,uef,u_joint,supportHeight;
     gsl_vector * a;
     gsl_vector * b;
     gsl_vector * c;

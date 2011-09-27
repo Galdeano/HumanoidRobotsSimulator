@@ -8,9 +8,14 @@
 #define Te 0.005 // période d'échantillonage en s et en double
 
 
-//Robot?
-#define Sherpa 1
-#define Generic 0
+//Choose Robot model
+#define Sherpa 0
+#define Generic 1
+
+#if Sherpa && Generic
+#error Both Sherpa and Generic robot model are specified
+#error Check Sherpa and Generic defs
+#endif
 
 #if Sherpa
 #define  NbLinks  14
@@ -23,4 +28,14 @@
 #define  SPINE  14
 #define  RARM  16
 #define  LARM  19
+#endif
+
+
+//Choose Command
+#define PD 0
+#define Dynamic 1
+
+#if PD && Dynamic
+#error Both PD and Dynamic command are specified
+#error Check PD and Dynamic defs
 #endif
