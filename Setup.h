@@ -1,4 +1,5 @@
-
+#ifndef H_Setup
+#define H_Setup
 
 #define NbRobots 1
 #define Video 0 // enregistre les images
@@ -38,4 +39,6 @@
 #if PD && Dynamic
 #error Both PD and Dynamic command are specified
 #error Check PD and Dynamic defs
+#endif
+
 #endif

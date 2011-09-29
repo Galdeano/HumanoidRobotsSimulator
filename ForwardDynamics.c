@@ -236,7 +236,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
             {
                 uPD[n]=kd*(((qd[n]-dqd[n])/Te)-uLINKc[n+2].dq)+kp*(qd[n]-uLINKc[n+2].q);
                 //uPD[n]=kd*(((0)/Te)-uLINKc[n+2].dq)+kp*(0-uLINKc[n+2].q);
-                gsl_vector_set(u,n+6,uPD[n]);
+                //gsl_vector_set(u,n+6,uPD[n]);
             }
 
             static float uG[NbLinks-2], fG[NbLinks-2], tG[NbLinks-2];
@@ -254,12 +254,22 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
 
 
         #if Dynamic
+            #if Sherpa
+            float kd=3;
+            float kp=1000;
+            #endif
+            #if Generic
+            float kd=0.001;
+            float kp=1;
+            #endif
+
+            static float uG[NbLinks-2];
 
             for(n=0; n<nDoF-6; n++)
             {
-                uPD[n]=kd*(((qd[n]-dqd[n])/Te)-uLINKc[n+2].dq)+kp*(qd[n]-uLINKc[n+2].q);
-                //uPD[n]=kd*(((0)/Te)-uLINKc[n+2].dq)+kp*(0-uLINKc[n+2].q);
-                gsl_vector_set(u,n+6,uPD[n]);
+                uPD[n]=kd*(((0)/Te)-uLINKc[n+2].dq)+kp*(0-uLINKc[n+2].q);
+                //gsl_vector_set(u,n+6,uPD[n]);
+                uG[n]=gsl_vector_get(g,n+6)+gsl_vector_get(ef,n+6)+gsl_vector_get(b,n+6);
             }
 
         #endif
@@ -341,11 +351,22 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
 
             if (Statusc.desired_support!=0 || Suspendu)
             {
+                #if PD
                 uLINK[n].u_joint = uPD[n-2]+uG[n-2]+uStab[n-2];
+                #endif
+                #if Dynamic
+                uLINK[n].u_joint = uPD[n-2]+uG[n-2];
+                #endif
+
             }
             else
             {
+                #if PD
                 uLINK[n].u_joint = uPD[n-2]+uStab[n-2];
+                #endif
+                #if Dynamic
+                uLINK[n].u_joint = uPD[n-2]+uG[n-2];
+                #endif
             }
             gsl_vector_set (u,n-2+6,uLINK[n].u_joint);
 
