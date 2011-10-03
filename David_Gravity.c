@@ -6,8 +6,7 @@
 
 #include "David_Gravity.h"
 #include "David_Cross.h"
-
-#define Suspended 0
+#include "Setup.h"
 
 #include <stdio.h>
 
@@ -48,7 +47,7 @@ void David_Gravity(Struct_uLINK uLINK[],Struct_State *Status, int j, float *f, f
     MatClrf( ftmp, 3, 1) ;
     MatClrf( ttmp, 3, 1) ;
 
-    if (((j==Status->right_foot_ID)||(j==Status->left_foot_ID)) && !Suspended)
+    if (((j==Status->right_foot_ID)||(j==Status->left_foot_ID)) && !Suspendu)
     {
         float com[3];
         David_CalcCoM(uLINK,com);

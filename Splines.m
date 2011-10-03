@@ -19,9 +19,9 @@ axis equal
 
 %positions et vitesses désirées
 p1=0;
-v1=-1;
-p2=1;
-v2=-1;
+v1=1;
+p2=0.5;
+v2=1;
 
 S1=v1*h3+p1*h1+p2*h2+v2*h4;
 

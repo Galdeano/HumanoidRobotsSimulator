@@ -95,8 +95,8 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
     }
    }
 
-    gsl_vector_set_zero(f);
-    gsl_vector_set_zero(tau);
+   gsl_vector_set_zero(f);
+   gsl_vector_set_zero(tau);
    ExternalForces(uLINK,Status,1,f,tau);
    if (Status->desired_support!=0 || Suspendu)
    {
@@ -228,8 +228,8 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
             float kp=1000;
             #endif
             #if Generic
-            float kd=0.001;
-            float kp=1;
+            float kd=1;
+            float kp=300;
             #endif
 
             for(n=0; n<nDoF-6; n++)
@@ -263,13 +263,20 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
             float kp=1;
             #endif
 
-            static float uG[NbLinks-2];
+            //static float uG[NbLinks-2];
+
+            static float uG[NbLinks-2], fG[NbLinks-2], tG[NbLinks-2];
+            David_Gravity( uLINKc, &Statusc, 1, fG, tG);
+            for (n=0; n<nDoF-6; n++)
+            {
+                uG[n]=uLINKc[n+2].ug;
+            }
 
             for(n=0; n<nDoF-6; n++)
             {
                 uPD[n]=kd*(((0)/Te)-uLINKc[n+2].dq)+kp*(0-uLINKc[n+2].q);
                 //gsl_vector_set(u,n+6,uPD[n]);
-                uG[n]=gsl_vector_get(g,n+6)+gsl_vector_get(ef,n+6)+gsl_vector_get(b,n+6);
+                uG[n]=gsl_vector_get(g,n+6)+gsl_vector_get(b,n+6);//+gsl_vector_get(ef,n+6)
             }
 
         #endif

@@ -16,7 +16,12 @@
 #include "IntegrateEuler.h"
 #include "ForwardDynamics.h"
 #include "ForwardKinematics.h"
-//#include "InverseSherpaKinematics.h"
+
+
+#include "InverseSherpaKinematics.h"
+#include "CalcCoM.h"
+#include "DrawMarker.h"
+
 #include "DrawIndicators.h"
 
 #include "Setup.h"
@@ -215,43 +220,47 @@ int main(int argc, char *argv[])
             glRotated(angular_z,0,0,1);
 
 
-//            for (i = 0; i < NbRobots; i++)
-//            {
-//            gsl_vector_set (uLINK[i][1].p, 2, Lc+Lt+Lp-0.07);
-//            gsl_vector_set (pos, 0, -0.09);
-//            gsl_vector_set (pos, 1, 0.32);
-//            gsl_vector_set (pos, 2, -0.95);
-//            InverseKinematics(q, pos);
-//            uLINK[i][2].q=gsl_vector_get (q,0);
-//            uLINK[i][3].q=gsl_vector_get (q,1);
-//            uLINK[i][4].q=gsl_vector_get (q,2);
-//            uLINK[i][5].q=gsl_vector_get (q,3);
-//            uLINK[i][6].q=gsl_vector_get (q,4);
-//            uLINK[i][7].q=gsl_vector_get (q,5);
-//            gsl_vector_set (pos, 0, -0.09);
-//            gsl_vector_set (pos, 1, 0.32);
-//            gsl_vector_set (pos, 2, -0.95);
-//            InverseKinematics(q, pos);
-//            uLINK[i][8].q=gsl_vector_get (q,0);
-//            uLINK[i][9].q=gsl_vector_get (q,1);
-//            uLINK[i][10].q=gsl_vector_get (q,2);
-//            uLINK[i][11].q=gsl_vector_get (q,3);
-//            uLINK[i][12].q=gsl_vector_get (q,4);
-//            uLINK[i][13].q=gsl_vector_get (q,5);
-//            ForwardKinematics(uLINK[i],1);
-//            DrawAllJoints(uLINK[i],1);
-//                CalcCoM(uLINK[i],com);
-//                glColor3ub(0,0,255);
-//                if (!ground)
-//                {
-//                    gsl_vector_set (com, 2, 0);
-//                }
-//                sprintf(titre,"Visualisation t= %2.3f, x= %2.3f, y= %2.3f", t*Dtime,gsl_vector_get (com,0),gsl_vector_get (com,1));
-//                SDL_WM_SetCaption(titre, NULL);
-//                DrawMarker(com);
-//            }
+            #if StaticCOM
+            for (i = 0; i < NbRobots; i++)
+            {
+            gsl_vector_set (uLINK[i][1].p, 2, Lc+Lt+Lp-0.07);
+            gsl_vector_set (pos, 0, -0.10);
+            gsl_vector_set (pos, 1, 0.21);
+            gsl_vector_set (pos, 2, -0.95);
+            InverseSherpaKinematics(q, pos);
+            uLINK[i][2].q=gsl_vector_get (q,0);
+            uLINK[i][3].q=gsl_vector_get (q,1);
+            uLINK[i][4].q=gsl_vector_get (q,2);
+            uLINK[i][5].q=gsl_vector_get (q,3);
+            uLINK[i][6].q=gsl_vector_get (q,4);
+            uLINK[i][7].q=gsl_vector_get (q,5);
+            gsl_vector_set (pos, 0, -0.10);
+            gsl_vector_set (pos, 1, 0.21);
+            gsl_vector_set (pos, 2, -0.95);
+            InverseSherpaKinematics(q, pos);
+            uLINK[i][8].q=gsl_vector_get (q,0);
+            uLINK[i][9].q=gsl_vector_get (q,1);
+            uLINK[i][10].q=gsl_vector_get (q,2);
+            uLINK[i][11].q=gsl_vector_get (q,3);
+            uLINK[i][12].q=gsl_vector_get (q,4);
+            uLINK[i][13].q=gsl_vector_get (q,5);
+            ForwardKinematics(uLINK[i],1);
+            DrawAllJoints(uLINK[i],1);
+                CalcCoM(uLINK[i],com);
+                glColor3ub(0,0,255);
+                if (!ground)
+                {
+                    gsl_vector_set (com, 2, 0);
+                }
+                //sprintf(titre,"Visualisation t= %2.3f, x= %2.3f, y= %2.3f", t*Dtime,gsl_vector_get (com,0),gsl_vector_get (com,1));
+                //SDL_WM_SetCaption(titre, NULL);
+                DrawMarker(com);
+                DrawIndicators(uLINK[i],&Status[i],com,CoP,Visu,ground);
+            }
+            #endif
 
 
+            #if !StaticCOM
             for (i = 0; i < NbRobots; i++)
             {
                 ForwardDynamics(uLINK[i],&Status[i],Dtime,t);
@@ -260,6 +269,7 @@ int main(int argc, char *argv[])
                 DrawAllJoints(uLINK[i],1);
                 DrawIndicators(uLINK[i],&Status[i],com,CoP,Visu,ground);
             }
+            #endif
 
 
 
@@ -280,6 +290,7 @@ int main(int argc, char *argv[])
             }
 
         }
+        #if !StaticCOM
         else
         {
             for (i = 0; i < NbRobots; i++)
@@ -288,6 +299,7 @@ int main(int argc, char *argv[])
                 IntegrateEuler(uLINK[i],1,Dtime);
             }
         }
+        #endif
 
     }
 

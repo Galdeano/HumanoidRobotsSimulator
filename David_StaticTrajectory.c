@@ -3,7 +3,7 @@
 #include "David_Spline.h"
 #include "David_StaticTrajectory.h"
 
-
+#include "Setup.h"
 
 void David_StaticTrajectory(float *qd, double t, int *desired_support, float *distribution)
 {
@@ -225,7 +225,7 @@ void David_StaticTrajectory(float *qd, double t, int *desired_support, float *di
 
 
 
-
+#if Sherpa
 void David_OneFoot(float *qd, double t, int *desired_support, float *distribution)
 {
 
@@ -336,6 +336,121 @@ void David_OneFoot(float *qd, double t, int *desired_support, float *distributio
     }
 
 }
+#endif
+
+#if Generic
+void David_OneFoot(float *qd, double t, int *desired_support, float *distribution)
+{
+
+
+    float t1=5;
+    float t2=15;
+    float t3=25;
+    float t4=35;
+    float t5=45;
+    float t6=55;
+
+//    float t1=5;
+//    float t2=15;
+//    float t3=15;
+//    float t4=15;
+//    float t5=15;
+//    float t6=25;
+
+//    float t1=0.5;
+//    float t2=2;
+//    float t3=5;
+//    float t4=8;
+//    float t5=11;
+//    float t6=14;
+
+
+    float com_y =0.21f;
+    //float com_y =0.29;
+
+
+    if (t<t1)
+    {
+        float pos[6] = { 0.f , 0.f , -1.01729f ,
+                         0.f , 0.f , -1.01729f
+                       } ;//Posture dans l'espace operationel
+        *distribution=0.5f;	//repartition de l'effort de contact
+        *desired_support=3;	//Pied de support: 0:none,1:right,2:left,3:both
+        David_InverseSherpaKinematics(qd, pos);
+        David_InverseSherpaKinematics(qd+6, pos+3);
+    }
+
+    if (t>=t1 && t<t2)
+    {
+        float pos[6] = { 0.f , 0.f , David_C2Spline((float)t,t1,(t1+t2)/2,t2,-1.01729f,-1.f,-0.95f,0.f,0.f) ,
+                         0.f , 0.f , David_C2Spline((float)t,t1,(t1+t2)/2,t2,-1.01729f,-1.f,-0.95f,0.f,0.f)
+                       } ;//Posture dans l'espace operationel
+        *distribution=0.5f;
+        *desired_support=3;
+        David_InverseSherpaKinematics(qd, pos);
+        David_InverseSherpaKinematics(qd+6, pos+3);
+    }
+
+    if (t>=t2 && t<t3)
+    {
+        float pos[6] = { David_Spline((float)t,t2,t3,0.f,-0.10f,0.f,0.f) , David_Spline((float)t,t2,t3,0.f,com_y,0.f,0.f) , -0.95f ,
+                         David_Spline((float)t,t2,t3,0.f,-0.10f,0.f,0.f) , David_Spline((float)t,t2,t3,0.f,com_y,0.f,0.f) , -0.95f
+                       } ;
+        *distribution=David_Spline((float)t,t2,t3,0.5f,0.f,0.03f,0.03f);
+        *desired_support=3;
+        David_InverseSherpaKinematics(qd, pos);
+        David_InverseSherpaKinematics(qd+6, pos+3);
+    }
+
+    if (t>=t3 && t<t4)
+    {
+        float pos[6] = { -0.10f , com_y , -0.95f ,
+                         -0.10f , com_y , David_C2Spline((float)t,t3,(t3+t4)/2,t4,-0.95f,-0.90f,-0.95f,0.f,0.f)
+                       } ;
+        *distribution=0.f;
+        *desired_support=1;
+        David_InverseSherpaKinematics(qd, pos);
+        David_InverseSherpaKinematics(qd+6, pos+3);
+    }
+
+
+    if (t>=t4 && t<t5)
+    {
+        float pos[6] = { David_Spline((float)t,t4,t5,-0.10f,0.f,0.f,0.f) , David_Spline((float)t,t4,t5,com_y,0.f,0.f,0.f) , -0.95f ,
+                         David_Spline((float)t,t4,t5,-0.10f,0.f,0.f,0.f) , David_Spline((float)t,t4,t5,com_y,0.f,0.f,0.f) , -0.95f
+                       } ;
+        *distribution=David_Spline((float)t,t4,t5,0.f,0.5f,-0.03f,-0.03f);
+        *desired_support=3;
+        David_InverseSherpaKinematics(qd, pos);
+        David_InverseSherpaKinematics(qd+6, pos+3);
+    }
+
+
+    if (t>=t5 && t<t6)
+    {
+        float pos[6] = { 0.f , 0.f , David_C2Spline((float)t,t5,(t5+t6)/2,t6,-0.95f,-1.f,-1.01729f,0.f,0.f) ,
+                         0.f , 0.f , David_C2Spline((float)t,t5,(t5+t6)/2,t6,-0.95f,-1.f,-1.01729f,0.f,0.f)
+                       } ;
+        *distribution=0.5;
+        *desired_support=3;
+        David_InverseSherpaKinematics(qd, pos);
+        David_InverseSherpaKinematics(qd+6, pos+3);
+    }
+
+    if (t>=t6)
+    {
+        float pos[6] = { 0.f , 0.f , -1.01729f ,
+                         0.f , 0.f , -1.01729f
+                       } ;
+        *distribution=0.5;
+        *desired_support=3;
+        David_InverseSherpaKinematics(qd, pos);
+        David_InverseSherpaKinematics(qd+6, pos+3);
+    }
+
+}
+#endif
+
 
 
 void David_GravityExperiment(float *qd, double t, int *desired_support, float *distribution)

@@ -2,7 +2,7 @@
 #define H_Setup
 
 #define NbRobots 1
-#define Video 0 // enregistre les images
+#define Video 1 // enregistre les images
 #define Suspendu 0 // 1 pour si le robot ne touche pas le sol
 #define Visualisation 0 // enregistre les valeurs numeriques de plusieurs variables
 
@@ -33,8 +33,8 @@
 
 
 //Choose Command
-#define PD 0
-#define Dynamic 1
+#define PD 1
+#define Dynamic 0
 
 #if PD && Dynamic
 #error Both PD and Dynamic command are specified
@@ -42,3 +42,9 @@
 #endif
 
 #endif
+
+
+//Debug
+#define StaticCOM 0
+
+
