@@ -1,3 +1,14 @@
+
+/*!
+ *  \file main.c
+ *  \brief     This is the multi body simulator
+ *  \details   This program use gsl for matrix coputation and SDL and openGL for visualization
+ *  \author    David Galdeano
+ *  \date      10/2011
+ *  \pre       First install gsl, SDL and openGL for a proper compilation
+ *  \warning   Do not modify this programm unless you know what you do.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -68,12 +79,12 @@ int main(int argc, char *argv[])
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity( );
     gluPerspective(50,(double)640/480,1,1000);
-    #if Sherpa
+#if Sherpa
     gluLookAt(1.5, -1.5, 1, 0, 0, 0.6, 0, 0, 1);
-    #endif
-    #if Generic
+#endif
+#if Generic
     gluLookAt(1.8, -1.8, 1.4, 0, 0, 0.9, 0, 0, 1);
-    #endif
+#endif
     glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
     glEnable(GL_DEPTH_TEST | GL_LINE_SMOOTH);
 
@@ -90,10 +101,10 @@ int main(int argc, char *argv[])
     }
     //gsl_vector_set (uLINK[0][1].p, 2, Lc+Lt+Lp+0.15);
 
-    #if Suspendu
-        gsl_vector_set (uLINK[0][1].p, 2, Lc+Lt+Lp+0.1);
-        uLINK[0][1].supportHeight=Lc+Lt+Lp+0.13;
-    #endif
+#if Suspendu
+    gsl_vector_set (uLINK[0][1].p, 2, Lc+Lt+Lp+0.1);
+    uLINK[0][1].supportHeight=Lc+Lt+Lp+0.13;
+#endif
 
     float Dtime = 0.0001;
     //float EndTime = 3;
@@ -220,32 +231,32 @@ int main(int argc, char *argv[])
             glRotated(angular_z,0,0,1);
 
 
-            #if StaticCOM
+#if StaticCOM
             for (i = 0; i < NbRobots; i++)
             {
-            gsl_vector_set (uLINK[i][1].p, 2, Lc+Lt+Lp-0.07);
-            gsl_vector_set (pos, 0, -0.10);
-            gsl_vector_set (pos, 1, 0.21);
-            gsl_vector_set (pos, 2, -0.95);
-            InverseSherpaKinematics(q, pos);
-            uLINK[i][2].q=gsl_vector_get (q,0);
-            uLINK[i][3].q=gsl_vector_get (q,1);
-            uLINK[i][4].q=gsl_vector_get (q,2);
-            uLINK[i][5].q=gsl_vector_get (q,3);
-            uLINK[i][6].q=gsl_vector_get (q,4);
-            uLINK[i][7].q=gsl_vector_get (q,5);
-            gsl_vector_set (pos, 0, -0.10);
-            gsl_vector_set (pos, 1, 0.21);
-            gsl_vector_set (pos, 2, -0.95);
-            InverseSherpaKinematics(q, pos);
-            uLINK[i][8].q=gsl_vector_get (q,0);
-            uLINK[i][9].q=gsl_vector_get (q,1);
-            uLINK[i][10].q=gsl_vector_get (q,2);
-            uLINK[i][11].q=gsl_vector_get (q,3);
-            uLINK[i][12].q=gsl_vector_get (q,4);
-            uLINK[i][13].q=gsl_vector_get (q,5);
-            ForwardKinematics(uLINK[i],1);
-            DrawAllJoints(uLINK[i],1);
+                gsl_vector_set (uLINK[i][1].p, 2, Lc+Lt+Lp-0.07);
+                gsl_vector_set (pos, 0, -0.10);
+                gsl_vector_set (pos, 1, 0.21);
+                gsl_vector_set (pos, 2, -0.95);
+                InverseSherpaKinematics(q, pos);
+                uLINK[i][2].q=gsl_vector_get (q,0);
+                uLINK[i][3].q=gsl_vector_get (q,1);
+                uLINK[i][4].q=gsl_vector_get (q,2);
+                uLINK[i][5].q=gsl_vector_get (q,3);
+                uLINK[i][6].q=gsl_vector_get (q,4);
+                uLINK[i][7].q=gsl_vector_get (q,5);
+                gsl_vector_set (pos, 0, -0.10);
+                gsl_vector_set (pos, 1, 0.21);
+                gsl_vector_set (pos, 2, -0.95);
+                InverseSherpaKinematics(q, pos);
+                uLINK[i][8].q=gsl_vector_get (q,0);
+                uLINK[i][9].q=gsl_vector_get (q,1);
+                uLINK[i][10].q=gsl_vector_get (q,2);
+                uLINK[i][11].q=gsl_vector_get (q,3);
+                uLINK[i][12].q=gsl_vector_get (q,4);
+                uLINK[i][13].q=gsl_vector_get (q,5);
+                ForwardKinematics(uLINK[i],1);
+                DrawAllJoints(uLINK[i],1);
                 CalcCoM(uLINK[i],com);
                 glColor3ub(0,0,255);
                 if (!ground)
@@ -257,10 +268,10 @@ int main(int argc, char *argv[])
                 DrawMarker(com);
                 DrawIndicators(uLINK[i],&Status[i],com,CoP,Visu,ground);
             }
-            #endif
+#endif
 
 
-            #if !StaticCOM
+#if !StaticCOM
             for (i = 0; i < NbRobots; i++)
             {
                 ForwardDynamics(uLINK[i],&Status[i],Dtime,t);
@@ -269,7 +280,7 @@ int main(int argc, char *argv[])
                 DrawAllJoints(uLINK[i],1);
                 DrawIndicators(uLINK[i],&Status[i],com,CoP,Visu,ground);
             }
-            #endif
+#endif
 
 
 
@@ -290,7 +301,7 @@ int main(int argc, char *argv[])
             }
 
         }
-        #if !StaticCOM
+#if !StaticCOM
         else
         {
             for (i = 0; i < NbRobots; i++)
@@ -299,7 +310,7 @@ int main(int argc, char *argv[])
                 IntegrateEuler(uLINK[i],1,Dtime);
             }
         }
-        #endif
+#endif
 
     }
 

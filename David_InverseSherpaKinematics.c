@@ -4,10 +4,10 @@
 
 void David_InverseSherpaKinematics(float *qd,float *pos)
 {
-/* //   float Hy=0.155*2;
- * //   float Hx=0.0468;
- * //    float Lp=0.1104;
- */
+    /* //   float Hy=0.155*2;
+     * //   float Hx=0.0468;
+     * //    float Lp=0.1104;
+     */
     static const float Lc=0.5073f;
     static const float Lt=0.510f;
 

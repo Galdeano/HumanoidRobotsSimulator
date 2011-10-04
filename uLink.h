@@ -4,11 +4,21 @@
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 
+/** \file uLink.h
+ * This describe link properties.
+ * Every bodies is represent by a link whith many properties (like mass, position, inertia,...) in this formulation.
+ */
 
-
+/**
+ * \struct SuLINK uLink.h
+ * \brief Object Link.
+ *
+ * SuLINK is a descriptor of a physical link in the multibody system
+ * used for the simulation
+ */
 typedef struct
 {
-    char name[8];
+    char name[8]; /*!< Name of the Link */
     unsigned char sister,child,mother,color,isPolygon;
     double m,q,dq,ddq,Ir,gr,u,ug,uef,u_joint,supportHeight;
     gsl_vector * a;
@@ -33,7 +43,12 @@ typedef struct
     gsl_matrix * forContact;
 } SuLINK ;
 
-
+/**
+ * \struct State uLink.h
+ * \brief Object State.
+ *
+ * SuLINK  contain some information about the robot wich are not local
+ */
 typedef struct
 {
     int desired_support;
@@ -59,6 +74,14 @@ typedef struct
 //    uLINK(n).u      = 0.0;          % joint torque [Nm]
 */
 
+/**
+ * \fn void SetupRobot(SuLINK uLINK[],State *Status)
+ * \brief Fonction de création d'une nouvelle instance d'un objet Str_t.
+ *
+ * \param SuLINK uLINK[] Chaîne à stocker dans l'objet Str_t, ne peut être NULL.
+ * \param State *Status Chaîne  dans l'objet Str_t, ne peut être NULL.
+ * \return Instance nouvellement allouée d'un objet de type Str_t ou NULL.
+ */
 
 void SetupRobot(SuLINK uLINK[],State *Status);
 

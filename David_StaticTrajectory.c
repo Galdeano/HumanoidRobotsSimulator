@@ -365,7 +365,7 @@ void David_OneFoot(float *qd, double t, int *desired_support, float *distributio
 //    float t6=14;
 
 
-    float com_y =0.21f;
+    float com_y =0.215f;
     //float com_y =0.29;
 
 
@@ -396,7 +396,7 @@ void David_OneFoot(float *qd, double t, int *desired_support, float *distributio
         float pos[6] = { David_Spline((float)t,t2,t3,0.f,-0.10f,0.f,0.f) , David_Spline((float)t,t2,t3,0.f,com_y,0.f,0.f) , -0.95f ,
                          David_Spline((float)t,t2,t3,0.f,-0.10f,0.f,0.f) , David_Spline((float)t,t2,t3,0.f,com_y,0.f,0.f) , -0.95f
                        } ;
-        *distribution=David_Spline((float)t,t2,t3,0.5f,0.f,0.03f,0.03f);
+        *distribution=David_Spline((float)t,t2,t3,0.5f,0.f,0.035f,0.035f);
         *desired_support=3;
         David_InverseSherpaKinematics(qd, pos);
         David_InverseSherpaKinematics(qd+6, pos+3);
@@ -419,7 +419,7 @@ void David_OneFoot(float *qd, double t, int *desired_support, float *distributio
         float pos[6] = { David_Spline((float)t,t4,t5,-0.10f,0.f,0.f,0.f) , David_Spline((float)t,t4,t5,com_y,0.f,0.f,0.f) , -0.95f ,
                          David_Spline((float)t,t4,t5,-0.10f,0.f,0.f,0.f) , David_Spline((float)t,t4,t5,com_y,0.f,0.f,0.f) , -0.95f
                        } ;
-        *distribution=David_Spline((float)t,t4,t5,0.f,0.5f,-0.03f,-0.03f);
+        *distribution=David_Spline((float)t,t4,t5,0.f,0.5f,-0.035f,-0.035f);
         *desired_support=3;
         David_InverseSherpaKinematics(qd, pos);
         David_InverseSherpaKinematics(qd+6, pos+3);
@@ -456,34 +456,34 @@ void David_OneFoot(float *qd, double t, int *desired_support, float *distributio
 void David_GravityExperiment(float *qd, double t, int *desired_support, float *distribution)
 {
 //   int n;
-/*
-    float t1=2;
-    float t2=5;
-    float t3=15;
-    float t4=25;
-    float t5=35;
-    float t6=45;
-    float t7=55;
-    float t8=65;
-    float t9=75;
-    float t10=85;
-    float t11=95;
-    float t12=105;
-    */
-
-
+    /*
         float t1=2;
         float t2=5;
-        float t3=10;
-        float t4=15;
-        float t5=20;
-        float t6=25;
-        float t7=30;
-        float t8=35;
-        float t9=40;
-        float t10=45;
-        float t11=50;
-        float t12=55;
+        float t3=15;
+        float t4=25;
+        float t5=35;
+        float t6=45;
+        float t7=55;
+        float t8=65;
+        float t9=75;
+        float t10=85;
+        float t11=95;
+        float t12=105;
+        */
+
+
+    float t1=2;
+    float t2=5;
+    float t3=10;
+    float t4=15;
+    float t5=20;
+    float t6=25;
+    float t7=30;
+    float t8=35;
+    float t9=40;
+    float t10=45;
+    float t11=50;
+    float t12=55;
 
 
 //    float t1=0.5;
@@ -508,8 +508,8 @@ void David_GravityExperiment(float *qd, double t, int *desired_support, float *d
     float com_y =0.10f;
     //float com_y =0.29;
 
-        *distribution=0.5f;	//repartition de l'effort de contact
-        *desired_support=0;	//Pied de support: 0:none,1:right,2:left,3:both
+    *distribution=0.5f;	//repartition de l'effort de contact
+    *desired_support=0;	//Pied de support: 0:none,1:right,2:left,3:both
 
     if (t<t1)
     {

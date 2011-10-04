@@ -35,8 +35,8 @@ void David_Stabilizator( Struct_uLINK uLINK[], Struct_State *Status, float *stab
         //gsl_vector_set (stab,10, - 100*(gsl_vector_get (Status->FootCenter_R,0) - gsl_vector_get (com,0)) + 20*(gsl_vector_get(com,0)-gsl_vector_get(Status->com_old,0))/Dtime);
         //gsl_vector_set (stab,11, + 200*(gsl_vector_get (Status->FootCenter_R,1) - gsl_vector_get (com,1)) - 20*(gsl_vector_get(com,1)-gsl_vector_get(Status->com_old,1))/Dtime);
 
-    stab[4] = (float)(- 10.f*(Status->FootCenter_R[0] - com[0]) + 2.f*(com[0]-Status->com_old[0])/Te);
-    stab[5] = (float)(  20.f*(Status->FootCenter_R[1] - com[1]) - 2.f*(com[1]-Status->com_old[1])/Te);
+        stab[4] = (float)(- 10.f*(Status->FootCenter_R[0] - com[0]) + 2.f*(com[0]-Status->com_old[0])/Te);
+        stab[5] = (float)(  20.f*(Status->FootCenter_R[1] - com[1]) - 2.f*(com[1]-Status->com_old[1])/Te);
     }
 
     if (Status->desired_support==2)
@@ -48,8 +48,8 @@ void David_Stabilizator( Struct_uLINK uLINK[], Struct_State *Status, float *stab
         //gsl_vector_set (stab,16, - 100*(gsl_vector_get (Status->FootCenter_L,0) - gsl_vector_get (com,0)) + 20*(gsl_vector_get(com,0)-gsl_vector_get(Status->com_old,0))/Dtime);
         //gsl_vector_set (stab,17, + 200*(gsl_vector_get (Status->FootCenter_L,1) - gsl_vector_get (com,1)) - 20*(gsl_vector_get(com,1)-gsl_vector_get(Status->com_old,1))/Dtime);
 
-    stab[10] = (float)(- 10.f*(Status->FootCenter_L[0] - com[0]) + 2.f*(com[0]-Status->com_old[0])/Te);
-    stab[11] = (float)(  20.f*(Status->FootCenter_L[1] - com[1]) - 2.f*(com[1]-Status->com_old[1])/Te);
+        stab[10] = (float)(- 10.f*(Status->FootCenter_L[0] - com[0]) + 2.f*(com[0]-Status->com_old[0])/Te);
+        stab[11] = (float)(  20.f*(Status->FootCenter_L[1] - com[1]) - 2.f*(com[1]-Status->com_old[1])/Te);
 
 
     }

@@ -11,13 +11,13 @@
 
 void CalcCoM(SuLINK uLINK[],gsl_vector * com)
 {
-/*
-//function com = calcCoM()
-//global uLINK
-//M  = TotalMass(1);
-//MC = calcMC(1);
-//com = MC / M;
-*/
+    /*
+    //function com = calcCoM()
+    //global uLINK
+    //M  = TotalMass(1);
+    //MC = calcMC(1);
+    //com = MC / M;
+    */
 
     float M;
     gsl_vector_set_zero(com);

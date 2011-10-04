@@ -44,7 +44,7 @@ void Stabilizator(SuLINK uLINK[],State *Status,gsl_vector * stab,double Dtime,do
         CalcCoM(uLINK,com);
         gsl_vector_memcpy (Status->com_old,com);
         gsl_vector_free(com);
-   }
+    }
 
 
 

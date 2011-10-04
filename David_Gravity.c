@@ -31,15 +31,15 @@ void David_Gravity(Struct_uLINK uLINK[],Struct_State *Status, int j, float *f, f
 
     MatMulf( wc, uLINK[j].R, uLINK[j].c, 3, 3, 1) ;
     MatAddf( wc, wc, uLINK[j].p, 3 , 1) ;
-/*//w_c = uLINK(j).R * uLINK(j).c + uLINK(j).p; % Centre de masse*/
+    /*//w_c = uLINK(j).R * uLINK(j).c + uLINK(j).p; % Centre de masse*/
     ftmp[2]=9.81f*uLINK[j].m;
-/*//f3 = -[0 0 -uLINK(j).m * G]'; % Gravite*/
+    /*//f3 = -[0 0 -uLINK(j).m * G]'; % Gravite*/
     MatProVectorielf( ttmp, wc, ftmp) ;
-/*//t3 = cross(w_c, f3);*/
+    /*//t3 = cross(w_c, f3);*/
     MatAddf( f, f, ftmp, 3, 1) ;
-/*//////f = f + f3;*/
+    /*//////f = f + f3;*/
     MatAddf( t, t, ttmp, 3, 1) ;
-/*//////t = t + t3;*/
+    /*//////t = t + t3;*/
 
 
 
@@ -55,7 +55,7 @@ void David_Gravity(Struct_uLINK uLINK[],Struct_State *Status, int j, float *f, f
 
         if (j==Status->right_foot_ID)
         {
-/*            //right foot*/
+            /*            //right foot*/
             ftmp[2]=-9.81f*David_TotalMass(uLINK,1)*(1.f-Status->distribution_y);
             MatAddf( f, f, ftmp, 3, 1) ;
 
@@ -68,7 +68,7 @@ void David_Gravity(Struct_uLINK uLINK[],Struct_State *Status, int j, float *f, f
 
         if (j==Status->left_foot_ID)
         {
-/*            //left foot*/
+            /*            //left foot*/
             ftmp[2]=-9.81f*David_TotalMass(uLINK,1)*(Status->distribution_y);
             MatAddf( f, f, ftmp, 3, 1) ;
 
@@ -79,15 +79,15 @@ void David_Gravity(Struct_uLINK uLINK[],Struct_State *Status, int j, float *f, f
         }
     }
 
-/*//% from child link*/
+    /*//% from child link*/
     David_Gravity(uLINK,Status,uLINK[j].child,ftmp,ttmp);
-/*//[f1,t1] = InverseDynamics(uLINK(j).child);*/
+    /*//[f1,t1] = InverseDynamics(uLINK(j).child);*/
 
     MatAddf( f, f, ftmp, 3, 1) ;
     MatAddf( t, t, ttmp, 3, 1) ;
-/* //f = f + f1;
- * //t = t + t1;
- */
+    /* //f = f + f1;
+     * //t = t + t1;
+     */
 
 
 
@@ -97,21 +97,21 @@ void David_Gravity(Struct_uLINK uLINK[],Struct_State *Status, int j, float *f, f
     {
         uLINK[j].ug = MatProScalf( uLINK[j].hv, f, 3) + MatProScalf( uLINK[j].hw, t, 3) ;
     }
-/* //if j ~= 1
- * //    uLINK(j).u = uLINK(j).hv' * f + uLINK(j).hw' * t;  % joint driving force
- * //end
- * //
- */
+    /* //if j ~= 1
+     * //    uLINK(j).u = uLINK(j).hv' * f + uLINK(j).hw' * t;  % joint driving force
+     * //end
+     * //
+     */
 
 
-/*//% return force to mother, with sisters*/
+    /*//% return force to mother, with sisters*/
     David_Gravity(uLINK,Status,uLINK[j].sister,ftmp,ttmp);
 
     MatAddf( f, f, ftmp, 3, 1) ;
     MatAddf( t, t, ttmp, 3, 1) ;
-/* //f = f + f2;
- * //t = t + t2;
- */
+    /* //f = f + f2;
+     * //t = t + t2;
+     */
 
 
 }

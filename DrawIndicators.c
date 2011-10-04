@@ -38,16 +38,16 @@ void DrawIndicators(SuLINK uLINK[],State *Status,gsl_vector * com,gsl_vector * C
     glColor3ub(0,255,0);
     if (Status->desired_support==1)
     {
-    DrawMarker(Status->FootCenter_R);
+        DrawMarker(Status->FootCenter_R);
     }
     if (Status->desired_support==2)
     {
-    DrawMarker(Status->FootCenter_L);
+        DrawMarker(Status->FootCenter_L);
     }
     if (Status->desired_support==3)
     {
-    DrawMarker(Status->FootCenter_R);
-    DrawMarker(Status->FootCenter_L);
+        DrawMarker(Status->FootCenter_R);
+        DrawMarker(Status->FootCenter_L);
     }
 
     gsl_vector * pos = gsl_vector_calloc (3);
