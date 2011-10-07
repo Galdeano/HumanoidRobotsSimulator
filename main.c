@@ -22,7 +22,7 @@
 #include <GL/glu.h>
 #include "uLINK.h"
 #include "DrawAllJoints.h"
-
+#include "PrintState.h"
 #include "bmp.h"
 #include "IntegrateEuler.h"
 #include "ForwardDynamics.h"
@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
     //int frame_skip = 1;
     for (i = 0; i < NbRobots; i++)
     {
-        gsl_vector_set (uLINK[i][1].p, 2, Lc+Lt+Lp+0.0005);
+        gsl_vector_set (uLINK[i][1].p, 2, Lc+Lt+Lp-0.0006);
         gsl_vector_set (uLINK[i][1].p, 1, i);
     }
     //gsl_vector_set (uLINK[0][1].p, 2, Lc+Lt+Lp+0.15);
@@ -206,6 +206,12 @@ int main(int argc, char *argv[])
             case SDLK_g:
                 ground = !ground;
                 break;
+            case SDLK_s:
+                SaveState(uLINK[0],&t);
+                break;
+            case SDLK_l:
+                LoadState(uLINK[0],&t);
+                break;
             default:
                 break;
             }
@@ -218,11 +224,15 @@ int main(int argc, char *argv[])
             break;
         }
 
+//        if (t==100)
+//        {
+//        SaveState(uLINK[0],t*Dtime);
+//        }
 
         if (t%frame_skip==0)
         {
 
-            sprintf(titre,"Visualisation t= %3.3f", t*Dtime);
+            sprintf(titre,"Visualisation t= %3.3f, %1.6f", t*Dtime, Lc+Lt+Lp-gsl_vector_get (uLINK[0][1].p, 2) );
             //sprintf(titre,"Visualisation t= %2.3f cop=%f center=%f", t*Dtime,Status[0].integral_R,Status[0].integral_L);
             SDL_WM_SetCaption(titre, NULL);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -276,7 +286,6 @@ int main(int argc, char *argv[])
             {
                 ForwardDynamics(uLINK[i],&Status[i],Dtime,t);
                 IntegrateEuler(uLINK[i],1,Dtime);
-                //PrintState(uLINK);
                 DrawAllJoints(uLINK[i],1);
                 DrawIndicators(uLINK[i],&Status[i],com,CoP,Visu,ground);
             }

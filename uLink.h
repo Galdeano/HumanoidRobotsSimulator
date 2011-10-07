@@ -11,78 +11,86 @@
 
 /**
  * \struct SuLINK uLink.h
- * \brief Object Link.
- *
- * SuLINK is a descriptor of a physical link in the multibody system
- * used for the simulation
+ * \brief SuLINK is a descriptor of a physical link in the multibody system used for the simulation
  */
 typedef struct
 {
     char name[8]; /*!< Name of the Link */
-    unsigned char sister,child,mother,color,isPolygon;
-    double m,q,dq,ddq,Ir,gr,u,ug,uef,u_joint,supportHeight;
-    gsl_vector * a;
-    gsl_vector * b;
-    gsl_vector * c;
-    gsl_vector * p;
-    gsl_vector * v;
-    gsl_vector * vo;
-    gsl_vector * w;
-    gsl_vector * dvo;
-    gsl_vector * dw;
-    gsl_vector * hw;
-    gsl_vector * hv;
-    gsl_vector * isContact;
+    unsigned char sister;/*!< Sister ID */
+    unsigned char child;/*!< Child ID */
+    unsigned char mother;/*!< Mother ID */
+    unsigned char color;/*!< Color representation of the joint */
+    unsigned char isPolygon;/*!< is the link capable of contact */
+    double m;/*!< Joint mass [kg] */
+    double q;/*!< Joint position [rad] */
+    double dq;/*!< Joint velocity [rad/s] */
+    double ddq;/*!< Joint acceleration [rad/s^2] */
+    double Ir;/*!< Child electric motor moment of inertia [kg.m^2] */
+    double gr;/*!< Reduction ratio of the motor [-] */
+    double u;/*!< Joint torque [Nm] */
+    double ug;/*!< Gravity generated torque [Nm] */
+    double uef;/*!< Externals forces generated torque [Nm] */
+    double u_joint;/*!< Command torque [Nm] */
+    double supportHeight;/*!< Ground height [m] */
+    gsl_vector * a;/*!< Axe of rotation 3*1 [-] */
+    gsl_vector * b;/*!< Link dimensions 3*1 [m] */
+    gsl_vector * c;/*!< Center of gravity 3*1 [m] */
+    gsl_vector * p;/*!< Absolute link position 3*1 [m]  */
+    gsl_vector * v;/*!< Absolute linear velocity 3*1 [m/s] */
+    gsl_vector * vo;/*!< Main body linear velocity 3*1 [m/s] (only used for main body) */
+    gsl_vector * w;/*!< Absolute orientation velocity 3*1 [rad/s] */
+    gsl_vector * dvo;/*!< Main body linear acceleration 3*1 [m/s^2] (only used for main body) */
+    gsl_vector * dw;/*!< Absolute orientation acceleration 3*1 [rad/s^2] */
+    gsl_vector * hw;/*!< Axe of rotation in world reference 3*1 [-] */
+    gsl_vector * hv;/*!< Axe of rotation in world reference cross by position of the link 3*1 */
+    gsl_vector * isContact;/*!< is the link corner in contact */
     float com[3];
     float shape[3];
-    gsl_matrix * R;
-    gsl_matrix * I;
-    gsl_matrix * vert;
-    gsl_matrix * face;
+    gsl_matrix * R;/*!< Absolute orientation 3*3 [-] */
+    gsl_matrix * I;/*!< around the center of gravity inertia tensor 3*3 [kg.m^2] */
+    gsl_matrix * vert;/*!< Shape of the link */
+    gsl_matrix * face;/*!< Shape of the link */
     gsl_matrix * posContact;
     gsl_matrix * forContact;
 } SuLINK ;
 
+
+
+
 /**
  * \struct State uLink.h
- * \brief Object State.
- *
- * SuLINK  contain some information about the robot wich are not local
+ * \brief SuLINK  contain some global information about the robot state
  */
 typedef struct
 {
-    int desired_support;
-    unsigned char ddl,support,right_foot_ID,left_foot_ID; /*0:none,1:right,2:left,3:both*/
-    float right_scale,left_scale,integral_R,integral_L,distribution_y,distribution_x;
-    gsl_vector * com_old;
-    gsl_vector * posCoP_R;
-    gsl_vector * forCoP_R;
-    gsl_vector * posCoP_L;
-    gsl_vector * forCoP_L;
-    gsl_vector * FootCenter_R;
-    gsl_vector * FootCenter_L;
+    int desired_support;/*!< Desired foot of support: 0:none,1:right,2:left,3:both */
+    unsigned char ddl;/*!< Number of Degrees of freedom */
+    unsigned char support;/*!< Foot of support: 0:none,1:right,2:left,3:both */
+    unsigned char right_foot_ID;/*!< Right foot ID */
+    unsigned char left_foot_ID;/*!< Right foot ID */
+    float right_scale;/*!< External forces drawing */
+    float left_scale;/*!< External forces drawing */
+    float integral_R;/*!< Stabilisator command */
+    float integral_L;/*!< Stabilisator command */
+    float distribution_y;/*!< External forces distribution betwenn the two legs on y axis [-] */
+    float distribution_x;/*!< External forces distribution betwenn the two legs on x axis [-] */
+    gsl_vector * com_old;/*!< Position of the Center of Mass at previous iteration [m] */
+    gsl_vector * posCoP_R;/*!< Right foot external forces position 3*1 [m] */
+    gsl_vector * forCoP_R;/*!< Right foot external forces amplitude 3*1 [N] */
+    gsl_vector * posCoP_L;/*!< Left foot external forces position 3*1 [m] */
+    gsl_vector * forCoP_L;/*!< Left foot external forces amplitude 3*1 [N] */
+    gsl_vector * FootCenter_R;/*!< Right foot position 3*1 [m] */
+    gsl_vector * FootCenter_L;/*!< Left foot position 3*1 [m] */
 } State ;
 
-/*
-//    uLINK(n).dq     = 0;            % joint velocity [rad/s]
-//    uLINK(n).ddq    = 0;            % joint acceleration [rad/s^2]
-//    %uLINK(n).c      = [0 0 0]';     % center of gravity [m]
-//    uLINK(n).c      = uLINK(n).b/2;     % center of gravity [m]
-//    uLINK(n).I      = zeros(3,3);   % around the center of gravity inertia tensor [kg.m^2]
-//    uLINK(n).Ir     = 0.0;          % child electric motor moment of inertia [kg.m^2]
-//    uLINK(n).gr     = 0.0;          % reduction ratio of the motor [-]
-//    uLINK(n).u      = 0.0;          % joint torque [Nm]
-*/
 
 /**
  * \fn void SetupRobot(SuLINK uLINK[],State *Status)
- * \brief Fonction de création d'une nouvelle instance d'un objet Str_t.
+ * \brief Initialize the link structure with the model value
  *
- * \param SuLINK uLINK[] Chaîne à stocker dans l'objet Str_t, ne peut être NULL.
- * \param State *Status Chaîne  dans l'objet Str_t, ne peut être NULL.
- * \return Instance nouvellement allouée d'un objet de type Str_t ou NULL.
+ * \param SuLINK uLINK[] Structure wich describe the robot link by link
+ * \param State *Status Structure wich describe the state of the robot
  */
-
 void SetupRobot(SuLINK uLINK[],State *Status);
 
 

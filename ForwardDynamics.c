@@ -249,7 +249,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
         //Stabilizator(uLINK,Status,stab,Dtime,t*Dtime);
         //gsl_vector_add (u,stab);
         static float uStab[NbLinks-2];
-        David_Stabilizator( uLINKc, &Statusc, uStab);
+        //David_Stabilizator( uLINKc, &Statusc, uStab);
 #endif
 
 

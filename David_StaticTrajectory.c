@@ -365,7 +365,7 @@ void David_OneFoot(float *qd, double t, int *desired_support, float *distributio
 //    float t6=14;
 
 
-    float com_y =0.215f;
+    float com_y =0.210f;
     //float com_y =0.29;
 
 
@@ -396,7 +396,7 @@ void David_OneFoot(float *qd, double t, int *desired_support, float *distributio
         float pos[6] = { David_Spline((float)t,t2,t3,0.f,-0.10f,0.f,0.f) , David_Spline((float)t,t2,t3,0.f,com_y,0.f,0.f) , -0.95f ,
                          David_Spline((float)t,t2,t3,0.f,-0.10f,0.f,0.f) , David_Spline((float)t,t2,t3,0.f,com_y,0.f,0.f) , -0.95f
                        } ;
-        *distribution=David_Spline((float)t,t2,t3,0.5f,0.f,0.035f,0.035f);
+        *distribution=David_Spline((float)t,t2,t3,0.5f,0.f,0.035f,0.030f);
         *desired_support=3;
         David_InverseSherpaKinematics(qd, pos);
         David_InverseSherpaKinematics(qd+6, pos+3);
