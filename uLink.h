@@ -5,7 +5,11 @@
 #include <gsl/gsl_matrix.h>
 
 /** \file uLink.h
- * This describe link properties.
+ *  \brief Link initialisation and declarations
+ *  \author    David Galdeano
+ *  \date      10/2011
+ *
+ * This file describe link properties.
  * Every bodies is represent by a link whith many properties (like mass, position, inertia,...) in this formulation.
  */
 
@@ -88,8 +92,8 @@ typedef struct
  * \fn void SetupRobot(SuLINK uLINK[],State *Status)
  * \brief Initialize the link structure with the model value
  *
- * \param SuLINK uLINK[] Structure wich describe the robot link by link
- * \param State *Status Structure wich describe the state of the robot
+ * \param uLINK[] Structure wich describe the robot link by link
+ * \param Status Structure wich describe the state of the robot
  */
 void SetupRobot(SuLINK uLINK[],State *Status);
 

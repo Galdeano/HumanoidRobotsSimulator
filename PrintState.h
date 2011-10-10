@@ -4,6 +4,13 @@
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 
+/** \file PrintState.h
+ *  \brief Save and load states
+ *  \author    David Galdeano
+ *  \date      10/2011
+ *
+ * These files allow saving and loading some state of the robot
+ */
 
 /**
  * \struct SaveLINK CopyuLink.h
@@ -22,7 +29,7 @@ typedef struct
     double v[3];/*!< Absolute linear velocity 3*1 [m/s] */
     double vo[3];/*!< Main body linear velocity 3*1 [m/s] (only used for main body) */
     double w[3];/*!< Absolute orientation velocity 3*1 [rad/s] */
-    double dvo[3];/*!< Main body linear acceleration 3*1 [m/s^2] (only used for main body) */
+    double dvo[3];/*!< Main body linear acceleration 3*1 [m/s^2] */
     double dw[3];/*!< Absolute orientation acceleration 3*1 [rad/s^2] */
     double hw[3];/*!< Axe of rotation in world reference 3*1 [-] */
     double hv[3];/*!< Axe of rotation in world reference cross by position of the link 3*1 */
@@ -30,12 +37,47 @@ typedef struct
 } SaveLINK ;
 
 
+/**
+ * \fn void SaveStateXML(SuLINK uLINK[],float t)
+ * \brief Save the state of the robot in a XML file
+ *
+ * \param uLINK[] Structure wich describe the robot link by link
+ * \param t Current time
+ */
 void SaveStateXML(SuLINK uLINK[],float t);
 
+
+/**
+ * \fn void SaveState(SuLINK uLINK[],long *t)
+ * \brief Save the state of the robot in a binary file
+ * \param uLINK[] Structure wich describe the robot link by link
+ * \param t Current time
+ */
 void SaveState(SuLINK uLINK[],long *t);
+
+/**
+ * \fn void SaveStuctLink(SuLINK uLINK[],SaveLINK CopyuLINK[])
+ * \brief Transfert the state of the robot to a structure without pointer
+ * \param uLINK[] Structure wich describe the robot link by link
+ * \param CopyuLINK[] Structure wich describe the robot witout pointers
+ */
 void SaveStuctLink(SuLINK uLINK[],SaveLINK CopyuLINK[]);
 
+
+/**
+ * \fn void LoadState(SuLINK uLINK[],long *t)
+ * \brief Load the state of the robot from a binary file
+ * \param uLINK[] Structure wich describe the robot link by link
+ * \param t Current time
+ */
 void LoadState(SuLINK uLINK[],long *t);
+
+/**
+ * \fn void LoadStuctLink(SuLINK uLINK[],SaveLINK CopyuLINK[])
+ * \brief Transfert the saved structure without pointer to the actual state of the robot
+ * \param uLINK[] Structure wich describe the robot link by link
+ * \param CopyuLINK[] Structure wich describe the robot witout pointers
+ */
 void LoadStuctLink(SuLINK uLINK[],SaveLINK CopyuLINK[]);
 
 #endif
