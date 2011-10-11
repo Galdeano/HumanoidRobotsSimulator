@@ -1,7 +1,19 @@
 #ifndef H_David_uLink
 #define H_David_uLink
 
+/** \file David_uLink.h
+ *  \brief Link initialisation and declarations (used in control loop)
+ *  \author    David Galdeano
+ *  \date      10/2011
+ *
+ * This file describe link properties for control loop.
+ */
 
+
+/**
+ * \struct Struct_uLINK uLink.h
+ * \brief Struct_uLINK is a descriptor of a physical link in the multibody system used for the simulation (used in control loop). See \ref SuLINK.
+ */
 typedef struct
 {
     char name[8];
@@ -16,7 +28,10 @@ typedef struct
     float R[9];
 } Struct_uLINK ;
 
-
+/**
+ * \struct Struct_State uLink.h
+ * \brief Struct_State contain some global information about the robot state (used in control loop). See \ref State.
+ */
 typedef struct
 {
     int desired_support;
@@ -37,7 +52,13 @@ typedef struct
  * //    uLINK(n).u      = 0.0;          % joint torque [Nm]
  */
 
-
+/**
+ * \fn void David_SetupRobot(Struct_uLINK uLINK[],Struct_State *Status)
+ * \brief Initialize the link structure with the model value (used in control loop). See \ref SetupRobot.
+ *
+ * \param uLINK[] Structure wich describe the robot link by link
+ * \param Status Structure wich describe the state of the robot
+ */
 void David_SetupRobot(Struct_uLINK uLINK[],Struct_State *Status);
 
 

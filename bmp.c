@@ -23,15 +23,13 @@
 #include <string.h>
 #include "bmp.h"
 
-int
-read_bmp(const char *filename, int *width, int *height, unsigned char *rgb)
+int read_bmp(const char *filename, int *width, int *height, unsigned char *rgb)
 {
     fprintf(stderr, "Sorry, reading of .bmp files isn't supported yet.\n");
     return(0);
 }
 
-int
-write_bmp(const char *filename, int width, int height, char *rgb)
+int write_bmp(const char *filename, int width, int height, char *rgb)
 {
     int i, j, ipos;
     int bytesPerLine;

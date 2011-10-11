@@ -13,7 +13,7 @@
  */
 
 /**
- * \struct SaveLINK CopyuLink.h
+ * \struct SaveLINK PrintState.h
  * \brief SaveLINK is a copy of Sulink with no pointer to allow a binary save of every variables in the robot state
  */
 typedef struct

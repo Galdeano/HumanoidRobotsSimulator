@@ -7,7 +7,10 @@
  *  \date      10/2011
  *  \pre       First install gsl, SDL and openGL for a proper compilation
  *  \warning   Do not modify this programm unless you know what you do.
+ *  \copyright This program must not be modify, distributed or used in an other application without the autorisation of the autor and is distributed as is, without any guaranties in case of malfunctioning.
+ *
  */
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -337,6 +340,29 @@ int main(int argc, char *argv[])
 
 
 
+/*! \mainpage 	SimuSherpaConsole Reference Manual
+ *
+ * SimuSherpaConsole is a program which simulates a 3D biped robot with multi contact and multibody computations.
+ *
+ * \section author_sec Author
+ *
+ * This simulator is developped by David Galdeano (galdeano@lirmm.fr) under the supervision of Ahmed Chemori, Sebastien Krut and Philippe Fraisse at the
+ *  <a href="http://www.lirmm.fr"> Montpellier Laboratory of Informatics, Robotics, and Microelectronics</a> (LIRMM in french).
+ *
+ * \section intro_sec Introduction
+ *
+ * This program is coded in C using the SDL, OpenGL and gsl libraries functions. For now, SimuSherpaConsole is available for Windows and may work on other systems.
+ *
+ * Many functions for dynamics computations are adapted from Kajita's book: Humanoid Robot.
+ *
+ * SDL and OpenGL libraries are used for graphical representations of the simulation.
+ * gls librarie is used for vector and matrix computations.
+ *
+ * The project uses a code::blocs solution and may work on other IDE.
+ *
+ * \copyright This program must not be modified, distributed or used in an other application without the authorization of the autor and is distributed as is, without any guaranties in case of malfunctioning.
+ *
+ */
 
 
 
