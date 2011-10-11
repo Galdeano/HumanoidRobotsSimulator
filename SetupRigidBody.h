@@ -6,7 +6,7 @@
 #include <gsl/gsl_matrix.h>
 
 /** \file SetupRigidBody.h
- *  \brief Kinematics computations of robot
+ *  \brief Create the polygon faces and vectices for graphical representation
  *  \author    David Galdeano
  *  \date      10/2011
  *
@@ -15,7 +15,7 @@
 
 /**
  * \fn void SetupRigidBody(SuLINK uLINK[],int j)
- * \brief Compute the kinematics for robot from q coordinates
+ * \brief Create the polygon faces and vectices for graphical representation
  *
  *
  * \param uLINK[] Structure wich describe the robot link by link
