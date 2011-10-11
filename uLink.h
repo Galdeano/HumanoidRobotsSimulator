@@ -63,7 +63,7 @@ typedef struct
 
 /**
  * \struct State uLink.h
- * \brief SuLINK  contain some global information about the robot state
+ * \brief State contain some global information about the robot state
  */
 typedef struct
 {
