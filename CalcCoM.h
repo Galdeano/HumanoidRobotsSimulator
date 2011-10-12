@@ -17,7 +17,7 @@
  * \brief Compute the Center of Mass position
  *
  * \param uLINK[] Structure wich describe the robot link by link
- * \param com vector containing the CoM position as result
+ * \param com Out: vector containing the CoM position as result
  */
 void CalcCoM(SuLINK uLINK[],gsl_vector * com);
 
