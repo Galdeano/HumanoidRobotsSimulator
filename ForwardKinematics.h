@@ -6,7 +6,7 @@
 
 
 /** \file ForwardKinematics.h
- *  \brief Kinematics computations of robot
+ *  \brief Recursive kinematics computations of robot
  *  \author    David Galdeano
  *  \date      10/2011
  *
@@ -15,7 +15,7 @@
 
 /**
  * \fn void ForwardKinematics(SuLINK uLINK[],int j)
- * \brief Compute the kinematics for robot from q coordinates
+ * \brief Recursively compute the kinematics for robot from q coordinates
  *
  * Must be used as follow:
  * \code ForwardKinematics(uLINK,1); \endcode
