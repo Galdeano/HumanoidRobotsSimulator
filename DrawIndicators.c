@@ -12,7 +12,7 @@
 
 
 
-void DrawIndicators(SuLINK uLINK[],State *Status,gsl_vector * com,gsl_vector * CoP,gsl_vector * Visu,int ground)
+void DrawIndicators(SuLINK uLINK[],State *Status,gsl_vector * com,gsl_vector * CoP,int ground)
 {
 
     CalcCoM(uLINK,com);
@@ -51,6 +51,7 @@ void DrawIndicators(SuLINK uLINK[],State *Status,gsl_vector * com,gsl_vector * C
     }
 
     gsl_vector * pos = gsl_vector_calloc (3);
+    gsl_vector * Visu = gsl_vector_calloc (3);
 
     glColor3ub(0,255,255);
     if (Status->right_scale!=0.0)
@@ -72,6 +73,7 @@ void DrawIndicators(SuLINK uLINK[],State *Status,gsl_vector * com,gsl_vector * C
     DrawForceMarker(pos,Visu);
 
     gsl_vector_free(pos);
+    gsl_vector_free(Visu);
 
 }
 

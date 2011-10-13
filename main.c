@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
     gsl_vector * CoP = gsl_vector_calloc (3);
     gsl_vector * q = gsl_vector_calloc (6);
     gsl_vector * pos = gsl_vector_calloc (3);
-    gsl_vector * Visu = gsl_vector_calloc (3);
+
 
 //HWND Handle=NULL;
 
@@ -113,7 +113,6 @@ int main(int argc, char *argv[])
     //float EndTime = 3;
     long t=0;
     char titre[40] = "Visualisation t=0";
-
 
     char files[40];
     int frame=0;
@@ -279,7 +278,7 @@ int main(int argc, char *argv[])
                 //sprintf(titre,"Visualisation t= %2.3f, x= %2.3f, y= %2.3f", t*Dtime,gsl_vector_get (com,0),gsl_vector_get (com,1));
                 //SDL_WM_SetCaption(titre, NULL);
                 DrawMarker(com);
-                DrawIndicators(uLINK[i],&Status[i],com,CoP,Visu,ground);
+                DrawIndicators(uLINK[i],&Status[i],com,CoP,ground);
             }
 #endif
 
@@ -290,7 +289,7 @@ int main(int argc, char *argv[])
                 ForwardDynamics(uLINK[i],&Status[i],Dtime,t);
                 IntegrateEuler(uLINK[i],1,Dtime);
                 DrawAllJoints(uLINK[i],1);
-                DrawIndicators(uLINK[i],&Status[i],com,CoP,Visu,ground);
+                DrawIndicators(uLINK[i],&Status[i],com,CoP,ground);
             }
 #endif
 
@@ -332,7 +331,7 @@ int main(int argc, char *argv[])
     gsl_vector_free(CoP);
     gsl_vector_free(q);
     gsl_vector_free(pos);
-    gsl_vector_free(Visu);
+
 
     return EXIT_SUCCESS; // Fermeture du programme
 
