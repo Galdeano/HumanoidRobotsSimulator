@@ -45,15 +45,15 @@
  MatMulf( Statusc.FootCenter_L, uLINKc[13].R, FootL, 3, 3, 1) ;
  MatAddf( Statusc.FootCenter_L, Statusc.FootCenter_L, uLINKc[13].p, 3, 1) ;
 
- //David_CalcCoM(uLINKc,com);
+ //CalcCoM_f(uLINKc,com);
 
 	t = TempsTickToS( McrTimerGetCount( NULL ) ) ; // Lecture du temps
 
- //David_OneFoot(qd, t-t0, &Statusc.desired_support, &Statusc.distribution_y);
- //David_OneFoot(dqd, t-t0-Dtime, &Statusc.desired_support, &Statusc.distribution_y);
+ //OneFoot_f(qd, t-t0, &Statusc.desired_support, &Statusc.distribution_y);
+ //OneFoot_f(dqd, t-t0-Dtime, &Statusc.desired_support, &Statusc.distribution_y);
 
-	David_GravityExperiment(qd, t-t0, &Statusc.desired_support, &Statusc.distribution_y);
- David_GravityExperiment(dqd, t-t0-Te, &Statusc.desired_support, &Statusc.distribution_y);
+	GravityExperiment_f(qd, t-t0, &Statusc.desired_support, &Statusc.distribution_y);
+GravityExperiment_f(dqd, t-t0-Te, &Statusc.desired_support, &Statusc.distribution_y);
 
 	#if !CodeursCNA
 	QcpStore ( qd ) ;
@@ -78,10 +78,10 @@
  }
 
 
- //David_Stabilizator( uLINKc, &Statusc, uStab);
+ //Stabilizator_f( uLINKc, &Statusc, uStab);
 
 
- David_Gravity( uLINKc, &Statusc, 1, fG, tG);
+ Gravity_f( uLINKc, &Statusc, 1, fG, tG);
  for (n=0; n<NA; n++)
  {
    uG[n]=uLINKc[n+2].ug;
