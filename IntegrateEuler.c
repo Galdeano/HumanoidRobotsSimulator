@@ -5,8 +5,9 @@
 #include "SE3exp.h"
 #include "IntegrateEuler.h"
 
+#include "Setup.h"
 
-void IntegrateEuler(SuLINK uLINK[],int j,float Dtime )
+void IntegrateEuler(SuLINK uLINK[],int j )
 {
     if (j == 0)
     {
@@ -16,7 +17,7 @@ void IntegrateEuler(SuLINK uLINK[],int j,float Dtime )
     if (j == 1)
     {
         //[uLINK(j).p, uLINK(j).R] = SE3exp(j, Dtime);
-        SE3exp(uLINK,j, Dtime);
+        SE3exp(uLINK,j);
 
 //printf(" j: %d",j);
 //printf(" c: \n");
@@ -58,8 +59,8 @@ void IntegrateEuler(SuLINK uLINK[],int j,float Dtime )
 //        printf("%8.4f \n",uLINK[j].dq);
     }
 
-    IntegrateEuler(uLINK,uLINK[j].sister,Dtime);
-    IntegrateEuler(uLINK,uLINK[j].child,Dtime);
+    IntegrateEuler(uLINK,uLINK[j].sister);
+    IntegrateEuler(uLINK,uLINK[j].child);
 
 }
 

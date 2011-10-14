@@ -5,6 +5,6 @@
 #include <gsl/gsl_matrix.h>
 
 
-void SE3exp(SuLINK uLINK[],int j,float Dtime);
+void SE3exp(SuLINK uLINK[],int j);
 
 #endif

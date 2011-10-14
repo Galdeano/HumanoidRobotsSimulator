@@ -34,7 +34,7 @@
 #include "Setup.h"
 
 
-void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
+void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 {
     static Struct_uLINK uLINKc[NbLinks];
     static Struct_State Statusc;

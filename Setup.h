@@ -24,9 +24,15 @@
     \brief Record variables of the simulation
 */
 
+
 #define Te 0.005
 /*! \def Te
     \brief Sampling period of control loop in second
+*/
+
+#define Dtime 0.0001
+/*! \def Dtime
+    \brief Simulation sampling period
 */
 
 //Choose Robot model

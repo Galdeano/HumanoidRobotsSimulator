@@ -7,8 +7,9 @@
 #include "Hat.h"
 #include "SE3exp.h"
 
+#include "Setup.h"
 
-void SE3exp(SuLINK uLINK[],int j,float Dtime)
+void SE3exp(SuLINK uLINK[],int j)
 {
 //function [p2, R2] = SE3exp(j, dt)
 //SE3exp.m actualise la position et lÅforientation par lÅfutilisation de la vitesse spatiale.

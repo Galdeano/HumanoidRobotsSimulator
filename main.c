@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
     uLINK[0][1].supportHeight=Lc+Lt+Lp+0.13;
 #endif
 
-    float Dtime = 0.0001;
+
     //float EndTime = 3;
     long t=0;
     char titre[40] = "Visualisation t=0";
@@ -286,8 +286,8 @@ int main(int argc, char *argv[])
 #if !StaticCOM
             for (i = 0; i < NbRobots; i++)
             {
-                ForwardDynamics(uLINK[i],&Status[i],Dtime,t);
-                IntegrateEuler(uLINK[i],1,Dtime);
+                ForwardDynamics(uLINK[i],&Status[i],t);
+                IntegrateEuler(uLINK[i],1);
                 DrawAllJoints(uLINK[i],1);
                 DrawIndicators(uLINK[i],&Status[i],com,CoP,ground);
             }
@@ -317,8 +317,8 @@ int main(int argc, char *argv[])
         {
             for (i = 0; i < NbRobots; i++)
             {
-                ForwardDynamics(uLINK[i],&Status[i],Dtime,t);
-                IntegrateEuler(uLINK[i],1,Dtime);
+                ForwardDynamics(uLINK[i],&Status[i],t);
+                IntegrateEuler(uLINK[i],1);
             }
         }
 #endif
