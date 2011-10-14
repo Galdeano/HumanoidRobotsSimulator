@@ -6,7 +6,7 @@
 
 
 
-/** \file CalcCoM.h
+/** \file CalcCoP.h
  *  \brief Compute recursively the Center of Pressure position
  *  \author    David Galdeano
  *  \date      10/2011

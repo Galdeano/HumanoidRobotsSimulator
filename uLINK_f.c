@@ -2,16 +2,16 @@
 
 #include "d:\Mb\StLib\Mat.h"
 
-#include "David_uLINK.h"
+#include "uLINK_f.h"
 
-#include "David_FindMother.h"
-#include "David_ForwardKinematics.h"
+#include "FindMother_f.h"
+#include "ForwardKinematics_f.h"
 //#include "ForwardVelocity.h"
 
 #include "Setup.h"
 
 #if Sherpa
-void David_SetupRobot(Struct_uLINK uLINK[],Struct_State *Status)
+void SetupRobot_f(Struct_uLINK uLINK[],Struct_State *Status)
 {
 
 
@@ -180,9 +180,9 @@ void David_SetupRobot(Struct_uLINK uLINK[],Struct_State *Status)
 
 
 
-    David_FindMother(uLINK,1);
+    FindMother_f(uLINK,1);
 
-    David_ForwardKinematics(uLINK,1);
+    ForwardKinematics_f(uLINK,1);
 
     //ForwardVelocity(uLINK,1);
 
@@ -204,7 +204,7 @@ void David_SetupRobot(Struct_uLINK uLINK[],Struct_State *Status)
 
 
 #if Generic
-void David_SetupRobot(Struct_uLINK uLINK[],Struct_State *Status)
+void SetupRobot_f(Struct_uLINK uLINK[],Struct_State *Status)
 {
 
     float Hy=0.31f;
@@ -436,9 +436,9 @@ void David_SetupRobot(Struct_uLINK uLINK[],Struct_State *Status)
 
 
 
-    David_FindMother(uLINK,1);
+    FindMother_f(uLINK,1);
 
-    David_ForwardKinematics(uLINK,1);
+    ForwardKinematics_f(uLINK,1);
 
 }
 #endif

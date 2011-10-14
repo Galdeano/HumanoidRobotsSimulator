@@ -1,8 +1,8 @@
 #include <math.h>
-#include "David_InverseSherpaKinematics.h"
+#include "InverseSherpaKinematics_f.h"
 
 
-void David_InverseSherpaKinematics(float *qd,float *pos)
+void InverseSherpaKinematics_f(float *qd,float *pos)
 {
     /* //   float Hy=0.155*2;
      * //   float Hx=0.0468;

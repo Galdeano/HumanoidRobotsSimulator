@@ -2,10 +2,10 @@
 
 #include "d:\Mb\StLib\Mat.h"
 
-#include "David_Rodrigues.h"
+#include "Rodrigues_f.h"
 
 
-void David_Rodrigues(float *rot,float *w,float dt)
+void Rodrigues_f(float *rot,float *w,float dt)
 {
     float d,th;
     float wn[3], w_wedge[9], tmp[9];

@@ -1,11 +1,11 @@
-#include "David_uLINK.h"
-#include "David_Rodrigues.h"
+#include "uLINK_f.h"
+#include "Rodrigues_f.h"
 
 #include "d:\Mb\StLib\Mat.h"
 
-#include "David_ForwardKinematics.h"
+#include "ForwardKinematics_f.h"
 
-void David_ForwardKinematics(Struct_uLINK uLINK[],int j)
+void ForwardKinematics_f(Struct_uLINK uLINK[],int j)
 {
 
     if (j == 0)
@@ -21,7 +21,7 @@ void David_ForwardKinematics(Struct_uLINK uLINK[],int j)
         MatAddf( uLINK[j].p, uLINK[j].p, uLINK[uLINK[j].mother].p, 3, 1) ;
         /*        //uLINK[j].p = uLINK[uLINK[j].mother].R * uLINK[j].b + uLINK[uLINK[j].mother].p;*/
 
-        David_Rodrigues(rot,uLINK[j].a,uLINK[j].q);
+        Rodrigues_f(rot,uLINK[j].a,uLINK[j].q);
         MatMulf( uLINK[j].R, uLINK[uLINK[j].mother].R, rot, 3, 3, 3) ;
         /*        //uLINK[j].R = uLINK[uLINK[j].mother].R * Rodrigues(uLINK[j].a, uLINK[j].q);*/
 
@@ -36,8 +36,8 @@ void David_ForwardKinematics(Struct_uLINK uLINK[],int j)
 
     }
 
-    David_ForwardKinematics(uLINK,uLINK[j].sister);
-    David_ForwardKinematics(uLINK,uLINK[j].child);
+    ForwardKinematics_f(uLINK,uLINK[j].sister);
+    ForwardKinematics_f(uLINK,uLINK[j].child);
 
 
 }

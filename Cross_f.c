@@ -1,10 +1,10 @@
 
 #include "d:\Mb\StLib\Mat.h"
 
-#include "David_Cross.h"
+#include "Cross_f.h"
 
 
-int David_Cross( float *a, float *b, int i)
+int Cross_f( float *a, float *b, int i)
 {
     float cross[3];
     cross[0]=a[1]*b[2]-a[2]*b[1];

@@ -1,7 +1,7 @@
-#include "David_uLINK.h"
-#include "David_FindMother.h"
+#include "uLINK_f.h"
+#include "FindMother_f.h"
 
-void David_FindMother(Struct_uLINK uLINK[],int j)
+void FindMother_f(Struct_uLINK uLINK[],int j)
 {
     if (j != 0)
     {
@@ -12,13 +12,13 @@ void David_FindMother(Struct_uLINK uLINK[],int j)
         if (uLINK[j].child != 0)
         {
             uLINK[uLINK[j].child].mother = j;
-            David_FindMother(uLINK,uLINK[j].child);
+            FindMother_f(uLINK,uLINK[j].child);
         }
 
         if (uLINK[j].sister != 0)
         {
             uLINK[uLINK[j].sister].mother = uLINK[j].mother;
-            David_FindMother(uLINK,uLINK[j].sister);
+            FindMother_f(uLINK,uLINK[j].sister);
         }
     }
 }

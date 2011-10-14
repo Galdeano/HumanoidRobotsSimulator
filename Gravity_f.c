@@ -1,17 +1,17 @@
-#include "David_uLINK.h"
-#include "David_CalcCoM.h"
-#include "David_TotalMass.h"
+#include "uLINK_f.h"
+#include "CalcCoM_f.h"
+#include "TotalMass_f.h"
 
 #include "d:\Mb\StLib\Mat.h"
 
-#include "David_Gravity.h"
-#include "David_Cross.h"
+#include "Gravity_f.h"
+#include "Cross_f.h"
 #include "Setup.h"
 
 #include <stdio.h>
 
 
-void David_Gravity(Struct_uLINK uLINK[],Struct_State *Status, int j, float *f, float *t)
+void Gravity_f(Struct_uLINK uLINK[],Struct_State *Status, int j, float *f, float *t)
 {
 
     float ftmp[3], ttmp[3], wc[3];
@@ -50,18 +50,18 @@ void David_Gravity(Struct_uLINK uLINK[],Struct_State *Status, int j, float *f, f
     if (((j==Status->right_foot_ID)||(j==Status->left_foot_ID)) && !Suspendu)
     {
         float com[3];
-        David_CalcCoM(uLINK,com);
+        CalcCoM_f(uLINK,com);
 
 
         if (j==Status->right_foot_ID)
         {
             /*            //right foot*/
-            ftmp[2]=-9.81f*David_TotalMass(uLINK,1)*(1.f-Status->distribution_y);
+            ftmp[2]=-9.81f*TotalMass_f(uLINK,1)*(1.f-Status->distribution_y);
             MatAddf( f, f, ftmp, 3, 1) ;
 
             MatCpyf( ttmp, Status->FootCenter_R, 3, 1);
             ttmp[0]=com[0];
-            David_Cross(ttmp,ftmp,0);
+            Cross_f(ttmp,ftmp,0);
             MatAddf( t, t, ttmp, 3, 1) ;
 
         }
@@ -69,18 +69,18 @@ void David_Gravity(Struct_uLINK uLINK[],Struct_State *Status, int j, float *f, f
         if (j==Status->left_foot_ID)
         {
             /*            //left foot*/
-            ftmp[2]=-9.81f*David_TotalMass(uLINK,1)*(Status->distribution_y);
+            ftmp[2]=-9.81f*TotalMass_f(uLINK,1)*(Status->distribution_y);
             MatAddf( f, f, ftmp, 3, 1) ;
 
             MatCpyf( ttmp, Status->FootCenter_L, 3, 1);
             ttmp[0]=com[0];
-            David_Cross(ttmp,ftmp,0);
+            Cross_f(ttmp,ftmp,0);
             MatAddf( t, t, ttmp, 3, 1) ;
         }
     }
 
     /*//% from child link*/
-    David_Gravity(uLINK,Status,uLINK[j].child,ftmp,ttmp);
+    Gravity_f(uLINK,Status,uLINK[j].child,ftmp,ttmp);
     /*//[f1,t1] = InverseDynamics(uLINK(j).child);*/
 
     MatAddf( f, f, ftmp, 3, 1) ;
@@ -105,7 +105,7 @@ void David_Gravity(Struct_uLINK uLINK[],Struct_State *Status, int j, float *f, f
 
 
     /*//% return force to mother, with sisters*/
-    David_Gravity(uLINK,Status,uLINK[j].sister,ftmp,ttmp);
+    Gravity_f(uLINK,Status,uLINK[j].sister,ftmp,ttmp);
 
     MatAddf( f, f, ftmp, 3, 1) ;
     MatAddf( t, t, ttmp, 3, 1) ;

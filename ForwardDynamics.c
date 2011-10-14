@@ -17,12 +17,12 @@
 #include "ForwardDynamics.h"
 
 
-#include "David_uLINK.h"
-#include "David_StaticTrajectory.h"
-#include "David_ForwardKinematics.h"
-#include "David_CalcCoM.h"
-#include "David_Gravity.h"
-#include "David_Stabilizator.h"
+#include "uLINK_f.h"
+#include "StaticTrajectory_f.h"
+#include "ForwardKinematics_f.h"
+#include "CalcCoM_f.h"
+#include "Gravity_f.h"
+#include "Stabilizator_f.h"
 #include "DrawMarkerf.h"
 
 #ifndef MCSpline
@@ -40,7 +40,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
     static Struct_State Statusc;
     if (t==1)
     {
-        David_SetupRobot(uLINKc,&Statusc);
+        SetupRobot_f(uLINKc,&Statusc);
     }
 
 
@@ -189,7 +189,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
 //        }
 
 
-        David_ForwardKinematics(uLINKc,1);
+        ForwardKinematics_f(uLINKc,1);
 
         static float FootR[3]= {0.0853,0,-0.11};
         MatMulf( Statusc.FootCenter_R, uLINKc[7].R, FootR, 3, 3, 1) ;
@@ -202,13 +202,13 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
 //        DrawMarkerf(Statusc.FootCenter_R);
 //        DrawMarkerf(Statusc.FootCenter_L);
 
-        David_CalcCoM(uLINKc,com);
+        CalcCoM_f(uLINKc,com);
         //DrawMarkerf(com);
 
 
 
-        David_OneFoot(qd, t*Dtime, &Statusc.desired_support, &Statusc.distribution_y);
-        David_OneFoot(dqd, t*Dtime-Dtime, &Statusc.desired_support, &Statusc.distribution_y);
+        OneFoot_f(qd, t*Dtime, &Statusc.desired_support, &Statusc.distribution_y);
+        OneFoot_f(dqd, t*Dtime-Dtime, &Statusc.desired_support, &Statusc.distribution_y);
 
 //            FILE *dist_file=fopen("./../Simu_data/dist.txt","a");
 //            for(n=0; n<nDoF-6; n++)
@@ -218,8 +218,8 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
 //            fprintf(dist_file,"\n");
 //            fclose(dist_file);
 
-        David_OneFoot(qd, t*Dtime, &Status->desired_support, &Status->distribution_y);
-        David_OneFoot(dqd, t*Dtime-Dtime, &Status->desired_support, &Status->distribution_y);
+        OneFoot_f(qd, t*Dtime, &Status->desired_support, &Status->distribution_y);
+        OneFoot_f(dqd, t*Dtime-Dtime, &Status->desired_support, &Status->distribution_y);
 
 
 #if PD
@@ -240,7 +240,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
         }
 
         static float uG[NbLinks-2], fG[NbLinks-2], tG[NbLinks-2];
-        David_Gravity( uLINKc, &Statusc, 1, fG, tG);
+        Gravity_f( uLINKc, &Statusc, 1, fG, tG);
         for (n=0; n<nDoF-6; n++)
         {
             uG[n]=uLINKc[n+2].ug;
@@ -249,7 +249,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
         //Stabilizator(uLINK,Status,stab,Dtime,t*Dtime);
         //gsl_vector_add (u,stab);
         static float uStab[NbLinks-2];
-        //David_Stabilizator( uLINKc, &Statusc, uStab);
+        //Stabilizator_f( uLINKc, &Statusc, uStab);
 #endif
 
 
@@ -266,7 +266,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,double Dtime,long t)
         //static float uG[NbLinks-2];
 
         static float uG[NbLinks-2], fG[NbLinks-2], tG[NbLinks-2];
-        David_Gravity( uLINKc, &Statusc, 1, fG, tG);
+        Gravity_f( uLINKc, &Statusc, 1, fG, tG);
         for (n=0; n<nDoF-6; n++)
         {
             uG[n]=uLINKc[n+2].ug;

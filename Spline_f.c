@@ -1,7 +1,7 @@
-#include "David_Spline.h"
+#include "Spline_f.h"
 
 
-float David_Spline(float x,float x0,float x1,float p0,float p1,float v0,float v1)
+float Spline_f(float x,float x0,float x1,float p0,float p1,float v0,float v1)
 {
 
     float t= (x-x0)/(x1-x0);
@@ -17,19 +17,19 @@ float David_Spline(float x,float x0,float x1,float p0,float p1,float v0,float v1
 
 }
 
-float David_C2Spline(float x,float x0,float x1,float x2,float p0,float p1,float p2,float v0,float v2)
+float C2Spline_f(float x,float x0,float x1,float x2,float p0,float p1,float p2,float v0,float v2)
 {
 
     float v1 = ((-6*p0-2*(x1-x0)*v0+6*p1)/((x1-x0)*(x1-x0))+(-6*p1+6*p2-2*(x2-x1)*v2)/((x2-x1)*(x2-x1)))/(4/(x1-x0)+4/(x2-x1));
 
     if (x<=x1)
     {
-        return David_Spline(x,x0,x1,p0,p1,v0,v1);
+        return Spline_f(x,x0,x1,p0,p1,v0,v1);
     }
 
     if (x>x1)
     {
-        return David_Spline(x,x1,x2,p1,p2,v1,v2);
+        return Spline_f(x,x1,x2,p1,p2,v1,v2);
     }
     return 0;
 }

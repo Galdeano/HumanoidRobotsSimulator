@@ -1,17 +1,17 @@
-#include "David_uLINK.h"
+#include "uLINK_f.h"
 
 #include "d:\Mb\StLib\Mat.h"
 
-#include "David_CalcCoM.h"
-#include "David_Stabilizator.h"
+#include "CalcCoM_f.h"
+#include "Stabilizator_f.h"
 
 #include "Setup.h"
 
 
-void David_Stabilizator( Struct_uLINK uLINK[], Struct_State *Status, float *stab)
+void Stabilizator_f( Struct_uLINK uLINK[], Struct_State *Status, float *stab)
 {
     float com[3];
-    David_CalcCoM(uLINK,com);
+    CalcCoM_f(uLINK,com);
 
     MatClrf( stab, NbLinks-2, 1) ;
 
@@ -55,7 +55,6 @@ void David_Stabilizator( Struct_uLINK uLINK[], Struct_State *Status, float *stab
     }
 
     MatCpyf( Status->com_old, com, 3, 1) ;
-
 
 }
 

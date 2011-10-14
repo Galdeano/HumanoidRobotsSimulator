@@ -1,11 +1,11 @@
-#include "David_uLINK.h"
+#include "uLINK_f.h"
 
 #include "d:\Mb\StLib\Mat.h"
 
-#include "David_CalcMC.h"
+#include "CalcMC_f.h"
 
 
-void David_CalcMC( Struct_uLINK uLINK[], float *com, int j)
+void CalcMC_f( Struct_uLINK uLINK[], float *com, int j)
 {
     if (j == 0)
     {
@@ -22,8 +22,8 @@ void David_CalcMC( Struct_uLINK uLINK[], float *com, int j)
         MatMulScalf( tmp, uLINK[j].m, tmp, 3, 1) ;
         MatAddf( com, com, tmp, 3, 1) ;
 
-        David_CalcMC(uLINK,com,uLINK[j].child);
-        David_CalcMC(uLINK,com,uLINK[j].sister);
+        CalcMC_f(uLINK,com,uLINK[j].child);
+        CalcMC_f(uLINK,com,uLINK[j].sister);
 
     }
 }

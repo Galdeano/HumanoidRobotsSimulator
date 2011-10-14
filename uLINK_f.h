@@ -1,7 +1,7 @@
-#ifndef H_David_uLink
-#define H_David_uLink
+#ifndef H_uLink_f
+#define H_uLink_f
 
-/** \file David_uLink.h
+/** \file uLink_f.h
  *  \brief Link initialisation and declarations (used in control loop)
  *  \author    David Galdeano
  *  \date      10/2011
@@ -53,13 +53,13 @@ typedef struct
  */
 
 /**
- * \fn void David_SetupRobot(Struct_uLINK uLINK[],Struct_State *Status)
+ * \fn void SetupRobot_f(Struct_uLINK uLINK[],Struct_State *Status)
  * \brief Initialize the link structure with the model value (used in control loop). See \ref SetupRobot.
  *
  * \param uLINK[] Structure wich describe the robot link by link
  * \param Status Structure wich describe the state of the robot
  */
-void David_SetupRobot(Struct_uLINK uLINK[],Struct_State *Status);
+void SetupRobot_f(Struct_uLINK uLINK[],Struct_State *Status);
 
 
 #endif
