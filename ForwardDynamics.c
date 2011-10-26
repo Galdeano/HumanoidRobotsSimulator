@@ -210,14 +210,6 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         OneFoot_f(qd, t*Dtime, &Statusc.desired_support, &Statusc.distribution_y);
         OneFoot_f(dqd, t*Dtime-Dtime, &Statusc.desired_support, &Statusc.distribution_y);
 
-//            FILE *dist_file=fopen("./../Simu_data/dist.txt","a");
-//            for(n=0; n<nDoF-6; n++)
-//            {
-//                fprintf(dist_file,"%f ",Statusc.distribution_y);
-//            }
-//            fprintf(dist_file,"\n");
-//            fclose(dist_file);
-
         OneFoot_f(qd, t*Dtime, &Status->desired_support, &Status->distribution_y);
         OneFoot_f(dqd, t*Dtime-Dtime, &Status->desired_support, &Status->distribution_y);
 

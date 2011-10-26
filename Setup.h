@@ -7,6 +7,41 @@
  *  \date      10/2011
  */
 
+
+//Choose scenario
+#define Sc1 1
+/*! \def Sc1
+    \brief Scenario 1: Squat task, variation of Hip carthesian position on z axis
+*/
+#define Sc2 0
+/*! \def Sc2
+    \brief Scenario 2: variation of Hip carthesian position on y axis
+*/
+#define Sc3 0
+/*! \def Sc3
+    \brief Scenario 3: variation of Ankle articular orientation around y axis
+*/
+#define Sc4 0
+/*! \def Sc4
+    \brief Scenario 4: variation of Arm articular orientation around y axis
+*/
+#define Sc5 0
+/*! \def Sc5
+    \brief Scenario 5: variation of Trunk articular orientation around y axis
+*/
+#define Sc6 0
+/*! \def Sc6
+    \brief Scenario 6: variation of Trunk and Arm articular orientation around y axis
+*/
+#if Sc1 && Sc2 && Sc3 && Sc4 && Sc5 && Sc6
+#error Only ons scenario can be choose
+#error Check Sc* defs
+#endif
+
+
+
+
+
 #define NbRobots 1
 /*! \def NbRobots
     \brief Number of robot simulated
