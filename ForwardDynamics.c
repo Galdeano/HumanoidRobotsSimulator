@@ -19,6 +19,7 @@
 
 #include "uLINK_f.h"
 #include "StaticTrajectory_f.h"
+#include "Scenarios.h"
 #include "ForwardKinematics_f.h"
 #include "CalcCoM_f.h"
 #include "Gravity_f.h"
@@ -206,12 +207,24 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         //DrawMarkerf(com);
 
 
-
+        #if Trajectories
         OneFoot_f(qd, t*Dtime, &Statusc.desired_support, &Statusc.distribution_y);
         OneFoot_f(dqd, t*Dtime-Dtime, &Statusc.desired_support, &Statusc.distribution_y);
 
         OneFoot_f(qd, t*Dtime, &Status->desired_support, &Status->distribution_y);
         OneFoot_f(dqd, t*Dtime-Dtime, &Status->desired_support, &Status->distribution_y);
+        #endif
+
+        #if Scenarios
+        Scenario_desired_trajectory(qd, t*Dtime, &Statusc.desired_support, &Statusc.distribution_y);
+        Scenario_desired_trajectory(dqd, t*Dtime-Dtime, &Statusc.desired_support, &Statusc.distribution_y);
+
+        Scenario_desired_trajectory(qd, t*Dtime, &Status->desired_support, &Status->distribution_y);
+        Scenario_desired_trajectory(dqd, t*Dtime-Dtime, &Status->desired_support, &Status->distribution_y);
+        #endif
+
+
+///scenario.c
 
 
 #if PD

@@ -8,6 +8,22 @@
  */
 
 
+
+#define Scenarios 1
+/*! \def Scenarios
+    \brief Uses trajectories from scenarios for demonstrations purposes
+*/
+#define Trajectories 0
+/*! \def Trajecrories
+    \brief Uses trajectories for tasks
+*/
+#if Scenarios && Trajectories
+#error Choose between Typical scenarios or Task trajcetories
+#error Check Sc* defs
+#endif
+
+
+#if Scenarios
 //Choose scenario
 #define Sc1 1
 /*! \def Sc1
@@ -33,11 +49,11 @@
 /*! \def Sc6
     \brief Scenario 6: variation of Trunk and Arm articular orientation around y axis
 */
-#if Sc1 && Sc2 && Sc3 && Sc4 && Sc5 && Sc6
-#error Only ons scenario can be choose
+#if (Sc1 + Sc2 + Sc3 + Sc4 + Sc5 + Sc6)!=1
+#error Only one scenario can be choose
 #error Check Sc* defs
 #endif
-
+#endif
 
 
 
@@ -85,6 +101,9 @@
 #error Check Sherpa and Generic defs
 #endif
 
+#if Sherpa && Scenarios
+#error Only Generic robot model can be used with scenarios
+#endif
 
 #if Sherpa
 #define  NbLinks  14
