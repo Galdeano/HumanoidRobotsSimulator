@@ -152,22 +152,6 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         static float com[3];
 
 
-        FILE *dq_file=fopen("./../Simu_data/dq.txt","a");
-        for(n=0; n<nDoF-6; n++)
-        {
-            fprintf(dq_file,"%f .",uLINK[n+2].dq);
-        }
-        fprintf(dq_file,"\n");
-        for(n=0; n<nDoF-6; n++)
-        {
-            fprintf(dq_file,"%f .",(uLINK[n+2].q - uLINKc[n+2].q)/Te);
-        }
-        fprintf(dq_file,"\n");
-        fprintf(dq_file,"\n");
-        fclose(dq_file);
-
-
-
         for(n=2; n<nDoF-6+2; n++)
         {
             //uLINKc[n].dq = (uLINK[n].q - uLINKc[n].q)/Te;

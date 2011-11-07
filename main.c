@@ -48,6 +48,10 @@
 
 int main(int argc, char *argv[])
 {
+    freopen("CON", "w", stdout);
+    freopen("CON", "r", stdin);
+    freopen("CON", "w", stderr);
+
     printf("Sherpa Simulator\n");
     int i=0;
 
@@ -233,8 +237,8 @@ int main(int argc, char *argv[])
 
         if (t%frame_skip==0)
         {
-
-            sprintf(titre,"Visualisation t= %3.3f, %1.6f", t*Dtime, Lc+Lt+Lp-gsl_vector_get (uLINK[0][1].p, 2) );
+            sprintf(titre,"Visualisation t= %3.3f", t*Dtime);
+            //sprintf(titre,"Visualisation t= %3.3f, %1.6f", t*Dtime, Lc+Lt+Lp-gsl_vector_get (uLINK[0][1].p, 2) );
             //sprintf(titre,"Visualisation t= %2.3f cop=%f center=%f", t*Dtime,Status[0].integral_R,Status[0].integral_L);
             SDL_WM_SetCaption(titre, NULL);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

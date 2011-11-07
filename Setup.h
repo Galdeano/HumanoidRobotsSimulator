@@ -25,7 +25,7 @@
 
 #if Scenarios
 //Choose scenario
-#define Sc1 1
+#define Sc1 0
 /*! \def Sc1
     \brief Scenario 1: Squat task, variation of Hip carthesian position on z axis
 */
@@ -37,7 +37,7 @@
 /*! \def Sc3
     \brief Scenario 3: variation of Ankle articular orientation around y axis
 */
-#define Sc4 0
+#define Sc4 1
 /*! \def Sc4
     \brief Scenario 4: variation of Arm articular orientation around y axis
 */
@@ -49,7 +49,12 @@
 /*! \def Sc6
     \brief Scenario 6: variation of Trunk and Arm articular orientation around y axis
 */
-#if (Sc1 + Sc2 + Sc3 + Sc4 + Sc5 + Sc6)!=1
+#define Sc7 0
+/*! \def Sc7
+    \brief Scenario 7: variation of Hip and Ankle articular orientation around x axis
+*/
+
+#if (Sc1 + Sc2 + Sc3 + Sc4 + Sc5 + Sc6+ Sc7)!=1
 #error Only one scenario can be choose
 #error Check Sc* defs
 #endif
@@ -70,7 +75,7 @@
 /*! \def Suspendu
     \brief 1 if the robot is hanged and dont touch the ground
 */
-#define Visualisation 0
+#define Visualisation 1
 /*! \def Visualisation
     \brief Record variables of the simulation
 */
@@ -166,4 +171,5 @@
 
     For debug use only
 */
+
 
