@@ -27,31 +27,31 @@
 //Choose scenario
 #define Sc1 0
 /*! \def Sc1
-    \brief Scenario 1: Squat task, variation of Hip carthesian position on z axis
+    \brief Scenario 1: Squat task, variation of Hip Cartesian position on z axis
 */
 #define Sc2 0
 /*! \def Sc2
-    \brief Scenario 2: variation of Hip carthesian position on y axis
+    \brief Scenario 2: Variation of Hip carthesian position on y axis
 */
 #define Sc3 0
 /*! \def Sc3
-    \brief Scenario 3: variation of Ankle articular orientation around y axis
+    \brief Scenario 3: Variation of Ankle articular orientation around y axis
 */
-#define Sc4 1
+#define Sc4 0
 /*! \def Sc4
-    \brief Scenario 4: variation of Arm articular orientation around y axis
+    \brief Scenario 4: Variation of Arm articular orientation around y axis
 */
 #define Sc5 0
 /*! \def Sc5
-    \brief Scenario 5: variation of Trunk articular orientation around y axis
+    \brief Scenario 5: Variation of Trunk articular orientation around y axis
 */
-#define Sc6 0
+#define Sc6 1
 /*! \def Sc6
-    \brief Scenario 6: variation of Trunk and Arm articular orientation around y axis
+    \brief Scenario 6: Variation of Trunk and Arm articular orientation around y axis
 */
 #define Sc7 0
 /*! \def Sc7
-    \brief Scenario 7: variation of Hip and Ankle articular orientation around x axis
+    \brief Scenario 7: Variation of Hip and Ankle articular orientation around x axis
 */
 
 #if (Sc1 + Sc2 + Sc3 + Sc4 + Sc5 + Sc6+ Sc7)!=1
@@ -63,10 +63,6 @@
 
 
 
-#define NbRobots 1
-/*! \def NbRobots
-    \brief Number of robot simulated
-*/
 #define Video 1
 /*! \def Video
     \brief Record images of the simulation

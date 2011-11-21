@@ -53,17 +53,35 @@ int main(int argc, char *argv[])
     freopen("CON", "w", stderr);
 
     printf("Sherpa Simulator\n");
-    int i=0;
 
-    SuLINK uLINK[NbRobots][NbLinks];
-    State Status[NbRobots];
-    for (i = 0; i < NbRobots; i++)
-    {
-        SetupRobot(uLINK[i],&Status[i]);
-    }
+    FILE *f=fopen("./Robots/RobotSherpa.xml","r");
+    char mystring [100];
+    int dof;
+    if (f == NULL) perror ("Error opening robot description file");
+    //fgets (mystring , 100 , f);
+    //printf("%s \n",mystring);
+    fscanf (f, "%s", mystring);
+    printf("%s \n",mystring);
+    fscanf (f, "%s", mystring);
+    printf("%s \n",mystring);
+    fscanf (f, "%i", &dof);
+    printf("%i \n",dof);
+    fclose(f);
+
+    //getchar();
 
 
-    printf("Robot wheigth: %f \n",TotalMass(uLINK[0],1));
+    struct SuLINK *uLINK = malloc(NbLinks*sizeof(SuLINK));
+
+
+    //SuLINK uLINK[NbLinks];
+    State Status;
+
+    SetupRobot(uLINK,&Status);
+
+
+
+    printf("Robot wheigth: %f \n",TotalMass(uLINK,1));
     //printf("%f \n",gsl_vector_get (uLINK[2].b,1));
     //printf("%8.1f \n",uLINK[8].mother);
 
@@ -101,16 +119,16 @@ int main(int argc, char *argv[])
     float Lp=0.1104;
     int frame_skip = 20;
     //int frame_skip = 1;
-    for (i = 0; i < NbRobots; i++)
-    {
-        gsl_vector_set (uLINK[i][1].p, 2, Lc+Lt+Lp-0.0006);
-        gsl_vector_set (uLINK[i][1].p, 1, i);
-    }
+//    for (i = 0; i < NbRobots; i++)
+//    {
+//        gsl_vector_set (uLINK[i][1].p, 2, Lc+Lt+Lp-0.0006);
+//        gsl_vector_set (uLINK[i][1].p, 1, i);
+//    }
     //gsl_vector_set (uLINK[0][1].p, 2, Lc+Lt+Lp+0.15);
 
 #if Suspendu
-    gsl_vector_set (uLINK[0][1].p, 2, Lc+Lt+Lp+0.1);
-    uLINK[0][1].supportHeight=Lc+Lt+Lp+0.13;
+    gsl_vector_set (uLINK[1].p, 2, Lc+Lt+Lp+0.1);
+    uLINK[1].supportHeight=Lc+Lt+Lp+0.13;
 #endif
 
 
@@ -213,10 +231,10 @@ int main(int argc, char *argv[])
                 ground = !ground;
                 break;
             case SDLK_s:
-                SaveState(uLINK[0],&t);
+                SaveState(uLINK,&t);
                 break;
             case SDLK_l:
-                LoadState(uLINK[0],&t);
+                LoadState(uLINK,&t);
                 break;
             default:
                 break;
@@ -225,7 +243,7 @@ int main(int argc, char *argv[])
         }
 
 
-        if (t*Dtime>105) //Arret du programme à x sacondes de simulation pour vidéo
+        if (t*Dtime>120) //Arret du programme à x sacondes de simulation pour vidéo
         {
             break;
         }
@@ -248,32 +266,30 @@ int main(int argc, char *argv[])
 
 
 #if StaticCOM
-            for (i = 0; i < NbRobots; i++)
-            {
-                gsl_vector_set (uLINK[i][1].p, 2, Lc+Lt+Lp-0.07);
+                gsl_vector_set (uLINK[1].p, 2, Lc+Lt+Lp-0.07);
                 gsl_vector_set (pos, 0, -0.10);
                 gsl_vector_set (pos, 1, 0.21);
                 gsl_vector_set (pos, 2, -0.95);
                 InverseSherpaKinematics(q, pos);
-                uLINK[i][2].q=gsl_vector_get (q,0);
-                uLINK[i][3].q=gsl_vector_get (q,1);
-                uLINK[i][4].q=gsl_vector_get (q,2);
-                uLINK[i][5].q=gsl_vector_get (q,3);
-                uLINK[i][6].q=gsl_vector_get (q,4);
-                uLINK[i][7].q=gsl_vector_get (q,5);
+                uLINK[2].q=gsl_vector_get (q,0);
+                uLINK[3].q=gsl_vector_get (q,1);
+                uLINK[4].q=gsl_vector_get (q,2);
+                uLINK[5].q=gsl_vector_get (q,3);
+                uLINK[6].q=gsl_vector_get (q,4);
+                uLINK[7].q=gsl_vector_get (q,5);
                 gsl_vector_set (pos, 0, -0.10);
                 gsl_vector_set (pos, 1, 0.21);
                 gsl_vector_set (pos, 2, -0.95);
                 InverseSherpaKinematics(q, pos);
-                uLINK[i][8].q=gsl_vector_get (q,0);
-                uLINK[i][9].q=gsl_vector_get (q,1);
-                uLINK[i][10].q=gsl_vector_get (q,2);
-                uLINK[i][11].q=gsl_vector_get (q,3);
-                uLINK[i][12].q=gsl_vector_get (q,4);
-                uLINK[i][13].q=gsl_vector_get (q,5);
-                ForwardKinematics(uLINK[i],1);
-                DrawAllJoints(uLINK[i],1);
-                CalcCoM(uLINK[i],com);
+                uLINK[8].q=gsl_vector_get (q,0);
+                uLINK[9].q=gsl_vector_get (q,1);
+                uLINK[10].q=gsl_vector_get (q,2);
+                uLINK[11].q=gsl_vector_get (q,3);
+                uLINK[12].q=gsl_vector_get (q,4);
+                uLINK[13].q=gsl_vector_get (q,5);
+                ForwardKinematics(uLINK,1);
+                DrawAllJoints(uLINK,1);
+                CalcCoM(uLINK,com);
                 glColor3ub(0,0,255);
                 if (!ground)
                 {
@@ -282,19 +298,17 @@ int main(int argc, char *argv[])
                 //sprintf(titre,"Visualisation t= %2.3f, x= %2.3f, y= %2.3f", t*Dtime,gsl_vector_get (com,0),gsl_vector_get (com,1));
                 //SDL_WM_SetCaption(titre, NULL);
                 DrawMarker(com);
-                DrawIndicators(uLINK[i],&Status[i],com,CoP,ground);
-            }
+                DrawIndicators(uLINK,&Status,com,CoP,ground);
+
 #endif
 
 
 #if !StaticCOM
-            for (i = 0; i < NbRobots; i++)
-            {
-                ForwardDynamics(uLINK[i],&Status[i],t);
-                IntegrateEuler(uLINK[i],1);
-                DrawAllJoints(uLINK[i],1);
-                DrawIndicators(uLINK[i],&Status[i],com,CoP,ground);
-            }
+
+                ForwardDynamics(uLINK,&Status,t);
+                IntegrateEuler(uLINK,1);
+                DrawAllJoints(uLINK,1);
+                DrawIndicators(uLINK,&Status,com,CoP,ground);
 #endif
 
 
@@ -319,11 +333,9 @@ int main(int argc, char *argv[])
 #if !StaticCOM
         else
         {
-            for (i = 0; i < NbRobots; i++)
-            {
-                ForwardDynamics(uLINK[i],&Status[i],t);
-                IntegrateEuler(uLINK[i],1);
-            }
+                ForwardDynamics(uLINK,&Status,t);
+                IntegrateEuler(uLINK,1);
+                /// todo : Runge kuta
         }
 #endif
 
@@ -336,6 +348,7 @@ int main(int argc, char *argv[])
     gsl_vector_free(q);
     gsl_vector_free(pos);
 
+    free(uLINK);
 
     return EXIT_SUCCESS; // Fermeture du programme
 
