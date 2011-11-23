@@ -83,6 +83,85 @@ void SaveStateXML(SuLINK uLINK[],float t)
 }
 
 
+void SaveRobotXML(SuLINK uLINK[],State *Status)
+{
+    FILE *f=fopen("SherpaState.xml","w");
+////    gsl_vector_fprintf(f,tmp,"%.5g");
+////    fprintf(f," \n");
+    fprintf(f,"<Robot>\n");
+    int i;
+        fprintf(f,"\t<DoF>\n");
+        fprintf(f,"\t\t%d\n",(NbLinks-2));
+        fprintf(f,"\t</DoF>\n");
+        fprintf(f,"\t<Name>\n");
+        fprintf(f,"\t\t%s\n","Generic");
+        fprintf(f,"\t</Name>\n");
+
+        fprintf(f,"\t<State>\n");
+        fprintf(f,"\t\t<right_foot_ID>\n");
+        fprintf(f,"\t\t\t%d\n",Status->right_foot_ID);
+        fprintf(f,"\t\t</right_foot_ID>\n");
+        fprintf(f,"\t\t<left_foot_ID>\n");
+        fprintf(f,"\t\t\t%d\n",Status->left_foot_ID);
+        fprintf(f,"\t\t</left_foot_ID>\n");
+        fprintf(f,"\t</State>\n");
+
+
+
+    for(i=1; i<(Status->ddl-4); i++)
+    {
+        fprintf(f,"\t<Link no=\"%d\">\n",i);
+        fprintf(f,"\t\t<Name>\n");
+        fprintf(f,"\t\t\t%s\n",uLINK[i].name);
+        fprintf(f,"\t\t</Name>\n");
+        fprintf(f,"\t\t<m>\n");
+        fprintf(f,"\t\t\t%f\n",uLINK[i].m);
+        fprintf(f,"\t\t</m>\n");
+        fprintf(f,"\t\t<color>\n");
+        fprintf(f,"\t\t\t%d\n",uLINK[i].color);
+        fprintf(f,"\t\t</color>\n");
+        fprintf(f,"\t\t<sister>\n");
+        fprintf(f,"\t\t\t%d\n",uLINK[i].sister);
+        fprintf(f,"\t\t</sister>\n");
+        fprintf(f,"\t\t<child>\n");
+        fprintf(f,"\t\t\t%d\n",uLINK[i].child);
+        fprintf(f,"\t\t</child>\n");
+
+        fprintf(f,"\t\t<a>\n");
+        fprintf(f,"\t\t\t%f %f %f\n",gsl_vector_get(uLINK[i].a,0),gsl_vector_get(uLINK[i].a,1),gsl_vector_get(uLINK[i].a,2));
+        fprintf(f,"\t\t</a>\n");
+
+        fprintf(f,"\t\t<b>\n");
+        fprintf(f,"\t\t\t%f %f %f\n",gsl_vector_get(uLINK[i].b,0),gsl_vector_get(uLINK[i].b,1),gsl_vector_get(uLINK[i].b,2));
+        fprintf(f,"\t\t</b>\n");
+
+        fprintf(f,"\t\t<p>\n");
+        fprintf(f,"\t\t\t%f %f %f\n",gsl_vector_get(uLINK[i].p,0),gsl_vector_get(uLINK[i].p,1),gsl_vector_get(uLINK[i].p,2));
+        fprintf(f,"\t\t</p>\n");
+
+        fprintf(f,"\t\t<c>\n");
+        fprintf(f,"\t\t\t%f %f %f\n",gsl_vector_get(uLINK[i].c,0),gsl_vector_get(uLINK[i].c,1),gsl_vector_get(uLINK[i].c,2));
+        fprintf(f,"\t\t</c>\n");
+        fprintf(f,"\t\t<R>\n");
+        fprintf(f,"\t\t\t%f %f %f %f %f %f %f %f %f\n",gsl_matrix_get(uLINK[i].R,0,0),gsl_matrix_get(uLINK[i].R,0,1),gsl_matrix_get(uLINK[i].R,0,2),
+                                     gsl_matrix_get(uLINK[i].R,1,0),gsl_matrix_get(uLINK[i].R,1,1),gsl_matrix_get(uLINK[i].R,1,2),
+                                     gsl_matrix_get(uLINK[i].R,2,0),gsl_matrix_get(uLINK[i].R,2,1),gsl_matrix_get(uLINK[i].R,2,2));
+        fprintf(f,"\t\t</R>\n");
+
+        fprintf(f,"\t\t<I>\n");
+        fprintf(f,"\t\t\t%f %f %f %f %f %f %f %f %f\n",gsl_matrix_get(uLINK[i].I,0,0),gsl_matrix_get(uLINK[i].I,0,1),gsl_matrix_get(uLINK[i].I,0,2),
+                                     gsl_matrix_get(uLINK[i].I,1,0),gsl_matrix_get(uLINK[i].I,1,1),gsl_matrix_get(uLINK[i].I,1,2),
+                                     gsl_matrix_get(uLINK[i].I,2,0),gsl_matrix_get(uLINK[i].I,2,1),gsl_matrix_get(uLINK[i].I,2,2));
+        fprintf(f,"\t\t</I>\n");
+
+        fprintf(f,"\t</Link>\n");
+
+    }
+    fprintf(f,"</Robot>\n");
+
+    fclose(f);
+}
+
 
 
 void SaveState(SuLINK uLINK[],long *t)

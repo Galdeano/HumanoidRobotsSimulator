@@ -9,11 +9,11 @@
 
 
 
-#define Scenarios 1
+#define Scenarios 0
 /*! \def Scenarios
     \brief Uses trajectories from scenarios for demonstrations purposes
 */
-#define Trajectories 0
+#define Trajectories 1
 /*! \def Trajecrories
     \brief Uses trajectories for tasks
 */

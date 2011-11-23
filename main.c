@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <dirent.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_blas.h>
@@ -30,7 +31,7 @@
 #include "IntegrateEuler.h"
 #include "ForwardDynamics.h"
 #include "ForwardKinematics.h"
-
+#include "LoadRobot.h"
 
 #include "InverseSherpaKinematics.h"
 #include "CalcCoM.h"
@@ -54,32 +55,74 @@ int main(int argc, char *argv[])
 
     printf("Sherpa Simulator\n");
 
-    FILE *f=fopen("./Robots/RobotSherpa.xml","r");
+    printf("\n Choose your robot: \n");
+
+    DIR *d;
+    struct dirent *dir;
+    d = opendir("./Robots/");
+    int i=0,j=0;
+    char szInput [25];
+    char RobotFile[255];
+    strcpy( RobotFile, "./Robots/" );
+
+    if (d == NULL)
+    perror("");
+
+    if (d)
+    {
+        while ((dir = readdir(d)) != NULL)
+        {
+            i++;
+            printf("%ld -> %s\n",telldir(d), dir->d_name);
+        }
+        rewinddir(d);
+
+        do {
+        fgets ( szInput, 25, stdin );
+        j=atoi(szInput);
+        } while (!(j>2 && j<=i));
+
+        for(i=0; i<j;i++)
+        {dir = readdir(d);}
+        strcat( RobotFile, dir->d_name );
+        printf("\n%s\n", RobotFile);
+        closedir(d);
+    }
+
+
+    FILE *f=fopen(RobotFile,"r");
     char mystring [100];
     int dof;
     if (f == NULL) perror ("Error opening robot description file");
     //fgets (mystring , 100 , f);
     //printf("%s \n",mystring);
     fscanf (f, "%s", mystring);
-    printf("%s \n",mystring);
+    //printf("%s \n",mystring);
     fscanf (f, "%s", mystring);
-    printf("%s \n",mystring);
+    //printf("%s \n",mystring);
     fscanf (f, "%i", &dof);
-    printf("%i \n",dof);
+    printf("DoF: %i \n",dof);
     fclose(f);
 
-    //getchar();
 
-
-    struct SuLINK *uLINK = malloc(NbLinks*sizeof(SuLINK));
+    struct SuLINK *uLINK;
+    uLINK = calloc(dof+2,sizeof(SuLINK));
 
 
     //SuLINK uLINK[NbLinks];
     State Status;
 
-    SetupRobot(uLINK,&Status);
+    //SetupRobot(uLINK,&Status);
 
+    //SaveRobotXML(uLINK,&Status);
 
+    LoadRobotXML(uLINK,&Status,RobotFile);
+
+    for(i=1; i<(dof+2); i++)
+    {
+    printf("ispolygon: %i \n",uLINK[i]->isPolygon);
+    }
+return 0;
 
     printf("Robot wheigth: %f \n",TotalMass(uLINK,1));
     //printf("%f \n",gsl_vector_get (uLINK[2].b,1));
@@ -266,49 +309,49 @@ int main(int argc, char *argv[])
 
 
 #if StaticCOM
-                gsl_vector_set (uLINK[1].p, 2, Lc+Lt+Lp-0.07);
-                gsl_vector_set (pos, 0, -0.10);
-                gsl_vector_set (pos, 1, 0.21);
-                gsl_vector_set (pos, 2, -0.95);
-                InverseSherpaKinematics(q, pos);
-                uLINK[2].q=gsl_vector_get (q,0);
-                uLINK[3].q=gsl_vector_get (q,1);
-                uLINK[4].q=gsl_vector_get (q,2);
-                uLINK[5].q=gsl_vector_get (q,3);
-                uLINK[6].q=gsl_vector_get (q,4);
-                uLINK[7].q=gsl_vector_get (q,5);
-                gsl_vector_set (pos, 0, -0.10);
-                gsl_vector_set (pos, 1, 0.21);
-                gsl_vector_set (pos, 2, -0.95);
-                InverseSherpaKinematics(q, pos);
-                uLINK[8].q=gsl_vector_get (q,0);
-                uLINK[9].q=gsl_vector_get (q,1);
-                uLINK[10].q=gsl_vector_get (q,2);
-                uLINK[11].q=gsl_vector_get (q,3);
-                uLINK[12].q=gsl_vector_get (q,4);
-                uLINK[13].q=gsl_vector_get (q,5);
-                ForwardKinematics(uLINK,1);
-                DrawAllJoints(uLINK,1);
-                CalcCoM(uLINK,com);
-                glColor3ub(0,0,255);
-                if (!ground)
-                {
-                    gsl_vector_set (com, 2, 0);
-                }
-                //sprintf(titre,"Visualisation t= %2.3f, x= %2.3f, y= %2.3f", t*Dtime,gsl_vector_get (com,0),gsl_vector_get (com,1));
-                //SDL_WM_SetCaption(titre, NULL);
-                DrawMarker(com);
-                DrawIndicators(uLINK,&Status,com,CoP,ground);
+            gsl_vector_set (uLINK[1].p, 2, Lc+Lt+Lp-0.07);
+            gsl_vector_set (pos, 0, -0.10);
+            gsl_vector_set (pos, 1, 0.21);
+            gsl_vector_set (pos, 2, -0.95);
+            InverseSherpaKinematics(q, pos);
+            uLINK[2].q=gsl_vector_get (q,0);
+            uLINK[3].q=gsl_vector_get (q,1);
+            uLINK[4].q=gsl_vector_get (q,2);
+            uLINK[5].q=gsl_vector_get (q,3);
+            uLINK[6].q=gsl_vector_get (q,4);
+            uLINK[7].q=gsl_vector_get (q,5);
+            gsl_vector_set (pos, 0, -0.10);
+            gsl_vector_set (pos, 1, 0.21);
+            gsl_vector_set (pos, 2, -0.95);
+            InverseSherpaKinematics(q, pos);
+            uLINK[8].q=gsl_vector_get (q,0);
+            uLINK[9].q=gsl_vector_get (q,1);
+            uLINK[10].q=gsl_vector_get (q,2);
+            uLINK[11].q=gsl_vector_get (q,3);
+            uLINK[12].q=gsl_vector_get (q,4);
+            uLINK[13].q=gsl_vector_get (q,5);
+            ForwardKinematics(uLINK,1);
+            DrawAllJoints(uLINK,1);
+            CalcCoM(uLINK,com);
+            glColor3ub(0,0,255);
+            if (!ground)
+            {
+                gsl_vector_set (com, 2, 0);
+            }
+            //sprintf(titre,"Visualisation t= %2.3f, x= %2.3f, y= %2.3f", t*Dtime,gsl_vector_get (com,0),gsl_vector_get (com,1));
+            //SDL_WM_SetCaption(titre, NULL);
+            DrawMarker(com);
+            DrawIndicators(uLINK,&Status,com,CoP,ground);
 
 #endif
 
 
 #if !StaticCOM
 
-                ForwardDynamics(uLINK,&Status,t);
-                IntegrateEuler(uLINK,1);
-                DrawAllJoints(uLINK,1);
-                DrawIndicators(uLINK,&Status,com,CoP,ground);
+            ForwardDynamics(uLINK,&Status,t);
+            IntegrateEuler(uLINK,1);
+            DrawAllJoints(uLINK,1);
+            DrawIndicators(uLINK,&Status,com,CoP,ground);
 #endif
 
 
@@ -333,9 +376,9 @@ int main(int argc, char *argv[])
 #if !StaticCOM
         else
         {
-                ForwardDynamics(uLINK,&Status,t);
-                IntegrateEuler(uLINK,1);
-                /// todo : Runge kuta
+            ForwardDynamics(uLINK,&Status,t);
+            IntegrateEuler(uLINK,1);
+            /// todo : Runge kuta
         }
 #endif
 

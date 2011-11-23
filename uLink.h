@@ -20,11 +20,11 @@
 typedef struct
 {
     char name[8]; /*!< Name of the Link */
-    unsigned char sister;/*!< Sister ID */
-    unsigned char child;/*!< Child ID */
-    unsigned char mother;/*!< Mother ID */
-    unsigned char color;/*!< Color representation of the joint */
-    unsigned char isPolygon;/*!< is the link capable of contact */
+    int sister;/*!< Sister ID */
+    int child;/*!< Child ID */
+    int mother;/*!< Mother ID */
+    int color;/*!< Color representation of the joint */
+    int isPolygon;/*!< is the link capable of contact */
     double m;/*!< Joint mass [kg] */
     double q;/*!< Joint position [rad] */
     double dq;/*!< Joint velocity [rad/s] */
@@ -68,10 +68,10 @@ typedef struct
 typedef struct
 {
     int desired_support;/*!< Desired foot of support: 0:none,1:right,2:left,3:both */
-    unsigned char ddl;/*!< Number of Degrees of freedom */
-    unsigned char support;/*!< Foot of support: 0:none,1:right,2:left,3:both */
-    unsigned char right_foot_ID;/*!< Right foot ID */
-    unsigned char left_foot_ID;/*!< Right foot ID */
+    int ddl;/*!< Number of Degrees of freedom */
+    int support;/*!< Foot of support: 0:none,1:right,2:left,3:both */
+    int right_foot_ID;/*!< Right foot ID */
+    int left_foot_ID;/*!< Right foot ID */
     float right_scale;/*!< External forces drawing */
     float left_scale;/*!< External forces drawing */
     float integral_R;/*!< Stabilisator command */

@@ -46,6 +46,13 @@ typedef struct
  */
 void SaveStateXML(SuLINK uLINK[],float t);
 
+/**
+ * \fn void SaveRobotXML(SuLINK uLINK[],float t)
+ * \brief Save the structure of the robot in a XML file
+ *
+ * \param uLINK[] Structure wich describe the robot link by link
+ */
+void SaveRobotXML(SuLINK uLINK[],State *Status);
 
 /**
  * \fn void SaveState(SuLINK uLINK[],long *t)
