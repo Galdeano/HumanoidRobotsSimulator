@@ -409,6 +409,14 @@ void SetupRobot(SuLINK uLINK[],State *Status)
     float Lt=0.510;
     float Lp=0.1104;
 
+    int  RLEG = 2;
+    int  LLEG = 8;
+    int  SPINE = 14;
+    int  RARM = 16;
+    int  LARM = 19;
+
+    int  NbLinks = 22;
+
     // Eléments d'inertie du robot Sherpa - 20091021SK
     float mPelvis=3.2+1.9+1; // [kg]
     float mUpperLimb=5+3;

@@ -44,7 +44,7 @@ typedef struct
  * \param uLINK[] Structure wich describe the robot link by link
  * \param t Current time
  */
-void SaveStateXML(SuLINK uLINK[],float t);
+void SaveStateXML(SuLINK uLINK[],State *Status,float t);
 
 /**
  * \fn void SaveRobotXML(SuLINK uLINK[],float t)
@@ -60,7 +60,7 @@ void SaveRobotXML(SuLINK uLINK[],State *Status);
  * \param uLINK[] Structure wich describe the robot link by link
  * \param t Current time
  */
-void SaveState(SuLINK uLINK[],long *t);
+void SaveState(SuLINK uLINK[],State *Status,long *t);
 
 /**
  * \fn void SaveStuctLink(SuLINK uLINK[],SaveLINK CopyuLINK[])
@@ -68,7 +68,7 @@ void SaveState(SuLINK uLINK[],long *t);
  * \param uLINK[] Structure wich describe the robot link by link
  * \param CopyuLINK[] Structure wich describe the robot witout pointers
  */
-void SaveStuctLink(SuLINK uLINK[],SaveLINK CopyuLINK[]);
+void SaveStuctLink(SuLINK uLINK[],SaveLINK CopyuLINK[],State *Status);
 
 
 /**
@@ -77,7 +77,7 @@ void SaveStuctLink(SuLINK uLINK[],SaveLINK CopyuLINK[]);
  * \param uLINK[] Structure wich describe the robot link by link
  * \param t Current time
  */
-void LoadState(SuLINK uLINK[],long *t);
+void LoadState(SuLINK uLINK[],State *Status,long *t);
 
 /**
  * \fn void LoadStuctLink(SuLINK uLINK[],SaveLINK CopyuLINK[])
@@ -85,6 +85,6 @@ void LoadState(SuLINK uLINK[],long *t);
  * \param uLINK[] Structure wich describe the robot link by link
  * \param CopyuLINK[] Structure wich describe the robot witout pointers
  */
-void LoadStuctLink(SuLINK uLINK[],SaveLINK CopyuLINK[]);
+void LoadStuctLink(SuLINK uLINK[],SaveLINK CopyuLINK[],State *Status);
 
 #endif

@@ -13,7 +13,8 @@ void Stabilizator_f( Struct_uLINK uLINK[], Struct_State *Status, float *stab)
     float com[3];
     CalcCoM_f(uLINK,com);
 
-    MatClrf( stab, NbLinks-2, 1) ;
+
+    MatClrf( stab, (Status->ddl)-6, 1) ;
 
     if (Status->desired_support==0)
     {

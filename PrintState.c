@@ -8,14 +8,14 @@
 
 
 
-void SaveStateXML(SuLINK uLINK[],float t)
+void SaveStateXML(SuLINK uLINK[],State *Status,float t)
 {
     FILE *f=fopen("SherpaState.xml","w");
 ////    gsl_vector_fprintf(f,tmp,"%.5g");
 ////    fprintf(f," \n");
     fprintf(f,"<Sherpa t=\"%f\">\n",t);
     int i;
-    for(i=1; i<NbLinks; i++)
+    for(i=1; i<((Status->ddl)-6+2); i++)
     {
         fprintf(f,"\t<Link no=\"%d\">\n",i);
         fprintf(f,"\t\t<Name>\n");
@@ -91,7 +91,7 @@ void SaveRobotXML(SuLINK uLINK[],State *Status)
     fprintf(f,"<Robot>\n");
     int i;
         fprintf(f,"\t<DoF>\n");
-        fprintf(f,"\t\t%d\n",(NbLinks-2));
+        fprintf(f,"\t\t%d\n",((Status->ddl)-6));
         fprintf(f,"\t</DoF>\n");
         fprintf(f,"\t<Name>\n");
         fprintf(f,"\t\t%s\n","Generic");
@@ -164,13 +164,15 @@ void SaveRobotXML(SuLINK uLINK[],State *Status)
 
 
 
-void SaveState(SuLINK uLINK[],long *t)
+void SaveState(SuLINK uLINK[],State *Status,long *t)
 {
-    SaveLINK CopyuLINK[NbLinks];
-    SaveStuctLink(uLINK,CopyuLINK);
+
+    SaveLINK *CopyuLINK;
+    CopyuLINK = calloc((Status->ddl)+2-6,sizeof(SaveLINK));
+    SaveStuctLink(uLINK,CopyuLINK,Status);
 
     FILE *f=fopen("SherpaState.bin","wb");
-    fwrite(CopyuLINK, NbLinks * sizeof(SaveLINK), 1, f);
+    fwrite(CopyuLINK, ((Status->ddl)+2-6) * sizeof(SaveLINK), 1, f);
     fclose(f);
 
     FILE *ft=fopen("SherpaStateT.bin","wb");
@@ -180,11 +182,11 @@ void SaveState(SuLINK uLINK[],long *t)
 
 }
 
-void SaveStuctLink(SuLINK uLINK[],SaveLINK CopyuLINK[])
+void SaveStuctLink(SuLINK uLINK[],SaveLINK CopyuLINK[],State *Status)
 {
     int i,j,k;
 
-    for(i=1; i<NbLinks; i++)
+    for(i=1; i<((Status->ddl)-6+2); i++)
     {
         CopyuLINK[i].q = uLINK[i].q ;
         CopyuLINK[i].dq = uLINK[i].dq;
@@ -212,26 +214,27 @@ void SaveStuctLink(SuLINK uLINK[],SaveLINK CopyuLINK[])
 }
 
 
-void LoadState(SuLINK uLINK[],long *t)
+void LoadState(SuLINK uLINK[],State *Status,long *t)
 {
-    SaveLINK CopyuLINK[NbLinks];
+    SaveLINK *CopyuLINK;
+    CopyuLINK = calloc((Status->ddl)+2-6,sizeof(SaveLINK));
 
     FILE *f=fopen("SherpaState.bin","rb");
-    fread(CopyuLINK, NbLinks * sizeof(SaveLINK), 1, f);
+    fread(CopyuLINK, ((Status->ddl)+2-6)* sizeof(SaveLINK), 1, f);
     fclose(f);
 
-    LoadStuctLink(uLINK,CopyuLINK);
+    LoadStuctLink(uLINK,CopyuLINK,Status);
 
     FILE *ft=fopen("SherpaStateT.bin","rb");
     fread(t, sizeof(float), 1, ft);
     fclose(ft);
 }
 
-void LoadStuctLink(SuLINK uLINK[],SaveLINK CopyuLINK[])
+void LoadStuctLink(SuLINK uLINK[],SaveLINK CopyuLINK[],State *Status)
 {
     int i,j,k;
 
-    for(i=1; i<NbLinks; i++)
+    for(i=1; i<((Status->ddl)-6+2); i++)
     {
         uLINK[i].q = CopyuLINK[i].q ;
         uLINK[i].dq = CopyuLINK[i].dq;

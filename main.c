@@ -111,6 +111,8 @@ int main(int argc, char *argv[])
 
     State Status;
 
+    strcpy(Status.RobotFile,RobotFile);
+
     //SetupRobot(uLINK,&Status);
 
     //SaveRobotXML(uLINK,&Status);
@@ -146,16 +148,7 @@ int main(int argc, char *argv[])
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity( );
     gluPerspective(50,(double)640/480,1,1000);
-
-    printf("Robot com: %f \n",gsl_vector_get(Status.com_old,2));
-
-#if Sherpa
-    gluLookAt(1.5, -1.5, 1, 0, 0, 0.6, 0, 0, 1);
-#endif
-#if Generic
-    gluLookAt(1.8, -1.8, 1.4, 0, 0, 0.9, 0, 0, 1);
-#endif
-
+    gluLookAt(2*gsl_vector_get(Status.com_old,2), -2*gsl_vector_get(Status.com_old,2), 1.4*gsl_vector_get(Status.com_old,2), 0, 0, 0.9*gsl_vector_get(Status.com_old,2), 0, 0, 1);
     glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
     glEnable(GL_DEPTH_TEST | GL_LINE_SMOOTH);
 
@@ -277,10 +270,10 @@ int main(int argc, char *argv[])
                 ground = !ground;
                 break;
             case SDLK_s:
-                SaveState(uLINK,&t);
+                SaveState(uLINK,&Status,&t);
                 break;
             case SDLK_l:
-                LoadState(uLINK,&t);
+                LoadState(uLINK,&Status,&t);
                 break;
             default:
                 break;

@@ -213,6 +213,12 @@ void SetupRobot_f(Struct_uLINK uLINK[],Struct_State *Status)
     float Lt=0.510f;
     float Lp=0.1104f;
 
+    int  RLEG = 2;
+    int  LLEG = 8;
+    int  SPINE = 14;
+    int  RARM = 16;
+    int  LARM = 19;
+
     // Eléments d'inertie du robot Sherpa - 20091021SK
     float mPelvis=6.1f; // [kg]
     float mUpperLimb=8.f;
@@ -223,7 +229,7 @@ void SetupRobot_f(Struct_uLINK uLINK[],Struct_State *Status)
 
 
     int i;
-    for(i=1; i<NbLinks; i++)
+    for(i=1; i<((Status->ddl)+2-6); i++)
     {
         uLINK[i].q = 0.f;
         uLINK[i].dq = 0.f;

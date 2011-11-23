@@ -16,7 +16,7 @@
 #include "ExternalForces.h"
 #include "ForwardDynamics.h"
 
-
+#include "LoadRobot.h"
 #include "uLINK_f.h"
 #include "StaticTrajectory_f.h"
 #include "Scenarios.h"
@@ -37,11 +37,14 @@
 
 void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 {
-    static Struct_uLINK uLINKc[NbLinks];
+
+    Struct_uLINK *uLINKc;
+    uLINKc = calloc((Status->ddl)+2-6,sizeof(Struct_uLINK));
     static Struct_State Statusc;
     if (t==1)
     {
-        SetupRobot_f(uLINKc,&Statusc);
+        LoadRobotXML_f(uLINKc,&Statusc,Status->RobotFile);
+        //SetupRobot_f(uLINKc,&Statusc);
     }
 
 
@@ -148,7 +151,12 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
     if ((t%50)==0)
     {
 
-        static float uPD[NbLinks-2], qd[NbLinks-2], dqd[NbLinks-2];  // rad
+        float *uPD;
+        uPD = calloc((Status->ddl)-6,sizeof(float));
+        float *qd;
+        qd = calloc((Status->ddl)-6,sizeof(float));
+        float *dqd;
+        dqd = calloc((Status->ddl)-6,sizeof(float));
         static float com[3];
 
 
@@ -228,7 +236,14 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
             //gsl_vector_set(u,n+6,uPD[n]);
         }
 
-        static float uG[NbLinks-2], fG[NbLinks-2], tG[NbLinks-2];
+
+
+        float *uG;
+        uG = calloc((Status->ddl)-6,sizeof(float));
+        float *fG;
+        fG = calloc((Status->ddl)-6,sizeof(float));
+        float *tG;
+        tG = calloc((Status->ddl)-6,sizeof(float));
         Gravity_f( uLINKc, &Statusc, 1, fG, tG);
         for (n=0; n<nDoF-6; n++)
         {
@@ -237,7 +252,9 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
         //Stabilizator(uLINK,Status,stab,Dtime,t*Dtime);
         //gsl_vector_add (u,stab);
-        static float uStab[NbLinks-2];
+
+        float *uStab;
+        uStab = calloc((Status->ddl)-6,sizeof(float));
         //Stabilizator_f( uLINKc, &Statusc, uStab);
 #endif
 

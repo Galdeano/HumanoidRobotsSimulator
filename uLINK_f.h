@@ -14,7 +14,7 @@
  * \struct Struct_uLINK uLink.h
  * \brief Struct_uLINK is a descriptor of a physical link in the multibody system used for the simulation (used in control loop). See \ref SuLINK.
  */
-typedef struct
+struct SStruct_uLINK
 {
     char name[8];
     unsigned char sister,child,mother;
@@ -26,7 +26,9 @@ typedef struct
     float hw[3];
     float hv[3];
     float R[9];
-} Struct_uLINK ;
+};
+
+typedef struct  SStruct_uLINK  Struct_uLINK;
 
 /**
  * \struct Struct_State uLink.h

@@ -67,6 +67,7 @@ typedef struct  StuLINK  SuLINK ;
  */
 typedef struct
 {
+    char RobotFile[255]; /*!< Path of XML file for robot description */
     int desired_support;/*!< Desired foot of support: 0:none,1:right,2:left,3:both */
     int ddl;/*!< Number of Degrees of freedom */
     int support;/*!< Foot of support: 0:none,1:right,2:left,3:both */

@@ -32,7 +32,7 @@ void InvDyn(SuLINK uLINK[],State *Status,int j,gsl_vector * u)
 //end
 //
 
-    for (n=1; n<(NbLinks-1); n++)
+    for (n=1; n<((Status->ddl)-6+2-1); n++)
     {
         if (n == j-6)
             uLINK[n+1].ddq = 1;
@@ -65,7 +65,7 @@ void InvDyn(SuLINK uLINK[],State *Status,int j,gsl_vector * u)
     {
         gsl_vector_set (u, n+3,gsl_vector_get (t,n));
     }
-    for (n=0; n<(NbLinks-2); n++)
+    for (n=0; n<((Status->ddl)-6); n++)
     {
         gsl_vector_set (u, n+6,uLINK[n+2].u);
     }
