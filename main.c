@@ -105,11 +105,10 @@ int main(int argc, char *argv[])
     fclose(f);
 
 
-    struct SuLINK *uLINK;
+    SuLINK *uLINK;
     uLINK = calloc(dof+2,sizeof(SuLINK));
-
-
     //SuLINK uLINK[NbLinks];
+
     State Status;
 
     //SetupRobot(uLINK,&Status);
@@ -118,11 +117,11 @@ int main(int argc, char *argv[])
 
     LoadRobotXML(uLINK,&Status,RobotFile);
 
-    for(i=1; i<(dof+2); i++)
-    {
-    printf("ispolygon: %i \n",uLINK[i]->isPolygon);
-    }
-return 0;
+//    for(i=1; i<(dof+2); i++)
+//    {
+//    printf("ispolygon: %i \n",uLINK[i].isPolygon);
+//    }
+
 
     printf("Robot wheigth: %f \n",TotalMass(uLINK,1));
     //printf("%f \n",gsl_vector_get (uLINK[2].b,1));
@@ -147,12 +146,16 @@ return 0;
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity( );
     gluPerspective(50,(double)640/480,1,1000);
+
+    printf("Robot com: %f \n",gsl_vector_get(Status.com_old,2));
+
 #if Sherpa
     gluLookAt(1.5, -1.5, 1, 0, 0, 0.6, 0, 0, 1);
 #endif
 #if Generic
     gluLookAt(1.8, -1.8, 1.4, 0, 0, 0.9, 0, 0, 1);
 #endif
+
     glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
     glEnable(GL_DEPTH_TEST | GL_LINE_SMOOTH);
 

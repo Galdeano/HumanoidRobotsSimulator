@@ -17,7 +17,7 @@
  * \struct SuLINK uLink.h
  * \brief SuLINK is a descriptor of a physical link in the multibody system used for the simulation
  */
-typedef struct
+struct StuLINK
 {
     char name[8]; /*!< Name of the Link */
     int sister;/*!< Sister ID */
@@ -56,9 +56,9 @@ typedef struct
     gsl_matrix * face;/*!< Shape of the link */
     gsl_matrix * posContact;
     gsl_matrix * forContact;
-} SuLINK ;
+};
 
-
+typedef struct  StuLINK  SuLINK ;
 
 
 /**

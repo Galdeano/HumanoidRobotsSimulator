@@ -102,9 +102,9 @@
 #error Check Sherpa and Generic defs
 #endif
 
-#if Sherpa && Scenarios
-#error Only Generic robot model can be used with scenarios
-#endif
+//#if Sherpa && Scenarios
+//#error Only Generic robot model can be used with scenarios
+//#endif
 
 #if Sherpa
 #define  NbLinks  14
