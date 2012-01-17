@@ -37,7 +37,7 @@
 /*! \def Sc3
     \brief Scenario 3: Variation of Ankle articular orientation around y axis
 */
-#define Sc4 0
+#define Sc4 1
 /*! \def Sc4
     \brief Scenario 4: Variation of Arm articular orientation around y axis
 */
@@ -45,7 +45,7 @@
 /*! \def Sc5
     \brief Scenario 5: Variation of Trunk articular orientation around y axis
 */
-#define Sc6 1
+#define Sc6 0
 /*! \def Sc6
     \brief Scenario 6: Variation of Trunk and Arm articular orientation around y axis
 */
@@ -63,7 +63,7 @@
 
 
 
-#define Video 1
+#define Video 0
 /*! \def Video
     \brief Record images of the simulation
 */
@@ -71,7 +71,7 @@
 /*! \def Suspendu
     \brief 1 if the robot is hanged and dont touch the ground
 */
-#define Visualisation 1
+#define Visualisation 0
 /*! \def Visualisation
     \brief Record variables of the simulation
 */

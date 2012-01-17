@@ -259,7 +259,7 @@ void LoadRobotXML_f(Struct_uLINK uLINK[],Struct_State *Status,char* RobotFile)
     fscanf (f, "%s", tmp_s);
     fscanf (f, "%s", tmp_s);
     fscanf (f, "%i", &dof);
-printf("DoF: %i \n",dof);
+//printf("DoF: %i \n",dof);
 
 
     for(i=1; i<(dof+2); i++)
@@ -291,12 +291,12 @@ printf("DoF: %i \n",dof);
     {fscanf (f, "%s", tmp_s);}
     fscanf (f, "%i", &tmp_i);
     Status->right_foot_ID=tmp_i;
-printf("right: %i \n",tmp_i);
+//printf("right: %i \n",tmp_i);
     for(j=0;j<2;j++)
     {fscanf (f, "%s", tmp_s);}
     fscanf (f, "%i", &tmp_i);
     Status->left_foot_ID=tmp_i;
-printf("left: %i \n",tmp_i);
+//printf("left: %i \n",tmp_i);
 
 
         for(j=0;j<2;j++)
