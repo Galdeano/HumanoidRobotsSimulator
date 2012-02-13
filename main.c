@@ -36,7 +36,7 @@
 #include "InverseSherpaKinematics.h"
 #include "CalcCoM.h"
 #include "DrawMarker.h"
-
+#include "Ext_traj.h"
 #include "DrawIndicators.h"
 
 #include "Setup.h"
@@ -78,8 +78,9 @@ int main(int argc, char *argv[])
         rewinddir(d);
 
         do {
-        fgets ( szInput, 25, stdin );
-        j=atoi(szInput);
+        //fgets ( szInput, 25, stdin );
+        //j=atoi(szInput);
+        j=3;
         } while (!(j>2 && j<=i));
 
         for(i=0; i<j;i++)
@@ -169,6 +170,20 @@ int main(int argc, char *argv[])
     gsl_vector_set (uLINK[1].p, 2, Lc+Lt+Lp+0.1);
     uLINK[1].supportHeight=Lc+Lt+Lp+0.13;
 #endif
+
+
+#if Ext_traj
+    float *qd;
+    qd = calloc(dof,sizeof(float));
+    Ext_trajectory_init(qd);
+    for(i=1; i<(dof+2); i++)
+    {
+        uLINK[i].q = qd[i-1];
+    }
+    free (qd);
+    ForwardKinematics(uLINK,1);
+#endif
+
 
 
     //float EndTime = 3;

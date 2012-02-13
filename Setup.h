@@ -13,12 +13,16 @@
 /*! \def Scenarios
     \brief Uses trajectories from scenarios for demonstrations purposes
 */
-#define Trajectories 1
-/*! \def Trajecrories
+#define Trajectories 0
+/*! \def Trajectories
     \brief Uses trajectories for tasks
 */
-#if Scenarios && Trajectories
-#error Choose between Typical scenarios or Task trajcetories
+#define Ext_traj 1
+/*! \def Ext_traj
+    \brief Uses trajectories from file
+*/
+#if Scenarios && Trajectories && Ext_traj
+#error Choose between Typical scenarios or Task trajectories
 #error Check Sc* defs
 #endif
 
@@ -77,7 +81,7 @@
 */
 
 
-#define Te 0.005
+#define Te 0.01
 /*! \def Te
     \brief Sampling period of control loop in second
 */

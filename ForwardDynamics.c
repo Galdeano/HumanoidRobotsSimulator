@@ -18,6 +18,7 @@
 
 #include "LoadRobot.h"
 #include "uLINK_f.h"
+#include "Ext_traj.h"
 #include "StaticTrajectory_f.h"
 #include "Scenarios.h"
 #include "ForwardKinematics_f.h"
@@ -147,8 +148,8 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 //    A(n,n) = A(n,n) + uLINK(j).Ir * uLINK(j).gr^2;
 //end
 
-
-    if ((t%50)==0)
+//      if ((t%50)==0)
+    if ((t%100)==0)
     {
 
         float *uPD;
@@ -215,8 +216,15 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         Scenario_desired_trajectory(dqd, t*Dtime-Dtime, &Status->desired_support, &Status->distribution_y);
         #endif
 
+//        #if Ext_traj
+//        Ext_trajectory(qd, t*Dtime, &Statusc.desired_support, &Statusc.distribution_y);
+//        Ext_trajectory(dqd, t*Dtime-Dtime, &Statusc.desired_support, &Statusc.distribution_y);
+//
+//        Ext_trajectory(qd, t*Dtime, &Status->desired_support, &Status->distribution_y);
+//        Ext_trajectory(dqd, t*Dtime-Dtime, &Status->desired_support, &Status->distribution_y);
+//        #endif
 
-///scenario.c
+
 
 
 #if PD
