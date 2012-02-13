@@ -12,6 +12,7 @@ void Ext_trajectory_init(float *qd)
 
     //fscanf (f, "%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f", &qd[0], &qd[1], &qd[2], &qd[3], &qd[4], &qd[5], &qd[6], &qd[7], &qd[8], &qd[9], &qd[10], &qd[11], &qd[12], &qd[13], &qd[14], &qd[15], &qd[16], &qd[17], &qd[18], &qd[19], &qd[20]);
 
+    fclose(f);
 }
 
 void Ext_trajectory(float *qd, double t, int *desired_support, float *distribution_y)
@@ -34,10 +35,10 @@ void Ext_trajectory(float *qd, double t, int *desired_support, float *distributi
     }
 
     *distribution_y=0.5f;	//repartition de l'effort de contact
-    *desired_support=0;	//Pied de support: 0:none,1:right,2:left,3:both
+    *desired_support=3;	//Pied de support: 0:none,1:right,2:left,3:both
 
     free (qt);
-
+    fclose(f);
 }
 
 

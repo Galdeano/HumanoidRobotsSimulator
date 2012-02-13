@@ -149,7 +149,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 //end
 
 //      if ((t%50)==0)
-    if ((t%100)==0)
+    if ((t%50)==0)
     {
 
         float *uPD;
@@ -216,13 +216,13 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         Scenario_desired_trajectory(dqd, t*Dtime-Dtime, &Status->desired_support, &Status->distribution_y);
         #endif
 
-//        #if Ext_traj
-//        Ext_trajectory(qd, t*Dtime, &Statusc.desired_support, &Statusc.distribution_y);
-//        Ext_trajectory(dqd, t*Dtime-Dtime, &Statusc.desired_support, &Statusc.distribution_y);
-//
-//        Ext_trajectory(qd, t*Dtime, &Status->desired_support, &Status->distribution_y);
-//        Ext_trajectory(dqd, t*Dtime-Dtime, &Status->desired_support, &Status->distribution_y);
-//        #endif
+        #if Ext_traj
+        Ext_trajectory(qd, t*Dtime, &Statusc.desired_support, &Statusc.distribution_y);
+        Ext_trajectory(dqd, t*Dtime-Dtime, &Statusc.desired_support, &Statusc.distribution_y);
+
+        Ext_trajectory(qd, t*Dtime, &Status->desired_support, &Status->distribution_y);
+        Ext_trajectory(dqd, t*Dtime-Dtime, &Status->desired_support, &Status->distribution_y);
+        #endif
 
 
 

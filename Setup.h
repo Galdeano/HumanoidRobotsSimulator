@@ -81,7 +81,7 @@
 */
 
 
-#define Te 0.01
+#define Te 0.005
 /*! \def Te
     \brief Sampling period of control loop in second
 */
