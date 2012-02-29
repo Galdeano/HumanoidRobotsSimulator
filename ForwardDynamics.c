@@ -39,8 +39,13 @@
 void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 {
 
-    Struct_uLINK *uLINKc;
-    uLINKc = calloc((Status->ddl)+2-6,sizeof(Struct_uLINK));
+    static Struct_uLINK *uLINKc;
+    static int init=1;
+    if (init==1)
+    {
+        uLINKc = calloc((Status->ddl)+2-6,sizeof(Struct_uLINK));
+        init=0;
+    }
     static Struct_State Statusc;
     if (t==1)
     {
@@ -151,13 +156,18 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 //      if ((t%50)==0)
     if ((t%50)==0)
     {
+        static int init_com=1;
+        static float *uPD;
+        static float *qd;
+        static float *dqd;
+        if (init_com==1)
+        {
+            uPD = calloc((Status->ddl)-6,sizeof(float));
+            qd = calloc((Status->ddl)-6,sizeof(float));
+            dqd = calloc((Status->ddl)-6,sizeof(float));
+            init_com=0;
+        }
 
-        float *uPD;
-        uPD = calloc((Status->ddl)-6,sizeof(float));
-        float *qd;
-        qd = calloc((Status->ddl)-6,sizeof(float));
-        float *dqd;
-        dqd = calloc((Status->ddl)-6,sizeof(float));
         static float com[3];
 
 
@@ -250,12 +260,20 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
 
 
-        float *uG;
-        uG = calloc((Status->ddl)-6,sizeof(float));
-        float *fG;
-        fG = calloc((Status->ddl)-6,sizeof(float));
-        float *tG;
-        tG = calloc((Status->ddl)-6,sizeof(float));
+        static float *uG;
+        static float *fG;
+        static float *tG;
+        static float *uStab;
+        static int init_G=1;
+        if (init_G==1)
+        {
+            uG = calloc((Status->ddl)-6,sizeof(float));
+            fG = calloc((Status->ddl)-6,sizeof(float));
+            tG = calloc((Status->ddl)-6,sizeof(float));
+            uStab = calloc((Status->ddl)-6,sizeof(float));
+            init_G=0;
+        }
+
         Gravity_f( uLINKc, &Statusc, 1, fG, tG);
         for (n=0; n<nDoF-6; n++)
         {
@@ -265,8 +283,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         //Stabilizator(uLINK,Status,stab,Dtime,t*Dtime);
         //gsl_vector_add (u,stab);
 
-        float *uStab;
-        uStab = calloc((Status->ddl)-6,sizeof(float));
+
         //Stabilizator_f( uLINKc, &Statusc, uStab);
 #endif
 
@@ -363,8 +380,98 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
 
 
+#if Task
+            gsl_vector * idx1 = gsl_vector_calloc (8);
+            static int path1[8] = {7, 7, 6, 5, 4, 3, 2, 1};
+            //int path1[8] = {1, 2, 3, 4, 5, 6, 7, 7};
+            for(i=0; i<8; i++)
+            {
+                gsl_vector_set(idx1,i,path1[i]);
+            }
+            gsl_vector * idx2 = gsl_vector_calloc (14);
+            static int path2[14] = {7, 7, 6, 5, 4, 3, 2, 8, 9, 10, 11, 12, 13, 13};
+            for(i=0; i<14; i++)
+            {
+                gsl_vector_set(idx2,i,path2[i]);
+            }
+
+            gsl_matrix * J1 = gsl_matrix_calloc (6,nDoF-6);
+            CalcJacobianModif( uLINK,J1,idx1);
+            gsl_matrix * J2 = gsl_matrix_calloc (6,nDoF-6);
+            CalcJacobianModif( uLINK,J2,idx2);
+
+            gsl_vector * task1 = gsl_vector_calloc (6);
+            gsl_vector * task2 = gsl_vector_calloc (6);
+            gsl_vector * p = gsl_vector_calloc (3);
+            gsl_matrix * R = gsl_matrix_calloc (3,3);
+
+            gsl_matrix_set_identity(R);
+            gsl_vector_set_zero(p);
+            gsl_vector_set (p, 1, -0.1595);
+            CalcVWerrOri(uLINK, task1, p, R,idx1);
+
+            gsl_matrix_set_identity(R);
+            gsl_vector_set_zero(p);
+            gsl_vector_set (p, 0, -0.0155);
+            gsl_vector_set (p, 1, -0.0798);
+            gsl_vector_set (p, 2, -0.8434);
+            CalcVWerrOri(uLINK, task2, p, R,idx2);
+
+            gsl_matrix * P1 = gsl_matrix_calloc (nDoF-6,nDoF-6);
+            gsl_matrix * P2 = gsl_matrix_calloc (nDoF-6,nDoF-6);
+            gsl_matrix * Ptmp = gsl_matrix_calloc (nDoF-6,nDoF-6);
+            gsl_matrix * invJ = gsl_matrix_calloc (nDoF-6,6);
+
+            gsl_matrix_set_identity(P1);
+            pinv(invJ,J1);
+            gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJ, J1, 0.0, Ptmp);
+            gsl_matrix_sub(P1,Ptmp);
+
+            gsl_matrix_set_identity(P2);
+            pinv(invJ,J2);
+            gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJ, J2, 0.0, Ptmp);
+            gsl_matrix_sub(P2,Ptmp);
+
+            gsl_vector_scale (task1, 1);
+            gsl_vector_scale (task2, 1);
+
+            gsl_vector * dq = gsl_vector_calloc(nDoF-6);
+            gsl_vector * dqtmp = gsl_vector_calloc(nDoF-6);
+            pinv(invJ,J1);
+            gsl_blas_dgemv(CblasNoTrans, 1.0, invJ, task1, 0.0, dq);
+
+            pinv(invJ,J2);
+            gsl_blas_dgemv(CblasNoTrans, 1.0, invJ, task2, 0.0, dqtmp);
+            gsl_blas_dgemv(CblasNoTrans, 1.0, P1, dqtmp, 0.0, dqtmp);
+            gsl_vector_add(dq,dqtmp);
 
 
+            for (i=0; i<(nDoF-6); i++)
+            {
+                uLINK[i+2].u_joint =gsl_vector_get(dq,i);
+            }
+            PrintGSLVector(dq);
+
+            //uLINK[n].u_joint = 0;
+
+            gsl_vector_free(idx1);
+            gsl_vector_free(idx2);
+            gsl_matrix_free(J1);
+            gsl_matrix_free(J2);
+            gsl_vector_free(task1);
+            gsl_vector_free(task2);
+            gsl_vector_free(p);
+            gsl_matrix_free(R);
+            gsl_matrix_free(P1);
+            gsl_matrix_free(P2);
+            gsl_matrix_free(Ptmp);
+            gsl_matrix_free(invJ);
+            gsl_vector_free(dq);
+            gsl_vector_free(dqtmp);
+
+
+    //PrintGSLMatrixTranspose(J);
+#endif
 
 
 
@@ -394,7 +501,8 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 #endif
             }
 #if Task
-                uLINK[n].u_joint = 0;
+
+
 #endif
             gsl_vector_set (u,n-2+6,uLINK[n].u_joint);
 
@@ -409,7 +517,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         }
     }
 
-
+PrintGSLVector(u);
 //gsl_vector_set_zero(u);
 
     gsl_vector_sub (u,g);

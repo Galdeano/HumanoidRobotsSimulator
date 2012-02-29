@@ -1,0 +1,70 @@
+<Robot>
+	<DoF>
+		1
+	</DoF>
+	<Name>
+		Generic
+	</Name>
+	<State>
+		<right_foot_ID>
+			7
+		</right_foot_ID>
+		<left_foot_ID>
+			13
+		</left_foot_ID>
+	</State>
+	<Link no="1">
+		<Name>
+			BODY
+		</Name>
+		<m>
+			10.0
+		</m>
+		<color>
+			3
+		</color>
+		<sister>
+			0
+		</sister>
+		<child>
+			0
+		</child>
+		<a>
+			0.000000 0.000000 1.000000
+		</a>
+		<b>
+			0.000000 0.000000 0.000000
+		</b>
+		<p>
+			0.000000 0.000000 0.500000
+		</p>
+		<c>
+			0.000000 0.000000 0.000000
+		</c>
+		<R>
+			1.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 1.000000
+		</R>
+		<I>
+			0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000
+		</I>
+	</Link>
+	<Contacts>
+		<solid>
+			1
+		</solid>
+		<Contact no='1'>
+			<body>
+				1
+			</body>
+			<supportHeight>
+				0.000000
+			</supportHeight>
+			<shape>
+				0.200000 0.200000 0.200000
+			</shape>
+			<com>
+				0.000000 0.000000 0.000000
+			</com>
+		</Contact>
+	</Contacts>
+</Robot>
