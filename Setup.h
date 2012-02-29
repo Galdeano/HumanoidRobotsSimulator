@@ -13,15 +13,15 @@
 /*! \def Scenarios
     \brief Uses trajectories from scenarios for demonstrations purposes
 */
-#define Trajectories 0
+#define Trajectories 1
 /*! \def Trajectories
     \brief Uses trajectories for tasks
 */
-#define Ext_traj 1
+#define Ext_traj 0
 /*! \def Ext_traj
     \brief Uses trajectories from file
 */
-#if Scenarios && Trajectories && Ext_traj
+#if (Scenarios + Trajectories + Ext_traj)!=1
 #error Choose between Typical scenarios or Task trajectories
 #error Check Sc* defs
 #endif
@@ -100,8 +100,11 @@
 /*! \def Generic
     \brief Generic robot model is used
 */
-
-#if Sherpa && Generic
+#define Human 0
+/*! \def Human
+    \brief Human model is used
+*/
+#if (Sherpa + Generic + Human)!=1
 #error Both Sherpa and Generic robot model are specified
 #error Check Sherpa and Generic defs
 #endif
@@ -147,16 +150,20 @@
 
 
 //Choose Command
-#define PD 1
+#define PD 0
 /*! \def PD
-    \brief Proportional derivative command is used is used
+    \brief Proportional derivative command is used
 */
 #define Dynamic 0
 /*! \def Dynamic
-    \brief Dynamic command is used is used
+    \brief Dynamic command is used
+*/
+#define Task 1
+/*! \def Task
+    \brief Task control is used
 */
 
-#if PD && Dynamic
+#if (PD+ Dynamic + Task)!=1
 #error Both PD and Dynamic command are specified
 #error Check PD and Dynamic defs
 #endif
@@ -171,5 +178,12 @@
 
     For debug use only
 */
+
+#define base 13
+/*! \def base
+    \brief base link for computation
+*/
+
+
 
 

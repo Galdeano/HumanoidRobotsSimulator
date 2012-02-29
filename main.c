@@ -184,6 +184,55 @@ int main(int argc, char *argv[])
     ForwardKinematics(uLINK,1);
 #endif
 
+#if Task
+//    float *qd;
+//    qd = calloc(dof,sizeof(float));
+//    Ext_trajectory_init(qd);
+//    for(i=1; i<(dof+2); i++)
+//    {
+//        uLINK[i].q = qd[i-1];
+//    }
+//    free (qd);
+
+uLINK[2].q = -0.1745;
+uLINK[5].q = 0.3491;
+uLINK[6].q = -0.1745;
+
+uLINK[8].q = -0.1745;
+uLINK[11].q = 0.3491;
+uLINK[12].q = -0.1745;
+
+    gsl_vector_set_zero(uLINK[base].p);
+    gsl_vector_set (uLINK[base].p, 2, 0.066);
+    gsl_matrix_set_identity(uLINK[base].R);
+    NodeForwardKinematics(uLINK,base,0);
+
+    gsl_vector * idx = gsl_vector_calloc (8);
+    int path1[8] = {7, 7, 6, 5, 4, 3, 2, 1};
+    //int path1[8] = {1, 2, 3, 4, 5, 6, 7, 7};
+    for(i=0; i<8; i++)
+    {
+        gsl_vector_set(idx,i,path1[i]);
+    }
+    gsl_matrix * J = gsl_matrix_calloc (6,gsl_length_v(idx)-2);
+    CalcJacobianModif( uLINK,J,idx);
+
+for (i=0; i<J->size1; i++)
+{
+    for (j=0; j<J->size2; j++)
+    {
+        printf("%4.6f ",gsl_matrix_get(J, i,j));
+    }
+    printf("\n");
+}
+printf("\n");
+
+
+
+    //printf("size: %d \n",gsl_length_v(idx));
+
+#endif
+
 
 
     //float EndTime = 3;

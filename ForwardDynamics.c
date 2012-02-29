@@ -236,6 +236,10 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         float kd=1;
         float kp=300;
 #endif
+#if Human
+        float kd=1;
+        float kp=500;
+#endif
 
         for(n=0; n<nDoF-6; n++)
         {
@@ -389,6 +393,9 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
                 uLINK[n].u_joint = uPD[n-2]+uG[n-2];
 #endif
             }
+#if Task
+                uLINK[n].u_joint = 0;
+#endif
             gsl_vector_set (u,n-2+6,uLINK[n].u_joint);
 
         }

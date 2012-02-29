@@ -23,6 +23,7 @@ struct StuLINK
     int sister;/*!< Sister ID */
     int child;/*!< Child ID */
     int mother;/*!< Mother ID */
+    int upper;/*!< Upper ID */
     int color;/*!< Color representation of the joint */
     int isPolygon;/*!< is the link capable of contact */
     double m;/*!< Joint mass [kg] */

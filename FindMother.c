@@ -14,12 +14,14 @@ void FindMother(SuLINK uLINK[],int j)
         if (uLINK[j].child != 0)
         {
             uLINK[uLINK[j].child].mother = j;
+            uLINK[uLINK[j].child].upper = j;
             FindMother(uLINK,uLINK[j].child);
         }
 
         if (uLINK[j].sister != 0)
         {
             uLINK[uLINK[j].sister].mother = uLINK[j].mother;
+            uLINK[uLINK[j].sister].upper = j;
             FindMother(uLINK,uLINK[j].sister);
         }
     }
