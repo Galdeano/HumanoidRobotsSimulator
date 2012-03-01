@@ -6,6 +6,7 @@
 #include "uLINK.h"
 #include "NodeForwardKinematics.h"
 #include "Rodrigues.h"
+#include "pinv.h"
 
 void NodeForwardKinematics(SuLINK uLINK[],int j, int sender)
 {

@@ -78,9 +78,9 @@ int main(int argc, char *argv[])
         rewinddir(d);
 
         do {
-        //fgets ( szInput, 25, stdin );
-        //j=atoi(szInput);
-        j=3;
+        fgets ( szInput, 25, stdin );
+        j=atoi(szInput);
+        //j=7;
         } while (!(j>2 && j<=i));
 
         for(i=0; i<j;i++)
@@ -205,6 +205,7 @@ uLINK[12].q = -0.1745;
 
     gsl_vector_set_zero(uLINK[base].p);
     gsl_vector_set (uLINK[base].p, 2, 0.066);
+    //gsl_vector_set (uLINK[base].p, 2, 0.07);
     gsl_matrix_set_identity(uLINK[base].R);
     NodeForwardKinematics(uLINK,base,0);
 
@@ -215,27 +216,27 @@ uLINK[12].q = -0.1745;
 //    {
 //        gsl_vector_set(idx,i,path1[i]);
 //    }
-    gsl_vector * idx = gsl_vector_calloc (14);
-    int path1[14] = {7, 7, 6, 5, 4, 3, 2, 8, 9, 10, 11, 12, 13, 13};
-    //int path1[8] = {1, 2, 3, 4, 5, 6, 7, 7};
-    for(i=0; i<14; i++)
-    {
-        gsl_vector_set(idx,i,path1[i]);
-    }
-    gsl_matrix * J = gsl_matrix_calloc (6,dof);
-    CalcJacobianModif( uLINK,J,idx);
-
-    //PrintGSLMatrixTranspose(J);
-
-    gsl_vector * err = gsl_vector_calloc (6);
-    gsl_vector * p = gsl_vector_calloc (3);
-    gsl_matrix * R = gsl_matrix_calloc (3,3);
-    gsl_matrix_set_identity(R);
-
-    //gsl_vector_set (p, 0, 0.0);
-
-    CalcVWerrOri(uLINK, err, p, R,idx);
-    PrintGSLVector(err);
+////    gsl_vector * idx = gsl_vector_calloc (14);
+////    int path1[14] = {7, 7, 6, 5, 4, 3, 2, 8, 9, 10, 11, 12, 13, 13};
+////    //int path1[8] = {1, 2, 3, 4, 5, 6, 7, 7};
+////    for(i=0; i<14; i++)
+////    {
+////        gsl_vector_set(idx,i,path1[i]);
+////    }
+//    gsl_matrix * J = gsl_matrix_calloc (6,dof);
+//    CalcJacobianModif( uLINK,J,idx);
+//
+//    //PrintGSLMatrixTranspose(J);
+//
+//    gsl_vector * err = gsl_vector_calloc (6);
+//    gsl_vector * p = gsl_vector_calloc (3);
+//    gsl_matrix * R = gsl_matrix_calloc (3,3);
+//    gsl_matrix_set_identity(R);
+//
+//    //gsl_vector_set (p, 0, 0.0);
+//
+//    CalcVWerrOri(uLINK, err, p, R,idx);
+//    //PrintGSLVector(err);
 
 
 //    for (i = 0; i < 1; i++)
@@ -246,7 +247,7 @@ uLINK[12].q = -0.1745;
 //      glLoadIdentity( );
 //            //glRotated(angular_z,0,0,1);
 //
-//      ForwardKinematics(uLINK,1);
+//      //ForwardKinematics(uLINK,1);
 //      DrawAllJoints(uLINK,1);
 //      glFlush();
 //      SDL_GL_SwapBuffers();

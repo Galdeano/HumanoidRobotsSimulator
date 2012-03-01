@@ -26,6 +26,10 @@
 #include "Gravity_f.h"
 #include "Stabilizator_f.h"
 #include "DrawMarkerf.h"
+#include "CalcJacobianModif.h"
+#include "CalcVWerrOri.h"
+#include "pinv.h"
+#include "PrintGSLMatrix.h"
 
 #ifndef MCSpline
 #include "Mat.h"
@@ -388,6 +392,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
             {
                 gsl_vector_set(idx1,i,path1[i]);
             }
+
             gsl_vector * idx2 = gsl_vector_calloc (14);
             static int path2[14] = {7, 7, 6, 5, 4, 3, 2, 8, 9, 10, 11, 12, 13, 13};
             for(i=0; i<14; i++)
@@ -407,15 +412,19 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
             gsl_matrix_set_identity(R);
             gsl_vector_set_zero(p);
-            gsl_vector_set (p, 1, -0.1595);
+            gsl_vector_set (p, 0, 0.0155);
+            gsl_vector_set (p, 1, 0.0798);
+            gsl_vector_set (p, 2, 0.8434);
             CalcVWerrOri(uLINK, task1, p, R,idx1);
 
             gsl_matrix_set_identity(R);
             gsl_vector_set_zero(p);
-            gsl_vector_set (p, 0, -0.0155);
-            gsl_vector_set (p, 1, -0.0798);
-            gsl_vector_set (p, 2, -0.8434);
+            gsl_vector_set (p, 1, 0.1595);
             CalcVWerrOri(uLINK, task2, p, R,idx2);
+
+            PrintGSLVector(task1);
+            PrintGSLVector(task2);
+
 
             gsl_matrix * P1 = gsl_matrix_calloc (nDoF-6,nDoF-6);
             gsl_matrix * P2 = gsl_matrix_calloc (nDoF-6,nDoF-6);
@@ -432,8 +441,8 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
             gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJ, J2, 0.0, Ptmp);
             gsl_matrix_sub(P2,Ptmp);
 
-            gsl_vector_scale (task1, 1);
-            gsl_vector_scale (task2, 1);
+            gsl_vector_scale (task1, 10);
+            gsl_vector_scale (task2, 10);
 
             gsl_vector * dq = gsl_vector_calloc(nDoF-6);
             gsl_vector * dqtmp = gsl_vector_calloc(nDoF-6);
@@ -445,12 +454,33 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
             gsl_blas_dgemv(CblasNoTrans, 1.0, P1, dqtmp, 0.0, dqtmp);
             gsl_vector_add(dq,dqtmp);
 
+//        static float *uG;
+//        static float *fG;
+//        static float *tG;
+//        static float *uStab;
+//        static int init_G=1;
+//        if (init_G==1)
+//        {
+//            uG = calloc((Status->ddl)-6,sizeof(float));
+//            fG = calloc((Status->ddl)-6,sizeof(float));
+//            tG = calloc((Status->ddl)-6,sizeof(float));
+//            uStab = calloc((Status->ddl)-6,sizeof(float));
+//            init_G=0;
+//        }
+//
+//        Gravity_f( uLINKc, &Statusc, 1, fG, tG);
+//        for (n=0; n<nDoF-6; n++)
+//        {
+//            uG[n]=uLINKc[n+2].ug;
+//        }
+
 
             for (i=0; i<(nDoF-6); i++)
             {
-                uLINK[i+2].u_joint =gsl_vector_get(dq,i);
+                uLINK[i+2].u_joint =gsl_vector_get(dq,i)+0.8*gsl_vector_get(g,i+6);
             }
-            PrintGSLVector(dq);
+            //PrintGSLVector(dq);
+
 
             //uLINK[n].u_joint = 0;
 
@@ -517,7 +547,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         }
     }
 
-PrintGSLVector(u);
+//PrintGSLVector(u);
 //gsl_vector_set_zero(u);
 
     gsl_vector_sub (u,g);

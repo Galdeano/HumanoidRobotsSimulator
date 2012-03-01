@@ -14,7 +14,7 @@ void rot2omega(gsl_matrix * R,gsl_vector * w)
 
     alpha=(gsl_matrix_get(R,0,0)+gsl_matrix_get(R,1,1)+gsl_matrix_get(R,2,2)-1)/2;
 
-    if (abs(alpha)-1 <0.00001)
+    if (fabs(alpha-1) <0.0000001)
     {
         gsl_vector_set_zero(w);
         return;

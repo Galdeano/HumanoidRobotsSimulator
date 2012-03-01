@@ -3,6 +3,8 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_blas.h>
 #include "uLINK.h"
+#include "Cross.h"
+#include "gsl_length_v.h"
 #include "CalcJacobianModif.h"
 
 
