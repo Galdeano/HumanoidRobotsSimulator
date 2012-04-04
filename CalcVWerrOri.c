@@ -29,14 +29,13 @@ void CalcVWerrOri( SuLINK uLINK[], gsl_vector * err, gsl_vector * p, gsl_matrix 
         rot2 = gsl_matrix_calloc (3, 3);
         init_tmp=0;
     }
-//    gsl_vector * error = gsl_vector_calloc (3);
-//    gsl_matrix * rot = gsl_matrix_calloc (3, 3);
-
 
 
     gsl_vector_memcpy(error,p);
     gsl_vector_sub(error,uLINK[now].p);
     gsl_vector_add(error,uLINK[ori].p);
+ //   pinv( rot, uLINK[ori].R);
+ //   gsl_blas_dgemv(CblasNoTrans, 1.0, rot, error, 0.0, error2);
 
     for (i=0; i<3; i++)
     {
@@ -45,6 +44,7 @@ void CalcVWerrOri( SuLINK uLINK[], gsl_vector * err, gsl_vector * p, gsl_matrix 
 
     pinv( rot, uLINK[now].R);
     gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, rot, uLINK[ori].R, 0.0, rot2);
+    //gsl_matrix_memcpy(rot,rot2);
     gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, rot2, R, 0.0, rot);
     rot2omega(rot,error);
     gsl_blas_dgemv(CblasNoTrans, 1.0, uLINK[now].R, error, 0.0, error2);
@@ -54,8 +54,7 @@ void CalcVWerrOri( SuLINK uLINK[], gsl_vector * err, gsl_vector * p, gsl_matrix 
         gsl_vector_set(err,i+3,gsl_vector_get(error2,i));
     }
 
-    //gsl_vector_free(error);
-    //gsl_matrix_free(rot);
+
 
 }
 

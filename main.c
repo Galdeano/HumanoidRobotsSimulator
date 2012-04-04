@@ -38,6 +38,7 @@
 #include "DrawMarker.h"
 #include "Ext_traj.h"
 #include "DrawIndicators.h"
+#include "NodeForwardKinematics.h"
 
 #include "Setup.h"
 
@@ -66,7 +67,7 @@ int main(int argc, char *argv[])
     strcpy( RobotFile, "./Robots/" );
 
     if (d == NULL)
-    perror("");
+        perror("");
 
     if (d)
     {
@@ -77,14 +78,18 @@ int main(int argc, char *argv[])
         }
         rewinddir(d);
 
-        do {
-        fgets ( szInput, 25, stdin );
-        j=atoi(szInput);
-        //j=7;
-        } while (!(j>2 && j<=i));
+        do
+        {
+            //fgets ( szInput, 25, stdin );
+            //j=atoi(szInput);
+            j=3;
+        }
+        while (!(j>2 && j<=i));
 
-        for(i=0; i<j;i++)
-        {dir = readdir(d);}
+        for(i=0; i<j; i++)
+        {
+            dir = readdir(d);
+        }
         strcat( RobotFile, dir->d_name );
         printf("\n%s\n", RobotFile);
         closedir(d);
@@ -194,13 +199,14 @@ int main(int argc, char *argv[])
 //    }
 //    free (qd);
 
-uLINK[2].q = -0.1745;
-uLINK[5].q = 0.3491;
-uLINK[6].q = -0.1745;
+    uLINK[2].q = -0.1745;
+    uLINK[5].q = 0.3491;
+    uLINK[6].q = -0.1745;
 
-uLINK[8].q = -0.1745;
-uLINK[11].q = 0.3491;
-uLINK[12].q = -0.1745;
+    uLINK[8].q = -0.1745;
+    uLINK[11].q = 0.3491;
+    uLINK[12].q = -0.1745;
+
 
 
     gsl_vector_set_zero(uLINK[base].p);
@@ -209,20 +215,23 @@ uLINK[12].q = -0.1745;
     gsl_matrix_set_identity(uLINK[base].R);
     NodeForwardKinematics(uLINK,base,0);
 
-//    gsl_vector * idx = gsl_vector_calloc (8);
-//    int path1[8] = {7, 7, 6, 5, 4, 3, 2, 1};
-//    //int path1[8] = {1, 2, 3, 4, 5, 6, 7, 7};
-//    for(i=0; i<8; i++)
-//    {
-//        gsl_vector_set(idx,i,path1[i]);
-//    }
-////    gsl_vector * idx = gsl_vector_calloc (14);
-////    int path1[14] = {7, 7, 6, 5, 4, 3, 2, 8, 9, 10, 11, 12, 13, 13};
+    CalcCoM(uLINK,com);
+    PrintGSLVector(com);
+//
+////    gsl_vector * idx = gsl_vector_calloc (8);
+////    int path1[8] = {7, 7, 6, 5, 4, 3, 2, 1};
 ////    //int path1[8] = {1, 2, 3, 4, 5, 6, 7, 7};
-////    for(i=0; i<14; i++)
+////    for(i=0; i<8; i++)
 ////    {
 ////        gsl_vector_set(idx,i,path1[i]);
 ////    }
+//    gsl_vector * idx = gsl_vector_calloc (14);
+//    int path1[14] = {7, 7, 6, 5, 4, 3, 2, 8, 9, 10, 11, 12, 13, 13};
+//    //int path1[8] = {1, 2, 3, 4, 5, 6, 7, 7};
+//    for(i=0; i<14; i++)
+//    {
+//        gsl_vector_set(idx,i,path1[i]);
+//    }
 //    gsl_matrix * J = gsl_matrix_calloc (6,dof);
 //    CalcJacobianModif( uLINK,J,idx);
 //
@@ -233,29 +242,61 @@ uLINK[12].q = -0.1745;
 //    gsl_matrix * R = gsl_matrix_calloc (3,3);
 //    gsl_matrix_set_identity(R);
 //
-//    //gsl_vector_set (p, 0, 0.0);
-//
+//    gsl_vector_set (p, 1, 0.1595);
 //    CalcVWerrOri(uLINK, err, p, R,idx);
-//    //PrintGSLVector(err);
-
-
-//    for (i = 0; i < 1; i++)
+//    PrintGSLVector(err);
+//
+////    gsl_matrix * J = gsl_matrix_calloc (3,dof);
+////    CalcCoMJacobian(uLINK, J, base);
+////    PrintGSLMatrixTranspose(J);
+//
+////    float *qd;
+////    qd = calloc(dof,sizeof(float));
+////
+////    for (i = 0; i < 533; i++)
+////    {
+////
+////        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+////        glMatrixMode( GL_MODELVIEW );
+////        glLoadIdentity( );
+////        //glRotated(angular_z,0,0,1);
+////
+////        Ext_q_trajectory(qd, 0);
+////        printf(" %d %f %f \n",i,uLINK[2].q,qd[1]);
+////        for(j=1; j<(dof+2); j++)
+////        {
+////            uLINK[j].q = qd[j-1];
+////        }
+////
+////        ForwardKinematics(uLINK,1);
+////        DrawAllJoints(uLINK,1);
+////        glFlush();
+////        SDL_GL_SwapBuffers();
+////        SDL_Delay(50);
+////    }
+////
+////    free (qd);
+////
+////    return EXIT_SUCCESS; // Fermeture du programme
+//
+//
+//
+//    for (i = 0; i < 10; i++)
 //    {
 //
-//      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//      glMatrixMode( GL_MODELVIEW );
-//      glLoadIdentity( );
-//            //glRotated(angular_z,0,0,1);
-//
-//      //ForwardKinematics(uLINK,1);
-//      DrawAllJoints(uLINK,1);
-//      glFlush();
-//      SDL_GL_SwapBuffers();
-//      SDL_Delay(2000);
+//        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//        glMatrixMode( GL_MODELVIEW );
+//        glLoadIdentity( );
+//        //glRotated(angular_z,0,0,1);
+//        ForwardKinematics(uLINK,1);
+//        DrawAllJoints(uLINK,1);
+//        glFlush();
+//        SDL_GL_SwapBuffers();
+//        SDL_Delay(50);
 //    }
+//
 //    return EXIT_SUCCESS; // Fermeture du programme
-
-
+//
 
 #endif
 
@@ -434,8 +475,8 @@ uLINK[12].q = -0.1745;
 
 #if !StaticCOM
 
-            ForwardDynamics(uLINK,&Status,t);
-            IntegrateEuler(uLINK,1);
+            //ForwardDynamics(uLINK,&Status,t);
+            //IntegrateEuler(uLINK,1);
             DrawAllJoints(uLINK,1);
             DrawIndicators(uLINK,&Status,com,CoP,ground);
 #endif
@@ -460,8 +501,11 @@ uLINK[12].q = -0.1745;
 
         }
 #if !StaticCOM
-        else
+        //else
         {
+            gsl_vector_set_zero(uLINK[1].p);
+            gsl_vector_set (uLINK[1].p, 2, 1.2);
+            gsl_vector_set_zero(uLINK[1].vo);
             ForwardDynamics(uLINK,&Status,t);
             IntegrateEuler(uLINK,1);
             /// todo : Runge kuta
