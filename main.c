@@ -227,251 +227,217 @@ int main(int argc, char *argv[])
 
     CalcCoM(uLINK,com);
     PrintGSLVector(com);
-    int nDoF=dof+6;
 
-    static gsl_matrix * JCoM;
-    static gsl_matrix * invJCoM;
-    JCoM = gsl_matrix_calloc (3,nDoF-6);
-    invJCoM = gsl_matrix_calloc (nDoF-6,3);
-    CalcCoMJacobian(uLINK, JCoM, base);
-    pinv(invJCoM,JCoM);
-    ping(1);
-    //PrintGSLMatrixTranspose(JCoM);
-    PrintGSLMatrix(invJCoM);
-
-
-
-//return EXIT_SUCCESS; // Fermeture du programme
-
-
-//    for (i = 0; i < 540; i++)
-//    {
-//        float *kqd;
-//        kqd = calloc(nDoF-6,sizeof(float));
-//        Ext_q_trajectory(kqd, 0);
-//
-//        for (j=0; j<(nDoF-6); j++)
-//        {
-//            uLINK[j+2].q= kqd[j+1];
-//        }
-//
-//        free (kqd);
-//
-//        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//        glMatrixMode( GL_MODELVIEW );
-//        glLoadIdentity( );
-//        //glRotated(angular_z,0,0,1);
-//        ForwardKinematics(uLINK,1);
-//        DrawAllJoints(uLINK,1);
-//        DrawGround(2.0,0.0,-0.2,6.0,6.0,0.1);
-//        glFlush();
-//        SDL_GL_SwapBuffers();
-//        SDL_Delay(5);
-//    }
-//
-//    return EXIT_SUCCESS; // Fermeture du programme
-
-    for (i = 0; i < 1; i++)
-    {
-
-ping(i);
-
-        static gsl_vector * idx1;
-        static gsl_vector * idx2;
-        static gsl_matrix * J1;
-        static gsl_matrix * J2;
-        //static gsl_matrix * JCoM;
-        static gsl_matrix * Jtilde;
-        static gsl_vector * task1;
-        static gsl_vector * task2;
-        static gsl_vector * taskCoM;
-        static gsl_vector * CoM;
-        static gsl_vector * vec3;
-        static gsl_vector * vec3_2;
-        static gsl_vector * p;
-        static gsl_matrix * R;
-        static gsl_matrix * P1;
-        static gsl_matrix * P2;
-        static gsl_matrix * PCoM;
-        static gsl_matrix * Ptmp;
-        static gsl_matrix * invJ;
-        //static gsl_matrix * invJCoM;
-        static gsl_vector * dq;
-        static gsl_vector * dqtmp;
-        static gsl_vector * dqtmp2;
-        static float *opd;
-        static gsl_vector * trace;
-
-        static int init_task=1;
-        if (init_task==1)
-        {
-            opd = calloc(9,sizeof(float));
-            trace = gsl_vector_calloc (3);
-
-            idx1 = gsl_vector_calloc (8);
-            idx2 = gsl_vector_calloc (14);
-            J1 = gsl_matrix_calloc (6,nDoF-6);
-            J2 = gsl_matrix_calloc (6,nDoF-6);
-            //JCoM = gsl_matrix_calloc (3,nDoF-6);
-            Jtilde = gsl_matrix_calloc (3,nDoF-6);
-            task1 = gsl_vector_calloc (6);
-            task2 = gsl_vector_calloc (6);
-            taskCoM = gsl_vector_calloc (3);
-            CoM = gsl_vector_calloc (3);
-            vec3 = gsl_vector_calloc (3);
-            vec3_2 = gsl_vector_calloc (3);
-            p = gsl_vector_calloc (3);
-            R = gsl_matrix_calloc (3,3);
-            P1 = gsl_matrix_calloc (nDoF-6,nDoF-6);
-            P2 = gsl_matrix_calloc (nDoF-6,nDoF-6);
-            PCoM = gsl_matrix_calloc (nDoF-6,nDoF-6);
-            Ptmp = gsl_matrix_calloc (nDoF-6,nDoF-6);
-            invJ = gsl_matrix_calloc (nDoF-6,6);
-            //invJCoM = gsl_matrix_calloc (nDoF-6,3);
-            dq = gsl_vector_calloc(nDoF-6);
-            dqtmp = gsl_vector_calloc(nDoF-6);
-            dqtmp2 = gsl_vector_calloc(nDoF-6);
-            init_task=0;
-
-//            static int path1[8] = {7, 7, 6, 5, 4, 3, 2, 1};
-//            //int path1[8] = {1, 2, 3, 4, 5, 6, 7, 7};
-//            for(j=0; j<8; j++)
-//            {
-//                gsl_vector_set(idx1,j,path1[j]);
-//            }
-
-            //static int path2[14] = {7, 7, 6, 5, 4, 3, 2, 8, 9, 10, 11, 12, 13, 13};
-            static int path2[14] = {13, 13, 12, 11, 10, 9, 8, 2, 3, 4, 5, 6, 7, 7};
-            for(j=0; j<14; j++)
-            {
-                gsl_vector_set(idx2,j,path2[j]);
-            }
-        }
-
-        Ext_op_trajectory(opd, 0);
-
-        gsl_vector_set (uLINK[base].p, 0, opd[6]);
-        gsl_vector_set (uLINK[base].p, 1, opd[7]);
-        gsl_vector_set (uLINK[base].p, 2, opd[8]);
-
-        NodeForwardKinematics(uLINK,base,0);
-
-
-
-//        CalcJacobianModif( uLINK,J1,idx1);
-        CalcJacobianModif( uLINK,J2,idx2);
-        CalcCoMJacobian(uLINK, JCoM, base);
-
-
-//        gsl_matrix_set_identity(R);
-//        gsl_vector_set_zero(p);
-//        gsl_vector_set (p, 0, 0.0155);
-//        gsl_vector_set (p, 1, 0.0798);
-//        gsl_vector_set (p, 2, 0.8434);
-//        CalcVWerrOri(uLINK, task1, p, R,idx1);
-
-        gsl_matrix_set_identity(R);
-        gsl_vector_set_zero(p);
-        gsl_vector_set (p, 0, (opd[3]-opd[6]));
-        gsl_vector_set (p, 1, (opd[4]-opd[7]));
-        gsl_vector_set (p, 2, (opd[5]-opd[8]));
-        CalcVWerrOri(uLINK, task2, p, R,idx2);
-
-        gsl_vector_set (taskCoM, 0, opd[0]);
-        gsl_vector_set (taskCoM, 1, opd[1]);
-        gsl_vector_set (taskCoM, 2, opd[2]-0.1);
-        CalcCoM(uLINK,CoM);
-//        PrintGSLVector(CoM);
-//        PrintGSLVector(taskCoM);
-        gsl_vector_sub(taskCoM,CoM);
-
-
-
-//        gsl_matrix_set_identity(P1);
-//        pinv(invJ,J1);
-//        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJ, J1, 0.0, Ptmp);
-//        gsl_matrix_sub(P1,Ptmp);
-
-        gsl_matrix_set_identity(P2);
-        pinv(invJ,J2);
-        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJ, J2, 0.0, Ptmp);
-        gsl_matrix_sub(P2,Ptmp);
-
-        gsl_matrix_set_identity(PCoM);
-        pinv(invJCoM,JCoM);
-        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJCoM, JCoM, 0.0, Ptmp);
-        gsl_matrix_sub(PCoM,Ptmp);
-
-
-        if(0)
-        {
-        pinv(invJ,J2);
-        gsl_blas_dgemv(CblasNoTrans, 1.0, invJ, task2, 0.0, dq);
-        }
-        else
-        {
-        pinv(invJCoM,JCoM);
-        gsl_blas_dgemv(CblasNoTrans, 1.0, invJCoM, taskCoM, 0.0, dq);
-        }
-
-        ping(5);
-        PrintGSLMatrixTranspose(J2);ping(6);
-        PrintGSLMatrixTranspose(JCoM);
-
-
-//
-//        gsl_vector_memcpy(vec3,taskCoM);
-//        gsl_blas_dgemv(CblasNoTrans, 1.0, JCoM, dq, 0.0, vec3_2);
-//        gsl_vector_sub(vec3,vec3_2);
-//
-//        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, JCoM, P2, 0.0, Jtilde);
-//
-//        pinv(invJCoM,Jtilde);
-//        gsl_blas_dgemv(CblasNoTrans, 1.0, invJCoM, vec3, 0.0, dqtmp2);
-//
-//        gsl_blas_dgemv(CblasNoTrans, 1.0, P2, dqtmp2, 0.0, dqtmp);
-//        gsl_vector_add(dq,dqtmp);
-
-
-
-        for (j=0; j<(nDoF-6); j++)
-        {
-            uLINK[j+2].q =uLINK[j+2].q+gsl_vector_get(dq,j);//+gsl_vector_get (g, n+6);
-        }
-
-
-
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glMatrixMode( GL_MODELVIEW );
-        glLoadIdentity( );
-        //glRotated(angular_z,0,0,1);
-        //ForwardKinematics(uLINK,1);
-        NodeForwardKinematics(uLINK,base,0);
-        DrawAllJoints(uLINK,1);
-
-//        gsl_vector_set_zero(p);
-//        gsl_vector_set (p, 0, opd[3]-opd[6]);
-//        gsl_vector_set (p, 1, opd[4]-opd[7]);
-//        gsl_vector_set (p, 2, opd[5]-opd[8]);
-//        DrawMarker(p);
-
-        for(j=0; j<3; j++)
-        {
-            gsl_vector_set (trace, 0, opd[0+3*j]);
-            gsl_vector_set (trace, 1, opd[1+3*j]);
-            gsl_vector_set (trace, 2, opd[2+3*j]);
-            DrawMarker(trace);
-        }
-        DrawGround(2.0,0.0,-0.2,6.0,6.0,0.1);
-        glFlush();
-        SDL_GL_SwapBuffers();
-        SDL_Delay(5);
-    }
-
-    return EXIT_SUCCESS; // Fermeture du programme
-
-
+////    int nDoF=dof+6;
+////
+//////return EXIT_SUCCESS; // Fermeture du programme
+////
+////
+//////    for (i = 0; i < 540; i++)
+//////    {
+//////        float *kqd;
+//////        kqd = calloc(nDoF-6,sizeof(float));
+//////        Ext_q_trajectory(kqd, 0);
+//////
+//////        for (j=0; j<(nDoF-6); j++)
+//////        {
+//////            uLINK[j+2].q= kqd[j+1];
+//////        }
+//////
+//////        free (kqd);
+//////
+//////        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//////        glMatrixMode( GL_MODELVIEW );
+//////        glLoadIdentity( );
+//////        //glRotated(angular_z,0,0,1);
+//////        ForwardKinematics(uLINK,1);
+//////        DrawAllJoints(uLINK,1);
+//////        DrawGround(2.0,0.0,-0.2,6.0,6.0,0.1);
+//////        glFlush();
+//////        SDL_GL_SwapBuffers();
+//////        SDL_Delay(5);
+//////    }
+//////
+//////    return EXIT_SUCCESS; // Fermeture du programme
+////
+////    for (i = 0; i < 500; i++)
+////    {
+////
+////ping(i);
+////
+////        static gsl_vector * idx1;
+////        static gsl_vector * idx2;
+////        static gsl_matrix * J1;
+////        static gsl_matrix * J2;
+////        static gsl_matrix * JCoM;
+////        static gsl_matrix * Jtilde;
+////        static gsl_vector * task1;
+////        static gsl_vector * task2;
+////        static gsl_vector * taskCoM;
+////        static gsl_vector * CoM;
+////        static gsl_vector * vec3;
+////        static gsl_vector * vec3_2;
+////        static gsl_vector * p;
+////        static gsl_matrix * R;
+////        static gsl_matrix * P1;
+////        static gsl_matrix * P2;
+////        static gsl_matrix * PCoM;
+////        static gsl_matrix * Ptmp;
+////        static gsl_matrix * invJ;
+////        static gsl_matrix * invJCoM;
+////        static gsl_vector * dq;
+////        static gsl_vector * dqtmp;
+////        static gsl_vector * dqtmp2;
+////        static float *opd;
+////        static gsl_vector * trace;
+////
+////        static int init_task=1;
+////        if (init_task==1)
+////        {
+////            opd = calloc(9,sizeof(float));
+////            trace = gsl_vector_calloc (3);
+////
+////            idx1 = gsl_vector_calloc (8);
+////            idx2 = gsl_vector_calloc (14);
+////            J1 = gsl_matrix_calloc (6,nDoF-6);
+////            J2 = gsl_matrix_calloc (6,nDoF-6);
+////            JCoM = gsl_matrix_calloc (3,nDoF-6);
+////            Jtilde = gsl_matrix_calloc (3,nDoF-6);
+////            task1 = gsl_vector_calloc (6);
+////            task2 = gsl_vector_calloc (6);
+////            taskCoM = gsl_vector_calloc (3);
+////            CoM = gsl_vector_calloc (3);
+////            vec3 = gsl_vector_calloc (3);
+////            vec3_2 = gsl_vector_calloc (3);
+////            p = gsl_vector_calloc (3);
+////            R = gsl_matrix_calloc (3,3);
+////            P1 = gsl_matrix_calloc (nDoF-6,nDoF-6);
+////            P2 = gsl_matrix_calloc (nDoF-6,nDoF-6);
+////            PCoM = gsl_matrix_calloc (nDoF-6,nDoF-6);
+////            Ptmp = gsl_matrix_calloc (nDoF-6,nDoF-6);
+////            invJ = gsl_matrix_calloc (nDoF-6,6);
+////            invJCoM = gsl_matrix_calloc (nDoF-6,3);
+////            dq = gsl_vector_calloc(nDoF-6);
+////            dqtmp = gsl_vector_calloc(nDoF-6);
+////            dqtmp2 = gsl_vector_calloc(nDoF-6);
+////            init_task=0;
+////
+//////            static int path1[8] = {7, 7, 6, 5, 4, 3, 2, 1};
+//////            //int path1[8] = {1, 2, 3, 4, 5, 6, 7, 7};
+//////            for(j=0; j<8; j++)
+//////            {
+//////                gsl_vector_set(idx1,j,path1[j]);
+//////            }
+////
+////            //static int path2[14] = {7, 7, 6, 5, 4, 3, 2, 8, 9, 10, 11, 12, 13, 13};
+////            static int path2[14] = {13, 13, 12, 11, 10, 9, 8, 2, 3, 4, 5, 6, 7, 7};
+////            for(j=0; j<14; j++)
+////            {
+////                gsl_vector_set(idx2,j,path2[j]);
+////            }
+////        }
+////
+////        Ext_op_trajectory(opd, 0);
+////
+////        gsl_vector_set (uLINK[base].p, 0, opd[6]);
+////        gsl_vector_set (uLINK[base].p, 1, opd[7]);
+////        gsl_vector_set (uLINK[base].p, 2, opd[8]);
+////
+////        NodeForwardKinematics(uLINK,base,0);
+////
+////
+////
+//////        CalcJacobianModif( uLINK,J1,idx1);
+////        CalcJacobianModif( uLINK,J2,idx2);
+////        CalcCoMJacobian(uLINK, JCoM, base);
+////
+////
+//////        gsl_matrix_set_identity(R);
+//////        gsl_vector_set_zero(p);
+//////        gsl_vector_set (p, 0, 0.0155);
+//////        gsl_vector_set (p, 1, 0.0798);
+//////        gsl_vector_set (p, 2, 0.8434);
+//////        CalcVWerrOri(uLINK, task1, p, R,idx1);
+////
+////        gsl_matrix_set_identity(R);
+////        gsl_vector_set_zero(p);
+////        gsl_vector_set (p, 0, (opd[3]-opd[6]));
+////        gsl_vector_set (p, 1, (opd[4]-opd[7]));
+////        gsl_vector_set (p, 2, (opd[5]-opd[8]));
+////        CalcVWerrOri(uLINK, task2, p, R,idx2);
+////
+////        gsl_vector_set (taskCoM, 0, opd[0]);
+////        gsl_vector_set (taskCoM, 1, opd[1]);
+////        gsl_vector_set (taskCoM, 2, opd[2]-0.1);
+////        CalcCoM(uLINK,CoM);
+////        gsl_vector_sub(taskCoM,CoM);
+////
+////
+////
+//////        gsl_matrix_set_identity(P1);
+//////        pinv(invJ,J1);
+//////        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJ, J1, 0.0, Ptmp);
+//////        gsl_matrix_sub(P1,Ptmp);
+////
+////        gsl_matrix_set_identity(P2);
+////        pinv(invJ,J2);
+////        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJ, J2, 0.0, Ptmp);
+////        gsl_matrix_sub(P2,Ptmp);
+////
+////        gsl_matrix_set_identity(PCoM);
+////        pinv(invJCoM,JCoM);
+////        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJCoM, JCoM, 0.0, Ptmp);
+////        gsl_matrix_sub(PCoM,Ptmp);
+////
+////
+////
+////        pinv(invJ,J2);
+////        gsl_blas_dgemv(CblasNoTrans, 1.0, invJ, task2, 0.0, dq);
+////
+////        gsl_vector_memcpy(vec3,taskCoM);
+////        gsl_blas_dgemv(CblasNoTrans, 1.0, JCoM, dq, 0.0, vec3_2);
+////        gsl_vector_sub(vec3,vec3_2);
+////
+////        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, JCoM, P2, 0.0, Jtilde);
+////
+////        pinv(invJCoM,Jtilde);
+////        gsl_blas_dgemv(CblasNoTrans, 1.0, invJCoM, vec3, 0.0, dqtmp2);
+////
+////        gsl_blas_dgemv(CblasNoTrans, 1.0, P2, dqtmp2, 0.0, dqtmp);
+////        gsl_vector_add(dq,dqtmp);
+////
+////
+////
+////        for (j=0; j<(nDoF-6); j++)
+////        {
+////            uLINK[j+2].q =uLINK[j+2].q+gsl_vector_get(dq,j);//+gsl_vector_get (g, n+6);
+////        }
+////
+////
+////
+////        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+////        glMatrixMode( GL_MODELVIEW );
+////        glLoadIdentity( );
+////        //glRotated(angular_z,0,0,1);
+////        //ForwardKinematics(uLINK,1);
+////        NodeForwardKinematics(uLINK,base,0);
+////        DrawAllJoints(uLINK,1);
+////
+////
+////        for(j=0; j<3; j++)
+////        {
+////            gsl_vector_set (trace, 0, opd[0+3*j]);
+////            gsl_vector_set (trace, 1, opd[1+3*j]);
+////            gsl_vector_set (trace, 2, opd[2+3*j]);
+////            DrawMarker(trace);
+////        }
+////        DrawGround(2.0,0.0,-0.2,6.0,6.0,0.1);
+////        glFlush();
+////        SDL_GL_SwapBuffers();
+////        SDL_Delay(5);
+////    }
+////
+////    return EXIT_SUCCESS; // Fermeture du programme
 
 
 #endif

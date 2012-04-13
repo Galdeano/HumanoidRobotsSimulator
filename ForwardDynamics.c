@@ -492,27 +492,25 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         gsl_matrix_set_identity(R);
         gsl_vector_set_zero(p);
         gsl_vector_set (p, 1, -0.1595);
-        gsl_vector_set (p, 2, -0.01);
+        //gsl_vector_set (p, 2, -0.01);
         CalcVWerrOri(uLINK, task2, p, R,idx2);
 
 
 
-//        gsl_vector_set (taskCoM, 0, 0.048516);
-//        gsl_vector_set (taskCoM, 1,-0.079750);
-//        gsl_vector_set (taskCoM, 2, 0.884101);
-        gsl_vector_set (taskCoM, 0, 0.043085);
-        gsl_vector_set (taskCoM, 1,0);
-        gsl_vector_set (taskCoM, 2, 1.174709);
+        gsl_vector_set (taskCoM, 0, 0.048516);
+        gsl_vector_set (taskCoM, 1,-0.079750);
+        gsl_vector_set (taskCoM, 2, 0.884101);
 //        pinv(R,uLINK[base].R);
 //        gsl_blas_dgemv(CblasNoTrans, 1.0, R, p, 0.0, taskCoM);
         CalcCoM(uLINK,CoM);
         gsl_vector_sub(taskCoM,CoM);
 
 
-
+ping(1);
         //PrintGSLVector(task1);
         PrintGSLVector(task2);
-        //PrintGSLVector(taskCoM);
+        PrintGSLVector(taskCoM);
+ping(2);
 
         gsl_matrix_set_identity(P1);
         pinv(invJ,J1);
@@ -541,17 +539,17 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         pinv(invJ,J2);
         gsl_blas_dgemv(CblasNoTrans, 1.0, invJ, task2, 0.0, dq);
 
-//        gsl_vector_memcpy(vec3,taskCoM);
-//        gsl_blas_dgemv(CblasNoTrans, 1.0, JCoM, dq, 0.0, vec3_2);
-//        gsl_vector_sub(vec3,vec3_2);
-//
-//        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, JCoM, P2, 0.0, Jtilde);
-//
-//        pinv(invJCoM,Jtilde);
-//        gsl_blas_dgemv(CblasNoTrans, 1.0, invJCoM, vec3, 0.0, dqtmp2);
-//
-//        gsl_blas_dgemv(CblasNoTrans, 1.0, P2, dqtmp2, 0.0, dqtmp);
-//        gsl_vector_add(dq,dqtmp);
+        gsl_vector_memcpy(vec3,taskCoM);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, JCoM, dq, 0.0, vec3_2);
+        gsl_vector_sub(vec3,vec3_2);
+
+        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, JCoM, P2, 0.0, Jtilde);
+
+        pinv(invJCoM,Jtilde);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, invJCoM, vec3, 0.0, dqtmp2);
+
+        gsl_blas_dgemv(CblasNoTrans, 1.0, P2, dqtmp2, 0.0, dqtmp);
+        gsl_vector_add(dq,dqtmp);
 
 
 //            pinv(invJCoM,JCoM);
@@ -565,7 +563,7 @@ PrintGSLVector(dq);
 
         for (i=0; i<(nDoF-6); i++)
         {
-            uLINK[i+2].u_joint =1000*gsl_vector_get(dq,i);//+gsl_vector_get (g, n+6);
+            uLINK[i+2].u_joint =500*gsl_vector_get(dq,i);//+gsl_vector_get (g, n+6);
             //uLINK[i+2].u_joint =0;
         }
 

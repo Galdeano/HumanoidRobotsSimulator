@@ -51,8 +51,8 @@ void CalcJacobianModif( SuLINK uLINK[], gsl_matrix * J, gsl_vector * idx)
 
         for (i=0; i<3; i++)
         {
-            gsl_matrix_set(J,i,j-1,gsl_vector_get(error,i));
-            gsl_matrix_set(J,i+3,j-1,gsl_vector_get(a,i));
+            gsl_matrix_set(J,i,j-2,gsl_vector_get(error,i));
+            gsl_matrix_set(J,i+3,j-2,gsl_vector_get(a,i));
         }
 
         //J(:,n-1) = [cross(a, target - uLINK(j).p) ; a ];
