@@ -265,8 +265,10 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         float kp=1000;
 #endif
 #if Generic
-        float kd=1;
-        float kp=300;
+//        float kd=1;
+//        float kp=300;
+        float kd=100;
+        float kp=3000;
 #endif
 #if Human
         float kd=1;

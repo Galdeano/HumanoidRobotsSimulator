@@ -75,7 +75,7 @@
 /*! \def Suspendu
     \brief 1 if the robot is hanged and dont touch the ground
 */
-#define Visualisation 1
+#define Visualisation 0
 /*! \def Visualisation
     \brief Record variables of the simulation
 */

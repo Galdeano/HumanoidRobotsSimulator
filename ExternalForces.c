@@ -34,9 +34,12 @@ void ExternalForces(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector
     {
         //int Kf = 1000000;        //1.0E+4 Rigidite (N/m),           //40000
         //int Df = 1000;        //1.0E+3 viscosite (N/(m/s)) du sol    //
-        int Kf = 1000000;        //1.0E+4 Rigidite (N/m),           //40000
-        int Df = 1000;        //1.0E+3 viscosite (N/(m/s)) du sol    //
-
+//        int Kf = 1000000;        //1.0E+4 Rigidite (N/m),           //40000
+//        int Df = 1000;        //1.0E+3 viscosite (N/(m/s)) du sol    //
+//        int Kf = 100000000;        //1.0E+4 Rigidite (N/m),           //sherpa
+//        int Df = 20000;        //1.0E+3 viscosite (N/(m/s)) du sol    //
+        int Kf = 5000000;        //1.0E+4 Rigidite (N/m),           //40000
+        int Df = 5000;        //1.0E+3 viscosite (N/(m/s)) du sol    //
 
         int i,k;
         double val;

@@ -29,7 +29,8 @@ void DrawPolygon(SuLINK uLINK[],int j)
     for (i = 0; i < 6; ++i)
     {
         glBegin(GL_QUADS);
-        glColor3ub(124,124,124);
+        //glColor3ub(124,124,124);
+        glColor3f(0.8f,0.8f,0.8f);
         for (k = 0; k < 4; ++k)
         {
             glVertex3d(gsl_matrix_get(vert,0,gsl_matrix_get(uLINK[j].face,k,i)),gsl_matrix_get(vert,1,gsl_matrix_get(uLINK[j].face,k,i)),gsl_matrix_get(vert,2,gsl_matrix_get(uLINK[j].face,k,i)));

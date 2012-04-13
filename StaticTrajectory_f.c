@@ -343,12 +343,12 @@ void OneFoot_f(float *qd, double t, int *desired_support, float *distribution)
 {
 
 
-    float t1=5;
-    float t2=15;
-    float t3=25;
-    float t4=35;
-    float t5=45;
-    float t6=55;
+//    float t1=5;
+//    float t2=15;
+//    float t3=25;
+//    float t4=35;
+//    float t5=45;
+//    float t6=55;
 
 //    float t1=5;
 //    float t2=15;
@@ -357,15 +357,15 @@ void OneFoot_f(float *qd, double t, int *desired_support, float *distribution)
 //    float t5=15;
 //    float t6=25;
 
-//    float t1=0.5;
-//    float t2=2;
-//    float t3=5;
-//    float t4=8;
-//    float t5=11;
-//    float t6=14;
+    float t1=0.5;
+    float t2=2;
+    float t3=5;
+    float t4=8;
+    float t5=11;
+    float t6=14;
 
-
-    float com_y =0.210f;
+    float com_y =0.290f;
+    //float com_y =0.210f;
     //float com_y =0.29;
 
 
