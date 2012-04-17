@@ -502,7 +502,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
 
         //gsl_vector_set (taskCoM, 0, 0.048516);
-        gsl_vector_set (taskCoM, 0, 0.02);
+        gsl_vector_set (taskCoM, 0, 0.04);
         gsl_vector_set (taskCoM, 1,-0.079750);
         gsl_vector_set (taskCoM, 2, 0.884101);
 //        pinv(R,uLINK[base].R);
@@ -572,7 +572,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
         for (i=0; i<(nDoF-6); i++)
         {
-            uLINK[i+2].u_joint =200*gsl_vector_get(dq,i)+10*gsl_vector_get(ddq,i);
+            uLINK[i+2].u_joint =2000*gsl_vector_get(dq,i)+20*gsl_vector_get(ddq,i);
         }
 
         gsl_vector_memcpy(dq_old,dq);

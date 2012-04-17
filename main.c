@@ -134,6 +134,12 @@ int main(int argc, char *argv[])
 
     LoadRobotXML(uLINK,&Status,RobotFile);
 
+
+
+    LoadRobotParserXML(uLINK,&Status,RobotFile);
+
+    return EXIT_SUCCESS; // Fermeture du programme
+
 //    for(i=1; i<(dof+2); i++)
 //    {
 //    printf("ispolygon: %i \n",uLINK[i].isPolygon);
@@ -260,7 +266,7 @@ int main(int argc, char *argv[])
 //////            uLINK[j+2].q= kqd[j+1];
 //////        }
 //////
-//////        free (kqd);
+//////        free (kqd);return EXIT_SUCCESS; // Fermeture du programme
 //////
 //////        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 //////        glMatrixMode( GL_MODELVIEW );
@@ -276,7 +282,7 @@ int main(int argc, char *argv[])
 //////
 //////    return EXIT_SUCCESS; // Fermeture du programme
 ////
-////    for (i = 0; i < 500; i++)
+////    for (i = 0; i < 500; i++)void LoadRobotParserXML(SuLINK uLINK[],State *Status,char* RobotFile)
 ////    {
 ////
 ////ping(i);
@@ -402,7 +408,7 @@ int main(int argc, char *argv[])
 ////
 ////        gsl_matrix_set_identity(PCoM);
 ////        pinv(invJCoM,JCoM);
-////        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJCoM, JCoM, 0.0, Ptmp);
+////        gsl_blas_dgemm (CblasNreturn EXIT_SUCCESS; // Fermeture du programmeoTrans, CblasNoTrans, 1.0, invJCoM, JCoM, 0.0, Ptmp);
 ////        gsl_matrix_sub(PCoM,Ptmp);
 ////
 ////
