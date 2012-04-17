@@ -67,7 +67,7 @@
 
 
 
-#define Video 0
+#define Video 1
 /*! \def Video
     \brief Record images of the simulation
 */

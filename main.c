@@ -150,6 +150,22 @@ int main(int argc, char *argv[])
     gsl_vector * pos = gsl_vector_calloc (3);
 
 
+
+
+#if Video
+        char buf[256];
+        d = opendir("./../Simu_images/");
+
+        while(dir = readdir(d))
+        {
+                //printf("%s\n",dir->d_name);
+                sprintf(buf, "%s/%s", "./../Simu_images/", dir->d_name);
+                remove(buf);
+        }
+#endif
+
+
+
 //HWND Handle=NULL;
 
     SDL_Init(SDL_INIT_VIDEO); // Initialisation de la SDL

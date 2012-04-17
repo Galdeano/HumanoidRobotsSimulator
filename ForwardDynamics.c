@@ -431,6 +431,8 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         static gsl_vector * dq;
         static gsl_vector * dqtmp;
         static gsl_vector * dqtmp2;
+        static gsl_vector * dq_old;
+        static gsl_vector * ddq;
 
         static int init_task=1;
         if (init_task==1)
@@ -458,6 +460,8 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
             dq = gsl_vector_calloc(nDoF-6);
             dqtmp = gsl_vector_calloc(nDoF-6);
             dqtmp2 = gsl_vector_calloc(nDoF-6);
+            dq_old = gsl_vector_calloc(nDoF-6);
+            ddq = gsl_vector_calloc(nDoF-6);
             init_task=0;
         }
 
@@ -497,7 +501,8 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
 
 
-        gsl_vector_set (taskCoM, 0, 0.048516);
+        //gsl_vector_set (taskCoM, 0, 0.048516);
+        gsl_vector_set (taskCoM, 0, 0.02);
         gsl_vector_set (taskCoM, 1,-0.079750);
         gsl_vector_set (taskCoM, 2, 0.884101);
 //        pinv(R,uLINK[base].R);
@@ -506,11 +511,11 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         gsl_vector_sub(taskCoM,CoM);
 
 
-ping(1);
+
         //PrintGSLVector(task1);
-        PrintGSLVector(task2);
-        PrintGSLVector(taskCoM);
-ping(2);
+        //PrintGSLVector(task2);
+        //PrintGSLVector(taskCoM);
+
 
         gsl_matrix_set_identity(P1);
         pinv(invJ,J1);
@@ -559,13 +564,18 @@ ping(2);
 //            gsl_blas_dgemv(CblasNoTrans, 1.0, PCoM, dqtmp, 0.0, dqtmp);
 //            gsl_vector_add(dq,dqtmp);
 
-PrintGSLVector(dq);
+//PrintGSLVector(dq);
+        gsl_vector_memcpy(ddq,dq);
+        gsl_vector_sub(ddq,dq_old);
+        gsl_vector_scale(ddq,1/Te);
+
 
         for (i=0; i<(nDoF-6); i++)
         {
-            uLINK[i+2].u_joint =500*gsl_vector_get(dq,i);//+gsl_vector_get (g, n+6);
-            //uLINK[i+2].u_joint =0;
+            uLINK[i+2].u_joint =200*gsl_vector_get(dq,i)+10*gsl_vector_get(ddq,i);
         }
+
+        gsl_vector_memcpy(dq_old,dq);
 
 
 //
