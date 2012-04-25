@@ -37,6 +37,9 @@ struct StuLINK
     double uef;/*!< Externals forces generated torque [Nm] */
     double u_joint;/*!< Command torque [Nm] */
     double supportHeight;/*!< Ground height [m] */
+    double qmin;/*!< Joint low limit [rad] */
+    double qmax;/*!< Joint high limit [rad] */
+    double qmoy;/*!< Joint natural value [rad] */
     gsl_vector * a;/*!< Axe of rotation 3*1 [-] */
     gsl_vector * b;/*!< Link dimensions 3*1 [m] */
     gsl_vector * c;/*!< Center of gravity 3*1 [m] */

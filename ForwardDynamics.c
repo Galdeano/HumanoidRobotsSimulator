@@ -80,10 +80,9 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
     static Struct_State Statusc;
     if (t==1)
     {
-        LoadRobotXML_f(uLINKc,&Statusc,Status->RobotFile);
+        LoadRobotParserXML_f(uLINKc,&Statusc,Status->RobotFile);
         //SetupRobot_f(uLINKc,&Statusc);
     }
-
 
 
 
@@ -434,6 +433,13 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         static gsl_vector * dq_old;
         static gsl_vector * ddq;
 
+        static float *opd;
+        static gsl_vector * trace;
+
+        static gsl_vector * adphi;
+        static float *qdev;
+
+
         static int init_task=1;
         if (init_task==1)
         {
@@ -462,23 +468,37 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
             dqtmp2 = gsl_vector_calloc(nDoF-6);
             dq_old = gsl_vector_calloc(nDoF-6);
             ddq = gsl_vector_calloc(nDoF-6);
+
+            opd = calloc(9,sizeof(float));
+            trace = gsl_vector_calloc (3);
+            adphi = gsl_vector_calloc(nDoF-6);
+            qdev = calloc(nDoF-6,sizeof(float));
+
             init_task=0;
-        }
+
+            static int path1[8] = {7, 7, 6, 5, 4, 3, 2, 1};
+            //int path1[8] = {1, 2, 3, 4, 5, 6, 7, 7};
+            for(i=0; i<8; i++)
+            {
+                gsl_vector_set(idx1,i,path1[i]);
+            }
+
+            //static int path2[14] = {7, 7, 6, 5, 4, 3, 2, 8, 9, 10, 11, 12, 13, 13};
+            static int path2[14] = {13, 13, 12, 11, 10, 9, 8, 2, 3, 4, 5, 6, 7, 7};
+            for(i=0; i<14; i++)
+            {
+                gsl_vector_set(idx2,i,path2[i]);
+            }
+
+            for (i=0; i<(nDoF-6); i++)
+            {
+               qdev[i]=fmax(fabs(uLINK[i+2].qmin-uLINK[i+2].qmoy),fabs(uLINK[i+2].qmax-uLINK[i+2].qmoy))*2;
+            }
 
 
-        static int path1[8] = {7, 7, 6, 5, 4, 3, 2, 1};
-        //int path1[8] = {1, 2, 3, 4, 5, 6, 7, 7};
-        for(i=0; i<8; i++)
-        {
-            gsl_vector_set(idx1,i,path1[i]);
         }
 
-        //static int path2[14] = {7, 7, 6, 5, 4, 3, 2, 8, 9, 10, 11, 12, 13, 13};
-        static int path2[14] = {13, 13, 12, 11, 10, 9, 8, 2, 3, 4, 5, 6, 7, 7};
-        for(i=0; i<14; i++)
-        {
-            gsl_vector_set(idx2,i,path2[i]);
-        }
+        Ext_op_trajectory(opd, 0);
 
 
         CalcJacobianModif( uLINK,J1,idx1);
@@ -499,8 +519,6 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         //gsl_vector_set (p, 2, -0.01);
         CalcVWerrOri(uLINK, task2, p, R,idx2);
 
-
-
         //gsl_vector_set (taskCoM, 0, 0.048516);
         gsl_vector_set (taskCoM, 0, 0.04);
         gsl_vector_set (taskCoM, 1,-0.079750);
@@ -509,6 +527,29 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 //        gsl_blas_dgemv(CblasNoTrans, 1.0, R, p, 0.0, taskCoM);
         CalcCoM(uLINK,CoM);
         gsl_vector_sub(taskCoM,CoM);
+
+#if Ext_traj
+        gsl_matrix_set_identity(R);
+        gsl_vector_set_zero(p);
+        gsl_vector_set (p, 0, (opd[3]-opd[6]));
+        gsl_vector_set (p, 1, (opd[4]-opd[7]));
+        gsl_vector_set (p, 2, (opd[5]-opd[8]));
+        //gsl_vector_scale(p,-1.0);
+        CalcVWerrOri(uLINK, task2, p, R,idx2);
+
+        gsl_vector_set (taskCoM, 0, opd[0]);
+        gsl_vector_set (taskCoM, 1, opd[1]);
+        gsl_vector_set (taskCoM, 2, opd[2]-0.1);
+        CalcCoM(uLINK,CoM);
+        gsl_vector_sub(taskCoM,CoM);
+
+#endif
+
+
+        for (i=0; i<(nDoF-6); i++)
+        {
+           gsl_vector_set(adphi,i,-1000*(2*(uLINK[i+2].q-uLINK[i+2].qmoy)/(qdev[i]*qdev[i])));
+        }
 
 
 
@@ -548,6 +589,10 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         gsl_blas_dgemv(CblasNoTrans, 1.0, JCoM, dq, 0.0, vec3_2);
         gsl_vector_sub(vec3,vec3_2);
 
+        gsl_blas_dgemv(CblasNoTrans, 1.0, PCoM, adphi, 0.0, dqtmp);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, JCoM, dqtmp, 0.0, vec3_2);
+        gsl_vector_add(vec3,vec3_2);
+
         gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, JCoM, P2, 0.0, Jtilde);
 
         pinv(invJCoM,Jtilde);
@@ -572,7 +617,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
         for (i=0; i<(nDoF-6); i++)
         {
-            uLINK[i+2].u_joint =2000*gsl_vector_get(dq,i)+20*gsl_vector_get(ddq,i);
+            uLINK[i+2].u_joint =1000*gsl_vector_get(dq,i)+10*gsl_vector_get(ddq,i);
         }
 
         gsl_vector_memcpy(dq_old,dq);
