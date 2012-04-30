@@ -589,16 +589,19 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         gsl_blas_dgemv(CblasNoTrans, 1.0, JCoM, dq, 0.0, vec3_2);
         gsl_vector_sub(vec3,vec3_2);
 
-        gsl_blas_dgemv(CblasNoTrans, 1.0, PCoM, adphi, 0.0, dqtmp);
-        gsl_blas_dgemv(CblasNoTrans, 1.0, JCoM, dqtmp, 0.0, vec3_2);
-        gsl_vector_add(vec3,vec3_2);
+
+
+//        gsl_blas_dgemv(CblasNoTrans, 1.0, PCoM, adphi, 0.0, dqtmp);
+//        gsl_blas_dgemv(CblasNoTrans, 1.0, JCoM, dqtmp, 0.0, vec3_2);
+//        gsl_vector_add(vec3,vec3_2);
+
 
         gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, JCoM, P2, 0.0, Jtilde);
 
         pinv(invJCoM,Jtilde);
-        gsl_blas_dgemv(CblasNoTrans, 1.0, invJCoM, vec3, 0.0, dqtmp2);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, invJCoM, vec3, 0.0, dqtmp);
 
-        gsl_blas_dgemv(CblasNoTrans, 1.0, P2, dqtmp2, 0.0, dqtmp);
+        //gsl_blas_dgemv(CblasNoTrans, 1.0, P2, dqtmp2, 0.0, dqtmp);
         gsl_vector_add(dq,dqtmp);
 
 
@@ -621,6 +624,8 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         }
 
         gsl_vector_memcpy(dq_old,dq);
+
+
 
 
 //
