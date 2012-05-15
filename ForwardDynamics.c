@@ -74,7 +74,6 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         {
             gsl_matrix_set(Inertia_Motor,n,n,0.5);
         }
-
         init=0;
     }
     static Struct_State Statusc;
@@ -83,8 +82,6 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         LoadRobotParserXML_f(uLINKc,&Statusc,Status->RobotFile);
         //SetupRobot_f(uLINKc,&Statusc);
     }
-
-
 
 
     InvDyn(uLINK,Status,0,b);
@@ -230,7 +227,6 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         CalcCoM_f(uLINKc,com);
         //DrawMarkerf(com);
 
-
 #if Trajectories
         OneFoot_f(qd, t*Dtime, &Statusc.desired_support, &Statusc.distribution_y);
         OneFoot_f(dqd, t*Dtime-Dtime, &Statusc.desired_support, &Statusc.distribution_y);
@@ -330,7 +326,6 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         {
             uG[n]=uLINKc[n+2].ug;
         }
-
         for(n=0; n<nDoF-6; n++)
         {
             uPD[n]=kd*(((0)/Te)-uLINKc[n+2].dq)+kp*(0-uLINKc[n+2].q);
@@ -501,8 +496,6 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
         }
 
-        Ext_op_trajectory(opd, 0);
-
 
         CalcJacobianModif( uLINK,J1,idx1);
         CalcJacobianModif( uLINK,J2,idx2);
@@ -523,16 +516,18 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         //gsl_vector_set (p, 2, -0.01);
         CalcVWerrOri(uLINK, task2, p, R,idx2);
 
-        gsl_vector_set (taskCoM, 0, 0.048516-0.03*(cos(0.1*M_PI*t*0.0001)-1));
+        gsl_vector_set (taskCoM, 0, 0.048516-0.03*(cos(0.25*M_PI*t*0.0001)-1));
         //gsl_vector_set (taskCoM, 0, 0.04);
         gsl_vector_set (taskCoM, 1,-0.079750);
-        gsl_vector_set (taskCoM, 2, 0.884101+0.05*(cos(0.1*M_PI*t*0.0001)-1));
+        gsl_vector_set (taskCoM, 2, 0.884101+0.05*(cos(0.25*M_PI*t*0.0001)-1));
 //        pinv(R,uLINK[base].R);
 //        gsl_blas_dgemv(CblasNoTrans, 1.0, R, p, 0.0, taskCoM);
         CalcCoM(uLINK,CoM);
         gsl_vector_sub(taskCoM,CoM);
 
 #if Ext_traj
+        Ext_op_trajectory(opd, 0);
+
         gsl_matrix_set_identity(R);
         gsl_vector_set_zero(p);
         gsl_vector_set (p, 0, (opd[3]-opd[6]));
@@ -580,7 +575,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
 
 
-        // first task\usepackage[harvard,dcucite]{harvard}
+        // first task
         pinv(invJ,J2);
         gsl_blas_dgemv(CblasNoTrans, 1.0, invJ, task2, 0.0, dq);
 
@@ -595,7 +590,6 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         gsl_vector_add(dq,dqtmp);
 
         // third task
-
         gsl_matrix_set_identity(Ptilde);
         pinv(invJCoM,Jtilde);
         gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJCoM, Jtilde, 0.0, Ptmp);

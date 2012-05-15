@@ -656,7 +656,7 @@ ping(i);
                 if (frame==0)
                 {
                     sprintf(files,"./../Simu_images/Test%ld.bmp", t/400);
-                    glReadBuffer(GL_FRONT);
+                    //glReadBuffer(GL_FRONT);
                     glReadPixels(0, 0, 640, 480, GL_RGB, GL_UNSIGNED_BYTE, pixel_data);//GL_BGR
                     write_bmp(files, 640, 480, pixel_data);
                     frame=20;
