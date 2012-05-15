@@ -1,6 +1,6 @@
 #include "uLINK_f.h"
 
-#include "d:\Mb\StLib\Mat.h"
+#include "Mat.h"
 
 #include "CalcCoM_f.h"
 #include "Stabilizator_f.h"

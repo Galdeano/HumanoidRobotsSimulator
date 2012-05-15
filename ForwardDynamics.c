@@ -248,11 +248,12 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 #endif
 
 #if Ext_traj
-        Ext_trajectory(qd, t*Dtime, &Statusc.desired_support, &Statusc.distribution_y);
-        Ext_trajectory(dqd, t*Dtime-Dtime, &Statusc.desired_support, &Statusc.distribution_y);
+//        for(n=0; n<nDoF-6; n++)
+//        {
+//            dqd[n]=qd[n];
+//        }
+        Ext_q_trajectory(qd,0);
 
-        Ext_trajectory(qd, t*Dtime, &Status->desired_support, &Status->distribution_y);
-        Ext_trajectory(dqd, t*Dtime-Dtime, &Status->desired_support, &Status->distribution_y);
 #endif
 
 
@@ -424,6 +425,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         static gsl_matrix * P1;
         static gsl_matrix * P2;
         static gsl_matrix * PCoM;
+        static gsl_matrix * Ptilde;
         static gsl_matrix * Ptmp;
         static gsl_matrix * invJ;
         static gsl_matrix * invJCoM;
@@ -460,6 +462,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
             P1 = gsl_matrix_calloc (nDoF-6,nDoF-6);
             P2 = gsl_matrix_calloc (nDoF-6,nDoF-6);
             PCoM = gsl_matrix_calloc (nDoF-6,nDoF-6);
+            Ptilde = gsl_matrix_calloc (nDoF-6,nDoF-6);
             Ptmp = gsl_matrix_calloc (nDoF-6,nDoF-6);
             invJ = gsl_matrix_calloc (nDoF-6,6);
             invJCoM = gsl_matrix_calloc (nDoF-6,3);
@@ -492,7 +495,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
             for (i=0; i<(nDoF-6); i++)
             {
-               qdev[i]=fmax(fabs(uLINK[i+2].qmin-uLINK[i+2].qmoy),fabs(uLINK[i+2].qmax-uLINK[i+2].qmoy))*2;
+               qdev[i]=fmin(fabs(uLINK[i+2].qmin-uLINK[i+2].qmoy),fabs(uLINK[i+2].qmax-uLINK[i+2].qmoy))*2;
             }
 
 
@@ -503,7 +506,8 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
         CalcJacobianModif( uLINK,J1,idx1);
         CalcJacobianModif( uLINK,J2,idx2);
-        CalcCoMJacobian(uLINK, JCoM, base);
+        CalcCoMJacobian(uLINK, JCoM, Base);
+
 
 
         gsl_matrix_set_identity(R);
@@ -519,10 +523,10 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         //gsl_vector_set (p, 2, -0.01);
         CalcVWerrOri(uLINK, task2, p, R,idx2);
 
-        //gsl_vector_set (taskCoM, 0, 0.048516);
-        gsl_vector_set (taskCoM, 0, 0.04);
+        gsl_vector_set (taskCoM, 0, 0.048516-0.03*(cos(0.1*M_PI*t*0.0001)-1));
+        //gsl_vector_set (taskCoM, 0, 0.04);
         gsl_vector_set (taskCoM, 1,-0.079750);
-        gsl_vector_set (taskCoM, 2, 0.884101);
+        gsl_vector_set (taskCoM, 2, 0.884101+0.05*(cos(0.1*M_PI*t*0.0001)-1));
 //        pinv(R,uLINK[base].R);
 //        gsl_blas_dgemv(CblasNoTrans, 1.0, R, p, 0.0, taskCoM);
         CalcCoM(uLINK,CoM);
@@ -548,7 +552,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
         for (i=0; i<(nDoF-6); i++)
         {
-           gsl_vector_set(adphi,i,-1000*(2*(uLINK[i+2].q-uLINK[i+2].qmoy)/(qdev[i]*qdev[i])));
+           gsl_vector_set(adphi,i,-0.1*(2*(uLINK[i+2].q-uLINK[i+2].qmoy)/(qdev[i]*qdev[i])));
         }
 
 
@@ -575,42 +579,36 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
 
 
-//            pinv(invJ,J1);
-//            gsl_blas_dgemv(CblasNoTrans, 1.0, invJ, task1, 0.0, dq);
-//            pinv(invJ,J2);
-//            gsl_blas_dgemv(CblasNoTrans, 1.0, invJ, task2, 0.0, dqtmp);
-//            gsl_blas_dgemv(CblasNoTrans, 1.0, P1, dqtmp, 0.0, dqtmp);
-//            gsl_vector_add(dq,dqtmp);
 
+        // first task\usepackage[harvard,dcucite]{harvard}
         pinv(invJ,J2);
         gsl_blas_dgemv(CblasNoTrans, 1.0, invJ, task2, 0.0, dq);
 
+        // second task
         gsl_vector_memcpy(vec3,taskCoM);
         gsl_blas_dgemv(CblasNoTrans, 1.0, JCoM, dq, 0.0, vec3_2);
         gsl_vector_sub(vec3,vec3_2);
-
-
-
-//        gsl_blas_dgemv(CblasNoTrans, 1.0, PCoM, adphi, 0.0, dqtmp);
-//        gsl_blas_dgemv(CblasNoTrans, 1.0, JCoM, dqtmp, 0.0, vec3_2);
-//        gsl_vector_add(vec3,vec3_2);
-
-
         gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, JCoM, P2, 0.0, Jtilde);
-
         pinv(invJCoM,Jtilde);
-        gsl_blas_dgemv(CblasNoTrans, 1.0, invJCoM, vec3, 0.0, dqtmp);
-
-        //gsl_blas_dgemv(CblasNoTrans, 1.0, P2, dqtmp2, 0.0, dqtmp);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, invJCoM, vec3, 0.0, dqtmp2);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, P2, dqtmp2, 0.0, dqtmp);
         gsl_vector_add(dq,dqtmp);
 
+        // third task
 
-//            pinv(invJCoM,JCoM);
-//            gsl_blas_dgemv(CblasNoTrans, 1.0,invJCoM,taskCoM, 0.0, dq);
-//            pinv(invJ,J2);
-//            gsl_blas_dgemv(CblasNoTrans, 1.0, invJ,task2, 0.0, dqtmp);
-//            gsl_blas_dgemv(CblasNoTrans, 1.0, PCoM, dqtmp, 0.0, dqtmp);
-//            gsl_vector_add(dq,dqtmp);
+        gsl_matrix_set_identity(Ptilde);
+        pinv(invJCoM,Jtilde);
+        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJCoM, Jtilde, 0.0, Ptmp);
+        gsl_matrix_sub(Ptilde,Ptmp);
+
+        gsl_vector_memcpy(dqtmp2,adphi);
+        gsl_vector_sub(dqtmp2,dqtmp);
+
+        gsl_blas_dgemv(CblasNoTrans, 1.0, Ptilde, dqtmp2, 0.0, dqtmp);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, P2, dqtmp, 0.0, dqtmp2);
+        gsl_vector_add(dq,dqtmp2);
+
+
 
 //PrintGSLVector(dq);
         gsl_vector_memcpy(ddq,dq);
@@ -626,7 +624,19 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         gsl_vector_memcpy(dq_old,dq);
 
 
-
+        for (i=0; i<(nDoF-6); i++)
+        {
+            if (uLINK[i+2].u_joint>uLINK[i+2].umax)
+            {
+                uLINK[i+2].u_joint=uLINK[i+2].umax;
+                printf("t= %lf max: %d\n",t*Dtime,i+2);
+            }
+            if (uLINK[i+2].u_joint<uLINK[i+2].umin)
+            {
+                uLINK[i+2].u_joint=uLINK[i+2].umin;
+                printf("t= %lf min: %d\n",t*Dtime,i+2);
+            }
+        }
 
 //
 //        float kd=1;

@@ -2,7 +2,7 @@
 #include "CalcCoM_f.h"
 #include "TotalMass_f.h"
 
-#include "d:\Mb\StLib\Mat.h"
+#include "Mat.h"
 
 #include "Gravity_f.h"
 #include "Cross_f.h"

@@ -1,5 +1,5 @@
 
-#include "d:\Mb\StLib\Mat.h"
+#include "Mat.h"
 
 #include "Cross_f.h"
 

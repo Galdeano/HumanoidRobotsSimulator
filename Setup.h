@@ -109,44 +109,6 @@
 #error Check Sherpa and Generic defs
 #endif
 
-//#if Sherpa && Scenarios
-//#error Only Generic robot model can be used with scenarios
-//#endif
-
-//#if Sherpa
-//#define  NbLinks  14
-///*! \def NbLinks
-//    \brief Number of link declared (Number od DoF+2)
-//*/
-//#endif
-
-
-//#if Generic
-//#define  NbLinks  22
-///*! \def NbLinks
-//    \brief Number of link declared (Number od DoF+2)
-//*/
-//#define  RLEG  2
-///*! \def RLEG
-//    \brief ID of first Right Leg Link
-//*/
-//#define  LLEG  8
-///*! \def LLEG
-//    \brief ID of first Left Leg Link
-//*/
-//#define  SPINE  14
-///*! \def SPINE
-//    \brief ID of first Spine Link
-//*/
-//#define  RARM  16
-///*! \def RARM
-//    \brief ID of first Right Arm Link
-//*/
-//#define  LARM  19
-///*! \def LARM
-//    \brief ID of first Left Arm Link
-//*/
-//#endif
 
 
 //Choose Command
@@ -179,7 +141,18 @@
     For debug use only
 */
 
-#define base 13
+
+#define VisuArticularsLimits 0
+/*! \def VisuArticulaLimits
+    \brief 1: display articular range of motion
+*/
+
+#define VisuTorquesColor 1
+/*! \def VisuTorquesColor
+    \brief 1: display toques via color change on joints articulation
+*/
+
+#define Base 13
 /*! \def base
     \brief base link for computation
 */

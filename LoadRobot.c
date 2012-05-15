@@ -13,7 +13,7 @@
 #include "ForwardVelocity.h"
 #include "CalcCoM.h"
 #include "Setup.h"
-#include "d:\Mb\StLib\Mat.h"
+#include "Mat.h"
 #include "FindMother_f.h"
 #include "ForwardKinematics_f.h"
 #include "LoadRobot.h"
@@ -437,6 +437,8 @@ void LoadRobotParserXML(SuLINK uLINK[],State *Status,char* RobotFile)
         uLINK[i].ug = 0.0;
         uLINK[i].uef = 0.0;
         uLINK[i].u_joint = 0.0;
+        uLINK[i].umin=-300;
+        uLINK[i].umax=300;
         uLINK[i].isPolygon=0;
         uLINK[i].qmin=-3.14;
         uLINK[i].qmax=3.14;
@@ -458,7 +460,7 @@ void LoadRobotParserXML(SuLINK uLINK[],State *Status,char* RobotFile)
 
 
     Status->ddl=dof+6;
-    Status->support=0; //0:none,1:right,2:left,3:both
+    Status->support=0; //0:none,1:right,2:left,3:bothuLINK[j].u_joint
     Status->desired_support=0;
     Status->distribution_y=0.5;
     Status->integral_R=0;
@@ -502,6 +504,16 @@ void LoadRobotParserXML(SuLINK uLINK[],State *Status,char* RobotFile)
         {
             sscanf (ezxml_child(Link, "qmoy")->txt,"%lf",&uLINK[numlink].qmoy);
             uLINK[numlink].qmoy*=DegToRad;
+            //ping(numlink);
+        }
+        if(ezxml_child(Link, "umin")!=NULL)
+        {
+            sscanf (ezxml_child(Link, "umin")->txt,"%lf",&uLINK[numlink].umin);
+            //ping(numlink);
+        }
+        if(ezxml_child(Link, "umax")!=NULL)
+        {
+            sscanf (ezxml_child(Link, "umax")->txt,"%lf",&uLINK[numlink].umax);
             //ping(numlink);
         }
         sscanf (ezxml_child(Link, "a")->txt,"%lf %lf %lf",gsl_vector_ptr (uLINK[numlink].a, 0),gsl_vector_ptr (uLINK[numlink].a, 1),gsl_vector_ptr (uLINK[numlink].a, 2));

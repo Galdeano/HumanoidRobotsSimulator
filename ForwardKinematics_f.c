@@ -1,7 +1,7 @@
 #include "uLINK_f.h"
 #include "Rodrigues_f.h"
 
-#include "d:\Mb\StLib\Mat.h"
+#include "Mat.h"
 
 #include "ForwardKinematics_f.h"
 

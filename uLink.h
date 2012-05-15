@@ -36,6 +36,8 @@ struct StuLINK
     double ug;/*!< Gravity generated torque [Nm] */
     double uef;/*!< Externals forces generated torque [Nm] */
     double u_joint;/*!< Command torque [Nm] */
+    double umin;/*!< Command torque limit [Nm] */
+    double umax;/*!< Command torque limit [Nm] */
     double supportHeight;/*!< Ground height [m] */
     double qmin;/*!< Joint low limit [rad] */
     double qmax;/*!< Joint high limit [rad] */

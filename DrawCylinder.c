@@ -5,6 +5,7 @@
 #include <gsl/gsl_math.h>
 #include "uLINK.h"
 #include "DrawCylinder.h"
+#include "Setup.h"
 
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -42,6 +43,7 @@ void   DrawCylinder(SuLINK uLINK[],int j)
 
     gluQuadricDrawStyle(params,GLU_FILL);
     //GLU_LINE
+    #if !VisuTorquesColor
     if (uLINK[j].color==0)//red
         glColor3ub(255,0,0);
     if (uLINK[j].color==1)//green
@@ -56,6 +58,20 @@ void   DrawCylinder(SuLINK uLINK[],int j)
         glColor3ub(0,255,255);
     if (uLINK[j].color==6)//magenta
         glColor3ub(255,0,255);
+    #endif
+    #if VisuTorquesColor
+    int colorT;
+    if (uLINK[j].u_joint>0)
+    {
+        colorT=(int)((uLINK[j].u_joint/uLINK[j].umax)*255);
+        glColor3ub(colorT,255-colorT,0);
+    }
+    else
+    {
+        colorT=(int)((uLINK[j].u_joint/uLINK[j].umin)*255);
+        glColor3ub(colorT,255-colorT,colorT);
+    }
+    #endif
     gluCylinder(params,radius,radius,len,6,1);
     gluQuadricDrawStyle(params,GLU_LINE);
     glColor3ub(0,0,0);

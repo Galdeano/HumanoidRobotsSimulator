@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
 //    for (i = 0; i < NbRobots; i++)
 //    {
 //        gsl_vector_set (uLINK[i][1].p, 2, Lc+Lt+Lp-0.0006);
-//        gsl_vector_set (uLINK[i][1].p, 1, i);
+//        gsl_vector_set (uLINK[i][1].p, 1, i);State *Status,
 //    }
     //gsl_vector_set (uLINK[0][1].p, 2, Lc+Lt+Lp+0.15);
 
@@ -231,11 +231,11 @@ int main(int argc, char *argv[])
     }
 
 
-    gsl_vector_set_zero(uLINK[base].p);
-    gsl_vector_set (uLINK[base].p, 2, 0.066);
+    gsl_vector_set_zero(uLINK[Base].p);
+    gsl_vector_set (uLINK[Base].p, 2, 0.066);
     //gsl_vector_set (uLINK[base].p, 2, 0.2);
-    gsl_matrix_set_identity(uLINK[base].R);
-    NodeForwardKinematics(uLINK,base,0);
+    gsl_matrix_set_identity(uLINK[Base].R);
+    NodeForwardKinematics(uLINK,Base,0);
 
     CalcCoM(uLINK,com);
     PrintGSLVector(com);
@@ -302,7 +302,7 @@ ping(i);
         static gsl_vector * dq;
         static gsl_vector * dqtmp;
         static gsl_vector * dqtmp2;
-        static float *opd;
+        static float *opd;State *Status,
         static gsl_vector * trace;
 
         static int init_task=1;
@@ -338,7 +338,7 @@ ping(i);
 
 //            static int path1[8] = {7, 7, 6, 5, 4, 3, 2, 1};
 //            //int path1[8] = {1, 2, 3, 4, 5, 6, 7, 7};
-//            for(j=0; j<8; j++)
+//            for(j=0; j<8; j++)State *Status,
 //            {
 //                gsl_vector_set(idx1,j,path1[j]);
 //            }

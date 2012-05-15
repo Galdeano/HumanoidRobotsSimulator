@@ -1,6 +1,6 @@
 #include <math.h>
 
-#include "d:\Mb\StLib\Mat.h"
+#include "Mat.h"
 
 #include "Rodrigues_f.h"
 
