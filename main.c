@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
 //    for (i = 0; i < NbRobots; i++)
 //    {
 //        gsl_vector_set (uLINK[i][1].p, 2, Lc+Lt+Lp-0.0006);
-//        gsl_vector_set (uLINK[i][1].p, 1, i);State *Status,
+//        gsl_vector_set (uLINK[i][1].p, 1, i);
 //    }
     //gsl_vector_set (uLINK[0][1].p, 2, Lc+Lt+Lp+0.15);
 
@@ -302,7 +302,7 @@ ping(i);
         static gsl_vector * dq;
         static gsl_vector * dqtmp;
         static gsl_vector * dqtmp2;
-        static float *opd;State *Status,
+        static float *opd;
         static gsl_vector * trace;
 
         static int init_task=1;
