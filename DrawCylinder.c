@@ -73,6 +73,11 @@ void   DrawCylinder(SuLINK uLINK[],int j)
     }
     #endif
     gluCylinder(params,radius,radius,len,6,1);
+
+    gluDisk(params,0,radius,6,1);
+    glTranslated(0,0,len);
+    gluDisk(params,0,radius,6,1);
+    glTranslated(0,0,-len);
     gluQuadricDrawStyle(params,GLU_LINE);
     glColor3ub(0,0,0);
     gluCylinder(params,radius,radius,len,6,1);

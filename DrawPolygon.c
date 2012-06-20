@@ -15,7 +15,20 @@ void DrawPolygon(SuLINK uLINK[],int j)
     int i,k;
 
     double tmp;
-    gsl_matrix * vert = gsl_matrix_calloc (3, 8);
+
+    static gsl_vector * v;
+    static gsl_vector * ftmp;
+    static gsl_matrix * vert;
+    static int init_tmp=1;
+    if (init_tmp==1)
+    {
+        v = gsl_vector_calloc (3);
+        ftmp = gsl_vector_calloc (3);
+        vert = gsl_matrix_calloc (3, 8);
+        init_tmp=0;
+    }
+
+//    gsl_matrix * vert = gsl_matrix_calloc (3, 8);
     gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, uLINK[j].R, uLINK[j].vert, 0.0, vert);
     for (i = 0; i < 3; ++i)
     {
@@ -73,16 +86,16 @@ void DrawPolygon(SuLINK uLINK[],int j)
     {
         if (gsl_vector_get(uLINK[j].isContact,i)==1)
         {
-            gsl_vector * v = gsl_vector_calloc (3);
-            gsl_vector * ftmp = gsl_vector_calloc (3);
+//            gsl_vector * v = gsl_vector_calloc (3);
+//            gsl_vector * ftmp = gsl_vector_calloc (3);
             gsl_matrix_get_col (v, uLINK[j].posContact, i);
             gsl_matrix_get_col (ftmp, uLINK[j].forContact, i);
             gsl_vector_scale (ftmp, -0.005);
             DrawForceMarker(v,ftmp);
-            gsl_vector_free(ftmp);
-            gsl_vector_free(v);
+//            gsl_vector_free(ftmp);
+//            gsl_vector_free(v);
         }
     }
-    gsl_matrix_free(vert);
+//    gsl_matrix_free(vert);
 }
 

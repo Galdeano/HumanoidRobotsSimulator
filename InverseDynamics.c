@@ -22,16 +22,38 @@ void InverseDynamics(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vecto
 //end
 //
     double res;
+
+    static gsl_vector * c;
+    static gsl_vector * P;
+    static gsl_vector * L;
+    static gsl_vector * tmp3;
+    static gsl_matrix * I;
+    static gsl_matrix * tmp;
+    static gsl_matrix * tmp2;
+    static int init_tmp=1;
+    if (init_tmp==1)
+    {
+        c = gsl_vector_calloc (3);
+        P = gsl_vector_calloc (3);
+        L = gsl_vector_calloc (3);
+        tmp3 = gsl_vector_calloc (3);
+        I = gsl_matrix_calloc (3, 3);
+        tmp = gsl_matrix_calloc (3, 3);
+        tmp2 = gsl_matrix_calloc (3, 3);
+
+        init_tmp=0;
+    }
+
     gsl_vector_set_zero(f);
     gsl_vector_set_zero(t);
-    gsl_vector * c = gsl_vector_calloc (3);
-    gsl_matrix * I = gsl_matrix_calloc (3,3);
-    gsl_matrix * tmp = gsl_matrix_calloc (3,3);
-    gsl_matrix * tmp2 = gsl_matrix_calloc (3,3);
-
-    gsl_vector * P = gsl_vector_calloc (3);
-    gsl_vector * L = gsl_vector_calloc (3);
-    gsl_vector * tmp3 = gsl_vector_calloc (3);
+//    gsl_vector * c = gsl_vector_calloc (3);
+//    gsl_matrix * I = gsl_matrix_calloc (3,3);
+//    gsl_matrix * tmp = gsl_matrix_calloc (3,3);
+//    gsl_matrix * tmp2 = gsl_matrix_calloc (3,3);
+//
+//    gsl_vector * P = gsl_vector_calloc (3);
+//    gsl_vector * L = gsl_vector_calloc (3);
+//    gsl_vector * tmp3 = gsl_vector_calloc (3);
 
     gsl_vector * ftmp = gsl_vector_calloc (3);
     gsl_vector * ttmp = gsl_vector_calloc (3);
@@ -300,14 +322,14 @@ void InverseDynamics(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vecto
 //f = f + f2;
 //t = t + t2;
 
-    gsl_vector_free(c);
-    gsl_matrix_free(I);
-    gsl_matrix_free(tmp);
-    gsl_matrix_free(tmp2);
-
-    gsl_vector_free(P);
-    gsl_vector_free(L);
-    gsl_vector_free(tmp3);
+//    gsl_vector_free(c);
+//    gsl_matrix_free(I);
+//    gsl_matrix_free(tmp);
+//    gsl_matrix_free(tmp2);
+//
+//    gsl_vector_free(P);
+//    gsl_vector_free(L);
+//    gsl_vector_free(tmp3);
     gsl_vector_free(ftmp);
     gsl_vector_free(ttmp);
 }

@@ -16,7 +16,18 @@
 void DrawIndicators(SuLINK uLINK[],State *Status,gsl_vector * com,gsl_vector * CoP,int ground)
 {
     int i,j,k;
-    float RadToDeg = 180/M_PI;
+
+    static float RadToDeg;
+    static gsl_vector * pos;
+    static gsl_vector * Visu;
+    static int init_tmp=1;
+    if (init_tmp==1)
+    {
+        RadToDeg = 180/M_PI;
+        pos = gsl_vector_calloc (3);
+        Visu = gsl_vector_calloc (3);
+        init_tmp=0;
+    }
 
     CalcCoM(uLINK,com);
     glColor3ub(0,0,255);
@@ -53,8 +64,8 @@ void DrawIndicators(SuLINK uLINK[],State *Status,gsl_vector * com,gsl_vector * C
         DrawMarker(Status->FootCenter_L);
     }
 
-    gsl_vector * pos = gsl_vector_calloc (3);
-    gsl_vector * Visu = gsl_vector_calloc (3);
+//    gsl_vector * pos = gsl_vector_calloc (3);
+//    gsl_vector * Visu = gsl_vector_calloc (3);
 
     glColor3ub(0,255,255);
     if (Status->right_scale!=0.0)
@@ -107,8 +118,8 @@ void DrawIndicators(SuLINK uLINK[],State *Status,gsl_vector * com,gsl_vector * C
 
     #endif
 
-    gsl_vector_free(pos);
-    gsl_vector_free(Visu);
+//    gsl_vector_free(pos);
+//    gsl_vector_free(Visu);
 
 }
 

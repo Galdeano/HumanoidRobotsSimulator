@@ -72,7 +72,32 @@ void Ext_op_trajectory(float *opd, double t)
 }
 
 
+void Ext_op_trajectory_LIPM(float *opd, double t)
+{
+    int i;
 
+    static float *opt;
+    static FILE *f;
+    static int init_tmp=1;
+    if (init_tmp==1)
+    {
+        opt = calloc(9,sizeof(float));
+        f=fopen("./Trajectories/LIPM_op.txt","r");
+        if (f == NULL) perror ("Error opening robot trajectory file");
+        init_tmp=0;
+    }
+
+
+    fscanf (f, "%f,%f,%f,%f,%f,%f,%f,%f,%f", &opt[0], &opt[1], &opt[2], &opt[3], &opt[4], &opt[5], &opt[6], &opt[7], &opt[8]);
+
+    for(i=0; i<9; i++)
+    {
+        opd[i] = opt[i];
+    }
+
+    //free (qt);
+    //fclose(f);
+}
 
 
 

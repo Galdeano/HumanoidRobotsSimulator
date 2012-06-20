@@ -15,6 +15,14 @@
 void Gravity(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector * t)
 {
 
+    static gsl_vector * w_c;
+    static int init_tmp=1;
+    if (init_tmp==1)
+    {
+        w_c = gsl_vector_calloc (3);
+        init_tmp=0;
+    }
+
     gsl_vector_set_zero(f);
     gsl_vector_set_zero(t);
 
@@ -31,7 +39,7 @@ void Gravity(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector * t)
 
     gsl_vector_set_zero(ftmp);
     gsl_vector_set_zero(ttmp);
-    gsl_vector * w_c = gsl_vector_calloc (3);
+//    gsl_vector * w_c = gsl_vector_calloc (3);
     gsl_blas_dgemv(CblasNoTrans, 1.0, uLINK[j].R, uLINK[j].c, 0.0, w_c);
     gsl_vector_add (w_c, uLINK[j].p);
 
@@ -44,7 +52,7 @@ void Gravity(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector * t)
     /*////t3 = cross(w_c, f3);*/
     gsl_vector_add (f, ftmp);
     gsl_vector_add (t, ttmp);
-    gsl_vector_free(w_c);
+//    gsl_vector_free(w_c);
     /* ////f = f + f3;
      * ////t = t + t3;
      * ////

@@ -9,10 +9,29 @@
 void Rodrigues(gsl_matrix * rot,gsl_vector * w,double dt)
 {
     double d,th;
-    gsl_vector * wn = gsl_vector_calloc (3);
-    gsl_matrix * w_wedge = gsl_matrix_calloc (3, 3);
-    gsl_matrix * w_wedge2 = gsl_matrix_calloc (3, 3);
-    gsl_matrix * eye = gsl_matrix_calloc (3, 3);
+
+    static gsl_vector * wn;
+    static gsl_matrix * w_wedge;
+    static gsl_matrix * w_wedge2;
+    static gsl_matrix * eye;
+    static int init_tmp=1;
+    if (init_tmp==1)
+    {
+        wn = gsl_vector_calloc (3);
+        w_wedge = gsl_matrix_calloc (3, 3);
+        w_wedge2 = gsl_matrix_calloc (3, 3);
+        eye = gsl_matrix_calloc (3, 3);
+        gsl_matrix_set_identity (eye);
+
+        init_tmp=0;
+    }
+
+//    gsl_vector * wn = gsl_vector_calloc (3);
+//    gsl_matrix * w_wedge = gsl_matrix_calloc (3, 3);
+//    gsl_matrix * w_wedge2 = gsl_matrix_calloc (3, 3);
+//    gsl_matrix * eye = gsl_matrix_calloc (3, 3);
+//    gsl_matrix_set_identity (eye);
+
 
     d = gsl_blas_dnrm2 (w);
     th = d*dt;
@@ -32,9 +51,7 @@ void Rodrigues(gsl_matrix * rot,gsl_vector * w,double dt)
 //w_wedge = [0 -wn(3) wn(2);wn(3) 0 -wn(1);-wn(2) wn(1) 0];
 
 
-    gsl_matrix_set_identity (eye);
-
-    gsl_matrix_add (rot, eye);
+    gsl_matrix_memcpy(rot, eye);
 
     gsl_matrix_scale ( w_wedge, (sin(th)));
     gsl_matrix_add (rot, w_wedge);
@@ -43,10 +60,10 @@ void Rodrigues(gsl_matrix * rot,gsl_vector * w,double dt)
     gsl_matrix_add (rot, w_wedge2);
 
 //R = eye(3) + w_wedge * sin(th) + w_wedge^2 * (1-cos(th));
-    gsl_vector_free(wn);
-    gsl_matrix_free(w_wedge);
-    gsl_matrix_free(w_wedge2);
-    gsl_matrix_free(eye);
+//    gsl_vector_free(wn);
+//    gsl_matrix_free(w_wedge);
+//    gsl_matrix_free(w_wedge2);
+//    gsl_matrix_free(eye);
 //$R = $eye3 + sin($angle)*$axis_skewed + (1-cos($angle))*$axis_skewed*$axis_skewed;
 
 }

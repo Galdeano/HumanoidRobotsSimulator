@@ -10,6 +10,17 @@
 
 void ForwardAllKinematics(SuLINK uLINK[],int j)
 {
+    static gsl_vector * dhv;
+    static gsl_vector * dhw;
+    static gsl_vector * tmp;
+    static int init_tmp=1;
+    if (init_tmp==1)
+    {
+        dhv = gsl_vector_calloc (3);
+        dhw = gsl_vector_calloc (3);
+        tmp = gsl_vector_calloc (3);
+        init_tmp=0;
+    }
 
     if (j == 0)
     {
@@ -85,9 +96,9 @@ void ForwardAllKinematics(SuLINK uLINK[],int j)
 //
         //spatial acceleration
 
-        gsl_vector * dhv = gsl_vector_calloc (3);
-        gsl_vector * dhw = gsl_vector_calloc (3);
-        gsl_vector * tmp = gsl_vector_calloc (3);
+//        gsl_vector * dhv = gsl_vector_calloc (3);
+//        gsl_vector * dhw = gsl_vector_calloc (3);
+//        gsl_vector * tmp = gsl_vector_calloc (3);
         gsl_vector_memcpy (dhv, uLINK[j].hv);
         Cross(uLINK[uLINK[j].mother].w, dhv, 1);
         gsl_vector_memcpy (tmp, uLINK[j].hw);
@@ -113,9 +124,9 @@ void ForwardAllKinematics(SuLINK uLINK[],int j)
 //        uLINK(j).dw  = uLINK(mom).dw  + dhw * uLINK(j).dq + hw * uLINK(j).ddq;
 //        uLINK(j).dvo = uLINK(mom).dvo + dhv * uLINK(j).dq + hv * uLINK(j).ddq;
 
-        gsl_vector_free(dhv);
-        gsl_vector_free(dhw);
-        gsl_vector_free(tmp);
+//        gsl_vector_free(dhv);
+//        gsl_vector_free(dhw);
+//        gsl_vector_free(tmp);
     }
 
     ForwardAllKinematics(uLINK,uLINK[j].sister);

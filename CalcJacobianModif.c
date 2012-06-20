@@ -16,8 +16,19 @@ void CalcJacobianModif( SuLINK uLINK[], gsl_matrix * J, gsl_vector * idx)
     int i,n,j,k;
 //gsl_length_v(idx)
 
-    gsl_vector * a = gsl_vector_calloc (3);
-    gsl_vector * error = gsl_vector_calloc (3);
+    static gsl_vector * a;
+    static gsl_vector * error;
+    static int init_tmp=1;
+    if (init_tmp==1)
+    {
+        a = gsl_vector_calloc (3);
+        error = gsl_vector_calloc (3);
+
+        init_tmp=0;
+    }
+
+//    gsl_vector * a = gsl_vector_calloc (3);
+//    gsl_vector * error = gsl_vector_calloc (3);
 
     for(n=1; n<(gsl_length_v(idx)-1); n++)//attention aux indices qui partent de zero en c
     {
@@ -58,8 +69,8 @@ void CalcJacobianModif( SuLINK uLINK[], gsl_matrix * J, gsl_vector * idx)
         //J(:,n-1) = [cross(a, target - uLINK(j).p) ; a ];
 
     }
-    gsl_vector_free(a);
-    gsl_vector_free(error);
+//    gsl_vector_free(a);
+//    gsl_vector_free(error);
 
 }
 

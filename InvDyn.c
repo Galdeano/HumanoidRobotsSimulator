@@ -12,6 +12,16 @@
 void InvDyn(SuLINK uLINK[],State *Status,int j,gsl_vector * u)
 {
     int n;
+    static gsl_vector * f;
+    static gsl_vector * t;
+    static int init_tmp=1;
+    if (init_tmp==1)
+    {
+        f = gsl_vector_calloc (3);
+        t = gsl_vector_calloc (3);
+        init_tmp=0;
+    }
+
     gsl_vector_set_zero(uLINK[1].dvo);
     gsl_vector_set_zero(uLINK[1].dw);
 //uLINK(1).dvo = [0 0 0]';
@@ -51,8 +61,8 @@ void InvDyn(SuLINK uLINK[],State *Status,int j,gsl_vector * u)
     ForwardAllKinematics(uLINK,1);
 //ForwardAllKinematics(1);
 
-    gsl_vector * f = gsl_vector_calloc (3);
-    gsl_vector * t = gsl_vector_calloc (3);
+//    gsl_vector * f = gsl_vector_calloc (3);
+//    gsl_vector * t = gsl_vector_calloc (3);
 
     InverseDynamics(uLINK,Status,1,f,t);
 //[f,t] = InverseDynamics(1);
@@ -70,7 +80,7 @@ void InvDyn(SuLINK uLINK[],State *Status,int j,gsl_vector * u)
         gsl_vector_set (u, n+6,uLINK[n+2].u);
     }
 //u = [f',t',uLINK(2:end).u]';
-    gsl_vector_free(f);
-    gsl_vector_free(t);
+//    gsl_vector_free(f);
+//    gsl_vector_free(t);
 }
 

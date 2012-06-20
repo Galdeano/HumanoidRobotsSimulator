@@ -19,9 +19,17 @@ void CalcCoM(SuLINK uLINK[],gsl_vector * com)
     //com = MC / M;
     */
 
-    float M;
+    static float M;
+    static int init_tmp=1;
+    if (init_tmp==1)
+    {
+        M = TotalMass(uLINK,1);
+        init_tmp=0;
+    }
+
+    //float M;
     gsl_vector_set_zero(com);
-    M = TotalMass(uLINK,1);
+    //M = TotalMass(uLINK,1);
     CalcMC(uLINK,com,1);
     gsl_vector_scale (com, 1/M);
 

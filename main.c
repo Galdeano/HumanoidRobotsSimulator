@@ -54,7 +54,7 @@
 //#include <windows.h>
 #include "TotalMass.h"
 
-// test traj pas
+
 
 
 int main(int argc, char *argv[])
@@ -105,6 +105,7 @@ int main(int argc, char *argv[])
     }
 
 
+
     FILE *f=fopen(RobotFile,"r");
     char mystring [100];
     int dof;
@@ -136,6 +137,8 @@ int main(int argc, char *argv[])
     //printf("%f \n",gsl_vector_get (uLINK[2].b,1));
     //printf("%8.1f \n",uLINK[8].mother);
 
+
+
     gsl_vector * com = gsl_vector_calloc (3);
     gsl_vector * CoP = gsl_vector_calloc (3);
     gsl_vector * q = gsl_vector_calloc (6);
@@ -145,15 +148,15 @@ int main(int argc, char *argv[])
 
 
 #if Video
-        char buf[256];
-        d = opendir("./../Simu_images/");
+    char buf[256];
+    d = opendir("./../Simu_images/");
 
-        while(dir = readdir(d))
-        {
-                //printf("%s\n",dir->d_name);
-                sprintf(buf, "%s/%s", "./../Simu_images/", dir->d_name);
-                remove(buf);
-        }
+    while(dir = readdir(d))
+    {
+        //printf("%s\n",dir->d_name);
+        sprintf(buf, "%s/%s", "./../Simu_images/", dir->d_name);
+        remove(buf);
+    }
 #endif
 
 
@@ -167,8 +170,7 @@ int main(int argc, char *argv[])
 
 //Handle=FindWindow("SDL_app","Visualisation");
 //SetWindowPos(Handle,HWND_TOPMOST,1,1,640,480,SWP_SHOWWINDOW);
-        int Kf = 100000000;        //1.0E+4 Rigidite (N/m),           //40000
-        int Df = 20000;        //1.0E+3 viscosite (N/(m/s)) du sol    //
+
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity( );
     gluPerspective(50,(double)640/480,1,1000);
@@ -181,6 +183,7 @@ int main(int argc, char *argv[])
     float Lt=0.510;
     float Lp=0.1104;
     int frame_skip = 20;
+    int img_per_s = 25;
     //int frame_skip = 1;
 //    for (i = 0; i < NbRobots; i++)
 //    {
@@ -199,6 +202,7 @@ int main(int argc, char *argv[])
     float *qd;
     qd = calloc(dof,sizeof(float));
     Ext_trajectory_init(qd);
+    0.0661375
     for(i=1; i<(dof+2); i++)
     {
         uLINK[i].q = qd[i-1];
@@ -276,9 +280,9 @@ int main(int argc, char *argv[])
     for (i = 0; i < 50; i++)
     {
 
-ping(i);
+        ping(i);
 
-    int nDoF=dof+6;
+        int nDoF=dof+6;
         static gsl_vector * idx1;
         static gsl_vector * idx2;
         static gsl_matrix * J1;
@@ -513,6 +517,20 @@ ping(i);
         FILE *dq_file=fopen("./../Simu_data/dq.txt","w");
         fclose(dq_file);
 
+        FILE *p_file=fopen("./../Simu_data/p.txt","w");
+        fclose(p_file);
+
+        FILE *CoM_file=fopen("./../Simu_data/CoM.txt","w");
+        fclose(CoM_file);
+
+        FILE *taskCoM_file=fopen("./../Simu_data/taskCoM.txt","w");
+        fclose(taskCoM_file);
+
+        FILE *CoP_file=fopen("./../Simu_data/CoP.txt","w");
+        fclose(CoP_file);
+
+        FILE *u_file=fopen("./../Simu_data/u.txt","w");
+        fclose(u_file);
     }
 
 
@@ -575,7 +593,7 @@ ping(i);
         }
 
 
-        if (t*Dtime>120) //Arret du programme à x sacondes de simulation pour vidéo
+        if (t*Dtime>180) //Arret du programme à x sacondes de simulation pour vidéo
         {
             break;
         }
@@ -659,10 +677,11 @@ ping(i);
                     //glReadBuffer(GL_FRONT);
                     glReadPixels(0, 0, 640, 480, GL_RGB, GL_UNSIGNED_BYTE, pixel_data);//GL_BGR
                     write_bmp(files, 640, 480, pixel_data);
-                    frame=20;
+                    frame=1/(Dtime*frame_skip*img_per_s);
                 }
                 frame--;
             }
+            //angular_z+=M_PI*0.02;
 
         }
 #if !StaticCOM

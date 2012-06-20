@@ -15,13 +15,22 @@ void ForwardKinematics(SuLINK uLINK[],int j)
         return;
     }
 
+    static gsl_matrix * rot;
+    static int init_tmp=1;
+    if (init_tmp==1)
+    {
+        rot = gsl_matrix_calloc (3, 3);
+        init_tmp=0;
+    }
+//    gsl_matrix_set_zero(rot);
+
     if (j != 1)
     {
         gsl_blas_dgemv(CblasNoTrans, 1.0, uLINK[uLINK[j].mother].R, uLINK[j].b, 0.0, uLINK[j].p);
         gsl_vector_add (uLINK[j].p, uLINK[uLINK[j].mother].p);
         //uLINK[j].p = uLINK[uLINK[j].mother].R * uLINK[j].b + uLINK[uLINK[j].mother].p;
 
-        gsl_matrix * rot = gsl_matrix_calloc (3, 3);
+//        gsl_matrix * rot = gsl_matrix_calloc (3, 3);
         Rodrigues( rot ,uLINK[j].a, uLINK[j].q);
 
 //printf("%8.1f ",gsl_vector_get (uLINK[j].a,0));
@@ -66,7 +75,7 @@ void ForwardKinematics(SuLINK uLINK[],int j)
 //printf("%8.1f ",gsl_matrix_get (uLINK[j].R, 2,1));
 //printf("%8.1f \n \n",gsl_matrix_get (uLINK[j].R, 2,2));
         //uLINK[j].R = uLINK[uLINK[j].mother].R * Rodrigues(uLINK[j].a, uLINK[j].q);
-        gsl_matrix_free(rot);
+//        gsl_matrix_free(rot);
     }
 
     ForwardKinematics(uLINK,uLINK[j].sister);
