@@ -67,7 +67,7 @@
 
 
 
-#define Video 0
+#define Video 1
 /*! \def Video
     \brief Record images of the simulation
 */
@@ -86,7 +86,7 @@
     \brief Sampling period of control loop in second
 */
 
-#define Dtime 0.0001
+#define Dtime 0.00001
 /*! \def Dtime
     \brief Simulation sampling period
 */

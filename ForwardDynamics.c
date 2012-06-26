@@ -191,7 +191,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
 
 //      if ((t%50)==0)
-    if ((t%50)==0)
+    if ((t%(int)(Te/Dtime))==0)
     {
         static int init_com=1;
         static float *uPD;
@@ -919,7 +919,7 @@ gsl_blas_dgemv(CblasNoTrans, 1.0, R, p, 0.0, taskCoM);
 
         for (i=0; i<(nDoF-6); i++)
         {
-            uLINK[i+2].u_joint =1000*gsl_vector_get(dq,i)+0.001/Dtime*gsl_vector_get(ddq,i);
+            uLINK[i+2].u_joint =1000*gsl_vector_get(dq,i)+10*gsl_vector_get(ddq,i);
         }
 
         gsl_vector_memcpy(dq_old,dq);
