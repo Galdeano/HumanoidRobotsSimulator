@@ -460,6 +460,8 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         static gsl_vector * zmp;
         static gsl_vector * dzmp;
 
+        static gsl_vector * q_pd;
+
 
         static int init_task=1;
         if (init_task==1)
@@ -499,6 +501,8 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
             zmp = gsl_vector_calloc (3);
             dzmp = gsl_vector_calloc (3);
 
+            q_pd = gsl_vector_calloc(nDoF-6);
+
             init_task=0;
 
             static int path1[8] = {7, 7, 6, 5, 4, 3, 2, 1};
@@ -537,7 +541,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         gsl_vector_set (p, 2, 0.8434);
         CalcVWerrOri(uLINK, task1, p, R,idx1);
 
-#if 0
+#if 1
         gsl_matrix_set_identity(R);
         gsl_vector_set_zero(p);
         gsl_vector_set (p, 1, -0.1595);
@@ -783,7 +787,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
 #endif
 
-#if 1
+#if 0
         if ((t*Dtime)>=0.5)
         {
             Ext_op_trajectory_LIPM(opd, 0);
@@ -912,6 +916,7 @@ gsl_blas_dgemv(CblasNoTrans, 1.0, R, p, 0.0, taskCoM);
 
 
 //PrintGSLVector(dq);
+
         gsl_vector_memcpy(ddq,dq);
         gsl_vector_sub(ddq,dq_old);
         gsl_vector_scale(ddq,1/Te);
@@ -919,6 +924,7 @@ gsl_blas_dgemv(CblasNoTrans, 1.0, R, p, 0.0, taskCoM);
 
         for (i=0; i<(nDoF-6); i++)
         {
+            //uLINK[i+2].u_joint =1000*gsl_vector_get(dq,i)+10*gsl_vector_get(ddq,i);
             uLINK[i+2].u_joint =1000*gsl_vector_get(dq,i)+10*gsl_vector_get(ddq,i);
         }
 

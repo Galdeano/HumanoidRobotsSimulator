@@ -86,7 +86,7 @@
     \brief Sampling period of control loop in second
 */
 
-#define Dtime 0.00001
+#define Dtime 0.0001
 /*! \def Dtime
     \brief Simulation sampling period
 */

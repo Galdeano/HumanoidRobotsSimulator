@@ -59,7 +59,7 @@ void ExternalForces(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector
 //        int Kf = 100000000;        //1.0E+4 Rigidite (N/m),           //sherpa
 //        int Df = 20000;        //1.0E+3 viscosite (N/(m/s)) du sol    //
         int Kf = 5000000;        //1.0E+4 Rigidite (N/m),           //20000000
-        int Df = 0.5/Dtime;        //1.0E+3 viscosite (N/(m/s)) du sol    //5000
+        int Df = 5000;        //1.0E+3 viscosite (N/(m/s)) du sol    //5000
 
         int i,k;
         double val;
@@ -99,7 +99,7 @@ void ExternalForces(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector
             Status->support &= (~0x02); //foot left support=0
         }
 
-        for (i = 0; i < 8; ++i)
+        for (i = 0; i < 8; ++i)///////////////////////////////////////////////////////
         {
             if (gsl_matrix_get(vert,2,i)<uLINK[j].supportHeight)
             {
@@ -109,45 +109,52 @@ void ExternalForces(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector
                 gsl_vector_set (ftmp,0,Df*gsl_vector_get(v,0));
                 gsl_vector_set (ftmp,1,Df*gsl_vector_get(v,1));
                 gsl_vector_set (ftmp,2,Kf*(gsl_matrix_get(vert,2,i)-uLINK[j].supportHeight)+Df*gsl_vector_get(v,2));
+
+
                 if (gsl_vector_get (ftmp,2)>0)
                 {
                     gsl_vector_set(ftmp,2,0);
                 }
-                    gsl_vector_add(f, ftmp);
-                    gsl_vector_memcpy (ttmp, ftmp);
-                    gsl_matrix_get_col(v, vert, i);
-                    //gsl_vector_sub(v,uLINK[j].p);
-                    Cross(v,ttmp,1);
-                    gsl_vector_add(t, ttmp);
-                    //gsl_vector_add(v,uLINK[j].p);
+                if (gsl_vector_get (ftmp,2)<-300)
+                {
+                    gsl_vector_set(ftmp,2,-300);
+                }
 
-                    //gsl_vector_scale (ftmp, -0.01);
-                    //DrawForceMarker(v,ftmp);
-                    gsl_vector_set(uLINK[j].isContact,i,1);
-                    gsl_matrix_set_col (uLINK[j].posContact, i, v);
-                    gsl_matrix_set_col (uLINK[j].forContact, i, ftmp);
+                gsl_vector_add(f, ftmp);
+                gsl_vector_memcpy (ttmp, ftmp);
+                gsl_matrix_get_col(v, vert, i);
+                //gsl_vector_sub(v,uLINK[j].p);
+                Cross(v,ttmp,1);
+                gsl_vector_add(t, ttmp);
+                //gsl_vector_add(v,uLINK[j].p);
 
-                    if (j==Status->right_foot_ID)
-                    {
-                        gsl_vector_set (v, 2, 0);
-                        gsl_vector_scale (v, gsl_vector_get (ftmp,2));
-                        Status->right_scale=Status->right_scale+gsl_vector_get (ftmp,2);
-                        //gsl_vector_scale (ftmp, -0.0025);
-                        gsl_vector_add(Status->forCoP_R,ftmp);
-                        gsl_vector_add(Status->posCoP_R,v);
-                        Status->support |= 0x01;
-                    }
+                //gsl_vector_scale (ftmp, -0.01);
+                //DrawForceMarker(v,ftmp);
+                gsl_vector_set(uLINK[j].isContact,i,1);
+                gsl_matrix_set_col (uLINK[j].posContact, i, v);
+                gsl_matrix_set_col (uLINK[j].forContact, i, ftmp);
 
-                    if (j==Status->left_foot_ID)
-                    {
-                        gsl_vector_set (v, 2, 0);
-                        gsl_vector_scale (v, gsl_vector_get (ftmp,2));
-                        Status->left_scale=Status->left_scale+gsl_vector_get (ftmp,2);
-                        //gsl_vector_scale (ftmp, -0.0025);
-                        gsl_vector_add(Status->forCoP_L,ftmp);
-                        gsl_vector_add(Status->posCoP_L,v);
-                        Status->support |= 0x02;
-                    }
+                if (j==Status->right_foot_ID)
+                {
+                    gsl_vector_set (v, 2, 0);
+                    gsl_vector_scale (v, gsl_vector_get (ftmp,2));
+                    Status->right_scale=Status->right_scale+gsl_vector_get (ftmp,2);
+                    //gsl_vector_scale (ftmp, -0.0025);
+                    gsl_vector_add(Status->forCoP_R,ftmp);
+                    gsl_vector_add(Status->posCoP_R,v);
+                    Status->support |= 0x01;
+                }
+
+                if (j==Status->left_foot_ID)
+                {
+                    gsl_vector_set (v, 2, 0);
+                    gsl_vector_scale (v, gsl_vector_get (ftmp,2));
+                    Status->left_scale=Status->left_scale+gsl_vector_get (ftmp,2);
+                    //gsl_vector_scale (ftmp, -0.0025);
+                    gsl_vector_add(Status->forCoP_L,ftmp);
+                    gsl_vector_add(Status->posCoP_L,v);
+                    Status->support |= 0x02;
+                }
 
 //                }
 //                else

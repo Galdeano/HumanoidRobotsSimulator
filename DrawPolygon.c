@@ -82,7 +82,7 @@ void DrawPolygon(SuLINK uLINK[],int j)
 
 
     glColor3ub(0,0,255);
-    for (i = 0; i < 8; ++i)
+    for (i = 0; i < 8; ++i)///////////////////////////////////////////////////////////
     {
         if (gsl_vector_get(uLINK[j].isContact,i)==1)
         {

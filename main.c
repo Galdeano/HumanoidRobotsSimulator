@@ -580,6 +580,9 @@ int main(int argc, char *argv[])
             case SDLK_g:
                 ground = !ground;
                 break;
+            case SDLK_p:
+                fgets ( szInput, 25, stdin );
+                break;
             case SDLK_s:
                 SaveState(uLINK,&Status,&t);
                 break;
