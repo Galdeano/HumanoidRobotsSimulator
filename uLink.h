@@ -60,8 +60,12 @@ struct StuLINK
     gsl_matrix * I;/*!< around the center of gravity inertia tensor 3*3 [kg.m^2] */
     gsl_matrix * vert;/*!< Shape of the link */
     gsl_matrix * face;/*!< Shape of the link */
-    gsl_matrix * posContact;
-    gsl_matrix * forContact;
+    gsl_matrix * contact;/*!< relative position of contacts */
+    gsl_matrix * pcontact;/*!< absolute position of contacts */
+    gsl_matrix * fcontact;/*!< force of contacts */
+    gsl_vector * iscontact;/*!< is the link in contact */
+    gsl_matrix * posContact;/*!< absolute position of contacts */
+    gsl_matrix * forContact;/*!< force of contacts */
 };
 
 typedef struct  StuLINK  SuLINK ;

@@ -23,7 +23,9 @@ void InvDyn(SuLINK uLINK[],State *Status,int j,gsl_vector * u)
     }
 
     gsl_vector_set_zero(uLINK[1].dvo);
+    //gsl_vector_set (uLINK[1].dvo, 2,9.81+gsl_vector_get (uLINK[1].dvo,2));
     gsl_vector_set_zero(uLINK[1].dw);
+//uLINK(1).dvo = uLINK(1).dvo + [0 0 G]';
 //uLINK(1).dvo = [0 0 0]';
 //uLINK(1).dw  = [0 0 0]';
 

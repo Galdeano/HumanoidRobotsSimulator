@@ -51,6 +51,11 @@ void CalcCoMJacobian( SuLINK uLINK[], gsl_matrix * J, int base_call)
         init_tmp=0;
     }
 
+    //gsl_vector_set_zero(a);
+    //gsl_vector_set_zero(error);
+    gsl_vector_set_zero(mother);
+    //gsl_vector_set_zero(double_path);
+
     gsl_vector_set_zero(m);
     gsl_vector_set_zero(store_m);
     gsl_vector_set_zero(double_path);

@@ -158,5 +158,20 @@
 */
 
 
+// Contacts
+#define xContact 5
+#define yContact 4
+#define linearDamper 1
+/*! \def linearDamper
+    \brief 1: Use a spring damper contact
+*/
 
+#define nonLinearDamper 0
+/*! \def nonLinearDamper
+    \brief 1: Use a non linear damper contact
+*/
 
+#if (linearDamper + nonLinearDamper)!=1
+#error Both linearDamper and nonLinearDamper contact model are specified
+#error Check linearDamper and nonLinearDamper defs
+#endif

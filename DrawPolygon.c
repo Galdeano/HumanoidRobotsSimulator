@@ -10,6 +10,8 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+#include "Setup.h"
+
 void DrawPolygon(SuLINK uLINK[],int j)
 {
     int i,k;
@@ -90,12 +92,26 @@ void DrawPolygon(SuLINK uLINK[],int j)
 //            gsl_vector * ftmp = gsl_vector_calloc (3);
             gsl_matrix_get_col (v, uLINK[j].posContact, i);
             gsl_matrix_get_col (ftmp, uLINK[j].forContact, i);
-            gsl_vector_scale (ftmp, -0.005);
+            gsl_vector_scale (ftmp, -0.01);
             DrawForceMarker(v,ftmp);
 //            gsl_vector_free(ftmp);
 //            gsl_vector_free(v);
         }
     }
+
+    for (i = 0; i < xContact*yContact; ++i)///////////////////////////////////////////////////////////
+    {
+        if (gsl_vector_get(uLINK[j].iscontact,i)==1)
+        {
+            gsl_matrix_get_col(v, uLINK[j].pcontact, i);
+//        DrawMarker(v);
+            gsl_matrix_get_col (v, uLINK[j].pcontact, i);
+            gsl_matrix_get_col (ftmp, uLINK[j].fcontact, i);
+            gsl_vector_scale (ftmp, -0.01);
+            DrawForceMarker(v,ftmp);
+        }
+    }
+
 //    gsl_matrix_free(vert);
 }
 

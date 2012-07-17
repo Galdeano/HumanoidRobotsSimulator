@@ -33,11 +33,13 @@ void ExternalForces(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector
 //        init_tmp=0;
 //    }
     static gsl_matrix * vert;
+    //static gsl_matrix * vert2;
     static gsl_vector * v;
     static int init_tmp=1;
     if (init_tmp==1)
     {
         vert = gsl_matrix_calloc (3, 8);
+        //vert2 = gsl_matrix_calloc (3, 8);
         v = gsl_vector_calloc (3);
         init_tmp=0;
     }
@@ -58,14 +60,15 @@ void ExternalForces(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector
 //        int Df = 1000;        //1.0E+3 viscosite (N/(m/s)) du sol    //
 //        int Kf = 100000000;        //1.0E+4 Rigidite (N/m),           //sherpa
 //        int Df = 20000;        //1.0E+3 viscosite (N/(m/s)) du sol    //
-        int Kf = 5000000;        //1.0E+4 Rigidite (N/m),           //20000000
-        int Df = 5000;        //1.0E+3 viscosite (N/(m/s)) du sol    //5000
+//        int Kf = 5000000;        //1.0E+4 Rigidite (N/m),           //20000000
+//        int Df = 5000;        //1.0E+3 viscosite (N/(m/s)) du sol    //5000
 
         int i,k;
         double val;
 //        gsl_matrix * vert = gsl_matrix_calloc (3, 8);
 //        gsl_vector * v = gsl_vector_calloc (3);
         gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, uLINK[j].R, uLINK[j].vert, 0.0, vert);
+        //gsl_matrix_memcpy(vert2,vert);
         for (i = 0; i < 3; ++i)
         {
             for (k = 0; k < 8; ++k)
@@ -98,18 +101,109 @@ void ExternalForces(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector
             Status->left_scale=0.0;
             Status->support &= (~0x02); //foot left support=0
         }
+//
+//        for (i = 0; i < 8; ++i)///////////////////////////////////////////////////////
+//        {
+//            if (gsl_matrix_get(vert,2,i)<uLINK[j].supportHeight)
+//            {
+//                gsl_matrix_get_col(v, vert, i);
+//                Cross(uLINK[j].w,v,1);
+//                gsl_vector_add (v, uLINK[j].vo);
+//                gsl_vector_set (ftmp,0,Df*gsl_vector_get(v,0));
+//                gsl_vector_set (ftmp,1,Df*gsl_vector_get(v,1));
+//                gsl_vector_set (ftmp,2,Kf*(gsl_matrix_get(vert,2,i)-uLINK[j].supportHeight)+Df*gsl_vector_get(v,2));
+//
+//
+//                if (gsl_vector_get (ftmp,2)>0)
+//                {
+//                    gsl_vector_set(ftmp,2,0);
+//                }
+//                if (gsl_vector_get (ftmp,2)<-1000)
+//                {
+//                    gsl_vector_set(ftmp,2,-1000);
+//                }
+//
+//                gsl_vector_add(f, ftmp);
+//
+//                gsl_vector_memcpy (ttmp, ftmp);
+//                gsl_matrix_get_col(v, vert, i);
+//                Cross(v,ttmp,1);
+//                gsl_vector_add(t, ttmp);
+//
+//                //gsl_vector_scale (ftmp, -0.01);
+//                //DrawForceMarker(v,ftmp);
+//                gsl_vector_set(uLINK[j].isContact,i,1);
+//                gsl_matrix_get_col(v, vert, i);
+//                gsl_matrix_set_col (uLINK[j].posContact, i, v);
+//                gsl_matrix_set_col (uLINK[j].forContact, i, ftmp);
+//
+//                if (j==Status->right_foot_ID)
+//                {
+//                    //gsl_vector_set (v, 2, 0);
+//                    gsl_vector_scale (v, gsl_vector_get (ftmp,2));
+//                    Status->right_scale=Status->right_scale+gsl_vector_get (ftmp,2);
+//                    gsl_vector_add(Status->forCoP_R,ftmp);
+//                    gsl_vector_add(Status->posCoP_R,v);
+//                    Status->support |= 0x01;
+//                }
+//
+//                if (j==Status->left_foot_ID)
+//                {
+//                    //gsl_vector_set (v, 2, 0);
+//                    gsl_vector_scale (v, gsl_vector_get (ftmp,2));
+//                    Status->left_scale=Status->left_scale+gsl_vector_get (ftmp,2);
+//                    gsl_vector_add(Status->forCoP_L,ftmp);
+//                    gsl_vector_add(Status->posCoP_L,v);
+//                    Status->support |= 0x02;
+//                }
+//
+//            }
+//            else
+//            {
+//                gsl_vector_set(uLINK[j].isContact,i,0);
+//            }
+//        }
 
-        for (i = 0; i < 8; ++i)///////////////////////////////////////////////////////
+
+
+
+        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, uLINK[j].R, uLINK[j].contact, 0.0, uLINK[j].pcontact);
+        for (i = 0; i < 3; ++i)
         {
-            if (gsl_matrix_get(vert,2,i)<uLINK[j].supportHeight)
+            for (k = 0; k < xContact*yContact; ++k)
             {
-                gsl_matrix_get_col(v, vert, i);
+                val=gsl_matrix_get (uLINK[j].pcontact,i,k)+gsl_vector_get (uLINK[j].p,i);
+                gsl_matrix_set (uLINK[j].pcontact,i,k,val);
+            }
+        }
+
+
+        for (i = 0; i < xContact*yContact; ++i)///////////////////////////////////////////////////////
+        {
+            if (gsl_matrix_get(uLINK[j].pcontact,2,i)<uLINK[j].supportHeight)
+            {
+                gsl_matrix_get_col(v, uLINK[j].pcontact, i);
                 Cross(uLINK[j].w,v,1);
                 gsl_vector_add (v, uLINK[j].vo);
+
+#if linearDamper
+                static int Kf = 500000;        //1.0E+4 Rigidite (N/m),           //20000000
+                static int Df = 700;        //1.0E+3 viscosite (N/(m/s)) du sol    //5000
                 gsl_vector_set (ftmp,0,Df*gsl_vector_get(v,0));
                 gsl_vector_set (ftmp,1,Df*gsl_vector_get(v,1));
-                gsl_vector_set (ftmp,2,Kf*(gsl_matrix_get(vert,2,i)-uLINK[j].supportHeight)+Df*gsl_vector_get(v,2));
+                gsl_vector_set (ftmp,2,Kf*(gsl_matrix_get(uLINK[j].pcontact,2,i)-uLINK[j].supportHeight)+Df*gsl_vector_get(v,2));
+#endif
 
+#if nonLinearDamper
+                static int Kf = 5750;        //1.0E+4 Rigidite (N/m),           //20000000
+                static int Df = 60;        //1.0E+3 viscosite (N/(m/s)) du sol    //5000
+                static int Df2 = 450;        //1.0E+3 viscosite (N/(m/s)) du sol    //5000
+                static int pp = 1.2;
+                static int pd = 0.02;
+                gsl_vector_set (ftmp,0,Df*gsl_vector_get(v,0));
+                gsl_vector_set (ftmp,1,Df*gsl_vector_get(v,1));
+                gsl_vector_set (ftmp,2,Kf*pow((gsl_matrix_get(uLINK[j].pcontact,2,i)-uLINK[j].supportHeight),pp)+Df2*gsl_vector_get(v,2)*pow((gsl_matrix_get(uLINK[j].pcontact,2,i)-uLINK[j].supportHeight),pd));
+#endif
 
                 if (gsl_vector_get (ftmp,2)>0)
                 {
@@ -121,25 +215,21 @@ void ExternalForces(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector
                 }
 
                 gsl_vector_add(f, ftmp);
+
                 gsl_vector_memcpy (ttmp, ftmp);
-                gsl_matrix_get_col(v, vert, i);
-                //gsl_vector_sub(v,uLINK[j].p);
+                gsl_matrix_get_col(v, uLINK[j].pcontact, i);
                 Cross(v,ttmp,1);
                 gsl_vector_add(t, ttmp);
-                //gsl_vector_add(v,uLINK[j].p);
 
-                //gsl_vector_scale (ftmp, -0.01);
-                //DrawForceMarker(v,ftmp);
-                gsl_vector_set(uLINK[j].isContact,i,1);
-                gsl_matrix_set_col (uLINK[j].posContact, i, v);
-                gsl_matrix_set_col (uLINK[j].forContact, i, ftmp);
+                gsl_vector_set(uLINK[j].iscontact,i,1);
+
+                gsl_matrix_set_col (uLINK[j].fcontact, i, ftmp);
 
                 if (j==Status->right_foot_ID)
                 {
-                    gsl_vector_set (v, 2, 0);
+                    //gsl_vector_set (v, 2, 0);
                     gsl_vector_scale (v, gsl_vector_get (ftmp,2));
                     Status->right_scale=Status->right_scale+gsl_vector_get (ftmp,2);
-                    //gsl_vector_scale (ftmp, -0.0025);
                     gsl_vector_add(Status->forCoP_R,ftmp);
                     gsl_vector_add(Status->posCoP_R,v);
                     Status->support |= 0x01;
@@ -147,30 +237,26 @@ void ExternalForces(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector
 
                 if (j==Status->left_foot_ID)
                 {
-                    gsl_vector_set (v, 2, 0);
+                    //gsl_vector_set (v, 2, 0);
                     gsl_vector_scale (v, gsl_vector_get (ftmp,2));
                     Status->left_scale=Status->left_scale+gsl_vector_get (ftmp,2);
-                    //gsl_vector_scale (ftmp, -0.0025);
                     gsl_vector_add(Status->forCoP_L,ftmp);
                     gsl_vector_add(Status->posCoP_L,v);
                     Status->support |= 0x02;
                 }
 
-//                }
-//                else
-//                {
-//                    gsl_vector_set(uLINK[j].isContact,i,0);
-//                }
             }
             else
             {
-                gsl_vector_set(uLINK[j].isContact,i,0);
+                gsl_vector_set(uLINK[j].iscontact,i,0);
             }
         }
 
-//        gsl_matrix_free(vert);
-//        gsl_vector_free(v);
+
     }
+
+
+
 
 
 
@@ -178,6 +264,8 @@ void ExternalForces(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector
 
     gsl_vector_add (f, ftmp);
     gsl_vector_add (t, ttmp);
+
+
 
 
 
@@ -194,6 +282,7 @@ void ExternalForces(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector
      */
 
 
+
     /* //% return force to mother, with sisters
      *     //gsl_vector_set_zero(ftmp);
      *     //gsl_vector_set_zero(ttmp);
@@ -202,6 +291,7 @@ void ExternalForces(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector
 
     gsl_vector_add (f, ftmp);
     gsl_vector_add (t, ttmp);
+
 
 
     gsl_vector_free(ftmp);
