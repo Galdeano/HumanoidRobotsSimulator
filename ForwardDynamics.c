@@ -734,19 +734,19 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         gsl_vector_set (p, 0, 0.048516);
         if ((t*Dtime)<1.0)
         {
-            gsl_vector_set (p, 1,0.079750);
+            gsl_vector_set (p, 1,-0.079750);
         }
         if (((t*Dtime)>=1.0) && ((t*Dtime)<(wO+1)))
         {
-            gsl_vector_set (p, 1,0.079750+0.038*(cos((1/wO)*M_PI*(t*Dtime-1.0))-1));
+            gsl_vector_set (p, 1,-0.079750+0.038*(cos((1/wO)*M_PI*(t*Dtime-1.0))-1));
         }
         if ((t*Dtime)>=(wO+1))
         {
-            gsl_vector_set (p, 1,0.079750-0.076*(cos((1/wO)*M_PI*(t*Dtime-(wO+1)))));
+            gsl_vector_set (p, 1,-0.079750-0.076*(cos((1/wO)*M_PI*(t*Dtime-(wO+1)))));
         }
 
         gsl_vector_set (p, 2, 0.884101);
-        gsl_matrix_memcpy(R,uLINK[Base].R);
+        gsl_matrix_memcpy(R,uLINK[Status->right_foot_ID].R);
         //pinv(R,uLINK[Base].R);
         gsl_blas_dgemv(CblasNoTrans, 1.0, R, p, 0.0, taskCoMR);
         CalcCoM(uLINK,CoM);
@@ -771,33 +771,85 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         }
 
         gsl_vector_set (p, 2, 0.884101);
-        gsl_matrix_memcpy(R,uLINK[Base].R);
+        gsl_matrix_memcpy(R,uLINK[Status->left_foot_ID].R);
         //pinv(R,uLINK[Base].R);
         gsl_blas_dgemv(CblasNoTrans, 1.0, R, p, 0.0, taskCoML);
         CalcCoM(uLINK,CoM);
         //gsl_vector_memcpy(taskCoM,p);
         gsl_vector_sub(taskCoML,CoM);
 
-        gsl_vector_set (p, 2, 0);
-        gsl_vector_set_zero(CoP);
-        f=CalcCoP(uLINK,CoP,1);
-        if (f!=0.0 && t*Dtime>0.5)
+//        gsl_vector_set (p, 2, 0);
+//        gsl_vector_set_zero(CoP);
+//        f=CalcCoP(uLINK,CoP,1);
+//        if (f!=0.0 && t*Dtime>0.5)
+//        {
+//            gsl_vector_scale (CoP, 1/f);
+//            gsl_vector_set (CoP, 2, 0);
+//            gsl_vector_sub(p,CoP);
+//
+//            gsl_vector_memcpy(dzmp,p);
+//            gsl_vector_sub(dzmp,zmp);
+//            gsl_vector_scale (dzmp, Te);
+//            gsl_vector_scale (dzmp, 0.15);
+//            gsl_vector_add(taskCoML,dzmp);
+//
+//            gsl_vector_memcpy(zmp,p);
+//            gsl_vector_scale(p,0.04);
+//            gsl_vector_add(taskCoMR,p);
+//            gsl_vector_add(taskCoML,p);
+//        }
+
+//        PrintGSLVector(task2);
+//        PrintGSLVector(taskCoMR);
+//        PrintGSLVector(taskCoML);
+
+//gsl_vector_scale(taskCoMR,0.5);
+//gsl_vector_scale(taskCoML,0.5);
+
+        if (Visualisation)
         {
-            gsl_vector_scale (CoP, 1/f);
-            gsl_vector_set (CoP, 2, 0);
-            gsl_vector_sub(p,CoP);
+            FILE *CoM_file=fopen("./../Simu_data/CoM.txt","a");
+            for(n=0; n<3; n++)
+            {
+                fprintf(CoM_file,"%f ",gsl_vector_get(CoM,n));
+            }
+            fprintf(CoM_file,"\n");
+            fclose(CoM_file);
 
-            gsl_vector_memcpy(dzmp,p);
-            gsl_vector_sub(dzmp,zmp);
-            gsl_vector_scale (dzmp, Te);
-            gsl_vector_scale (dzmp, 0.15);
-            gsl_vector_add(taskCoML,dzmp);
+            FILE *CoMp_file=fopen("./../Simu_data/CoMp.txt","a");
+            for(n=0; n<3; n++)
+            {
+                fprintf(CoMp_file,"%f ",gsl_vector_get(p,n));
+            }
+            fprintf(CoMp_file,"\n");
+            fclose(CoMp_file);
 
-            gsl_vector_memcpy(zmp,p);
-            gsl_vector_scale(p,0.04);
-            gsl_vector_add(taskCoMR,p);
-            gsl_vector_add(taskCoML,p);
+            FILE *CoP_file=fopen("./../Simu_data/CoP.txt","a");
+            for(n=0; n<3; n++)
+            {
+                fprintf(CoP_file,"%f ",gsl_vector_get(CoP,n));
+            }
+            fprintf(CoP_file,"\n");
+            fclose(CoP_file);
+
+            FILE *taskCoMR_file=fopen("./../Simu_data/taskCoMR.txt","a");
+            for(n=0; n<3; n++)
+            {
+                fprintf(taskCoMR_file,"%f ",gsl_vector_get(taskCoMR,n));
+            }
+            fprintf(taskCoMR_file,"\n");
+            fclose(taskCoMR_file);
+
+            FILE *taskCoML_file=fopen("./../Simu_data/taskCoML.txt","a");
+            for(n=0; n<3; n++)
+            {
+                fprintf(taskCoML_file,"%f ",gsl_vector_get(taskCoML,n));
+            }
+            fprintf(taskCoML_file,"\n");
+            fclose(taskCoML_file);
+
         }
+
 #endif
 
 #if Ext_traj
@@ -843,6 +895,25 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         }
         CalcVWerrOri(uLINK, task2, p, R,idx2);
 
+        if ((t*Dtime)<0.5)
+        {
+            gsl_vector_set (p, 0, 0.048516);
+            gsl_vector_set (p, 1,-0.079750);
+            gsl_vector_set (p, 2, 0.884101);
+        }
+        if (((t*Dtime)>=0.5))
+        {
+            gsl_vector_set (p, 0, (opd[0]-opd[6]));
+            gsl_vector_set (p, 1, (opd[1]-opd[7]));
+            gsl_vector_set (p, 2, (opd[2]-opd[8]));
+        }
+        gsl_matrix_memcpy(R,uLINK[Status->right_foot_ID].R);
+        //pinv(R,uLINK[Base].R);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, R, p, 0.0, taskCoMR);
+        CalcCoM(uLINK,CoM);
+        //gsl_vector_memcpy(taskCoM,p);
+        gsl_vector_sub(taskCoMR,CoM);
+
 
         if ((t*Dtime)<0.5)
         {
@@ -856,11 +927,11 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
             gsl_vector_set (p, 1, (opd[1]-opd[7]));
             gsl_vector_set (p, 2, (opd[2]-opd[8]));
         }
-gsl_matrix_memcpy(R,uLINK[Base].R);
+        gsl_matrix_memcpy(R,uLINK[Status->left_foot_ID].R);
         //pinv(R,uLINK[Base].R);
-gsl_blas_dgemv(CblasNoTrans, 1.0, R, p, 0.0, taskCoML);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, R, p, 0.0, taskCoML);
         CalcCoM(uLINK,CoM);
-//gsl_vector_memcpy(taskCoM,p);
+        //gsl_vector_memcpy(taskCoM,p);
         gsl_vector_sub(taskCoML,CoM);
 
 //        gsl_vector_set (p, 2, 0);
@@ -904,55 +975,74 @@ gsl_blas_dgemv(CblasNoTrans, 1.0, R, p, 0.0, taskCoML);
         //PrintGSLVector(taskCoM);
 
 
-        gsl_matrix_set_identity(P1);
-        pinv(invJ,J1);
-        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJ, J1, 0.0, Ptmp);
-        gsl_matrix_sub(P1,Ptmp);
+//        gsl_matrix_set_identity(P1);
+//        pinv(invJ,J2);
+//        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJ, J2, 0.0, Ptmp);
+//        gsl_matrix_sub(P1,Ptmp);
+//
+//        gsl_matrix_set_identity(P2);
+//        pinv(invJ,J2);
+//        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJ, J2, 0.0, Ptmp);
+//        gsl_matrix_sub(P2,Ptmp);
+//
+//        gsl_matrix_set_identity(PCoMR);
+//        pinv(invJCoM,JCoMR);
+//        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJCoM, JCoMR, 0.0, Ptmp);
+//        gsl_matrix_sub(PCoMR,Ptmp);
+//
+//        gsl_matrix_set_identity(PCoML);
+//        pinv(invJCoM,JCoML);
+//        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJCoM, JCoML, 0.0, Ptmp);
+//        gsl_matrix_sub(PCoML,Ptmp);
 
-        gsl_matrix_set_identity(P2);
-        pinv(invJ,J2);
-        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJ, J2, 0.0, Ptmp);
-        gsl_matrix_sub(P2,Ptmp);
-
-        gsl_matrix_set_identity(PCoMR);
-        pinv(invJCoM,JCoMR);
-        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJCoM, JCoMR, 0.0, Ptmp);
-        gsl_matrix_sub(PCoMR,Ptmp);
-
-        gsl_matrix_set_identity(PCoML);
-        pinv(invJCoM,JCoML);
-        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJCoM, JCoML, 0.0, Ptmp);
-        gsl_matrix_sub(PCoML,Ptmp);
 
 
         // first task
         pinv(invJ,J2);
         gsl_blas_dgemv(CblasNoTrans, 1.0, invJ, task2, 0.0, dq);
 
+
         // second task
+        gsl_matrix_set_identity(P1);
+        pinv(invJ,J2);
+        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJ, J2, 0.0, Ptmp);
+        gsl_matrix_sub(P1,Ptmp);
+
         gsl_vector_memcpy(vec3,taskCoML);
         gsl_blas_dgemv(CblasNoTrans, 1.0, JCoML, dq, 0.0, vec3_2);
         gsl_vector_sub(vec3,vec3_2);
-        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, JCoML, P2, 0.0, Jtilde);
+        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, JCoML, P1, 0.0, Jtilde);
         pinv(invJCoM,Jtilde);
         gsl_blas_dgemv(CblasNoTrans, 1.0, invJCoM, vec3, 0.0, dqtmp);
         //gsl_blas_dgemv(CblasNoTrans, 1.0, P2, dqtmp2, 0.0, dqtmp);
         gsl_vector_add(dq,dqtmp);
 
 
-
         // third task
+        gsl_matrix_memcpy(P2,P1);
+        pinv(invJCoM,Jtilde);
+        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJCoM, Jtilde, 0.0, Ptmp);
+        gsl_matrix_sub(P2,Ptmp);
+
+        gsl_vector_memcpy(vec3,taskCoMR);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, JCoMR, dq, 0.0, vec3_2);
+        gsl_vector_sub(vec3,vec3_2);
+
+        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, JCoMR, P2, 0.0, Jtilde);
+        pinv(invJCoM,Jtilde);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, invJCoM, vec3, 0.0, dqtmp);
+        //gsl_blas_dgemv(CblasNoTrans, 1.0, P2, dqtmp2, 0.0, dqtmp);
+        gsl_vector_add(dq,dqtmp);
+
+
+        // fourth task
         gsl_matrix_set_identity(Ptilde);
         pinv(invJCoM,Jtilde);
         gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJCoM, Jtilde, 0.0, Ptmp);
         gsl_matrix_sub(Ptilde,Ptmp);
 
-        gsl_vector_memcpy(dqtmp2,adphi);
-        gsl_vector_sub(dqtmp2,dqtmp);
-
-        gsl_blas_dgemv(CblasNoTrans, 1.0, Ptilde, dqtmp2, 0.0, dqtmp);
-        gsl_blas_dgemv(CblasNoTrans, 1.0, P2, dqtmp, 0.0, dqtmp2);
-        gsl_vector_add(dq,dqtmp2);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, Ptilde, adphi, 0.0, dqtmp);
+        gsl_vector_add(dq,dqtmp);
 
 
 //PrintGSLVector(dq);
@@ -989,13 +1079,6 @@ gsl_blas_dgemv(CblasNoTrans, 1.0, R, p, 0.0, taskCoML);
 
         if (Visualisation)
         {
-            FILE *q_file=fopen("./../Simu_data/q.txt","a");
-            for(n=0; n<nDoF-6; n++)
-            {
-                fprintf(q_file,"%f ",uLINK[n+2].q);
-            }
-            fprintf(q_file,"\n");
-            fclose(q_file);
 
             FILE *u_file=fopen("./../Simu_data/u.txt","a");
             for(n=0; n<nDoF-6; n++)
@@ -1004,10 +1087,6 @@ gsl_blas_dgemv(CblasNoTrans, 1.0, R, p, 0.0, taskCoML);
             }
             fprintf(u_file,"\n");
             fclose(u_file);
-
-            FILE *t_file=fopen("./../Simu_data/t.txt","a");
-            fprintf(t_file,"%f \n",t*Dtime);
-            fclose(t_file);
 
         }
 

@@ -242,7 +242,7 @@ int main(int argc, char *argv[])
     NodeForwardKinematics(uLINK,Base,0);
 
     CalcCoM(uLINK,com);
-    PrintGSLVector(com);
+    //PrintGSLVector(com);
 
 ////
 //////return EXIT_SUCCESS; // Fermeture du programme
@@ -523,8 +523,14 @@ int main(int argc, char *argv[])
         FILE *CoM_file=fopen("./../Simu_data/CoM.txt","w");
         fclose(CoM_file);
 
-        FILE *taskCoM_file=fopen("./../Simu_data/taskCoM.txt","w");
-        fclose(taskCoM_file);
+        FILE *CoMp_file=fopen("./../Simu_data/CoMp.txt","w");
+        fclose(CoMp_file);
+
+        FILE *taskCoMR_file=fopen("./../Simu_data/taskCoMR.txt","w");
+        fclose(taskCoMR_file);
+
+        FILE *taskCoML_file=fopen("./../Simu_data/taskCoML.txt","w");
+        fclose(taskCoML_file);
 
         FILE *CoP_file=fopen("./../Simu_data/CoP.txt","w");
         fclose(CoP_file);
