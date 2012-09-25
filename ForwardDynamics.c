@@ -16,7 +16,7 @@
 #include "ExternalForces.h"
 #include "ForwardDynamics.h"
 
-#include "LoadRobot.h"
+#include "LoadRobot_f.h"
 #include "uLINK_f.h"
 #include "Ext_traj.h"
 #include "StaticTrajectory_f.h"
@@ -32,6 +32,10 @@
 #include "PrintGSLMatrix.h"
 #include "CalcCoMJacobian.h"
 #include "CalcCoP.h"
+
+#include "CalcJacobianModif_f.h"
+#include "CalcVWerrOri_f.h"
+#include "vec2tab.h"
 
 #ifndef MCSpline
 #include "Mat.h"
@@ -194,18 +198,18 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
     if ((t%(int)(Te/Dtime))==0)
     {
         static int init_com=1;
-        static float *uPD;
-        static float *qd;
-        static float *dqd;
+        static double *uPD;
+        static double *qd;
+        static double *dqd;
         if (init_com==1)
         {
-            uPD = calloc((Status->ddl)-6,sizeof(float));
-            qd = calloc((Status->ddl)-6,sizeof(float));
-            dqd = calloc((Status->ddl)-6,sizeof(float));
+            uPD = calloc((Status->ddl)-6,sizeof(double));
+            qd = calloc((Status->ddl)-6,sizeof(double));
+            dqd = calloc((Status->ddl)-6,sizeof(double));
             init_com=0;
         }
 
-        static float com[3];
+        static double com[3];
 
 
         for(n=2; n<nDoF-6+2; n++)
@@ -232,11 +236,11 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
         ForwardKinematics_f(uLINKc,1);
 
-        static float FootR[3]= {0.0853,0,-0.11};
+        static double FootR[3]= {0.0853,0,-0.11};
         MatMulf( Statusc.FootCenter_R, uLINKc[7].R, FootR, 3, 3, 1) ;
         MatAddf( Statusc.FootCenter_R, Statusc.FootCenter_R, uLINKc[7].p, 3, 1) ;
 
-        static float FootL[3]= {0.0853,0,-0.11};
+        static double FootL[3]= {0.0853,0,-0.11};
         MatMulf( Statusc.FootCenter_L, uLINKc[13].R, FootL, 3, 3, 1) ;
         MatAddf( Statusc.FootCenter_L, Statusc.FootCenter_L, uLINKc[13].p, 3, 1) ;
 
@@ -276,18 +280,18 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
 #if PD
 #if Sherpa
-        float kd=3;
-        float kp=1000;
+        double kd=3;
+        double kp=1000;
 #endif
 #if Generic
-//        float kd=1;
-//        float kp=300;
-        float kd=100;
-        float kp=3000;
+//        double kd=1;
+//        double kp=300;
+        double kd=100;
+        double kp=3000;
 #endif
 #if Human
-        float kd=1;
-        float kp=500;
+        double kd=1;
+        double kp=500;
 #endif
 
         for(n=0; n<nDoF-6; n++)
@@ -299,17 +303,17 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
 
 
-        static float *uG;
-        static float *fG;
-        static float *tG;
-        static float *uStab;
+        static double *uG;
+        static double *fG;
+        static double *tG;
+        static double *uStab;
         static int init_G=1;
         if (init_G==1)
         {
-            uG = calloc((Status->ddl)-6,sizeof(float));
-            fG = calloc((Status->ddl)-6,sizeof(float));
-            tG = calloc((Status->ddl)-6,sizeof(float));
-            uStab = calloc((Status->ddl)-6,sizeof(float));
+            uG = calloc((Status->ddl)-6,sizeof(double));
+            fG = calloc((Status->ddl)-6,sizeof(double));
+            tG = calloc((Status->ddl)-6,sizeof(double));
+            uStab = calloc((Status->ddl)-6,sizeof(double));
             init_G=0;
         }
 
@@ -329,17 +333,17 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
 #if Dynamic
 #if Sherpa
-        float kd=3;
-        float kp=1000;
+        double kd=3;
+        double kp=1000;
 #endif
 #if Generic
-        float kd=0.001;
-        float kp=1;
+        double kd=0.001;
+        double kp=1;
 #endif
 
-        //static float uG[NbLinks-2];
+        //static double uG[NbLinks-2];
 
-        static float uG[NbLinks-2], fG[NbLinks-2], tG[NbLinks-2];
+        static double uG[NbLinks-2], fG[NbLinks-2], tG[NbLinks-2];
         Gravity_f( uLINKc, &Statusc, 1, fG, tG);
         for (n=0; n<nDoF-6; n++)
         {
@@ -453,11 +457,11 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         static gsl_vector * dq_old;
         static gsl_vector * ddq;
 
-        static float *opd;
+        static double *opd;
         static gsl_vector * trace;
 
         static gsl_vector * adphi;
-        static float *qdev;
+        static double *qdev;
         static gsl_vector * CoP;
         static double f=0.0;
         static gsl_vector * zmp;
@@ -465,6 +469,15 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
         static gsl_vector * q_pd;
 
+        static int path1[8] = {7, 7, 6, 5, 4, 3, 2, 1};
+        static int path2[14] = {13, 13, 12, 11, 10, 9, 8, 2, 3, 4, 5, 6, 7, 7};
+
+        static double *Jf;
+        static double *invf;
+        static double *pf;
+        static double *Rf;
+        static double *taskf;
+        static double *dqf;
 
         static int init_task=1;
         if (init_task==1)
@@ -499,10 +512,10 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
             dq_old = gsl_vector_calloc(nDoF-6);
             ddq = gsl_vector_calloc(nDoF-6);
 
-            opd = calloc(9,sizeof(float));
+            opd = calloc(9,sizeof(double));
             trace = gsl_vector_calloc (3);
             adphi = gsl_vector_calloc(nDoF-6);
-            qdev = calloc(nDoF-6,sizeof(float));
+            qdev = calloc(nDoF-6,sizeof(double));
             CoP = gsl_vector_calloc (3);
             zmp = gsl_vector_calloc (3);
             dzmp = gsl_vector_calloc (3);
@@ -511,7 +524,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
             init_task=0;
 
-            static int path1[8] = {7, 7, 6, 5, 4, 3, 2, 1};
+            //static int path1[8] = {7, 7, 6, 5, 4, 3, 2, 1};
             //int path1[8] = {1, 2, 3, 4, 5, 6, 7, 7};
             for(i=0; i<8; i++)
             {
@@ -519,7 +532,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
             }
 
             //static int path2[14] = {7, 7, 6, 5, 4, 3, 2, 8, 9, 10, 11, 12, 13, 13};
-            static int path2[14] = {13, 13, 12, 11, 10, 9, 8, 2, 3, 4, 5, 6, 7, 7};
+
             for(i=0; i<14; i++)
             {
                 gsl_vector_set(idx2,i,path2[i]);
@@ -531,14 +544,25 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
             }
 
 
+            Jf = calloc(6*(nDoF-6),sizeof(double));
+            pf = calloc(3,sizeof(double));
+            Rf = calloc(9,sizeof(double));
+            taskf = calloc(6,sizeof(double));
+            invf = calloc((nDoF-6)*6,sizeof(double));
+            dqf = calloc((nDoF-6),sizeof(double));
         }
 
 
+
+//        CalcJacobianModif_f(uLINKc,Jf,path2,14,nDoF-6);
         CalcJacobianModif( uLINK,J1,idx1);
         CalcJacobianModif( uLINK,J2,idx2);
-        CalcCoMJacobian(uLINK, JCoMR, Status->right_foot_ID);
-        CalcCoMJacobian(uLINK, JCoML, Status->left_foot_ID);
+        CalcCoMJacobian(uLINK,Status, JCoMR, Status->right_foot_ID);
+        CalcCoMJacobian(uLINK,Status, JCoML, Status->left_foot_ID);
 
+//MatPrintf( "Jf", "%4.6f " , Jf , 6, (nDoF-6)) ;
+//printf(" \n \n");
+//PrintGSLMatrix(J2);
 
 
         gsl_matrix_set_identity(R);
@@ -547,6 +571,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         gsl_vector_set (p, 1, 0.0798);
         gsl_vector_set (p, 2, 0.8434);
         CalcVWerrOri(uLINK, task1, p, R,idx1);
+
 
 #if 0
         gsl_matrix_set_identity(R);
@@ -712,7 +737,10 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
 #if 1
 
-        static float wO=10.0;
+        static double wO=5.0;
+        static double amp=0.043;
+        //static double amp=0.038;
+
         gsl_matrix_set_identity(R);
         gsl_vector_set_zero(p);
         gsl_vector_set (p, 1, -0.1595);
@@ -731,6 +759,19 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         CalcVWerrOri(uLINK, task2, p, R,idx2);
 
 
+//vec2tab(pf, p);
+//MatIf( Rf, 3) ;
+//CalcVWerrOri_f(uLINKc,taskf, pf, Rf, path2,14);
+
+//MatPrintf( "taskf", "%4.6f " , taskf , 6, 1) ;
+//printf(" \n \n");
+//PrintGSLVector(task2);
+
+
+
+
+
+
         gsl_vector_set (p, 0, 0.048516);
         if ((t*Dtime)<1.0)
         {
@@ -738,11 +779,11 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         }
         if (((t*Dtime)>=1.0) && ((t*Dtime)<(wO+1)))
         {
-            gsl_vector_set (p, 1,-0.079750+0.038*(cos((1/wO)*M_PI*(t*Dtime-1.0))-1));
+            gsl_vector_set (p, 1,-0.079750+amp*(cos((1/wO)*M_PI*(t*Dtime-1.0))-1));
         }
         if ((t*Dtime)>=(wO+1))
         {
-            gsl_vector_set (p, 1,-0.079750-0.076*(cos((1/wO)*M_PI*(t*Dtime-(wO+1)))));
+            gsl_vector_set (p, 1,-0.079750-2*amp*(cos((1/wO)*M_PI*(t*Dtime-(wO+1)))));
         }
 
         gsl_vector_set (p, 2, 0.884101);
@@ -750,7 +791,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         //pinv(R,uLINK[Base].R);
         gsl_blas_dgemv(CblasNoTrans, 1.0, R, p, 0.0, taskCoMR);
         CalcCoM(uLINK,CoM);
-        //gsl_vector_memcpy(taskCoM,p);
+//gsl_vector_memcpy(taskCoMR,p);
         gsl_vector_sub(taskCoMR,CoM);
 
 
@@ -775,7 +816,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         //pinv(R,uLINK[Base].R);
         gsl_blas_dgemv(CblasNoTrans, 1.0, R, p, 0.0, taskCoML);
         CalcCoM(uLINK,CoM);
-        //gsl_vector_memcpy(taskCoM,p);
+//gsl_vector_memcpy(taskCoML,p);
         gsl_vector_sub(taskCoML,CoM);
 
 //        gsl_vector_set (p, 2, 0);
@@ -996,10 +1037,33 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 //        gsl_matrix_sub(PCoML,Ptmp);
 
 
+//MatPrintf( "Jf", "%4.6f " , Jf , 6, (nDoF-6)) ;
+//printf(" \n \n");
+//PrintGSLMatrix(J2);
+
+//MatPrintf( "taskf", "%4.6f " , taskf , 6, 1) ;
+//printf(" \n \n");
+//PrintGSLVector(task2);
 
         // first task
         pinv(invJ,J2);
         gsl_blas_dgemv(CblasNoTrans, 1.0, invJ, task2, 0.0, dq);
+
+
+//MatPseudoInvf( invf , Jf , 6, (nDoF-6)) ;
+//MatMulf( dqf , invf , taskf, (nDoF-6), 6, 1 ) ;
+
+//MatPrintf( "invf", "%4.6f " , invf , (nDoF-6), 6) ;
+////MatPrintf( "invf", "%4.6f " , invf , 6, (nDoF-6)) ;
+//printf(" \n \n");
+//PrintGSLMatrix(invJ);
+
+
+//MatPrintf( "dqf", "%4.6f " , dqf , 1, (nDoF-6)) ;
+//printf(" \n \n");
+//PrintGSLVector(dq);
+
+
 
 
         // second task
@@ -1094,11 +1158,11 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
 
 //
-//        float kd=1;
-//        float kp=500;
+//        double kd=1;
+//        double kp=500;
 //
-//        float *kqd;
-//        kqd = calloc(nDoF-6,sizeof(float));
+//        double *kqd;
+//        kqd = calloc(nDoF-6,sizeof(double));
 //        Ext_q_trajectory(kqd, 0);
 //
 //        for (i=0; i<(nDoF-6); i++)
@@ -1110,8 +1174,8 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
 
 
-//        float kd=300;
-//        float kp=100;
+//        double kd=300;
+//        double kp=100;
 //        for(n=0; n<nDoF-6; n++)
 //        {
 //            uLINK[n+2].u_joint=kd*(gsl_vector_get(dq,n)*Te-uLINKc[n+2].dq)+kp*((uLINKc[n+2].q+gsl_vector_get(dq,n)*Te)-uLINKc[n+2].q);

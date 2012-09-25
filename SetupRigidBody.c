@@ -12,6 +12,7 @@ void SetupRigidBody(SuLINK uLINK[],int j)
     char Masque[3][8]= {{0,0,1,1,0,0,1,1},{0,1,1,0,0,1,1,0},{0,0,0,0,1,1,1,1}};
     uLINK[j].vert = gsl_matrix_calloc (3, 8);
     uLINK[j].face = gsl_matrix_calloc (4, 6);
+    uLINK[j].normalface = gsl_matrix_calloc (3,6);
     uLINK[j].isContact = gsl_vector_calloc (8);
     uLINK[j].posContact = gsl_matrix_calloc (3, 8);
     uLINK[j].forContact = gsl_matrix_calloc (3, 8);
@@ -34,8 +35,8 @@ void SetupRigidBody(SuLINK uLINK[],int j)
     {
         for(l=0; l<yContact; l++)
         {
-            gsl_matrix_set (uLINK[j].contact,0,k*yContact+l, (float)k/(float)(xContact-1)*uLINK[j].shape[0]-uLINK[j].shape[0]/2+uLINK[j].com[0]);
-            gsl_matrix_set (uLINK[j].contact,1,k*yContact+l, (float)l/(float)(yContact-1)*uLINK[j].shape[1]-uLINK[j].shape[1]/2+uLINK[j].com[1]);
+            gsl_matrix_set (uLINK[j].contact,0,k*yContact+l, (double)k/(double)(xContact-1)*uLINK[j].shape[0]-uLINK[j].shape[0]/2+uLINK[j].com[0]);
+            gsl_matrix_set (uLINK[j].contact,1,k*yContact+l, (double)l/(double)(yContact-1)*uLINK[j].shape[1]-uLINK[j].shape[1]/2+uLINK[j].com[1]);
             gsl_matrix_set (uLINK[j].contact,2,k*yContact+l, -uLINK[j].shape[2]/2+uLINK[j].com[2]);
         }
     }
@@ -71,6 +72,27 @@ void SetupRigidBody(SuLINK uLINK[],int j)
     gsl_matrix_set (uLINK[j].face,3,4,4);
     gsl_matrix_set (uLINK[j].face,3,5,7);
 
+
+    gsl_matrix_set (uLINK[j].normalface,0,0,0);
+    gsl_matrix_set (uLINK[j].normalface,0,1,0);
+    gsl_matrix_set (uLINK[j].normalface,0,2,1);
+    gsl_matrix_set (uLINK[j].normalface,0,3,0);
+    gsl_matrix_set (uLINK[j].normalface,0,4,-1);
+    gsl_matrix_set (uLINK[j].normalface,0,5,0);
+
+    gsl_matrix_set (uLINK[j].normalface,1,0,0);
+    gsl_matrix_set (uLINK[j].normalface,1,1,1);
+    gsl_matrix_set (uLINK[j].normalface,1,2,0);
+    gsl_matrix_set (uLINK[j].normalface,1,3,-1);
+    gsl_matrix_set (uLINK[j].normalface,1,4,0);
+    gsl_matrix_set (uLINK[j].normalface,1,5,0);
+
+    gsl_matrix_set (uLINK[j].normalface,2,0,-1);
+    gsl_matrix_set (uLINK[j].normalface,2,1,0);
+    gsl_matrix_set (uLINK[j].normalface,2,2,0);
+    gsl_matrix_set (uLINK[j].normalface,2,3,0);
+    gsl_matrix_set (uLINK[j].normalface,2,4,0);
+    gsl_matrix_set (uLINK[j].normalface,2,5,1);
 
     uLINK[j].isPolygon=1;
 

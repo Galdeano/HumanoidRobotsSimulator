@@ -2,7 +2,7 @@
 #define H_DrawMarkerf
 
 
-void DrawMarkerf(float *com);
+void DrawMarkerf(double *com);
 
 
 #endif

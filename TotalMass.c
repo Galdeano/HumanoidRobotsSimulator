@@ -6,9 +6,9 @@
 
 
 
-float TotalMass(SuLINK uLINK[],int j)
+double TotalMass(SuLINK uLINK[],int j)
 {
-    float m;
+    double m;
     if (j == 0)
     {
         m = 0;

@@ -2,7 +2,7 @@
 #define H_InverseSherpaKinematics_f
 
 
-void InverseSherpaKinematics_f(float *qd,float *pos);
+void InverseSherpaKinematics_f(double *qd,double *pos);
 
 
 #endif

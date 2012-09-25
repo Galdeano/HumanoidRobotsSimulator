@@ -3,6 +3,7 @@
 
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
+#include "uLINK.h"
 
 /** \file TotalMass.h
  *  \brief Recursive computations of robot mass
@@ -23,6 +24,6 @@
  * \param uLINK[] Structure wich describe the robot link by link
  * \param j ID of the link
  */
-float TotalMass(SuLINK uLINK[],int j);
+double TotalMass(SuLINK uLINK[],int j);
 
 #endif

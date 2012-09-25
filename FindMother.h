@@ -24,7 +24,7 @@
  * \param uLINK[] Structure wich describe the robot link by link
  * \param j ID of the link
  */
-void FindMother(SuLINK uLINK[],int j);
+void FindMother(SuLINK uLINK[],State *Status,int j);
 
 
 #endif

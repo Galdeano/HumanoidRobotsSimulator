@@ -2,6 +2,6 @@
 #define H_Cross_f
 
 
-int Cross_f( float *a, float *b, int i);
+int Cross_f( double *a, double *b, int i);
 
 #endif

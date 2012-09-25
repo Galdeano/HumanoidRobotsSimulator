@@ -3,7 +3,7 @@
 
 
 
-void Stabilizator_f( Struct_uLINK uLINK[], Struct_State *Status, float *stab);
+void Stabilizator_f( Struct_uLINK uLINK[], Struct_State *Status, double *stab);
 
 #endif
 

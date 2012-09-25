@@ -46,13 +46,5 @@ void LoadRobotXML_f(Struct_uLINK uLINK[], Struct_State *Status, char* RobotFile)
 void LoadRobotParserXML(SuLINK uLINK[], State *Status, char* RobotFile);
 
 
-/**
- * \fn void LoadRobotParserXML_f(Struct_uLINK uLINK[],Struct_State *Status,char* RobotFile)
- * \brief Load the robot from a XML file
- *
- * \param uLINK[] Structure wich describe the robot link by link
- * \param t Current time
- */
-void LoadRobotParserXML_f(Struct_uLINK uLINK[], Struct_State *Status, char* RobotFile);
 
 #endif

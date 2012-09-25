@@ -2,13 +2,13 @@
 
 17:06 25/07/06 MB V
 
-Reel est défini comme float ou double suivant la précision souhaitée.
+Reel est défini comme double ou double suivant la précision souhaitée.
 
 Il est utilisé dans le module Mat et déclaré séparément ici.
 
-La plupart du temps le type float est suffisant.
+La plupart du temps le type double est suffisant.
 Toutefois l'utilisation de MatPseudoInv avec une matrice mal conditionnée peut nécessiter le type double.
 */
 
-typedef float Reel ;
+typedef double Reel ;
 //typedef double Reel ;

@@ -249,7 +249,7 @@ int MatTest()
 #define LJ 3
 #define CJ 6
 
-        Reel mat[] = // ne marche pas en float, passer en double
+        Reel mat[] = // ne marche pas en double, passer en double
         {
             0.2459f ,    0.f     ,    0.1224f ,    9.9998f ,   10.f     ,    9.9998f ,
             19.9998f ,   -0.123f  ,    0.f     ,   -0.06f   ,   19.9998f ,   20.f     ,
@@ -281,8 +281,11 @@ int MatTest()
     return 0 ;
 } // ModuleTest
 
-#define MMax 18 // M Max lignes
-#define NMax 18 // N Max colonnes
+//#define MMax 18 // M Max lignes
+//#define NMax 18 // N Max colonnes
+
+#define MMax 30 // M Max lignes
+#define NMax 30 // N Max colonnes
 
 //----------------------------------------------------------
 void MatTrans( Reel *_trans , const Reel *_mat, int _m , int _n )
@@ -303,9 +306,9 @@ void MatTrans( Reel *_trans , const Reel *_mat, int _m , int _n )
 
 
 //----------------------------------------------------------
-void MatTransf( float *_trans , const float *_mat, int _m , int _n )
+void MatTransf( double *_trans , const double *_mat, int _m , int _n )
 {
-    float *p ; // pointe un élément de _trans
+    double *p ; // pointe un élément de _trans
     int j ,
     i ;
 //------------------
@@ -350,15 +353,15 @@ void MatMul( Reel *_resul , const Reel *_mat1 , const Reel *_mat2 , int _l , int
 
 
 //----------------------------------------------------------
-void MatMulf( float *_resul , const float *_mat1 , const float *_mat2 , int _l , int _m , int _n )
+void MatMulf( double *_resul , const double *_mat1 , const double *_mat2 , int _l , int _m , int _n )
 {
-    const float *pCol2 , // pointe une colonne de _mat2
+    const double *pCol2 , // pointe une colonne de _mat2
     *p1 ,    // pointe un élément de _mat1
     *p2 ;    // pointe un élément de _mat2
     int i ,
     j ,
     k ;
-    float aux ,
+    double aux ,
     *pResul ,
     temp[NMax * MMax] ;
 //------------------
@@ -394,7 +397,7 @@ void MatAdd( Reel *_resul , const Reel *_mat1 , const Reel *_mat2 , int _m , int
 
 
 //----------------------------------------------------------
-void MatAddf( float *_resul , const float *_mat1 , const float *_mat2 , int _m , int _n )
+void MatAddf( double *_resul , const double *_mat1 , const double *_mat2 , int _m , int _n )
 // voir direct _m * _n = _taille en paramètre !!!! idem Sub Scal Cpy Clr Set
 {
     int i ;
@@ -413,7 +416,7 @@ void MatSub( Reel *_resul , const Reel *_mat1 , const Reel *_mat2 , int _m , int
 
 
 //----------------------------------------------------------
-void MatSubf( float *_resul , const float *_mat1 , const float *_mat2 , int _m , int _n )
+void MatSubf( double *_resul , const double *_mat1 , const double *_mat2 , int _m , int _n )
 {
     int i ;
 //------------------
@@ -431,7 +434,7 @@ void MatMulScal( Reel *_resul , Reel _scal , const Reel *_mat , int _m , int _n 
 
 
 //----------------------------------------------------------
-void MatMulScalf( float *_resul , float _scal , const float *_mat , int _m , int _n )
+void MatMulScalf( double *_resul , double _scal , const double *_mat , int _m , int _n )
 {
     int i ;
 //------------------
@@ -450,9 +453,9 @@ void MatCpy( Reel *_resul , const Reel *_mat , int _m , int _n ) // nom comme me
 
 
 //----------------------------------------------------------
-void MatCpyf( float *_resul , const float *_mat , int _m , int _n ) // nom comme memcpy ou strcpy
+void MatCpyf( double *_resul , const double *_mat , int _m , int _n ) // nom comme memcpy ou strcpy
 {
-    memcpy( _resul , _mat , _m * _n * sizeof( float ) ) ;    // 0 ou 1 marchent, sont testés
+    memcpy( _resul , _mat , _m * _n * sizeof( double ) ) ;    // 0 ou 1 marchent, sont testés
 }
 
 
@@ -466,7 +469,7 @@ void MatClr( Reel *_mat , int _m , int _n )
 
 
 //----------------------------------------------------------
-void MatClrf( float *_mat , int _m , int _n )
+void MatClrf( double *_mat , int _m , int _n )
 {
     int i ;
 //------------------
@@ -487,7 +490,7 @@ void MatI( Reel *_mat , int _n )
 
 
 //----------------------------------------------------------
-void MatIf( float *_mat , int _n )
+void MatIf( double *_mat , int _n )
 {
     MatClrf( _mat , _n , _n ) ;
     {
@@ -508,7 +511,7 @@ void MatSet( Reel *_mat , int _m , int _n , Reel _scal )
 
 
 //----------------------------------------------------------
-void MatSetf( float *_mat , int _m , int _n , float _scal )
+void MatSetf( double *_mat , int _m , int _n , double _scal )
 {
     int i ;
 //------------------
@@ -529,14 +532,14 @@ void MatPrint( const char *_titre , const char *_format , const Reel *_mat , int
 
 
 //----------------------------------------------------------
-void MatPrintf( const char *_titre , const char *_format , const float *_mat , int _m , int _n )
+void MatPrintf( const char *_titre , const char *_format , const double *_mat , int _m , int _n )
 {
     int i ,
     j ;
 //------------------
     printf( "\n\n%s" , _titre ) ;
     for ( i = _m ; i-- ; )                                                            // _m lignes
-        for ( printf( "\n" ) , j = _n ; j-- ; ) printf( _format , (float) *_mat++ ) ; // _n colonnes
+        for ( printf( "\n" ) , j = _n ; j-- ; ) printf( _format , (double) *_mat++ ) ; // _n colonnes
 } // MatPrintf
 
 
@@ -558,10 +561,10 @@ static Reel NormeCarre( const Reel *_vect , int _n )
 
 
 //---------------------------------------------------------- privé
-static float NormeCarref( const float *_vect , int _n )
+static double NormeCarref( const double *_vect , int _n )
 {
     int  i ;
-    float retour = 0.f ;
+    double retour = 0.f ;
 //------------------
     for ( i = _n ; i-- ; )  retour += _vect[i] * _vect[i] ;
     return retour ;
@@ -686,13 +689,13 @@ int MatPseudoInv( Reel *_inv , const Reel *_mat , int _m , int _n )
 
 
 //----------------------------------------------------------
-int MatPseudoInvf( float *_inv , const float *_mat , int _m , int _n )
+int MatPseudoInvf( double *_inv , const double *_mat , int _m , int _n )
 {
 
-#define EPSf (float) 1e-16 // -12 chez Xavier
+#define EPSf (double) 1e-12 // -12 chez Xavier
 
     int  k ;
-    float tmat[NMax * MMax] , // transposée de _mat(_n,_m)
+    double tmat[NMax * MMax] , // transposée de _mat(_n,_m)
     *pat ,              // pointe la ligne k de tmat (pour la colonne k de _mat)
     xnorm ,
     xnul ,  // groupé avec xmax
@@ -717,7 +720,7 @@ int MatPseudoInvf( float *_inv , const float *_mat , int _m , int _n )
     }
 // Le dernier xnorm calculé est celui de la ligne 0 de tmat, soit la colonne 0 de _mat
 
-    if ( xnul > (float) 1e32 ) return 2 ; // erreur, n'est pas dans Xavier
+    if ( xnul > (double) 1e32 ) return 2 ; // erreur, n'est pas dans Xavier
     xnul *= EPSf ;
 
     pat     = tmat ; // on utilise les lignes de tmat plus facile d'accès que les colonnes de _mat
@@ -796,9 +799,9 @@ void MatTilde( Reel *_resul , const Reel *_vect )
 
 
 //----------------------------------------------------------
-void MatTildef( float *_resul , const float *_vect )
+void MatTildef( double *_resul , const double *_vect )
 {
-    float ux , uy , uz ;
+    double ux , uy , uz ;
 //------------------
     ux = *_vect++ ;
     uy = *_vect++ ;
@@ -842,7 +845,7 @@ void MatProVectoriel( Reel *_resul , const Reel *_vect1 , const Reel *_vect2 )
 
 
 //----------------------------------------------------------
-void MatProVectorielf( float *_resul , const float *_vect1 , const float *_vect2 )
+void MatProVectorielf( double *_resul , const double *_vect1 , const double *_vect2 )
 {
 #if 1
 
@@ -857,7 +860,7 @@ void MatProVectorielf( float *_resul , const float *_vect1 , const float *_vect2
 
 #else // Méthode avec MatTilde
 
-    float tilde[3*3] ;
+    double tilde[3*3] ;
 //------------------
     MatTildef( tilde , _vect1 ) ;
     MatMulf( _resul , tilde , _vect2 , 3 , 3 , 1 ) ;
@@ -879,10 +882,10 @@ Reel MatProScal( const Reel *_vect1 , const Reel *_vect2 , int _n )
 
 
 //----------------------------------------------------------
-float MatProScalf( const float *_vect1 , const float *_vect2 , int _n )
+double MatProScalf( const double *_vect1 , const double *_vect2 , int _n )
 {
     int  i ;
-    float retour = 0.f ;
+    double retour = 0.f ;
 //------------------
     for ( i = _n ; i-- ; )  retour += _vect1[i] * _vect2[i] ;
 //MatMulf( &retour , _vect1 , _vect2 , 1 , _n , 1) ; // ProScal = t_vect1 * _vect2 serait plus long
@@ -901,9 +904,9 @@ Reel MatNorm( const Reel *_vect , int _n )
 
 
 //----------------------------------------------------------
-float MatNormf( const float *_vect , int _n )
+double MatNormf( const double *_vect , int _n )
 {
-    return (float) sqrt( (double) NormeCarref( _vect , _n ) ) ;
+    return (double) sqrt( (double) NormeCarref( _vect , _n ) ) ;
 }
 
 

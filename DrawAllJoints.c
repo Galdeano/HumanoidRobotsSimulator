@@ -11,12 +11,30 @@
 #include "DrawPolygon.h"
 #include "DrawCylinder.h"
 #include "Connect3D.h"
+#include "Setup.h"
 
 void DrawAllJoints(SuLINK uLINK[],int j)
 {
 
     if (j != 0)
     {
+#if LoadObj
+        int i,k;
+        glPushMatrix();
+        GLdouble rotgl[16];
+        glGetDoublev(GL_MODELVIEW_MATRIX, rotgl);//charge avec identitee
+        for (i = 0; i < 3; ++i)
+        {
+            for (k = 0; k < 3; ++k)
+            {
+                rotgl[i*4+k] = gsl_matrix_get (uLINK[j].R, k,i);
+            }
+            rotgl[i+12]=gsl_vector_get(uLINK[j].p,i);
+        }
+        glMultMatrixd(rotgl);
+        DrawOBJ(uLINK[j].obj);
+        glPopMatrix();
+#else
 
         if (uLINK[j].isPolygon==1)
         {
@@ -27,6 +45,8 @@ void DrawAllJoints(SuLINK uLINK[],int j)
         {
             Connect3D(uLINK,j);
         }
+#endif
+
 
         DrawCylinder(uLINK,j);
 

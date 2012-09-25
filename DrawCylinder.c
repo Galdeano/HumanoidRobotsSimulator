@@ -13,25 +13,34 @@
 void   DrawCylinder(SuLINK uLINK[],int j)
 {
 
-    float radius    = 0.02;
-    float len       = 0.06;
+    double radius    = 0.015;
+    double len       = 0.045;
+//    double radius    = 0.02;
+//    double len       = 0.06;
     int i,k;
+    int faces =12;
+    double RadToDeg = 180/M_PI;
 
-    //glLoadIdentity();
     glPushMatrix();
+    //glLoadIdentity();
     GLUquadric* params = gluNewQuadric();
     glLineWidth( 1.0f );
 
     GLdouble rotgl[16];
-    //glLoadIdentity();
+
     glGetDoublev(GL_MODELVIEW_MATRIX, rotgl);//charge avec identitee
     for (i = 0; i < 3; ++i)
+    {
         for (k = 0; k < 3; ++k)
+        {
             rotgl[i*4+k] = gsl_matrix_get (uLINK[j].R, k,i);
+        }
+        rotgl[i+12]=gsl_vector_get(uLINK[j].p,i);
+    }
 
 
-
-    glTranslated(gsl_vector_get (uLINK[j].p,0),gsl_vector_get (uLINK[j].p,1),gsl_vector_get (uLINK[j].p,2));
+//DrawMarker(uLINK[j].p);
+    //glTranslated(gsl_vector_get(uLINK[j].p,0),gsl_vector_get(uLINK[j].p,1),gsl_vector_get(uLINK[j].p,2));
 
 
     glMultMatrixd(rotgl);
@@ -43,7 +52,7 @@ void   DrawCylinder(SuLINK uLINK[],int j)
 
     gluQuadricDrawStyle(params,GLU_FILL);
     //GLU_LINE
-    #if !VisuTorquesColor
+#if !VisuTorquesColor
     if (uLINK[j].color==0)//red
         glColor3ub(255,0,0);
     if (uLINK[j].color==1)//green
@@ -58,8 +67,8 @@ void   DrawCylinder(SuLINK uLINK[],int j)
         glColor3ub(0,255,255);
     if (uLINK[j].color==6)//magenta
         glColor3ub(255,0,255);
-    #endif
-    #if VisuTorquesColor
+#endif
+#if VisuTorquesColor
     int colorT;
     if (uLINK[j].u_joint>0)
     {
@@ -71,17 +80,22 @@ void   DrawCylinder(SuLINK uLINK[],int j)
         colorT=(int)((uLINK[j].u_joint/uLINK[j].umin)*255);
         glColor3ub(colorT,255-colorT,colorT);
     }
-    #endif
-    gluCylinder(params,radius,radius,len,6,1);
+#endif
+    gluCylinder(params,radius,radius,len,faces,1);
 
-    gluDisk(params,0,radius,6,1);
+    glRotated(180,0,1,0);
+    gluDisk(params,0,radius,faces,1);
+    glRotated(-180,0,1,0);
     glTranslated(0,0,len);
-    gluDisk(params,0,radius,6,1);
+    gluDisk(params,0,radius,faces,1);
     glTranslated(0,0,-len);
     gluQuadricDrawStyle(params,GLU_LINE);
     glColor3ub(0,0,0);
-    gluCylinder(params,radius,radius,len,6,1);
+    gluCylinder(params,radius,radius,len,faces,1);
     gluDeleteQuadric(params);
+#if VisuArticularsLimits
+    gluPartialDisk(params,0.04,0.12,20,1,180+(uLINK[j+2].qmin)*RadToDeg,-1*(-uLINK[j+2].qmax+uLINK[j+2].qmin)*RadToDeg);
+#endif
     glPopMatrix();
 
 }

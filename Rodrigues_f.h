@@ -3,6 +3,6 @@
 
 
 
-void Rodrigues_f(float *rot,float *w,float dt);
+void Rodrigues_f(double *rot,double *w,double dt);
 
 #endif

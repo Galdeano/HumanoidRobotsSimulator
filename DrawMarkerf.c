@@ -6,9 +6,9 @@
 
 
 
-void DrawMarkerf(float *com)
+void DrawMarkerf(double *com)
 {
-    float d = 0.1;
+    double d = 0.1;
 
     glLineWidth( 1.0f );
     glBegin(GL_LINES);

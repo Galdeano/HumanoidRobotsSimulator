@@ -24,6 +24,6 @@
 // * \param com Out: vector containing the center of mass position
 // * \param j ID of the link
 // */
-void CalcCoMJacobian( SuLINK uLINK[], gsl_matrix * J, int base);
+void CalcCoMJacobian( SuLINK uLINK[],State *Status, gsl_matrix * J, int base);
 
 #endif

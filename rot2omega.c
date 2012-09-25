@@ -10,7 +10,7 @@
 void rot2omega(gsl_matrix * R,gsl_vector * w)
 {
 
-    float alpha,th;
+    double alpha,th;
 
     alpha=(gsl_matrix_get(R,0,0)+gsl_matrix_get(R,1,1)+gsl_matrix_get(R,2,2)-1)/2;
 

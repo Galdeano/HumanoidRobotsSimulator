@@ -15,16 +15,16 @@ Reel mat[6 * 6] ,
      {
          6.83 , -3.07 ,
          5.90 , -0.44
-     }  
+     }
 */
 
 
-#include "Reel.h" // définition du type Reel : float ou double
+#include "Reel.h" // définition du type Reel : double ou double
 
 
 //----------------------------------------------------------
 void MatTrans( Reel *_trans , const Reel *_mat , int _m , int _n ) ;
-void MatTransf( float *_trans , const float *_mat , int _m , int _n ) ;
+void MatTransf( double *_trans , const double *_mat , int _m , int _n ) ;
 /*
 Fonction : transpose une matrice.
 
@@ -39,7 +39,7 @@ NB : dans le cas d'un vecteur un MatCpy serait plus rapide (_m ou _n = 1)
 
 //----------------------------------------------------------
 void MatMul( Reel *_resul , const Reel *_mat1 , const Reel *_mat2 , int _l , int _m , int _n ) ;
-void MatMulf( float *_resul , const float *_mat1 , const float *_mat2 , int _l , int _m , int _n ) ;
+void MatMulf( double *_resul , const double *_mat1 , const double *_mat2 , int _l , int _m , int _n ) ;
 /*
 Fonction : multiplie deux matrices.
 
@@ -50,7 +50,7 @@ Sortie   : _resul(l,n) = _mat1(l,m) * _mat2(m,n) ; avec l, m et n >= 0
 
 //----------------------------------------------------------
 void MatAdd( Reel *_resul , const Reel *_mat1 , const Reel *_mat2 , int _m , int _n ) ;
-void MatAddf( float *_resul , const float *_mat1 , const float *_mat2 , int _m , int _n ) ;
+void MatAddf( double *_resul , const double *_mat1 , const double *_mat2 , int _m , int _n ) ;
 /*
 Fonction : additionne deux matrices.
 
@@ -61,7 +61,7 @@ Sortie   : _resul(m,n) = _mat1(m,n) + _mat2(m,n) ; _resul peut être dans _mat1 o
 
 //----------------------------------------------------------
 void MatSub( Reel *_resul , const Reel *_mat1 , const Reel *_mat2 , int _m , int _n ) ;
-void MatSubf( float *_resul , const float *_mat1 , const float *_mat2 , int _m , int _n ) ;
+void MatSubf( double *_resul , const double *_mat1 , const double *_mat2 , int _m , int _n ) ;
 /*
 Fonction : soustraie deux matrices.
 
@@ -72,7 +72,7 @@ Sortie   : _resul(m,n) = _mat1(m,n) - _mat2(m,n) ; _resul peut être dans _mat1 o
 
 //----------------------------------------------------------
 void MatMulScal( Reel *_resul , Reel _scal , const Reel *_mat , int _m , int _n ) ;
-void MatMulScalf( float *_resul , float _scal , const float *_mat , int _m , int _n ) ;
+void MatMulScalf( double *_resul , double _scal , const double *_mat , int _m , int _n ) ;
 /*
 Fonction : multiplie une matrice par un scalaire.
 
@@ -83,7 +83,7 @@ Sortie   : _resul(m,n) = _scal * _mat(m,n) ; _resul peut être dans _mat
 
 //----------------------------------------------------------
 void MatCpy( Reel *_resul , const Reel *_mat , int _m , int _n ) ;
-void MatCpyf( float *_resul , const float *_mat , int _m , int _n ) ;
+void MatCpyf( double *_resul , const double *_mat , int _m , int _n ) ;
 /*
 Fonction : copie une matrice.
 
@@ -94,7 +94,7 @@ Sortie   : _resul(m,n) = _mat(m,n) ;
 
 //----------------------------------------------------------
 void MatClr( Reel *_mat , int _m , int _n ) ;
-void MatClrf( float *_mat , int _m , int _n ) ;
+void MatClrf( double *_mat , int _m , int _n ) ;
 /*
 Fonction :  Clear,initialise une matrice avec des 0
 
@@ -104,7 +104,7 @@ Fonction :  Clear,initialise une matrice avec des 0
 
 //----------------------------------------------------------
 void MatI( Reel *_mat , int _n ) ;
-void MatIf( float *_mat , int _n ) ;
+void MatIf( double *_mat , int _n ) ;
 /*
 Fonction : initialise une matrice unitée de dimension n
 
@@ -114,7 +114,7 @@ Fonction : initialise une matrice unitée de dimension n
 
 //----------------------------------------------------------
 void MatSet( Reel *_mat , int _m , int _n , Reel _scal ) ;
-void MatSetf( float *_mat , int _m , int _n , float _scal ) ;
+void MatSetf( double *_mat , int _m , int _n , double _scal ) ;
 /*
 Fonction : initialise une matrice avec un scalaire.
 
@@ -123,7 +123,7 @@ Fonction : initialise une matrice avec un scalaire.
 
 //----------------------------------------------------------
 void MatPrint( const char *_titre , const char *_format , const Reel *_mat , int _m , int _n ) ;
-void MatPrintf( const char *_titre , const char *_format , const float *_mat , int _m , int _n ) ;
+void MatPrintf( const char *_titre , const char *_format , const double *_mat , int _m , int _n ) ;
 /*
 Fonction : affiche une matrice avec un format f.
 
@@ -137,7 +137,7 @@ Entrées  : _titre  ligne de texte précédant l'affichage de _mat
 
 //----------------------------------------------------------
 int  MatPseudoInv( Reel *_inv , const Reel *_mat , int _m , int _n ) ;
-int  MatPseudoInvf( float *_inv , const float *_mat , int _m , int _n ) ;
+int  MatPseudoInvf( double *_inv , const double *_mat , int _m , int _n ) ;
 /*
 Fonction : calcule la pseudo inverse d'une matrice.
 
@@ -153,7 +153,7 @@ Méthode : algorithme de Greville
 
 //----------------------------------------------------------
 void MatTilde( Reel *_resul , const Reel *_vect ) ;
-void MatTildef( float *_resul , const float *_vect ) ;
+void MatTildef( double *_resul , const double *_vect ) ;
 /*
 Fonction : à partir d'un vecteur u de dimension 3 calcule une matrice 3x3 définie par
 
@@ -164,7 +164,7 @@ _resul = [   uz     0  - ux ]
 
 //----------------------------------------------------------
 void MatProVectoriel( Reel *_resul , const Reel *_vect1 , const Reel *_vect2 ) ;
-void MatProVectorielf( float *_resul , const float *_vect1 , const float *_vect2 ) ;
+void MatProVectorielf( double *_resul , const double *_vect1 , const double *_vect2 ) ;
 /*
 Fonction : produit vectoriel de 2 vecteurs de dimension 3.
 
@@ -174,7 +174,7 @@ Sortie   : _resul(3) = _vect1(3) ^ _vect2(3) ;
 
 //----------------------------------------------------------
 Reel MatProScal( const Reel *_vect1 , const Reel *_vect2 , int _n ) ;
-float MatProScalf( const float *_vect1 , const float *_vect2 , int _n ) ;
+double MatProScalf( const double *_vect1 , const double *_vect2 , int _n ) ;
 /*
 Fonction : produit scalaire de 2 vecteurs de dimension _n.
 
@@ -186,7 +186,7 @@ Retour   : produit scalaire _vect1(n) * _vect2(n)
 
 //----------------------------------------------------------
 Reel MatNorm( const Reel *_vect , int _n ) ;
-float MatNormf( const float *_vect , int _n ) ;
+double MatNormf( const double *_vect , int _n ) ;
 /*
 Fonction : norme d'un vecteur de dimension _n.
 

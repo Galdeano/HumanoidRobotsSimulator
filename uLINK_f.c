@@ -15,17 +15,17 @@ void SetupRobot_f(Struct_uLINK uLINK[],Struct_State *Status)
 {
 
 
-    float Hy=0.31f;
-    float Hx=0.0468f;
-    float Lc=0.5073f;
-    float Lt=0.510f;
-    float Lp=0.1104f;
+    double Hy=0.31f;
+    double Hx=0.0468f;
+    double Lc=0.5073f;
+    double Lt=0.510f;
+    double Lp=0.1104f;
 
     // Eléments d'inertie du robot Sherpa - 20091021SK
-    float mPelvis=6.1f; // [kg]
-    float mUpperLimb=8.f;
-    float mLowerLimb=10.9f;
-    float mFoot=1.6f;
+    double mPelvis=6.1f; // [kg]
+    double mUpperLimb=8.f;
+    double mLowerLimb=10.9f;
+    double mFoot=1.6f;
     //Total=mPelvis+2*mUpperLimb+2*mLowerLimb+2*mFoot
     //printf("%8.4f \n",mPelvis+2*mUpperLimb+2*mLowerLimb+2*mFoot);
 
@@ -147,7 +147,7 @@ void SetupRobot_f(Struct_uLINK uLINK[],Struct_State *Status)
     uLINK[9].c[1] = 0.0025f;
     uLINK[9].c[2] = 0.00076f;
 
-    strcpy(uLINK[10].name, "LLEG_J2");
+    strcpy(uLINK[10].name, "LLEG_J2");void CalcJacobianModif_f( SuLINK uLINK[], double * J, double * idx, int idx_size);
     uLINK[10].m  = mUpperLimb ;
     uLINK[10].sister  = 0 ;
     uLINK[10].child  = 11 ;
@@ -207,11 +207,11 @@ void SetupRobot_f(Struct_uLINK uLINK[],Struct_State *Status)
 void SetupRobot_f(Struct_uLINK uLINK[],Struct_State *Status)
 {
 
-    float Hy=0.31f;
-    float Hx=0.0468f;
-    float Lc=0.5073f;
-    float Lt=0.510f;
-    float Lp=0.1104f;
+    double Hy=0.31f;
+    double Hx=0.0468f;
+    double Lc=0.5073f;
+    double Lt=0.510f;
+    double Lp=0.1104f;
 
     int  RLEG = 2;
     int  LLEG = 8;
@@ -220,10 +220,10 @@ void SetupRobot_f(Struct_uLINK uLINK[],Struct_State *Status)
     int  LARM = 19;
 
     // Eléments d'inertie du robot Sherpa - 20091021SK
-    float mPelvis=6.1f; // [kg]
-    float mUpperLimb=8.f;
-    float mLowerLimb=10.9f;
-    float mFoot=1.6f;
+    double mPelvis=6.1f; // [kg]
+    double mUpperLimb=8.f;
+    double mLowerLimb=10.9f;
+    double mFoot=1.6f;
     //Total=mPelvis+2*mUpperLimb+2*mLowerLimb+2*mFoot
     //printf("%8.4f \n",mPelvis+2*mUpperLimb+2*mLowerLimb+2*mFoot);
 

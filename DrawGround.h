@@ -13,13 +13,13 @@
 
 
 /**
- * \fn void DrawGround(float x,float y,float z,float dx,float dy,float dz,)
+ * \fn void DrawGround(double x,double y,double z,double dx,double dy,double dz,)
  * \brief Draw ground
  *
  *
  * \param uLINK[] Structure wich describe the robot link by link
  * \param j ID of the link
  */
-void DrawGround(float x,float y,float z,float dx,float dy,float dz);
+void DrawGround(double x,double y,double z,double dx,double dy,double dz);
 
 #endif

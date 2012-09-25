@@ -9,16 +9,16 @@
 #include "CalcCoMJacobian.h"
 
 
-void CalcCoMJacobian( SuLINK uLINK[], gsl_matrix * J, int base_call)
+void CalcCoMJacobian( SuLINK uLINK[],State *Status, gsl_matrix * J, int base_call)
 {
     int i,j,k,l,n,o,err;
     int nbre_elements,nbre_tmp;
-    static float mass;
-    static int extrem[5]= {7,13,18,21,23};
-    static int path[23];
+    static double mass;
 
-//remplacer extem par methode propre
-//remplacer 23 par dof
+
+
+///TODO: remplacer extem par methode propre
+///TODO: remplacer 23 par dof
 
     static gsl_vector * a;
     static gsl_vector * error;
@@ -30,7 +30,7 @@ void CalcCoMJacobian( SuLINK uLINK[], gsl_matrix * J, int base_call)
     static gsl_vector * tmpv3_2;
     static gsl_vector * mother;
     static gsl_vector * double_path;
-
+    static int *path;
 
     static int init_tmp=1;
     if (init_tmp==1)
@@ -45,6 +45,7 @@ void CalcCoMJacobian( SuLINK uLINK[], gsl_matrix * J, int base_call)
         tmpv3_2 = gsl_vector_calloc (3);
         mother = gsl_vector_calloc(24);
         double_path = gsl_vector_calloc(24);
+        path=calloc((Status->ddl)+2-6,sizeof(int));
 
 
         mass=TotalMass(uLINK,1);
@@ -64,13 +65,13 @@ void CalcCoMJacobian( SuLINK uLINK[], gsl_matrix * J, int base_call)
 
 
 
-    for(i=0; i<5; i++)
+    for(i=0; i<(Status->nb_limb); i++)
     {
-        if (extrem[i]!=base_call)
+        if (gsl_vector_get(Status->limbID,i)!=base_call)
         {
             gsl_matrix_set_zero(mc);
             gsl_vector_set_zero(m);
-            nbre_elements=FindRoute(uLINK,path,extrem[i]);
+            nbre_elements=FindRoute(uLINK,path,gsl_vector_get(Status->limbID,i));
 
             for (j=0; j<nbre_elements; j++)
             {
@@ -218,11 +219,11 @@ void CalcCoMJacobian( SuLINK uLINK[], gsl_matrix * J, int base_call)
 
 
 
-    for(n=1; n<24; n++)//attention aux indices qui partent de zero en c
+    for(n=1; n<((Status->ddl)+2-6+1); n++)//attention aux indices qui partent de zero en c
     {
         j=n;
         err=0;
-        for (i=1; i<24; i++)
+        for (i=1; i<((Status->ddl)+2-6+1); i++)
         {
             if (j==gsl_vector_get(mother,i))
             {

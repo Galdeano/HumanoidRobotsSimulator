@@ -53,9 +53,6 @@ void CalcVWerrOri( SuLINK uLINK[], gsl_vector * err, gsl_vector * p, gsl_matrix 
     {
         gsl_vector_set(err,i+3,gsl_vector_get(error2,i));
     }
-
-
-
 }
 
 

@@ -17,17 +17,17 @@ void SetupRobot(SuLINK uLINK[],State *Status)
 {
 
 
-    float Hy=0.155*2;
-    float Hx=0.0468;
-    float Lc=0.5073;
-    float Lt=0.510;
-    float Lp=0.1104;
+    double Hy=0.155*2;
+    double Hx=0.0468;
+    double Lc=0.5073;
+    double Lt=0.510;
+    double Lp=0.1104;
 
     // Eléments d'inertie du robot Sherpa - 20091021SK
-    float mPelvis=3.2+1.9+1; // [kg]
-    float mUpperLimb=5+3;
-    float mLowerLimb=9.9+1;
-    float mFoot=0.8+0.8;
+    double mPelvis=3.2+1.9+1; // [kg]
+    double mUpperLimb=5+3;
+    double mLowerLimb=9.9+1;
+    double mFoot=0.8+0.8;
     //Total=mPelvis+2*mUpperLimb+2*mLowerLimb+2*mFoot
     //printf("%8.4f \n",mPelvis+2*mUpperLimb+2*mLowerLimb+2*mFoot);
 
@@ -403,11 +403,11 @@ void SetupRobot(SuLINK uLINK[],State *Status)
 {
 
 
-    float Hy=0.155*2;
-    float Hx=0.0468;
-    float Lc=0.5073;
-    float Lt=0.510;
-    float Lp=0.1104;
+    double Hy=0.155*2;
+    double Hx=0.0468;
+    double Lc=0.5073;
+    double Lt=0.510;
+    double Lp=0.1104;
 
     int  RLEG = 2;
     int  LLEG = 8;
@@ -418,10 +418,10 @@ void SetupRobot(SuLINK uLINK[],State *Status)
     int  NbLinks = 22;
 
     // Eléments d'inertie du robot Sherpa - 20091021SK
-    float mPelvis=3.2+1.9+1; // [kg]
-    float mUpperLimb=5+3;
-    float mLowerLimb=9.9+1;
-    float mFoot=0.8+0.8;
+    double mPelvis=3.2+1.9+1; // [kg]
+    double mUpperLimb=5+3;
+    double mLowerLimb=9.9+1;
+    double mFoot=0.8+0.8;
     //Total=mPelvis+2*mUpperLimb+2*mLowerLimb+2*mFoot
     //printf("%8.4f \n",mPelvis+2*mUpperLimb+2*mLowerLimb+2*mFoot);
 
@@ -951,7 +951,7 @@ void SetupRobot(SuLINK uLINK[],State *Status)
 
 
 
-    FindMother(uLINK,1);
+    FindMother(uLINK,Status,1);
 
     ForwardKinematics(uLINK,1);
 

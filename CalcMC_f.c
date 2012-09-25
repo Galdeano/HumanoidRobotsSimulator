@@ -5,7 +5,7 @@
 #include "CalcMC_f.h"
 
 
-void CalcMC_f( Struct_uLINK uLINK[], float *com, int j)
+void CalcMC_f( Struct_uLINK uLINK[], double *com, int j)
 {
     if (j == 0)
     {
@@ -14,7 +14,7 @@ void CalcMC_f( Struct_uLINK uLINK[], float *com, int j)
     else
     {
 
-        float tmp[3];
+        double tmp[3];
 
 
         MatMulf( tmp, uLINK[j].R, uLINK[j].c, 3, 3, 1) ;

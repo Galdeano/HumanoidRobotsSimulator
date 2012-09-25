@@ -38,16 +38,16 @@ typedef struct
 
 
 /**
- * \fn void SaveStateXML(SuLINK uLINK[],float t)
+ * \fn void SaveStateXML(SuLINK uLINK[],double t)
  * \brief Save the state of the robot in a XML file
  *
  * \param uLINK[] Structure wich describe the robot link by link
  * \param t Current time
  */
-void SaveStateXML(SuLINK uLINK[],State *Status,float t);
+void SaveStateXML(SuLINK uLINK[],State *Status,double t);
 
 /**
- * \fn void SaveRobotXML(SuLINK uLINK[],float t)
+ * \fn void SaveRobotXML(SuLINK uLINK[],double t)
  * \brief Save the structure of the robot in a XML file
  *
  * \param uLINK[] Structure wich describe the robot link by link

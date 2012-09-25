@@ -5,10 +5,10 @@
 #include "Rodrigues_f.h"
 
 
-void Rodrigues_f(float *rot,float *w,float dt)
+void Rodrigues_f(double *rot,double *w,double dt)
 {
-    float d,th;
-    float wn[3], w_wedge[9], tmp[9];
+    double d,th;
+    double wn[3], w_wedge[9], tmp[9];
 
     d=MatNormf( w,3);
     th = d*dt;
@@ -19,12 +19,12 @@ void Rodrigues_f(float *rot,float *w,float dt)
 
     MatI( rot, 3); //R = eye(3) + w_wedge * sin(th) + w_wedge^2 * (1-cos(th));
 
-    MatMulScalf( tmp , (float)sin(th), w_wedge , 3, 3);
+    MatMulScalf( tmp , (double)sin(th), w_wedge , 3, 3);
     MatAddf( rot , rot , tmp , 3 , 3 ) ;
 
 
     MatMulf( tmp, w_wedge, w_wedge, 3, 3, 3) ;
-    MatMulScalf( tmp, 1.f-(float)cos(th), tmp, 3, 3);
+    MatMulScalf( tmp, 1.f-(double)cos(th), tmp, 3, 3);
     MatAddf( rot , rot , tmp , 3 , 3 ) ;
 
 }

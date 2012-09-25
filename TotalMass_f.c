@@ -4,9 +4,9 @@
 
 
 
-float TotalMass_f(Struct_uLINK uLINK[],int j)
+double TotalMass_f(Struct_uLINK uLINK[],int j)
 {
-    float m;
+    double m;
     if (j == 0)
     {
         m = 0;

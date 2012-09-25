@@ -7,7 +7,17 @@
  *  \date      10/2011
  */
 
+//double->double
+//multiview
+//default values
 
+
+#define file_motor 0
+#define reseau 1
+#define local 1
+#define Tasks 1
+#define Light 0
+#define file_human 0
 
 #define Scenarios 0
 /*! \def Scenarios
@@ -175,3 +185,12 @@
 #error Both linearDamper and nonLinearDamper contact model are specified
 #error Check linearDamper and nonLinearDamper defs
 #endif
+
+#define LoadObj 0
+/*! \def LoadObj
+    \brief 1: Load and displays the mechs associated to the model if they exists
+*/
+
+
+
+

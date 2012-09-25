@@ -60,12 +60,14 @@ struct StuLINK
     gsl_matrix * I;/*!< around the center of gravity inertia tensor 3*3 [kg.m^2] */
     gsl_matrix * vert;/*!< Shape of the link */
     gsl_matrix * face;/*!< Shape of the link */
+    gsl_matrix * normalface;/*!< Shape of the link */
     gsl_matrix * contact;/*!< relative position of contacts */
     gsl_matrix * pcontact;/*!< absolute position of contacts */
     gsl_matrix * fcontact;/*!< force of contacts */
     gsl_vector * iscontact;/*!< is the link in contact */
     gsl_matrix * posContact;/*!< absolute position of contacts */
     gsl_matrix * forContact;/*!< force of contacts */
+    char obj[50]; /*!< obj path */
 };
 
 typedef struct  StuLINK  SuLINK ;
@@ -83,12 +85,13 @@ typedef struct
     int support;/*!< Foot of support: 0:none,1:right,2:left,3:both */
     int right_foot_ID;/*!< Right foot ID */
     int left_foot_ID;/*!< Right foot ID */
-    float right_scale;/*!< External forces drawing */
-    float left_scale;/*!< External forces drawing */
-    float integral_R;/*!< Stabilisator command */
-    float integral_L;/*!< Stabilisator command */
-    float distribution_y;/*!< External forces distribution betwenn the two legs on y axis [-] */
-    float distribution_x;/*!< External forces distribution betwenn the two legs on x axis [-] */
+    int nb_limb;
+    double right_scale;/*!< External forces drawing */
+    double left_scale;/*!< External forces drawing */
+    double integral_R;/*!< Stabilisator command */
+    double integral_L;/*!< Stabilisator command */
+    double distribution_y;/*!< External forces distribution betwenn the two legs on y axis [-] */
+    double distribution_x;/*!< External forces distribution betwenn the two legs on x axis [-] */
     gsl_vector * com_old;/*!< Position of the Center of Mass at previous iteration [m] */
     gsl_vector * posCoP_R;/*!< Right foot external forces position 3*1 [m] */
     gsl_vector * forCoP_R;/*!< Right foot external forces amplitude 3*1 [N] */
@@ -96,6 +99,7 @@ typedef struct
     gsl_vector * forCoP_L;/*!< Left foot external forces amplitude 3*1 [N] */
     gsl_vector * FootCenter_R;/*!< Right foot position 3*1 [m] */
     gsl_vector * FootCenter_L;/*!< Left foot position 3*1 [m] */
+    gsl_vector * limbID;
 } State ;
 
 

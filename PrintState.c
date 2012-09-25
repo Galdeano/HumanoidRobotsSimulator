@@ -8,7 +8,7 @@
 
 
 
-void SaveStateXML(SuLINK uLINK[],State *Status,float t)
+void SaveStateXML(SuLINK uLINK[],State *Status,double t)
 {
     FILE *f=fopen("SherpaState.xml","w");
 ////    gsl_vector_fprintf(f,tmp,"%.5g");
@@ -176,7 +176,7 @@ void SaveState(SuLINK uLINK[],State *Status,long *t)
     fclose(f);
 
     FILE *ft=fopen("SherpaStateT.bin","wb");
-    fwrite(t, sizeof(float), 1, ft);
+    fwrite(t, sizeof(double), 1, ft);
     fclose(ft);
 //Bad idea because of the pointer in the structure Sulink
 
@@ -226,7 +226,7 @@ void LoadState(SuLINK uLINK[],State *Status,long *t)
     LoadStuctLink(uLINK,CopyuLINK,Status);
 
     FILE *ft=fopen("SherpaStateT.bin","rb");
-    fread(t, sizeof(float), 1, ft);
+    fread(t, sizeof(double), 1, ft);
     fclose(ft);
 }
 

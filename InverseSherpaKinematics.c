@@ -7,11 +7,11 @@
 
 void InverseSherpaKinematics(gsl_vector * q,gsl_vector * pos)
 {
-//   float Hy=0.155*2;
-//   float Hx=0.0468;
-    float Lc=0.5073;
-    float Lt=0.510;
-//    float Lp=0.1104;
+//   double Hy=0.155*2;
+//   double Hx=0.0468;
+    double Lc=0.5073;
+    double Lt=0.510;
+//    double Lp=0.1104;
 
     double x=gsl_vector_get (pos,0);
     double y=gsl_vector_get (pos,1);

@@ -11,10 +11,10 @@
 #include <stdio.h>
 
 
-void Gravity_f(Struct_uLINK uLINK[],Struct_State *Status, int j, float *f, float *t)
+void Gravity_f(Struct_uLINK uLINK[],Struct_State *Status, int j, double *f, double *t)
 {
 
-    float ftmp[3], ttmp[3], wc[3];
+    double ftmp[3], ttmp[3], wc[3];
 
     MatClrf( f, 3, 1) ;
     MatClrf( t, 3, 1) ;
@@ -49,7 +49,7 @@ void Gravity_f(Struct_uLINK uLINK[],Struct_State *Status, int j, float *f, float
 
     if (((j==Status->right_foot_ID)||(j==Status->left_foot_ID)) && !Suspendu)
     {
-        float com[3];
+        double com[3];
         CalcCoM_f(uLINK,com);
 
 

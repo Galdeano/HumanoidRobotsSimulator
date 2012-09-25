@@ -2,8 +2,8 @@
 #define H_Spline_f
 
 
-float Spline_f(float x,float x0,float x1,float p0,float p1,float v0,float v1);
+double Spline_f(double x,double x0,double x1,double p0,double p1,double v0,double v1);
 
-float C2Spline_f(float x,float x0,float x1,float x2,float p0,float p1,float p2,float v0,float v2);
+double C2Spline_f(double x,double x0,double x1,double x2,double p0,double p1,double p2,double v0,double v2);
 
 #endif

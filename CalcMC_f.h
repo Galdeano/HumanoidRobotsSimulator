@@ -2,6 +2,6 @@
 #define H_CalcMC_f
 
 
-void CalcMC_f( Struct_uLINK uLINK[], float *com, int j);
+void CalcMC_f( Struct_uLINK uLINK[], double *com, int j);
 
 #endif

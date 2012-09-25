@@ -17,7 +17,7 @@ void DrawIndicators(SuLINK uLINK[],State *Status,gsl_vector * com,gsl_vector * C
 {
     int i,j,k;
 
-    static float RadToDeg;
+    static double RadToDeg;
     static gsl_vector * pos;
     static gsl_vector * Visu;
     static int init_tmp=1;
@@ -99,12 +99,25 @@ void DrawIndicators(SuLINK uLINK[],State *Status,gsl_vector * com,gsl_vector * C
     {
         glPushMatrix();
 
-        glGetDoublev(GL_MODELVIEW_MATRIX, rotgl);//charge avec identitee
-        for (i = 0; i < 3; ++i)
-            for (k = 0; k < 3; ++k)
-                rotgl[i*4+k] = gsl_matrix_get (uLINK[j+1].R, k,i);
+//        glGetDoublev(GL_MODELVIEW_MATRIX, rotgl);//charge avec identitee
+//        for (i = 0; i < 3; ++i)
+//            for (k = 0; k < 3; ++k)
+//                rotgl[i*4+k] = gsl_matrix_get (uLINK[j+1].R, k,i);
+//
+//        glTranslated(gsl_vector_get (uLINK[j+2].p,0),gsl_vector_get (uLINK[j+2].p,1),gsl_vector_get (uLINK[j+2].p,2));
 
-        glTranslated(gsl_vector_get (uLINK[j+2].p,0),gsl_vector_get (uLINK[j+2].p,1),gsl_vector_get (uLINK[j+2].p,2));
+
+       glGetDoublev(GL_MODELVIEW_MATRIX, rotgl);//charge avec identitee
+
+    for (i = 0; i < 3; ++i)
+    {
+        for (k = 0; k < 3; ++k)
+        {
+            rotgl[i*4+k] = gsl_matrix_get (uLINK[j+1].R, k,i);
+        }
+        rotgl[i+12]=gsl_vector_get(uLINK[j+2].p,i);
+    }
+
         glMultMatrixd(rotgl);
         if (gsl_vector_get (uLINK[j+2].a,0)==1)
             glRotated(90,0,1,0);

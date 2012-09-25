@@ -229,7 +229,7 @@ void LoadRobotXML(SuLINK uLINK[],State *Status,char* RobotFile)
     }
 
 
-    FindMother(uLINK,1);
+    FindMother(uLINK,Status,1);
 
     ForwardKinematics(uLINK,1);
 
@@ -258,7 +258,7 @@ void LoadRobotXML_f(Struct_uLINK uLINK[],Struct_State *Status,char* RobotFile)
     char tmp_s [100];
     int dof,tmp_i;
     float tmp_f;
-    float tmp_tab9[9];
+    double tmp_tab9[9];
     if (f == NULL) perror ("Error opening robot description file");
     fscanf (f, "%s", tmp_s);
     fscanf (f, "%s", tmp_s);
@@ -341,28 +341,28 @@ void LoadRobotXML_f(Struct_uLINK uLINK[],Struct_State *Status,char* RobotFile)
 
         for(j=0;j<2;j++)
         {fscanf (f, "%s", tmp_s);}
-        fscanf (f, "%f %f %f ", &uLINK[i].a[0], &uLINK[i].a[1], &uLINK[i].a[2]);
+        fscanf (f, "%lf %lf %lf ", &uLINK[i].a[0], &uLINK[i].a[1], &uLINK[i].a[2]);
 //        for(j=0;j<3;j++)
 //        {gsl_vector_set (uLINK[i].a, j, tmp_tab3[j]);}
 //printf("a: %f %f %f \n",tmp_tab3[0],tmp_tab3[1],tmp_tab3[2]);
 
         for(j=0;j<2;j++)
         {fscanf (f, "%s", tmp_s);}
-        fscanf (f, "%f %f %f ", &uLINK[i].b[0], &uLINK[i].b[1], &uLINK[i].b[2]);
+        fscanf (f, "%lf %lf %lf ", &uLINK[i].b[0], &uLINK[i].b[1], &uLINK[i].b[2]);
 //        for(j=0;j<3;j++)
 //        {gsl_vector_set (uLINK[i].b, j, tmp_tab3[j]);}
 //printf("b: %f %f %f \n",tmp_tab3[0],tmp_tab3[1],tmp_tab3[2]);
 
         for(j=0;j<2;j++)
         {fscanf (f, "%s", tmp_s);}
-        fscanf (f, "%f %f %f ", &uLINK[i].p[0], &uLINK[i].p[1], &uLINK[i].p[2]);
+        fscanf (f, "%lf %lf %lf ", &uLINK[i].p[0], &uLINK[i].p[1], &uLINK[i].p[2]);
 //        for(j=0;j<3;j++)
 //        {gsl_vector_set (uLINK[i].p, j, tmp_tab3[j]);}
 //printf("p: %f %f %f \n",tmp_tab3[0],tmp_tab3[1],tmp_tab3[2]);
 
         for(j=0;j<2;j++)
         {fscanf (f, "%s", tmp_s);}
-        fscanf (f, "%f %f %f ", &uLINK[i].c[0], &uLINK[i].c[1], &uLINK[i].c[2]);
+        fscanf (f, "%lf %lf %lf ", &uLINK[i].c[0], &uLINK[i].c[1], &uLINK[i].c[2]);
 //        for(j=0;j<3;j++)
 //        {gsl_vector_set (uLINK[i].c, j, tmp_tab3[j]);}
 //printf("c: %f %f %f \n",tmp_tab3[0],tmp_tab3[1],tmp_tab3[2]);
@@ -370,7 +370,7 @@ void LoadRobotXML_f(Struct_uLINK uLINK[],Struct_State *Status,char* RobotFile)
 
         for(j=0;j<2;j++)
         {fscanf (f, "%s", tmp_s);}
-        fscanf (f, "%f %f %f %f %f %f %f %f %f ", &tmp_tab9[0], &tmp_tab9[1], &tmp_tab9[2], &tmp_tab9[3], &tmp_tab9[4], &tmp_tab9[5], &tmp_tab9[6], &tmp_tab9[7], &tmp_tab9[8]);
+        fscanf (f, "%lf %lf %lf %lf %lf %lf %lf %lf %lf ", &tmp_tab9[0], &tmp_tab9[1], &tmp_tab9[2], &tmp_tab9[3], &tmp_tab9[4], &tmp_tab9[5], &tmp_tab9[6], &tmp_tab9[7], &tmp_tab9[8]);
 //        for(j=0;j<3;j++)
 //        {for(k=0;k<3;k++)
 //         {gsl_matrix_set(uLINK[i].R, j, k, tmp_tab9[3*j+k]);
@@ -381,7 +381,7 @@ void LoadRobotXML_f(Struct_uLINK uLINK[],Struct_State *Status,char* RobotFile)
 
         for(j=0;j<2;j++)
         {fscanf (f, "%s", tmp_s);}
-        fscanf (f, "%f %f %f %f %f %f %f %f %f ", &tmp_tab9[0], &tmp_tab9[1], &tmp_tab9[2], &tmp_tab9[3], &tmp_tab9[4], &tmp_tab9[5], &tmp_tab9[6], &tmp_tab9[7], &tmp_tab9[8]);
+        fscanf (f, "%lf %lf %lf %lf %lf %lf %lf %lf %lf ", &tmp_tab9[0], &tmp_tab9[1], &tmp_tab9[2], &tmp_tab9[3], &tmp_tab9[4], &tmp_tab9[5], &tmp_tab9[6], &tmp_tab9[7], &tmp_tab9[8]);
 //        for(j=0;j<3;j++)
 //        {for(k=0;k<3;k++)
 //         {gsl_matrix_set(uLINK[i].I, j, k, tmp_tab9[3*j+k]);
@@ -418,7 +418,7 @@ void LoadRobotParserXML(SuLINK uLINK[],State *Status,char* RobotFile)
 
     int i;
     int dof,numlink,body;
-    float DegToRad = M_PI/180;
+    double DegToRad = M_PI/180;
 
     ezxml_t robot = ezxml_parse_file(RobotFile), State, Link, Contacts, Contact;
 
@@ -494,27 +494,48 @@ void LoadRobotParserXML(SuLINK uLINK[],State *Status,char* RobotFile)
             uLINK[numlink].qmin*=DegToRad;
             //ping(numlink);
         }
+        else
+        {
+            uLINK[numlink].qmin=-M_PI;
+        }
         if(ezxml_child(Link, "qmax")!=NULL)
         {
             sscanf (ezxml_child(Link, "qmax")->txt,"%lf",&uLINK[numlink].qmax);
             uLINK[numlink].qmax*=DegToRad;
             //ping(numlink);
         }
+        else
+        {
+            uLINK[numlink].qmax=M_PI;
+        }
         if(ezxml_child(Link, "qmoy")!=NULL)
         {
             sscanf (ezxml_child(Link, "qmoy")->txt,"%lf",&uLINK[numlink].qmoy);
             uLINK[numlink].qmoy*=DegToRad;
+            uLINK[numlink].q=uLINK[numlink].qmoy;
             //ping(numlink);
+        }
+        else
+        {
+            uLINK[numlink].qmoy=0;
         }
         if(ezxml_child(Link, "umin")!=NULL)
         {
             sscanf (ezxml_child(Link, "umin")->txt,"%lf",&uLINK[numlink].umin);
             //ping(numlink);
         }
+        else
+        {
+            uLINK[numlink].umin=-100;
+        }
         if(ezxml_child(Link, "umax")!=NULL)
         {
             sscanf (ezxml_child(Link, "umax")->txt,"%lf",&uLINK[numlink].umax);
             //ping(numlink);
+        }
+        else
+        {
+            uLINK[numlink].umax=100;
         }
         sscanf (ezxml_child(Link, "a")->txt,"%lf %lf %lf",gsl_vector_ptr (uLINK[numlink].a, 0),gsl_vector_ptr (uLINK[numlink].a, 1),gsl_vector_ptr (uLINK[numlink].a, 2));
         sscanf (ezxml_child(Link, "b")->txt,"%lf %lf %lf",gsl_vector_ptr (uLINK[numlink].b, 0),gsl_vector_ptr (uLINK[numlink].b, 1),gsl_vector_ptr (uLINK[numlink].b, 2));
@@ -526,7 +547,12 @@ void LoadRobotParserXML(SuLINK uLINK[],State *Status,char* RobotFile)
         sscanf (ezxml_child(Link, "I")->txt,"%lf %lf %lf %lf %lf %lf %lf %lf %lf",gsl_matrix_ptr (uLINK[numlink].I, 0,0),gsl_matrix_ptr (uLINK[numlink].I, 1,0),gsl_matrix_ptr (uLINK[numlink].I, 2,0)
                                                                                  ,gsl_matrix_ptr (uLINK[numlink].I, 0,1),gsl_matrix_ptr (uLINK[numlink].I, 1,1),gsl_matrix_ptr (uLINK[numlink].I, 2,1)
                                                                                  ,gsl_matrix_ptr (uLINK[numlink].I, 0,2),gsl_matrix_ptr (uLINK[numlink].I, 1,2),gsl_matrix_ptr (uLINK[numlink].I, 2,2));
-
+#if LoadObj
+        if(ezxml_child(Link, "obj")!=NULL)
+        {
+            sscanf (ezxml_child(Link, "obj")->txt,"%s",&uLINK[numlink].obj);
+        }
+#endif
         //printf("lim %d : %f %f \n",numlink,uLINK[numlink].qmin,uLINK[numlink].qmax);
 
 //        printf("numlink: %d \n", numlink);
@@ -555,99 +581,30 @@ void LoadRobotParserXML(SuLINK uLINK[],State *Status,char* RobotFile)
     ezxml_free(robot);
 
 
-
-    FindMother(uLINK,1);
+    Status->nb_limb=0;
+    Status->limbID=gsl_vector_calloc(5);
+    FindMother(uLINK,Status,1);
 
     ForwardKinematics(uLINK,1);
 
     ForwardVelocity(uLINK,1);
+
+
+//    gsl_vector_set_zero(uLINK[Base].p);
+//    //gsl_vector_set (uLINK[Base].p, 2, 0.066);
+//    gsl_vector_set (uLINK[Base].p, 2, 0.04);
+//    //gsl_vector_set (uLINK[base].p, 2, 0.2);
+//    gsl_matrix_set_identity(uLINK[Base].R);
+//    NodeForwardKinematics(uLINK,Base,0);
+
 
     gsl_vector * com = gsl_vector_calloc (3);
     CalcCoM(uLINK,com);
     gsl_vector_memcpy (Status->com_old,com);
     gsl_vector_free(com);
 
+
 }
-
-
-
-
-
-
-
-void LoadRobotParserXML_f(Struct_uLINK uLINK[],Struct_State *Status,char* RobotFile)
-{
-
-    int i;
-    int dof,numlink;
-
-    ezxml_t robot = ezxml_parse_file(RobotFile), State, Link;
-
-    sscanf (ezxml_child(robot, "DoF")->txt,"%d",&dof);
-    //printf("dof: %d \n", dof);
-
-    for(i=1; i<(dof+2); i++)
-    {
-        uLINK[i].q = 0.0;
-        uLINK[i].dq = 0.0;
-        uLINK[i].ddq = 0.0;
-        uLINK[i].u = 0.0;
-        uLINK[i].ug = 0.0;
-        uLINK[i].uef = 0.0;
-        uLINK[i].u_joint = 0.0;
-        MatClrf(uLINK[i].a,3,1);
-        MatClrf(uLINK[i].b,3,1);
-        MatClrf(uLINK[i].c,3,1);
-        MatClrf(uLINK[i].p,3,1);
-        MatClrf(uLINK[i].hw,3,1);
-        MatClrf(uLINK[i].hv,3,1);
-    }
-
-
-    Status->ddl=dof+6;
-    Status->support=0; //0:none,1:right,2:left,3:both
-    Status->desired_support=0;
-    Status->distribution_y=0.5;
-
-    State = ezxml_child(robot, "State");
-    sscanf (ezxml_child(State, "right_foot_ID")->txt,"%d",&Status->right_foot_ID);
-    sscanf (ezxml_child(State, "left_foot_ID")->txt,"%d",&Status->left_foot_ID);
-
-    for (Link = ezxml_child(robot, "Link"); Link; Link = Link->next)
-    {
-        numlink = atoi(ezxml_attr(Link, "no"));
-        sscanf (ezxml_child(Link, "Name")->txt,"%s", &uLINK[numlink].name);
-        sscanf (ezxml_child(Link, "m")->txt,"%f", &uLINK[numlink].m);
-        sscanf (ezxml_child(Link, "sister")->txt,"%d", &uLINK[numlink].sister);
-        sscanf (ezxml_child(Link, "child")->txt,"%d", &uLINK[numlink].child);
-        sscanf (ezxml_child(Link, "a")->txt,"%f %f %f", &uLINK[numlink].a[0], &uLINK[numlink].a[1], &uLINK[numlink].a[2]);
-        sscanf (ezxml_child(Link, "b")->txt,"%f %f %f", &uLINK[numlink].b[0], &uLINK[numlink].b[1], &uLINK[numlink].b[2]);
-        sscanf (ezxml_child(Link, "p")->txt,"%f %f %f", &uLINK[numlink].p[0], &uLINK[numlink].p[1], &uLINK[numlink].p[2]);
-        sscanf (ezxml_child(Link, "c")->txt,"%f %f %f", &uLINK[numlink].c[0], &uLINK[numlink].c[1], &uLINK[numlink].c[2]);
-    }
-
-    FindMother_f(uLINK,1);
-
-    ForwardKinematics_f(uLINK,1);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -15,7 +15,7 @@ void ForwardKinematics_f(Struct_uLINK uLINK[],int j)
 
     if (j != 1)
     {
-        float rot[9];
+        double rot[9];
         /*        //position and orientation*/
         MatMulf( uLINK[j].p, uLINK[uLINK[j].mother].R, uLINK[j].b, 3, 3, 1) ;
         MatAddf( uLINK[j].p, uLINK[j].p, uLINK[uLINK[j].mother].p, 3, 1) ;

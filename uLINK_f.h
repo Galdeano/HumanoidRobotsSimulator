@@ -18,14 +18,14 @@ struct SStruct_uLINK
 {
     char name[8];
     unsigned char sister,child,mother;
-    float m,q,dq,ddq,u,ug,uef,u_joint;
-    float a[3];
-    float b[3];
-    float c[3];
-    float p[3];
-    float hw[3];
-    float hv[3];
-    float R[9];
+    double m,q,dq,ddq,u,ug,uef,u_joint;
+    double a[3];
+    double b[3];
+    double c[3];
+    double p[3];
+    double hw[3];
+    double hv[3];
+    double R[9];
 };
 
 typedef struct  SStruct_uLINK  Struct_uLINK;
@@ -38,10 +38,10 @@ typedef struct
 {
     int desired_support;
     unsigned char ddl,support,right_foot_ID,left_foot_ID; /*  support: 0:none,1:right,2:left,3:both*/
-    float distribution_y;
-    float com_old[3];
-    float FootCenter_R[3];
-    float FootCenter_L[3];
+    double distribution_y;
+    double com_old[3];
+    double FootCenter_R[3];
+    double FootCenter_L[3];
 } Struct_State ;
 
 /* //    uLINK(n).dq     = 0;            % joint velocity [rad/s]
