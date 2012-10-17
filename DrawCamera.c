@@ -13,7 +13,7 @@ void CamInit(CamParam_s *CamParam)
     CamParam->holdw = 0; //au départ on part du principe que le bouton n'est pas maintenu
     CamParam->angleY = 30;
     CamParam->angleZ = 45;
-    CamParam->distance = 2; //distance initiale de la caméra avec le centre de la scène
+    CamParam->distance = 1.3; //distance initiale de la caméra avec le centre de la scène
     CamParam->motionSensivity = 0.3;
     CamParam->scrollSensivity = 0.1;
     CamParam->strafeSensivity = 0.002;
@@ -98,7 +98,6 @@ void Camlook(State *Status, CamParam_s *CamParam)
 
 
 
-//CST 26 crosnier
 
 
 

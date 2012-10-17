@@ -7,17 +7,20 @@
  *  \date      10/2011
  */
 
-//double->double
-//multiview
-//default values
+#define ENABLE_ZENTIMER
 
-
+#define save_data_long 0
+#define save_data_quick 0
 #define file_motor 0
 #define reseau 1
 #define local 1
+#define replay 0
 #define Tasks 1
 #define Light 0
 #define file_human 0
+#define shadow 1
+#define colors 0
+#define materials 1
 
 #define Scenarios 0
 /*! \def Scenarios
@@ -162,7 +165,7 @@
     \brief 1: display toques via color change on joints articulation
 */
 
-#define Base 13
+#define Base_ 13
 /*! \def base
     \brief base link for computation
 */

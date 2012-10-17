@@ -484,7 +484,12 @@ void LoadRobotParserXML(SuLINK uLINK[],State *Status,char* RobotFile)
     {
         numlink = atoi(ezxml_attr(Link, "no"));
         sscanf (ezxml_child(Link, "Name")->txt,"%s",&uLINK[numlink].name);
+
         sscanf (ezxml_child(Link, "m")->txt,"%lf",&uLINK[numlink].m);
+        if(ezxml_child(Link, "fixed")!=NULL)
+        {
+            sscanf (ezxml_child(Link, "fixed")->txt,"%d",&uLINK[numlink].fixed);
+        }
         sscanf (ezxml_child(Link, "color")->txt,"%d",&uLINK[numlink].color);
         sscanf (ezxml_child(Link, "sister")->txt,"%d",&uLINK[numlink].sister);
         sscanf (ezxml_child(Link, "child")->txt,"%d",&uLINK[numlink].child);

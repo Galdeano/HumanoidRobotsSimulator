@@ -6,6 +6,9 @@ typedef struct
 {
     short q[21];
     short dq[21];
+    short fsr_right[4];
+    short fsr_left[4];
+    short acc_gyro[6];
 } HoapSensor;
 
 typedef struct

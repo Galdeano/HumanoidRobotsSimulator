@@ -4,10 +4,10 @@
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_math.h>
 #include "DrawGround.h"
-
+#include "Setup.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
-
+#include "DrawLight.h"
 
 
 void DrawGround(double x,double y,double z,double dx,double dy,double dz)
@@ -102,33 +102,37 @@ void DrawGround(double x,double y,double z,double dx,double dy,double dz)
             }
         }
 
-        gsl_matrix_set ( face,0,0,0);
-        gsl_matrix_set ( face,0,1,1);
-        gsl_matrix_set ( face,0,2,3);
-        gsl_matrix_set ( face,0,3,0);
-        gsl_matrix_set ( face,0,4,0);
-        gsl_matrix_set ( face,0,5,4);
 
-        gsl_matrix_set ( face,1,0,1);
-        gsl_matrix_set ( face,1,1,5);
-        gsl_matrix_set ( face,1,2,2);
-        gsl_matrix_set ( face,1,3,4);
-        gsl_matrix_set ( face,1,4,1);
-        gsl_matrix_set ( face,1,5,5);
+        gsl_matrix_set (face,0,0,0);
+        gsl_matrix_set (face,1,0,1);
+        gsl_matrix_set (face,2,0,2);
+        gsl_matrix_set (face,3,0,3);
 
-        gsl_matrix_set ( face,2,0,2);
-        gsl_matrix_set ( face,2,1,6);
-        gsl_matrix_set ( face,2,2,6);
-        gsl_matrix_set ( face,2,3,7);
-        gsl_matrix_set ( face,2,4,5);
-        gsl_matrix_set ( face,2,5,6);
+        gsl_matrix_set (face,0,1,1);
+        gsl_matrix_set (face,1,1,5);
+        gsl_matrix_set (face,2,1,6);
+        gsl_matrix_set (face,3,1,2);
 
-        gsl_matrix_set ( face,3,0,3);
-        gsl_matrix_set ( face,3,1,2);
-        gsl_matrix_set ( face,3,2,7);
-        gsl_matrix_set ( face,3,3,3);
-        gsl_matrix_set ( face,3,4,4);
-        gsl_matrix_set ( face,3,5,7);
+        gsl_matrix_set (face,0,2,3);
+        gsl_matrix_set (face,1,2,2);
+        gsl_matrix_set (face,2,2,6);
+        gsl_matrix_set (face,3,2,7);
+
+        gsl_matrix_set (face,0,3,0);// 0473
+        gsl_matrix_set (face,1,3,3);
+        gsl_matrix_set (face,2,3,7);
+        gsl_matrix_set (face,3,3,4);
+
+        gsl_matrix_set (face,0,4,0);// 0154
+        gsl_matrix_set (face,1,4,4);
+        gsl_matrix_set (face,2,4,5);
+        gsl_matrix_set (face,3,4,1);
+
+        gsl_matrix_set (face,0,5,4);// 4567
+        gsl_matrix_set (face,1,5,7);
+        gsl_matrix_set (face,2,5,6);
+        gsl_matrix_set (face,3,5,5);
+
 
         gsl_matrix_set ( normalface,0,0,0);
         gsl_matrix_set ( normalface,0,1,0);
@@ -166,9 +170,14 @@ void DrawGround(double x,double y,double z,double dx,double dy,double dz)
 //        gsl_vector_add(v,pos);
 //        gsl_vector_scale(v,0.5);
 //        DrawForceMarker(v,ftmp);
-        glBegin(GL_QUADS);
-
+#if colors
         glColor3f(0.8f,0.8f,0.8f);
+#endif
+#if materials
+        set_material(&chrome);
+        //set_material(&white_shiny_plastic);
+#endif
+        glBegin(GL_QUADS);
         for (k = 0; k < 4; ++k)
         {
             glVertex3d(gsl_matrix_get(vert,0,gsl_matrix_get(face,k,i)),gsl_matrix_get(vert,1,gsl_matrix_get(face,k,i)),gsl_matrix_get(vert,2,gsl_matrix_get(face,k,i)));
@@ -180,7 +189,12 @@ void DrawGround(double x,double y,double z,double dx,double dy,double dz)
 
         glLineWidth( 2.0f );
         glBegin(GL_LINE_LOOP);
+#if colors
         glColor3ub(0,0,0);
+#endif
+#if materials
+        set_material(&black_rubber);
+#endif
         for (k = 0; k < 4; ++k)
         {
             glVertex3d(gsl_matrix_get(vert,0,gsl_matrix_get(face,k,i)),gsl_matrix_get(vert,1,gsl_matrix_get(face,k,i)),gsl_matrix_get(vert,2,gsl_matrix_get(face,k,i)));

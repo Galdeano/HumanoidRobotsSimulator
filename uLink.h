@@ -20,6 +20,7 @@
 struct StuLINK
 {
     char name[8]; /*!< Name of the Link */
+    int fixed;/*!< Is the link a dof */
     int sister;/*!< Sister ID */
     int child;/*!< Child ID */
     int mother;/*!< Mother ID */

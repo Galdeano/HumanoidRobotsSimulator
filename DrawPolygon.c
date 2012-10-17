@@ -12,6 +12,7 @@
 #include <GL/glu.h>
 
 #include "Setup.h"
+#include "DrawLight.h"
 
 void DrawPolygon(SuLINK uLINK[],int j)
 {
@@ -37,6 +38,8 @@ void DrawPolygon(SuLINK uLINK[],int j)
         init_tmp=0;
     }
 
+    glPushMatrix();
+
 
     gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, uLINK[j].R, uLINK[j].vert, 0.0, vert);
     gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, uLINK[j].R, uLINK[j].normalface, 0.0, norm);
@@ -61,21 +64,64 @@ void DrawPolygon(SuLINK uLINK[],int j)
 //        gsl_vector_add(v,pos);
 //        gsl_vector_scale(v,0.5);
 //        DrawForceMarker(v,ftmp);
-        glBegin(GL_QUADS);
 
-        glColor3f(0.9f,0.9f,0.9f);
+
+
+//set_material(&emerald);
+//set_material(&jade);
+//set_material(&obsidian);
+//set_material(&pearl);
+//set_material(&ruby);
+//set_material(&turquoise);
+//set_material(&brass);
+//set_material(&bronze);
+//set_material(&chrome);
+//set_material(&copper);
+//set_material(&gold);
+//set_material(&silver);
+//set_material(&black_plastic);
+//set_material(&cyan_plastic);
+//set_material(&green_plastic);
+//set_material(&red_plastic);
+//set_material(&white_plastic);
+//set_material(&yellow_plastic);
+//set_material(&black_rubber);
+//set_material(&cyan_rubber);
+//set_material(&green_rubber);
+//set_material(&red_rubber);
+//set_material(&white_rubber);
+//set_material(&yellow_rubber);
+
+        glBegin(GL_QUADS);
+#if colors
+        glColor3f(0.7f,0.7f,0.7f);
+#endif
+#if materials
+        set_material(&silver);
+#endif
+//        if(i==4)
+//        {
+//            glColor3f(1.0f,0.2f,0.2f);
+//        }
+
         for (k = 0; k < 4; ++k)
         {
             glVertex3d(gsl_matrix_get(vert,0,gsl_matrix_get(uLINK[j].face,k,i)),gsl_matrix_get(vert,1,gsl_matrix_get(uLINK[j].face,k,i)),gsl_matrix_get(vert,2,gsl_matrix_get(uLINK[j].face,k,i)));
         }
         glEnd();
         //gsl_vector_scale(norm,10);
+//set_material(&cyan_plastic);
 
 //DrawForceMarker(pos,norm);
 
         glLineWidth( 2.0f );
         glBegin(GL_LINE_LOOP);
+#if colors
         glColor3ub(0,0,0);
+#endif
+#if materials
+        set_material(&black_rubber);
+#endif
         for (k = 0; k < 4; ++k)
         {
             glVertex3d(gsl_matrix_get(vert,0,gsl_matrix_get(uLINK[j].face,k,i)),gsl_matrix_get(vert,1,gsl_matrix_get(uLINK[j].face,k,i)),gsl_matrix_get(vert,2,gsl_matrix_get(uLINK[j].face,k,i)));
@@ -95,7 +141,12 @@ void DrawPolygon(SuLINK uLINK[],int j)
 
     glLineWidth( 5.0f );
     glBegin(GL_LINES);
+#if colors
     glColor3ub(0,0,0);
+#endif
+#if materials
+        set_material(&black_rubber);
+#endif
     glVertex3d(gsl_vector_get (uLINK[j].p,0),gsl_vector_get (uLINK[j].p,1),gsl_vector_get (uLINK[j].p,2));
 
     glVertex3d((gsl_matrix_get(vert,0,0)+gsl_matrix_get(vert,0,6))/2,
@@ -103,8 +154,12 @@ void DrawPolygon(SuLINK uLINK[],int j)
                (gsl_matrix_get(vert,2,0)+gsl_matrix_get(vert,2,6))/2);
     glEnd();
 
-
+#if colors
     glColor3ub(0,0,255);
+#endif
+#if materials
+        set_material(&turquoise);
+#endif
     for (i = 0; i < 8; ++i)///////////////////////////////////////////////////////////
     {
         if (gsl_vector_get(uLINK[j].isContact,i)==1)
@@ -133,6 +188,7 @@ void DrawPolygon(SuLINK uLINK[],int j)
         }
     }
 
+    glPopMatrix();
 //    gsl_matrix_free(vert);
 }
 

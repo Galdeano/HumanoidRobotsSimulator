@@ -9,6 +9,7 @@
 
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include "DrawLight.h"
 
 void   DrawCylinder(SuLINK uLINK[],int j)
 {
@@ -28,16 +29,21 @@ void   DrawCylinder(SuLINK uLINK[],int j)
 
     GLdouble rotgl[16];
 
-    glGetDoublev(GL_MODELVIEW_MATRIX, rotgl);//charge avec identitee
+    //glGetDoublev(GL_MODELVIEW_MATRIX, rotgl);//charge avec identitee
     for (i = 0; i < 3; ++i)
     {
         for (k = 0; k < 3; ++k)
         {
             rotgl[i*4+k] = gsl_matrix_get (uLINK[j].R, k,i);
         }
+        rotgl[i*4+3]=0.0;
+        //rotgl[i+12]=gsl_vector_get(uLINK[j].p,i);
+    }
+    for (i = 0; i < 3; ++i)
+    {
         rotgl[i+12]=gsl_vector_get(uLINK[j].p,i);
     }
-
+    rotgl[i+12]=1.0;
 
 //DrawMarker(uLINK[j].p);
     //glTranslated(gsl_vector_get(uLINK[j].p,0),gsl_vector_get(uLINK[j].p,1),gsl_vector_get(uLINK[j].p,2));
@@ -52,6 +58,7 @@ void   DrawCylinder(SuLINK uLINK[],int j)
 
     gluQuadricDrawStyle(params,GLU_FILL);
     //GLU_LINE
+#if colors
 #if !VisuTorquesColor
     if (uLINK[j].color==0)//red
         glColor3ub(255,0,0);
@@ -81,6 +88,10 @@ void   DrawCylinder(SuLINK uLINK[],int j)
         glColor3ub(colorT,255-colorT,colorT);
     }
 #endif
+#endif
+#if materials
+        set_material(&emerald);
+#endif
     gluCylinder(params,radius,radius,len,faces,1);
 
     glRotated(180,0,1,0);
@@ -90,12 +101,17 @@ void   DrawCylinder(SuLINK uLINK[],int j)
     gluDisk(params,0,radius,faces,1);
     glTranslated(0,0,-len);
     gluQuadricDrawStyle(params,GLU_LINE);
-    glColor3ub(0,0,0);
+#if colors
+        glColor3ub(0,0,0);
+#endif
+#if materials
+        set_material(&black_rubber);
+#endif
     gluCylinder(params,radius,radius,len,faces,1);
-    gluDeleteQuadric(params);
 #if VisuArticularsLimits
     gluPartialDisk(params,0.04,0.12,20,1,180+(uLINK[j+2].qmin)*RadToDeg,-1*(-uLINK[j+2].qmax+uLINK[j+2].qmin)*RadToDeg);
 #endif
+    gluDeleteQuadric(params);
     glPopMatrix();
 
 }

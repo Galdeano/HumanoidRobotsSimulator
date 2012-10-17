@@ -16,10 +16,6 @@ void CalcCoMJacobian( SuLINK uLINK[],State *Status, gsl_matrix * J, int base_cal
     static double mass;
 
 
-
-///TODO: remplacer extem par methode propre
-///TODO: remplacer 23 par dof
-
     static gsl_vector * a;
     static gsl_vector * error;
     static gsl_matrix * mc;
@@ -37,16 +33,15 @@ void CalcCoMJacobian( SuLINK uLINK[],State *Status, gsl_matrix * J, int base_cal
     {
         a = gsl_vector_calloc (3);
         error = gsl_vector_calloc (3);
-        mc = gsl_matrix_calloc(24,3);
-        m = gsl_vector_calloc(24);
-        store_mc = gsl_matrix_calloc(24,3);
-        store_m = gsl_vector_calloc(24);
+        mc = gsl_matrix_calloc((Status->ddl)-3,3);
+        m = gsl_vector_calloc((Status->ddl)-3);
+        store_mc = gsl_matrix_calloc((Status->ddl)-3,3);
+        store_m = gsl_vector_calloc((Status->ddl)-3);
         tmpv3 = gsl_vector_calloc (3);
         tmpv3_2 = gsl_vector_calloc (3);
-        mother = gsl_vector_calloc(24);
-        double_path = gsl_vector_calloc(24);
+        mother = gsl_vector_calloc((Status->ddl)-3);
+        double_path = gsl_vector_calloc((Status->ddl)-3);
         path=calloc((Status->ddl)+2-6,sizeof(int));
-
 
         mass=TotalMass(uLINK,1);
         init_tmp=0;

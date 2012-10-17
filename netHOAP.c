@@ -43,22 +43,32 @@ Hoap hoapConnect(const char* addr, short port, HoapSensor* sensor)
     hoap.sock = sock;
 #else
     int i;
-//    const double deg2rad=M_PI/180;
     const double motor_command_init_p2[21] =
     {
         0, 40,  3697,  9537, -5840, -344,  18810, -2000,  0,  8800,
         0, 40, -3727, -9536,  5809,  425, -18810,  2000,  0, -8800, 418
     };
-//    const double motor_rotation[21] =
-//    {
-//        1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0,
-//        1.0, 1.0, 1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0
-//    };
+    const double fsr_right_init[4] =
+    {
+        //273, 434,  450,  558
+        216,272,229,274
+
+    };
+    const double fsr_left_init[4] =
+    {
+        //273, 434,  450,  558
+        309,217,264,220
+    };
 
     for(i=0; i<21; i++)
     {
         sensor->q[i]=motor_command_init_p2[i];
-        //sensor->q[i]=deg2rad*motor_rotation[i]*motor_command_init_p2[i]/209;
+    }
+
+    for(i=0; i<4; i++)
+    {
+        sensor->fsr_right[i]=fsr_right_init[i];
+        sensor->fsr_left[i]=fsr_left_init[i];
     }
 #endif
     return hoap;
@@ -84,12 +94,69 @@ void hoapControl(Hoap hoap, HoapSensor* sensor, const HoapControl* control)
 {
 #if !local
     send(hoap.sock,(char*)control,sizeof(HoapControl),0);
-#else
+#endif
+#if local
+#if !replay
     int j;
     for(j=0; j<21; j++)
     {
         sensor->q[j]=control->q[j];
     }
+#else
+    static int j,k,size;
+    static FILE *sensor_file;
+    static FILE *control_file;
+    static FILE *zmp_file;
+    static FILE *t_file;
+    static int init_tmp=1;
+    if (init_tmp==1)
+    {
+        sensor_file=fopen("./../../Simu_data/sensor.txt","r");
+        control_file=fopen("./../../Simu_data/control.txt","r");
+        zmp_file=fopen("./../../Simu_data/zmp.txt","r");
+        t_file=fopen("./../../Simu_data/t.txt","r");
+        init_tmp=0;
+    }
+
+
+    //printf("q: ");
+    for(j=0; j<21; j++)
+    {
+        fscanf(sensor_file,"%d",&(sensor->q[j]));
+        //printf("%d ",sensor->q[j]);
+    }
+    //printf("\n");
+    //printf("dq: ");
+    for(j=0; j<21; j++)
+    {
+        fscanf(sensor_file,"%d",&(sensor->dq[j]));
+        //printf("%d ",sensor->dq[j]);
+    }
+    //printf("\n");
+    //printf("fsrr: ");
+    for(j=0; j<4; j++)
+    {
+        fscanf(sensor_file,"%d",&(sensor->fsr_right[j]));
+        //printf("%d ",sensor->fsr_right[j]);
+    }
+    //printf("\n");
+    //printf("fsrl: ");
+    for(j=0; j<4; j++)
+    {
+        fscanf(sensor_file,"%d",&(sensor->fsr_left[j]));
+        //printf("%d ",sensor->fsr_left[j]);
+    }
+    //printf("\n");
+    //printf("acc: ");
+    for(j=0; j<6; j++)
+    {
+        fscanf(sensor_file,"%d",&(sensor->acc_gyro[j]));
+        //printf("%d ",sensor->acc_gyro[j]);
+    }
+    //printf("\n");
+
+
+#endif
 #endif
 }
 

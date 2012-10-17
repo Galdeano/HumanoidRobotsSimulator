@@ -45,32 +45,34 @@ void SetupRigidBody(SuLINK uLINK[],int j)
 
 
     gsl_matrix_set (uLINK[j].face,0,0,0);
-    gsl_matrix_set (uLINK[j].face,0,1,1);
-    gsl_matrix_set (uLINK[j].face,0,2,3);
-    gsl_matrix_set (uLINK[j].face,0,3,0);
-    gsl_matrix_set (uLINK[j].face,0,4,0);
-    gsl_matrix_set (uLINK[j].face,0,5,4);
-
     gsl_matrix_set (uLINK[j].face,1,0,1);
-    gsl_matrix_set (uLINK[j].face,1,1,5);
-    gsl_matrix_set (uLINK[j].face,1,2,2);
-    gsl_matrix_set (uLINK[j].face,1,3,4);
-    gsl_matrix_set (uLINK[j].face,1,4,1);
-    gsl_matrix_set (uLINK[j].face,1,5,5);
-
     gsl_matrix_set (uLINK[j].face,2,0,2);
-    gsl_matrix_set (uLINK[j].face,2,1,6);
-    gsl_matrix_set (uLINK[j].face,2,2,6);
-    gsl_matrix_set (uLINK[j].face,2,3,7);
-    gsl_matrix_set (uLINK[j].face,2,4,5);
-    gsl_matrix_set (uLINK[j].face,2,5,6);
-
     gsl_matrix_set (uLINK[j].face,3,0,3);
+
+    gsl_matrix_set (uLINK[j].face,0,1,1);
+    gsl_matrix_set (uLINK[j].face,1,1,5);
+    gsl_matrix_set (uLINK[j].face,2,1,6);
     gsl_matrix_set (uLINK[j].face,3,1,2);
+
+    gsl_matrix_set (uLINK[j].face,0,2,3);
+    gsl_matrix_set (uLINK[j].face,1,2,2);
+    gsl_matrix_set (uLINK[j].face,2,2,6);
     gsl_matrix_set (uLINK[j].face,3,2,7);
-    gsl_matrix_set (uLINK[j].face,3,3,3);
-    gsl_matrix_set (uLINK[j].face,3,4,4);
-    gsl_matrix_set (uLINK[j].face,3,5,7);
+
+    gsl_matrix_set (uLINK[j].face,0,3,0);// 0473
+    gsl_matrix_set (uLINK[j].face,1,3,3);
+    gsl_matrix_set (uLINK[j].face,2,3,7);
+    gsl_matrix_set (uLINK[j].face,3,3,4);
+
+    gsl_matrix_set (uLINK[j].face,0,4,0);// 0154
+    gsl_matrix_set (uLINK[j].face,1,4,4);
+    gsl_matrix_set (uLINK[j].face,2,4,5);
+    gsl_matrix_set (uLINK[j].face,3,4,1);
+
+    gsl_matrix_set (uLINK[j].face,0,5,4);// 4567
+    gsl_matrix_set (uLINK[j].face,1,5,7);
+    gsl_matrix_set (uLINK[j].face,2,5,6);
+    gsl_matrix_set (uLINK[j].face,3,5,5);
 
 
     gsl_matrix_set (uLINK[j].normalface,0,0,0);
