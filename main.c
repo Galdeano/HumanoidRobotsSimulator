@@ -64,7 +64,7 @@
 #include "rot2omega.h"
 
 #include "Hoap_calc_zmp.h"
-#include "zentimer.h"
+
 
 #include <windows.h>
 
@@ -309,16 +309,16 @@ int main(int argc, char *argv[])
 
 
 #if save_data_long
-    FILE *q_file=fopen("./../Simu_data/q.txt","w");
+    FILE *q_file=fopen("./../../Simu_data/q.txt","w");
     //fclose(q_file);
 
-    FILE *qd_file=fopen("./../Simu_data/qd.txt","w");
+    FILE *qd_file=fopen("./../../Simu_data/qd.txt","w");
     //fclose(qd_file);
 
-    FILE *t_file=fopen("./../Simu_data/t.txt","w");
+    FILE *t_file=fopen("./../../Simu_data/t.txt","w");
     //fclose(t_file);
 
-    FILE *dq_file=fopen("./../Simu_data/dq.txt","w");
+    FILE *dq_file=fopen("./../../Simu_data/dq.txt","w");
     //fclose(dq_file);
 
 //    FILE *q_file=fopen("./../Simu_data/q.txt","a");
@@ -504,11 +504,11 @@ int main(int argc, char *argv[])
 #endif
 
 
-    gsl_vector_set_zero(uLINK[Base_].p);
+    gsl_vector_set_zero(uLINK[baseFoot].p);
     //gsl_vector_set (uLINK[Base].p, 2, 0.066);
-    gsl_vector_set (uLINK[Base_].p, 2, 0.04);
-    gsl_matrix_set_identity(uLINK[Base_].R);
-    NodeForwardKinematics(uLINK,Base_,0);
+    gsl_vector_set (uLINK[baseFoot].p, 2, 0.04);
+    gsl_matrix_set_identity(uLINK[baseFoot].R);
+    NodeForwardKinematics(uLINK,baseFoot,0);
 
     CalcCoM(uLINK,com);
 
@@ -581,12 +581,22 @@ int main(int argc, char *argv[])
     int quit;
     quit=0;
     i=0;
+    #if save_data_long
     double freq_;
-    unsigned __int64 baseTime_;
-    unsigned __int64 pf;
-    QueryPerformanceFrequency( (LARGE_INTEGER *)&pf );
-    freq_ = 1.0 / (double)pf;
+    static unsigned __int64 baseTime_;
+    static unsigned __int64 pf_;
+    QueryPerformanceFrequency( (LARGE_INTEGER *)&pf_ );
+    freq_ = 1.0 / (double)pf_;
     QueryPerformanceCounter( (LARGE_INTEGER *)&baseTime_ );
+    #endif
+    #if save_data_quick
+    double freq_;
+    static unsigned __int64 baseTime_;
+    static unsigned __int64 pf_;
+    QueryPerformanceFrequency( (LARGE_INTEGER *)&pf_ );
+    freq_ = 1.0 / (double)pf_;
+    QueryPerformanceCounter( (LARGE_INTEGER *)&baseTime_ );
+    #endif
 
     while(1)
         //for (i = 0; i < 10000; i++)
@@ -882,8 +892,9 @@ int main(int argc, char *argv[])
             fprintf(qd_file,"%d ",control.q[j]);
         }
         fprintf(qd_file,"\n");
-
-        fprintf(t_file,"%f \n",t*Dtime);
+        static unsigned __int64 val;
+        QueryPerformanceCounter( (LARGE_INTEGER *)&val );
+        fprintf(t_file,"%f \n",(double)(val - baseTime_) * freq_);
 
         for(j=0; j<dof; j++)
         {
@@ -896,9 +907,9 @@ int main(int argc, char *argv[])
         buff_sensor[i-1]=sensor;
         buff_control[i-1]=control;
         buff_zmp_c[i-1]=zmp_c;
-        static unsigned __int64 val;
-        QueryPerformanceCounter( (LARGE_INTEGER *)&val );
-        buff_t[i-1]=(double)(val - baseTime_) * freq_;
+        static unsigned __int64 val_;
+        QueryPerformanceCounter( (LARGE_INTEGER *)&val_ );
+        buff_t[i-1]=(double)(val_ - baseTime_) * freq_;
 #endif
 
 
@@ -950,18 +961,18 @@ int main(int argc, char *argv[])
 
 
 #if file_human
-        gsl_vector_set (uLINK[Base_].p, 0, opd[6]);
-        gsl_vector_set (uLINK[Base_].p, 1, opd[7]);
-        gsl_vector_set (uLINK[Base_].p, 2, opd[8]+0.1);
-        gsl_vector_scale(uLINK[Base_].p,scale_task_F2F);
+        gsl_vector_set (uLINK[baseFoot].p, 0, opd[6]);
+        gsl_vector_set (uLINK[baseFoot].p, 1, opd[7]);
+        gsl_vector_set (uLINK[baseFoot].p, 2, opd[8]+0.1);
+        gsl_vector_scale(uLINK[baseFoot].p,scale_task_F2F);
 #else
-        gsl_vector_set_zero(uLINK[Base_].p);
-        gsl_vector_set (uLINK[Base_].p, 2, 0.04);
+        gsl_vector_set_zero(uLINK[baseFoot].p);
+        gsl_vector_set (uLINK[baseFoot].p, 2, 0.04);
 #endif
 
 
-        gsl_matrix_set_identity(uLINK[Base_].R);
-        NodeForwardKinematics(uLINK,Base_,0);
+        gsl_matrix_set_identity(uLINK[baseFoot].R);
+        NodeForwardKinematics(uLINK,baseFoot,0);
 
 #endif
 

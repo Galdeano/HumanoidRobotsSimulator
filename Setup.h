@@ -165,7 +165,7 @@
     \brief 1: display toques via color change on joints articulation
 */
 
-#define Base_ 13
+#define baseFoot 13
 /*! \def base
     \brief base link for computation
 */

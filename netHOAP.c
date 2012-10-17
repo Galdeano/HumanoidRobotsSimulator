@@ -96,67 +96,67 @@ void hoapControl(Hoap hoap, HoapSensor* sensor, const HoapControl* control)
     send(hoap.sock,(char*)control,sizeof(HoapControl),0);
 #endif
 #if local
-#if !replay
+//#if !replay
     int j;
     for(j=0; j<21; j++)
     {
         sensor->q[j]=control->q[j];
     }
-#else
-    static int j,k,size;
-    static FILE *sensor_file;
-    static FILE *control_file;
-    static FILE *zmp_file;
-    static FILE *t_file;
-    static int init_tmp=1;
-    if (init_tmp==1)
-    {
-        sensor_file=fopen("./../../Simu_data/sensor.txt","r");
-        control_file=fopen("./../../Simu_data/control.txt","r");
-        zmp_file=fopen("./../../Simu_data/zmp.txt","r");
-        t_file=fopen("./../../Simu_data/t.txt","r");
-        init_tmp=0;
-    }
-
-
-    //printf("q: ");
-    for(j=0; j<21; j++)
-    {
-        fscanf(sensor_file,"%d",&(sensor->q[j]));
-        //printf("%d ",sensor->q[j]);
-    }
-    //printf("\n");
-    //printf("dq: ");
-    for(j=0; j<21; j++)
-    {
-        fscanf(sensor_file,"%d",&(sensor->dq[j]));
-        //printf("%d ",sensor->dq[j]);
-    }
-    //printf("\n");
-    //printf("fsrr: ");
-    for(j=0; j<4; j++)
-    {
-        fscanf(sensor_file,"%d",&(sensor->fsr_right[j]));
-        //printf("%d ",sensor->fsr_right[j]);
-    }
-    //printf("\n");
-    //printf("fsrl: ");
-    for(j=0; j<4; j++)
-    {
-        fscanf(sensor_file,"%d",&(sensor->fsr_left[j]));
-        //printf("%d ",sensor->fsr_left[j]);
-    }
-    //printf("\n");
-    //printf("acc: ");
-    for(j=0; j<6; j++)
-    {
-        fscanf(sensor_file,"%d",&(sensor->acc_gyro[j]));
-        //printf("%d ",sensor->acc_gyro[j]);
-    }
-    //printf("\n");
-
-
-#endif
+//#else
+//    static int j,k,size;
+//    static FILE *sensor_file;
+//    static FILE *control_file;
+//    static FILE *zmp_file;
+//    static FILE *t_file;
+//    static int init_tmp=1;
+//    if (init_tmp==1)
+//    {
+//        sensor_file=fopen("./../../Simu_data/sensor.txt","r");
+//        control_file=fopen("./../../Simu_data/control.txt","r");
+//        zmp_file=fopen("./../../Simu_data/zmp.txt","r");
+//        t_file=fopen("./../../Simu_data/t.txt","r");
+//        init_tmp=0;
+//    }
+//
+//
+//    //printf("q: ");
+//    for(j=0; j<21; j++)
+//    {
+//        fscanf(sensor_file,"%d",&(sensor->q[j]));
+//        //printf("%d ",sensor->q[j]);
+//    }
+//    //printf("\n");
+//    //printf("dq: ");
+//    for(j=0; j<21; j++)
+//    {
+//        fscanf(sensor_file,"%d",&(sensor->dq[j]));
+//        //printf("%d ",sensor->dq[j]);
+//    }
+//    //printf("\n");
+//    //printf("fsrr: ");
+//    for(j=0; j<4; j++)
+//    {
+//        fscanf(sensor_file,"%d",&(sensor->fsr_right[j]));
+//        //printf("%d ",sensor->fsr_right[j]);
+//    }
+//    //printf("\n");
+//    //printf("fsrl: ");
+//    for(j=0; j<4; j++)
+//    {
+//        fscanf(sensor_file,"%d",&(sensor->fsr_left[j]));
+//        //printf("%d ",sensor->fsr_left[j]);
+//    }
+//    //printf("\n");
+//    //printf("acc: ");
+//    for(j=0; j<6; j++)
+//    {
+//        fscanf(sensor_file,"%d",&(sensor->acc_gyro[j]));
+//        //printf("%d ",sensor->acc_gyro[j]);
+//    }
+//    //printf("\n");
+//
+//
+//#endif
 #endif
 }
 
