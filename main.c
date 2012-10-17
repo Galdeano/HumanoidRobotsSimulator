@@ -51,6 +51,7 @@
 #include "CalcCoMJacobian.h"
 
 
+
 #include "Setup.h"
 
 
@@ -62,7 +63,10 @@
 #include "Rodrigues.h"
 #include "rot2omega.h"
 
-//#include <windows.h>
+#include "Hoap_calc_zmp.h"
+#include "zentimer.h"
+
+#include <windows.h>
 
 
 
@@ -108,7 +112,7 @@ int main(int argc, char *argv[])
             //*fgets ( szInput, 25, stdin );
             //j=atoi(szInput);
             //j=3;
-            j=11;
+            j=12;
         }
         while (!(j>2 && j<=i));
 
@@ -186,7 +190,11 @@ int main(int argc, char *argv[])
 
     SDL_Init(SDL_INIT_VIDEO); // Initialisation de la SDL
     atexit(SDL_Quit);
-    SDL_SetVideoMode(640, 480, 32, SDL_OPENGL); // Ouverture de la fenêtre
+
+    //SDL_SetVideoMode(640, 480, 32, SDL_OPENGL); // vga// Ouverture de la fenêtre
+    SDL_SetVideoMode(1024, 768, 32, SDL_OPENGL); // xga// Ouverture de la fenêtre
+    //SDL_SetVideoMode(1400, 1050, 32, SDL_OPENGL); // sxga+// Ouverture de la fenêtre
+
     SDL_WM_SetCaption("Visualisation", NULL);
     SDL_Event event;
 
@@ -195,15 +203,23 @@ int main(int argc, char *argv[])
 
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity( );
-    gluPerspective(50, 640/480, 0.001, 1000);
+
+    //gluPerspective(70, 640/480, 0.001, 1000);// vga
+    gluPerspective(70, 1024/768, 0.001, 1000);// xga
+    //gluPerspective(70, 1400/1050, 0.001, 1000);// sxga+
+
     //gluPerspective(50,(double)640/480,1,1000);
     //gluLookAt(1, 0, 0, 0, 0, 0, 0, 0, 1);
     //gluLookAt(2*gsl_vector_get(Status.com_old,2), -2*gsl_vector_get(Status.com_old,2), 1.4*gsl_vector_get(Status.com_old,2), 0, 0, 0, 0, 0, 1);
 //    gluLookAt(2*gsl_vector_get(Status.com_old,2), -2*gsl_vector_get(Status.com_old,2), 1.4*gsl_vector_get(Status.com_old,2), 0, 0, 0.9*gsl_vector_get(Status.com_old,2), 0, 0, 1);
     glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-    glEnable(GL_DEPTH_TEST | GL_LINE_SMOOTH);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    //glEnable(GL_LINE_SMOOTH);
     glEnable(GL_NORMALIZE);
 //glShadeModel(GL_SMOOTH);
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
 
     double Lc=0.5073;
     double Lt=0.510;
@@ -263,10 +279,11 @@ int main(int argc, char *argv[])
         1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0,
         1.0, 1.0, 1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0
     };
-    const int map[21] =
+    const int map[23] =
     {
         2, 3, 4, 5, 6, 7, 15, 16, 17, 18,
-        8, 9, 10, 11, 12, 13, 19, 20, 21, 22, 14
+        8, 9, 10, 11, 12, 13, 19, 20, 21, 22, 14,
+        23, 24
     };
 
     const short motor_l_bound[21] =
@@ -290,6 +307,8 @@ int main(int argc, char *argv[])
     int nb_scan;
 #endif
 
+
+#if save_data_long
     FILE *q_file=fopen("./../Simu_data/q.txt","w");
     //fclose(q_file);
 
@@ -302,12 +321,18 @@ int main(int argc, char *argv[])
     FILE *dq_file=fopen("./../Simu_data/dq.txt","w");
     //fclose(dq_file);
 
-//#if Light
 //    FILE *q_file=fopen("./../Simu_data/q.txt","a");
 //    FILE *qd_file=fopen("./../Simu_data/qd.txt","a");
 //    FILE *t_file=fopen("./../Simu_data/t.txt","a");
 //    FILE *dq_file=fopen("./../Simu_data/dq.txt","a");
-//#endif
+#endif
+#if save_data_quick
+    int buf_size=8000;
+    HoapSensor buff_sensor[buf_size];
+    HoapControl buff_control[buf_size];
+    zmp_calc buff_zmp_c[buf_size];
+    double  buff_t[buf_size];
+#endif
 
     static gsl_vector * idx1;
     static gsl_vector * idx2;
@@ -442,11 +467,21 @@ int main(int argc, char *argv[])
 #if reseau
     HoapSensor sensor;
     HoapControl control;
+    zmp_calc zmp_c;
+
     Hoap hoap = hoapConnect("10.59.145.197", 55000, &sensor);
     hoapSensor(hoap, &sensor);
+
     for(j=0; j<(dof); j++)
     {
-        uLINK[map[j]].q = deg2rad*sensor.q[j]*motor_rotation[j]/209;
+        if(uLINK[map[j]].fixed==0)
+        {
+            uLINK[map[j]].q = deg2rad*sensor.q[j]*motor_rotation[j]/209;
+        }
+        else
+        {
+            uLINK[map[j]].q = 0;
+        }
         control.q[j]=sensor.q[j];
         printf("%4.6f ",rad2deg*uLINK[map[j]].q);
     }
@@ -469,11 +504,11 @@ int main(int argc, char *argv[])
 #endif
 
 
-    gsl_vector_set_zero(uLINK[Base].p);
+    gsl_vector_set_zero(uLINK[Base_].p);
     //gsl_vector_set (uLINK[Base].p, 2, 0.066);
-    gsl_vector_set (uLINK[Base].p, 2, 0.04);
-    gsl_matrix_set_identity(uLINK[Base].R);
-    NodeForwardKinematics(uLINK,Base,0);
+    gsl_vector_set (uLINK[Base_].p, 2, 0.04);
+    gsl_matrix_set_identity(uLINK[Base_].R);
+    NodeForwardKinematics(uLINK,Base_,0);
 
     CalcCoM(uLINK,com);
 
@@ -484,11 +519,21 @@ int main(int argc, char *argv[])
 
     gsl_vector_memcpy(Init_task_CoM,com);
     gsl_vector_memcpy(Init_task_F2F,task2);
-    gsl_vector_set(Stand_task_CoM,0,0.01);
-    gsl_vector_set(Stand_task_CoM,1,-0.039);
-    gsl_vector_set(Stand_task_CoM,2,0.27);
+
+    gsl_vector_set(Stand_task_CoM,0,0.026);
+    gsl_vector_set(Stand_task_CoM,1,-0.038);
+    gsl_vector_set(Stand_task_CoM,2,0.29);
+
+//    gsl_vector_set(Stand_task_CoM,0,0.015);
+//    gsl_vector_set(Stand_task_CoM,1,-0.047);
+//    gsl_vector_set(Stand_task_CoM,2,0.285);
+//
+//    gsl_vector_set(Stand_task_CoM,0,0.010);
+//    gsl_vector_set(Stand_task_CoM,1,-0.039);
+//    gsl_vector_set(Stand_task_CoM,2,0.27);
 
     PrintGSLVector(Init_task_CoM);
+    PrintGSLVector(Stand_task_CoM);
     //PrintGSLVector(Init_task_F2F);
 
     gsl_vector_scale(Init_task_F2F,-1.0f);
@@ -525,7 +570,6 @@ int main(int argc, char *argv[])
 #endif
 
 
-
 //
 //    PrintGSLVector(Init_task_CoM);
 //    PrintGSLVector(Init_task_F2F);
@@ -534,19 +578,44 @@ int main(int argc, char *argv[])
 
 //clock_t begin,end;
 //double elapsed;
-
+    int quit;
+    quit=0;
     i=0;
+    double freq_;
+    unsigned __int64 baseTime_;
+    unsigned __int64 pf;
+    QueryPerformanceFrequency( (LARGE_INTEGER *)&pf );
+    freq_ = 1.0 / (double)pf;
+    QueryPerformanceCounter( (LARGE_INTEGER *)&baseTime_ );
+
     while(1)
         //for (i = 0; i < 10000; i++)
     {
         i++;
 //begin = clock();
 
+#if save_data_quick
+        if (i>=buf_size)
+        {
+            break;
+        }
+#endif
+        if (quit==1)
+        {
+            break;
+        }
+
+
         SDL_PollEvent(&event);
         switch (event.type)
         {
         case SDL_QUIT:
+#if save_data_quick
+            quit=1;
+            continue;
+#else
             exit(0);
+#endif
             break;
 #if !Light
         case SDL_KEYDOWN:
@@ -570,6 +639,8 @@ int main(int argc, char *argv[])
             OnMouseButton(&CamParam,event.button); //tous les événements boutons (up ou down) sont donnés à la caméra
             break;
 #endif
+        default:
+            break;
         }
 
 #if reseau
@@ -577,9 +648,17 @@ int main(int argc, char *argv[])
 
         for(j=0; j<(dof); j++)
         {
-            uLINK[map[j]].q = deg2rad*sensor.q[j]*motor_rotation[j]/209;
-            //uLINK[map[j]].q = deg2rad*control.q[j]*motor_rotation[j]/209;
+            if(uLINK[map[j]].fixed==0)
+            {
+                uLINK[map[j]].q = deg2rad*sensor.q[j]*motor_rotation[j]/209;
+            }
+            else
+            {
+                uLINK[map[j]].q = 0;
+            }
         }
+        Hoap_calc_zmp(&sensor,&zmp_c);
+
 #endif
 
 #if file_motor
@@ -614,9 +693,10 @@ int main(int argc, char *argv[])
 //        CalcCoMJacobian(uLINK,&Status, JCoMR, Status.right_foot_ID);
         CalcCoMJacobian(uLINK,&Status, JCoML, Status.left_foot_ID);
 
-        static double wO=1.0;
-        static double amp=0.02;
+        static double wO=2.0;
+        static double amp=0.015;
         static double interp=0.5;
+
 
 //        gsl_matrix_set_identity(R);
 //        gsl_vector_set_zero(p);
@@ -645,6 +725,7 @@ int main(int argc, char *argv[])
 
         }
 #endif
+
         if((t*Dtime)>=interp)
         {
             gsl_matrix_set_identity(R);
@@ -659,9 +740,8 @@ int main(int argc, char *argv[])
             Rodrigues(R,error,dt);
         }
         CalcVWerrOri(uLINK, task2, p, R,idx2);
-#if !Light
         //PrintGSLVector(task2);
-#endif
+
 
 
 #if file_human
@@ -692,11 +772,10 @@ int main(int argc, char *argv[])
         //gsl_blas_dgemv(CblasNoTrans, 1.0, uLINK[Status.right_foot_ID].R, p, 0.0, taskCoMR);
         gsl_vector_memcpy(taskCoML,p);
         CalcCoM(uLINK,CoM);
-//       PrintGSLVector(CoM);
+        //PrintGSLVector(CoM);
         gsl_vector_sub(taskCoML,CoM);
-#if !Light
         //PrintGSLVector(taskCoMR);
-#endif
+
 
         //gsl_blas_dgemv(CblasNoTrans, 1.0, uLINK[Status.left_foot_ID].R, p, 0.0, taskCoML);
 //        gsl_vector_memcpy(taskCoML,p);
@@ -770,23 +849,27 @@ int main(int argc, char *argv[])
 #if reseau
         for(j=0; j<(dof); j++)
         {
-            //uLINK[map[j]].q =uLINK[map[j]].q+0.2*gsl_vector_get(dq,map[j]-2);
-            control.q[j]=rad2deg*motor_rotation[j]*(uLINK[map[j]].q+0.5*gsl_vector_get(dq,map[j]-2))*209;
-            //printf("%d: %d %d\n",j+1,sensor.q[j],control.q[j]);
-            if(control.q[j]<(motor_l_bound[j]+209))
+            if(uLINK[map[j]].fixed==0)
             {
-                control.q[j]=motor_l_bound[j]+209;
-            }
-            if(control.q[j]>(motor_u_bound[j]-209))
-            {
-                control.q[j]=motor_u_bound[j]-209;
+                //uLINK[map[j]].q =uLINK[map[j]].q+0.2*gsl_vector_get(dq,map[j]-2);
+                control.q[j]=rad2deg*motor_rotation[j]*(uLINK[map[j]].q+0.5*gsl_vector_get(dq,map[j]-2))*209;
+                //printf("%d: %d %d\n",j+1,sensor.q[j],control.q[j]);
+                if(control.q[j]<(motor_l_bound[j]+209))
+                {
+                    control.q[j]=motor_l_bound[j]+209;
+                }
+                if(control.q[j]>(motor_u_bound[j]-209))
+                {
+                    control.q[j]=motor_u_bound[j]-209;
+                }
             }
         }
 
 
+
         hoapControl(hoap, &sensor, &control);
 
-#if Light
+#if save_data_long
 
         for(j=0; j<dof; j++)
         {
@@ -809,7 +892,14 @@ int main(int argc, char *argv[])
         fprintf(dq_file,"\n");
 
 #endif
-
+#if save_data_quick
+        buff_sensor[i-1]=sensor;
+        buff_control[i-1]=control;
+        buff_zmp_c[i-1]=zmp_c;
+        static unsigned __int64 val;
+        QueryPerformanceCounter( (LARGE_INTEGER *)&val );
+        buff_t[i-1]=(double)(val - baseTime_) * freq_;
+#endif
 
 
 //        for(j=0; j<(dof); j++)
@@ -860,18 +950,18 @@ int main(int argc, char *argv[])
 
 
 #if file_human
-        gsl_vector_set (uLINK[Base].p, 0, opd[6]);
-        gsl_vector_set (uLINK[Base].p, 1, opd[7]);
-        gsl_vector_set (uLINK[Base].p, 2, opd[8]+0.1);
-        gsl_vector_scale(uLINK[Base].p,scale_task_F2F);
+        gsl_vector_set (uLINK[Base_].p, 0, opd[6]);
+        gsl_vector_set (uLINK[Base_].p, 1, opd[7]);
+        gsl_vector_set (uLINK[Base_].p, 2, opd[8]+0.1);
+        gsl_vector_scale(uLINK[Base_].p,scale_task_F2F);
 #else
-        gsl_vector_set_zero(uLINK[Base].p);
-        gsl_vector_set (uLINK[Base].p, 2, 0.04);
+        gsl_vector_set_zero(uLINK[Base_].p);
+        gsl_vector_set (uLINK[Base_].p, 2, 0.04);
 #endif
 
 
-        gsl_matrix_set_identity(uLINK[Base].R);
-        NodeForwardKinematics(uLINK,Base,0);
+        gsl_matrix_set_identity(uLINK[Base_].R);
+        NodeForwardKinematics(uLINK,Base_,0);
 
 #endif
 
@@ -881,20 +971,132 @@ int main(int argc, char *argv[])
         sprintf(titre,"Visualisation t= %3.3f", t*Dtime);
         SDL_WM_SetCaption(titre, NULL);
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glMatrixMode( GL_MODELVIEW );
+
+
+        //glClearStencil(0);
+//        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT |GL_STENCIL_BUFFER_BIT);
+//glCullFace(GL_BACK);
+//glCullFace(GL_FRONT);
+
+
         Init_light();
+        glMatrixMode( GL_MODELVIEW );
         glLoadIdentity();
-        //glRotated(angular_z,0,0,1);
         Camlook(&Status,&CamParam);
 
+        //glRotated(angular_z,0,0,1);
+
+
+
+#if shadow
+
+        GLfloat light0_position [] = {2.0f, -2.0f, 2.0f, 1.0f};
+        GLfloat shadowPlane [] = {0.0f, 0.0f, 1.0f, 0.0f};
+        //GLfloat shadowPlane [] = {0.0f, 0.0f, 1.0f, 0.0f};
+        buildShadowMatrix( g_shadowMatrix, light0_position , shadowPlane );
+
+
+        //
+        // Render the floor to the stencil buffer so we can use it later to trim
+        // the shadow at the floor's edge...
+        //
+        glEnable( GL_STENCIL_TEST );
+        glStencilFunc( GL_ALWAYS, 1, 0xFFFFFFFF );         // Write a 1 to the stencil buffer everywhere we are about to draw
+        glStencilOp( GL_REPLACE, GL_REPLACE, GL_REPLACE ); // If a 1 is written to the stencil buffer - simply replace the current value stored there with the 1.
+
+        glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE ); // Disable writing to the color buffer
+        glDepthMask( GL_FALSE );                               // Disable writing to the depth buffer
+        DrawGround(2.0,0.0,-0.05,6.0,6.0,0.1);
+
+        glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE ); // Re-enable writing to the color buffer
+        glDepthMask( GL_TRUE );                            // Re-enable writing to the depth buffer
+        glDisable( GL_STENCIL_TEST );
+
+        //
+        // Render the floor...
+        //
+        DrawGround(2.0,0.0,-0.05,6.0,6.0,0.1);
+
+        //
+        // Render the shadow...
+        //
+
+        // Use our stencil to keep the shadow from running off the floor.
+        glEnable( GL_STENCIL_TEST );
+        glStencilFunc( GL_EQUAL, 1, 0xFFFFFFFF ); // Only write to areas where the stencil buffer has a 1.
+        glStencilOp( GL_KEEP, GL_KEEP, GL_KEEP ); // Don't modify the contents of the stencil buffer
+
+        glDisable( GL_LIGHTING );
+        glDisable( GL_DEPTH_TEST );
+        glEnable( GL_BLEND );
+        glDisable(GL_COLOR_MATERIAL);
+
+        glPushMatrix();
+        {
+            // Load the teapot's shadow matrix
+            glMultMatrixf( g_shadowMatrix );
+
+            glColor3f(0.1f, 0.1f, 0.1f); // shadow color
+
+            {
+                DrawAllJoints(uLINK,1);
+            }
+        }
+        glPopMatrix();
+
+        glEnable( GL_DEPTH_TEST );
+        glDisable( GL_BLEND );
+        glEnable( GL_LIGHTING );
+        glDisable( GL_STENCIL_TEST );
+        glEnable(GL_COLOR_MATERIAL);
+
+        DrawAllJoints(uLINK,1);
+
+#endif
+
+#if !shadow
+        DrawGround(2.0,0.0,-0.05,6.0,6.0,0.1);
+        DrawAllJoints(uLINK,1);
+#endif
+
+//    glDisable(GL_DEPTH_TEST);
+//    glDisable(GL_LIGHTING);
+//    glColor3f(0.0f, 0.0f, 0.0f); // Shadow's color
+//    glPushMatrix();
+//    {
+//        glMultMatrixf((GLfloat *)g_shadowMatrix);
+//        DrawAllJoints(uLINK,1);
+//    }
+//    glPopMatrix();
+//    glEnable(GL_DEPTH_TEST);
+//    glEnable(GL_LIGHTING);
+
+
+
+
         CalcCoM(uLINK,com);
+#if colors
         glColor3ub(0,0,255);
+#endif
+#if materials
+        set_material(&turquoise);
+#endif
         gsl_vector_set (com, 2, 0);
         DrawMarker(com);
 
-        DrawAllJoints(uLINK,1);
-        DrawGround(2.0,0.0,-0.11,6.0,6.0,0.1);
+#if colors
+        glColor3ub(255,0,0);
+#endif
+#if materials
+        set_material(&ruby);
+#endif
+        Hoap_calc_zmp_visu(uLINK,&Status,&zmp_c);
+
+//DrawOBJ("./Robots/HOAP3mesh_old/BODY_LINK01.obj");
+
+
+
         glFlush();
         SDL_GL_SwapBuffers();
         //SDL_Delay(5);
@@ -916,12 +1118,77 @@ int main(int argc, char *argv[])
 #endif
 
 
-#if Light
+#if save_data_long
     fclose(q_file);
     fclose(qd_file);
     fclose(t_file);
     fclose(dq_file);
 #endif
+#if save_data_quick
+
+    FILE *sensor_file=fopen("./../../Simu_data/sensor.txt","w");
+    FILE *control_file=fopen("./../../Simu_data/control.txt","w");
+    FILE *zmp_file=fopen("./../../Simu_data/zmp.txt","w");
+    FILE *t_file=fopen("./../../Simu_data/t.txt","w");
+
+    int k;
+    for(k=0; k<(i-2); k++)
+    {
+
+        for(j=0; j<21; j++)
+        {
+            fprintf(sensor_file,"%d ",buff_sensor[k].q[j]);
+        }
+        fprintf(sensor_file,"\n");
+        for(j=0; j<21; j++)
+        {
+            fprintf(sensor_file,"%d ",buff_sensor[k].dq[j]);
+        }
+        fprintf(sensor_file,"\n");
+        for(j=0; j<4; j++)
+        {
+            fprintf(sensor_file,"%d ",buff_sensor[k].fsr_right[j]);
+        }
+        fprintf(sensor_file,"\n");
+        for(j=0; j<4; j++)
+        {
+            fprintf(sensor_file,"%d ",buff_sensor[k].fsr_left[j]);
+        }
+        fprintf(sensor_file,"\n");
+        for(j=0; j<6; j++)
+        {
+            fprintf(sensor_file,"%d ",buff_sensor[k].acc_gyro[j]);
+        }
+        fprintf(sensor_file,"\n \n");
+
+        for(j=0; j<21; j++)
+        {
+            fprintf(control_file,"%d ",buff_control[k].q[j]);
+        }
+        fprintf(control_file,"\n");
+
+        fprintf(zmp_file,"%f ",buff_zmp_c[k].zmp_right.W);
+        fprintf(zmp_file,"%f ",buff_zmp_c[k].zmp_right.x);
+        fprintf(zmp_file,"%f ",buff_zmp_c[k].zmp_right.y);
+        fprintf(zmp_file,"%f ",buff_zmp_c[k].zmp_left.W);
+        fprintf(zmp_file,"%f ",buff_zmp_c[k].zmp_left.x);
+        fprintf(zmp_file,"%f ",buff_zmp_c[k].zmp_left.y);
+        fprintf(zmp_file,"\n");
+
+        fprintf(t_file,"%f ",buff_t[k]);
+        fprintf(t_file,"\n");
+    }
+//    fwrite(&buff_sensor, (i-2)*sizeof(HoapSensor), 1, sensor_file);
+//    fwrite(&buff_control, (i-2)*sizeof(HoapControl), 1, control_file);
+//    fwrite(&buff_zmp_c, (i-2)*sizeof(zmp_calc), 1, zmp_file);
+
+    fclose(sensor_file);
+    fclose(control_file);
+    fclose(zmp_file);
+    fclose(t_file);
+#endif
+
+
 
     return EXIT_SUCCESS; // Fermeture du programme
 
@@ -1131,7 +1398,7 @@ int main(int argc, char *argv[])
 
 
 
-    //double EndTime = 3;
+//double EndTime = 3;
 
 
     char files[40];
@@ -1141,7 +1408,7 @@ int main(int argc, char *argv[])
 
 
     int ground=0;
-    //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY*1000,SDL_DEFAULT_REPEAT_INTERVAL*1000);
+//SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY*1000,SDL_DEFAULT_REPEAT_INTERVAL*1000);
 
 
 
@@ -1367,7 +1634,7 @@ int main(int argc, char *argv[])
             //gsl_vector_set_zero(uLINK[1].vo);
             ForwardDynamics(uLINK,&Status,t);
             IntegrateEuler(uLINK,1);
-            /// todo : Runge kuta
+            /// \todo Runge kuta
         }
 #endif
 
@@ -1399,10 +1666,11 @@ int main(int argc, char *argv[])
  *
  * \section intro_sec Introduction
  *
- * This program is coded in C using the SDL, OpenGL and gsl libraries functions. For now, SimuSherpaConsole is available for Windows and may work on other systems.
+ * This program is coded in C using the ezxml, SDL, OpenGL and gsl libraries functions. For now, SimuSherpaConsole is available for Windows and may work on other systems.
  *
  * Many functions for dynamics computations are adapted from Kajita's book: Humanoid Robot.
  *
+ * ezxml librarie is used for xml file manipulation.
  * SDL and OpenGL libraries are used for graphical representations of the simulation.
  * gls librarie is used for vector and matrix computations.
  *
