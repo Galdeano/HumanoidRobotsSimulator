@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
             //*fgets ( szInput, 25, stdin );
             //j=atoi(szInput);
             //j=3;
-            j=12;
+            j=13;
         }
         while (!(j>2 && j<=i));
 
@@ -327,11 +327,18 @@ int main(int argc, char *argv[])
 //    FILE *dq_file=fopen("./../Simu_data/dq.txt","a");
 #endif
 #if save_data_quick
-    int buf_size=8000;
-    HoapSensor buff_sensor[buf_size];
-    HoapControl buff_control[buf_size];
-    zmp_calc buff_zmp_c[buf_size];
-    double  buff_t[buf_size];
+//malloc SuLINK *uLINK; uLINK = calloc(dof+2,sizeof(SuLINK));
+    const int buf_size=200000;
+    //HoapSensor buff_sensor[buf_size];
+    //    //HoapControl buff_control[buf_size];
+    //zmp_calc buff_zmp_c[buf_size];
+    //double  buff_t[buf_size];
+    HoapSensor *buff_sensor;
+    buff_sensor = calloc(buf_size,sizeof(HoapSensor));
+    zmp_calc *buff_zmp_c;
+    buff_zmp_c = calloc(buf_size,sizeof(zmp_calc));
+    double  *buff_t;
+    buff_t = calloc(buf_size,sizeof(double));
 #endif
 
     static gsl_vector * idx1;
@@ -796,7 +803,7 @@ int main(int argc, char *argv[])
 
         for (j=0; j<(nDoF-6); j++)
         {
-            gsl_vector_set(adphi,j,-0.01*(2*(uLINK[j+2].q-uLINK[j+2].qmoy)/(qdev[j]*qdev[j])));
+            gsl_vector_set(adphi,j,-0.02*(2*(uLINK[j+2].q-uLINK[j+2].qmoy)/(qdev[j]*qdev[j])));
         }
 //ping(6);
 
@@ -905,7 +912,7 @@ int main(int argc, char *argv[])
 #endif
 #if save_data_quick
         buff_sensor[i-1]=sensor;
-        buff_control[i-1]=control;
+        //buff_control[i-1]=control;
         buff_zmp_c[i-1]=zmp_c;
         static unsigned __int64 val_;
         QueryPerformanceCounter( (LARGE_INTEGER *)&val_ );
@@ -1138,7 +1145,7 @@ int main(int argc, char *argv[])
 #if save_data_quick
 
     FILE *sensor_file=fopen("./../../Simu_data/sensor.txt","w");
-    FILE *control_file=fopen("./../../Simu_data/control.txt","w");
+    //FILE *control_file=fopen("./../../Simu_data/control.txt","w");
     FILE *zmp_file=fopen("./../../Simu_data/zmp.txt","w");
     FILE *t_file=fopen("./../../Simu_data/t.txt","w");
 
@@ -1172,11 +1179,11 @@ int main(int argc, char *argv[])
         }
         fprintf(sensor_file,"\n \n");
 
-        for(j=0; j<21; j++)
-        {
-            fprintf(control_file,"%d ",buff_control[k].q[j]);
-        }
-        fprintf(control_file,"\n");
+//        for(j=0; j<21; j++)
+//        {
+//            fprintf(control_file,"%d ",buff_control[k].q[j]);
+//        }
+//        fprintf(control_file,"\n");
 
         fprintf(zmp_file,"%f ",buff_zmp_c[k].zmp_right.W);
         fprintf(zmp_file,"%f ",buff_zmp_c[k].zmp_right.x);
@@ -1194,9 +1201,13 @@ int main(int argc, char *argv[])
 //    fwrite(&buff_zmp_c, (i-2)*sizeof(zmp_calc), 1, zmp_file);
 
     fclose(sensor_file);
-    fclose(control_file);
+//    fclose(control_file);
     fclose(zmp_file);
     fclose(t_file);
+
+    free(buff_sensor);
+    free(buff_zmp_c);
+    free(buff_t);
 #endif
 
 

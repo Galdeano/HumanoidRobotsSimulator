@@ -10,7 +10,7 @@
 #define ENABLE_ZENTIMER
 
 #define save_data_long 0
-#define save_data_quick 0
+#define save_data_quick 1
 #define file_motor 0
 #define reseau 1
 #define local 1

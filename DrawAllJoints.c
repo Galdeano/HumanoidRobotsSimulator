@@ -47,8 +47,10 @@ void DrawAllJoints(SuLINK uLINK[],int j)
         }
 #endif
 
-
-        DrawCylinder(uLINK,j);
+        if (j != 1)
+        {
+            DrawCylinder(uLINK,j);
+        }
 
         DrawAllJoints(uLINK,uLINK[j].sister);
         DrawAllJoints(uLINK,uLINK[j].child);
