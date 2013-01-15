@@ -2,7 +2,7 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_blas.h>
 #include <stdio.h>
-#include "uLINK.h"
+#include "uLink.h"
 #include "Setup.h"
 #include "PrintState.h"
 

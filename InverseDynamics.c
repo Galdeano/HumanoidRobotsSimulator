@@ -1,7 +1,7 @@
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_blas.h>
-#include "uLINK.h"
+#include "uLink.h"
 #include "Hat.h"
 #include "Cross.h"
 #include "InverseDynamics.h"

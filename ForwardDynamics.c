@@ -5,7 +5,7 @@
 #include <gsl/gsl_math.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include "uLINK.h"
+#include "uLink.h"
 #include "InvDyn.h"
 #include "CalcCoM.h"
 #include "Cross.h"

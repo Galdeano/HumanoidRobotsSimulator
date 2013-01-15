@@ -30,6 +30,19 @@ void init_material()
 //set_material(&white_rubber);
 //set_material(&yellow_rubber);
 
+    test.Ka[0]=0.35;
+    test.Ka[1]=0.35;
+    test.Ka[2]=0.25;
+    test.Ka[3]=1.0;
+    test.Kd[0]=0.5;
+    test.Kd[1]=0.5;
+    test.Kd[2]=0.5;
+    test.Kd[3]=1.0;
+    test.Ks[0]=0.5;
+    test.Ks[1]=0.5;
+    test.Ks[2]=0.5;
+    test.Ks[3]=1.0;
+    test.n=50;
 
     red_shiny_plastic.Ka[0]=0.3;
     red_shiny_plastic.Ka[1]=0.0;
@@ -538,7 +551,7 @@ void Init_light()
     //positionnement de la lumière avec les différents paramètres
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
-#if colors
+#if colorsGL
     GLfloat light_model_ambient[]= {.5,.5,.5,1.0};
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT,light_model_ambient);
 #endif
@@ -551,7 +564,7 @@ void Init_light()
     glLightfv(GL_LIGHT0,GL_DIFFUSE,diffuse);
     glLightfv(GL_LIGHT0,GL_SPECULAR, specular0);
     //glLightf(GL_LIGHT0,GL_LINEAR_ATTENUATION,0.4f);
-#if colors
+#if colorsGL
     glLightf(GL_LIGHT0,GL_LINEAR_ATTENUATION,0.4f);
 #endif
 #if materials

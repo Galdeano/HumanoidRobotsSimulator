@@ -4,7 +4,7 @@
 
 typedef struct
 {
-GLfloat Ka [4];
+GLfloat Ka[4];
 GLfloat Kd[4];
 GLfloat Ks[4];
 GLfloat n;
@@ -20,6 +20,7 @@ struct Vertex
 
 float g_shadowMatrix[16];
 
+materialStruct test;
 materialStruct red_shiny_plastic;
 materialStruct white_shiny_plastic;
 materialStruct shiny_gold;

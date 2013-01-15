@@ -3,12 +3,12 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_math.h>
-#include "uLINK.h"
+#include "uLink.h"
 #include "CalcCoM.h"
 #include "Stabilizator.h"
 
 
-void Stabilizator(SuLINK uLINK[],State *Status,gsl_vector * stab,double Dtime,double t)
+void Stabilizator(SuLINK uLINK[],State *Status,gsl_vector *stab,double t)
 {
 
     if (Status->desired_support==0)

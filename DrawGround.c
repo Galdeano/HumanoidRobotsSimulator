@@ -74,13 +74,14 @@ void DrawGround(double x,double y,double z,double dx,double dy,double dz)
 
 
 
-    static int i,k,l;
+    static int i,k,l,m;
     static char Masque[3][8]= {{0,0,1,1,0,0,1,1},{0,1,1,0,0,1,1,0},{0,0,0,0,1,1,1,1}};
     static gsl_matrix * vert;
     static gsl_matrix * face;
     static gsl_matrix * normalface;
     static double shape[3];
     static double com[3];
+    static double x0,x1,y0,y1,z0;
 
     static int init_tmp=1;
     if (init_tmp==1)
@@ -163,33 +164,85 @@ void DrawGround(double x,double y,double z,double dx,double dy,double dz)
 
     for (i = 0; i < 6; ++i)
     {
-        glNormal3d(gsl_matrix_get(normalface,0,i), gsl_matrix_get(normalface,1,i), gsl_matrix_get(normalface,2,i));
+
+        if(i!=5)
+        {
+            glNormal3d(gsl_matrix_get(normalface,0,i), gsl_matrix_get(normalface,1,i), gsl_matrix_get(normalface,2,i));
 //        gsl_matrix_get_col (ftmp, norm, i);
 //        gsl_matrix_get_col (v, vert, gsl_matrix_get(uLINK[j].face,0,i));
 //        gsl_matrix_get_col (pos, vert, gsl_matrix_get(uLINK[j].face,2,i));
 //        gsl_vector_add(v,pos);
 //        gsl_vector_scale(v,0.5);
 //        DrawForceMarker(v,ftmp);
-#if colors
-        glColor3f(0.8f,0.8f,0.8f);
+
+            glBegin(GL_QUADS);
+#if colorsGL
+            glColor3f(0.8f,0.8f,0.8f);
 #endif
 #if materials
-        set_material(&chrome);
-        //set_material(&white_shiny_plastic);
+            //set_material(&chrome);
+            set_material(&test);
 #endif
-        glBegin(GL_QUADS);
-        for (k = 0; k < 4; ++k)
-        {
-            glVertex3d(gsl_matrix_get(vert,0,gsl_matrix_get(face,k,i)),gsl_matrix_get(vert,1,gsl_matrix_get(face,k,i)),gsl_matrix_get(vert,2,gsl_matrix_get(face,k,i)));
+            for (k = 0; k < 4; ++k)
+            {
+                glVertex3d(gsl_matrix_get(vert,0,gsl_matrix_get(face,k,i)),gsl_matrix_get(vert,1,gsl_matrix_get(face,k,i)),gsl_matrix_get(vert,2,gsl_matrix_get(face,k,i)));
+            }
+            glEnd();
+            //gsl_vector_scale(norm,10);
         }
-        glEnd();
-        //gsl_vector_scale(norm,10);
+        else
+        {
+
+            for (m = 0; m < GroundResolution; ++m)
+            {
+                for (l = 0; l < GroundResolution; ++l)
+                {
+                    glNormal3d(gsl_matrix_get(normalface,0,i), gsl_matrix_get(normalface,1,i), gsl_matrix_get(normalface,2,i));
+                    glBegin(GL_QUADS);
+#if colorsGL
+                    glColor3f(0.8f,0.8f,0.8f);
+#endif
+#if materials
+                    set_material(&test);
+#endif
+                    //prendre la diagonale? x:l,l+1 y: m,m+1
+                    x0=((GroundResolution-l)*gsl_matrix_get(vert,0,gsl_matrix_get(face,0,i))+l*gsl_matrix_get(vert,0,gsl_matrix_get(face,2,i)))/GroundResolution;
+                    x1=((GroundResolution-(l+1))*gsl_matrix_get(vert,0,gsl_matrix_get(face,0,i))+(l+1)*gsl_matrix_get(vert,0,gsl_matrix_get(face,2,i)))/GroundResolution;
+//                    gsl_matrix_get(vert,0,gsl_matrix_get(face,0,i));
+//                    gsl_matrix_get(vert,0,gsl_matrix_get(face,2,i));
+
+                    y0=((GroundResolution-m)*gsl_matrix_get(vert,1,gsl_matrix_get(face,0,i))+m*gsl_matrix_get(vert,1,gsl_matrix_get(face,2,i)))/GroundResolution;
+                    y1=((GroundResolution-(m+1))*gsl_matrix_get(vert,1,gsl_matrix_get(face,0,i))+(m+1)*gsl_matrix_get(vert,1,gsl_matrix_get(face,2,i)))/GroundResolution;
+//                    gsl_matrix_get(vert,1,gsl_matrix_get(face,0,i));
+//                    gsl_matrix_get(vert,1,gsl_matrix_get(face,2,i));
+
+
+                    z0=gsl_matrix_get(vert,2,gsl_matrix_get(face,0,i));
+
+//                    for (k = 0; k < 4; ++k)
+//                    {
+//                        glVertex3d(gsl_matrix_get(vert,0,gsl_matrix_get(face,k,i)),gsl_matrix_get(vert,1,gsl_matrix_get(face,k,i)),gsl_matrix_get(vert,2,gsl_matrix_get(face,k,i)));
+//                    }
+
+                    glVertex3d(x0,y0,z0);
+                    glVertex3d(x1,y0,z0);
+                    glVertex3d(x1,y1,z0);
+                    glVertex3d(x0,y1,z0);
+
+
+                    glEnd();
+//                    ping(l);
+//                    ping(m);
+                }
+            }
+//            ping(8);
+        }
 
 //DrawForceMarker(pos,norm);
 
         glLineWidth( 2.0f );
         glBegin(GL_LINE_LOOP);
-#if colors
+#if colorsGL
         glColor3ub(0,0,0);
 #endif
 #if materials

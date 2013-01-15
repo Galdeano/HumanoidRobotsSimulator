@@ -2,7 +2,7 @@
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_blas.h>
-#include "uLINK.h"
+#include "uLink.h"
 #include "TotalMass.h"
 #include "FindRoute.h"
 #include "Cross.h"

@@ -3,7 +3,7 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_math.h>
-#include "uLINK.h"
+#include "uLink.h"
 #include "ForwardKinematics.h"
 #include "Rodrigues.h"
 

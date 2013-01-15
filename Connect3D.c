@@ -3,7 +3,7 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_math.h>
-#include "uLINK.h"
+#include "uLink.h"
 #include "Connect3D.h"
 #include "Setup.h"
 #include <GL/gl.h>
@@ -14,7 +14,7 @@ void Connect3D(SuLINK uLINK[],int j)
 {
 
     glLineWidth( 5.0f );
-#if colors
+#if colorsGL
     glColor3ub(0,0,0);
 #endif
 #if materials

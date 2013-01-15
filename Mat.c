@@ -15,6 +15,7 @@ autrement dit transposer un vecteur en mêmoire ne le modifie pas.
 
 #include <stdio.h>
 
+#include <math.h> // pour sqrt en .cpp
 
 int MatTest()
 {
@@ -893,7 +894,6 @@ double MatProScalf( const double *_vect1 , const double *_vect2 , int _n )
 } // MatProScalf
 
 
-#include <Math.h> // pour sqrt en .cpp
 
 
 //----------------------------------------------------------

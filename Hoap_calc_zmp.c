@@ -1,5 +1,5 @@
 
-
+#include "butterworth.h"
 #include "netHOAP.h"
 #include "Hoap_calc_zmp.h"
 
@@ -52,14 +52,15 @@ void Hoap_calc_zmp_right(HoapSensor* sensor,zmp_calc* zmp)
 
     zmp->zmp_right.W=W;
 
-    if(zmp->zmp_right.W<0)
+    if(zmp->zmp_right.W<0.01)
     {
-        zmp->zmp_right.W=0;
+        zmp->zmp_right.W=0.01;
     }
 
     zmp->zmp_right.y=-((Q[0]+Q[2])*Lx*0.00981/W - Mx);
 
     zmp->zmp_right.x=(Q[0]+Q[1])*Ly*0.00981/W - My;
+
 
 }
 
@@ -114,14 +115,16 @@ void Hoap_calc_zmp_left(HoapSensor* sensor,zmp_calc* zmp)
 
     zmp->zmp_left.W=W;
 
-    if(zmp->zmp_left.W<0)
+    if(zmp->zmp_left.W<0.01)
     {
-        zmp->zmp_left.W=0;
+        zmp->zmp_left.W=0.01;
     }
 
     zmp->zmp_left.y=-((Q[0]+Q[2])*Lx*0.00981/W - Mx);
 
     zmp->zmp_left.x=(Q[0]+Q[1])*Ly*0.00981/W - My;
+
+
 
 }
 
@@ -130,13 +133,77 @@ void Hoap_calc_zmp(HoapSensor* sensor,zmp_calc* zmp)
 
     Hoap_calc_zmp_right(sensor,zmp);
     Hoap_calc_zmp_left(sensor,zmp);
-
-
     //printf("right: %f %f %f left: %f %f %f \n",zmp->zmp_right.W,zmp->zmp_right.x,zmp->zmp_right.y,zmp->zmp_left.W,zmp->zmp_left.x,zmp->zmp_left.y);
 
 }
 
+void Hoap_filter_zmp(zmp_calc* zmp_c, zmp_calc* zmp_f)
+{
+static ButterworthData data_lx;
+static ButterworthData data_ly;
+static ButterworthData data_lW;
+static ButterworthData data_rx;
+static ButterworthData data_ry;
+static ButterworthData data_rW;
 
+    static int init_tmp=1;
+    if (init_tmp==1)
+    {
+        ButterworthFilterInit(&data_lx);
+        ButterworthFilterInit(&data_ly);
+        ButterworthFilterInit(&data_lW);
+        ButterworthFilterInit(&data_rx);
+        ButterworthFilterInit(&data_ry);
+        ButterworthFilterInit(&data_rW);
+        init_tmp=0;
+    }
+
+
+    if (zmp_c->zmp_right.x>56)
+    {
+        zmp_c->zmp_right.x=56;
+    }
+    else if (zmp_c->zmp_right.x<-42)
+    {
+        zmp_c->zmp_right.x=-42;
+    }
+
+    if (zmp_c->zmp_right.y>31.5)
+    {
+        zmp_c->zmp_right.y=31.5;
+    }
+    else if (zmp_c->zmp_right.y<-31.5)
+    {
+        zmp_c->zmp_right.y=-31.5;
+    }
+
+
+    if (zmp_c->zmp_left.x>56)
+    {
+        zmp_c->zmp_left.x=56;
+    }
+    else if (zmp_c->zmp_left.x<-42)
+    {
+        zmp_c->zmp_left.x=-42;
+    }
+
+    if (zmp_c->zmp_left.y>31.5)
+    {
+        zmp_c->zmp_left.y=31.5;
+    }
+    else if (zmp_c->zmp_left.y<-31.5)
+    {
+        zmp_c->zmp_left.y=-31.5;
+    }
+
+zmp_f->zmp_left.x=ButterworthFilter (&data_lx, zmp_c->zmp_left.x);
+zmp_f->zmp_left.y=ButterworthFilter (&data_ly, zmp_c->zmp_left.y);
+zmp_f->zmp_left.W=ButterworthFilter (&data_lW, zmp_c->zmp_left.W);
+zmp_f->zmp_right.x=ButterworthFilter (&data_rx, zmp_c->zmp_right.x);
+zmp_f->zmp_right.y=ButterworthFilter (&data_ry, zmp_c->zmp_right.y);
+zmp_f->zmp_right.W=ButterworthFilter (&data_rW, zmp_c->zmp_right.W);
+
+}
 
 
 

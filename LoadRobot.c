@@ -556,6 +556,12 @@ void LoadRobotParserXML(SuLINK uLINK[],State *Status,char* RobotFile)
         if(ezxml_child(Link, "obj")!=NULL)
         {
             sscanf (ezxml_child(Link, "obj")->txt,"%s",&uLINK[numlink].obj);
+            load_obj(uLINK[numlink].obj,&(uLINK[numlink].Mesh_obj));
+        }
+        uLINK[numlink].obj_offset = gsl_vector_calloc (3);
+        if(ezxml_child(Link, "obj_offset")!=NULL)
+        {
+            sscanf (ezxml_child(Link, "obj_offset")->txt,"%lf %lf %lf",gsl_vector_ptr (uLINK[numlink].obj_offset, 0),gsl_vector_ptr (uLINK[numlink].obj_offset, 1),gsl_vector_ptr (uLINK[numlink].obj_offset, 2));
         }
 #endif
         //printf("lim %d : %f %f \n",numlink,uLINK[numlink].qmin,uLINK[numlink].qmax);

@@ -18,6 +18,6 @@ typedef struct
 void Hoap_calc_zmp_right(HoapSensor* sensor,zmp_calc* zmp);
 void Hoap_calc_zmp_left(HoapSensor* sensor,zmp_calc* zmp);
 void Hoap_calc_zmp(HoapSensor* sensor,zmp_calc* zmp);
-
+void Hoap_filter_zmp(zmp_calc* zmp_c, zmp_calc* zmp_f);
 
 #endif

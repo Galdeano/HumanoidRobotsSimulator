@@ -3,7 +3,7 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_math.h>
-#include "uLINK.h"
+#include "uLink.h"
 #include "DrawCylinder.h"
 #include "Setup.h"
 
@@ -58,7 +58,7 @@ void   DrawCylinder(SuLINK uLINK[],int j)
 
     gluQuadricDrawStyle(params,GLU_FILL);
     //GLU_LINE
-#if colors
+#if colorsGL
 #if !VisuTorquesColor
     if (uLINK[j].color==0)//red
         glColor3ub(255,0,0);
@@ -101,7 +101,7 @@ void   DrawCylinder(SuLINK uLINK[],int j)
     gluDisk(params,0,radius,faces,1);
     glTranslated(0,0,-len);
     gluQuadricDrawStyle(params,GLU_LINE);
-#if colors
+#if colorsGL
         glColor3ub(0,0,0);
 #endif
 #if materials

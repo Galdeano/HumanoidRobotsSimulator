@@ -1,0 +1,178 @@
+
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <SDL/SDL.h>
+#include "Setup.h"
+#include "uLink.h"
+#include "CalcCoM.h"
+
+#include "DrawCamera.h"
+#include "DrawLight.h"
+#include "DrawGround.h"
+#include "DrawMarker.h"
+#include "DrawAllJoints.h"
+
+#include "DrawScene.h"
+
+void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
+{
+
+    static int init_tmp=1;
+    static gsl_vector * com;
+    if (init_tmp==1)
+    {
+        com = gsl_vector_calloc (3);
+        init_tmp=0;
+    }
+    //gsl_vector * com = gsl_vector_calloc (3);
+
+#if !Light
+
+    //printf(titre,"Visualisation t= %3.3f", t2);
+    //SDL_WM_SetCaption(titre, NULL);
+
+    //glClearStencil(0);
+//        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT |GL_STENCIL_BUFFER_BIT);
+    //glCullFace(GL_BACK);
+    //glCullFace(GL_FRONT);
+
+
+    Init_light();
+    glMatrixMode( GL_MODELVIEW );
+    glLoadIdentity();
+    Camlook(Status,CamParam);
+
+    //glRotated(angular_z,0,0,1);
+
+
+#if shadow
+
+    GLfloat light0_position [] = {2.0f, -2.0f, 2.0f, 1.0f};
+    GLfloat shadowPlane [] = {0.0f, 0.0f, 1.0f, 0.0f};
+    //GLfloat shadowPlane [] = {0.0f, 0.0f, 1.0f, 0.0f};
+    buildShadowMatrix( g_shadowMatrix, light0_position , shadowPlane );
+
+
+    //
+    // Render the floor to the stencil buffer so we can use it later to trim
+    // the shadow at the floor's edge...
+    //
+    glEnable( GL_STENCIL_TEST );
+    glStencilFunc( GL_ALWAYS, 1, 0xFFFFFFFF );         // Write a 1 to the stencil buffer everywhere we are about to draw
+    glStencilOp( GL_REPLACE, GL_REPLACE, GL_REPLACE ); // If a 1 is written to the stencil buffer - simply replace the current value stored there with the 1.
+
+    glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE ); // Disable writing to the color buffer
+    glDepthMask( GL_FALSE );                               // Disable writing to the depth buffer
+    DrawGround(2.0,0.0,-0.05,6.0,6.0,0.1);
+
+    glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE ); // Re-enable writing to the color buffer
+    glDepthMask( GL_TRUE );                            // Re-enable writing to the depth buffer
+    glDisable( GL_STENCIL_TEST );
+
+    //
+    // Render the floor...
+    //
+    DrawGround(2.0,0.0,-0.05,6.0,6.0,0.1);
+
+    //
+    // Render the shadow...
+    //
+
+    // Use our stencil to keep the shadow from running off the floor.
+    glEnable( GL_STENCIL_TEST );
+    glStencilFunc( GL_EQUAL, 1, 0xFFFFFFFF ); // Only write to areas where the stencil buffer has a 1.
+    glStencilOp( GL_KEEP, GL_KEEP, GL_KEEP ); // Don't modify the contents of the stencil buffer
+
+    glDisable( GL_LIGHTING );
+    glDisable( GL_DEPTH_TEST );
+    glEnable( GL_BLEND );
+    glDisable(GL_COLOR_MATERIAL);
+
+    glPushMatrix();
+    {
+        // Load the teapot's shadow matrix
+        glMultMatrixf( g_shadowMatrix );
+
+        glColor3f(0.1f, 0.1f, 0.1f); // shadow color
+
+        {
+            DrawAllJoints(uLINK,1);
+        }
+    }
+    glPopMatrix();
+
+    glEnable( GL_DEPTH_TEST );
+    glDisable( GL_BLEND );
+    glEnable( GL_LIGHTING );
+    glDisable( GL_STENCIL_TEST );
+    glEnable(GL_COLOR_MATERIAL);
+
+    DrawAllJoints(uLINK,1);
+
+#endif //shadow
+
+
+#if !shadow
+    DrawGround(2.0,0.0,-0.05,6.0,6.0,0.1);
+    DrawAllJoints(uLINK,1);
+#endif //!shadow
+
+//    glDisable(GL_DEPTH_TEST);
+//    glDisable(GL_LIGHTING);
+//    glColor3f(0.0f, 0.0f, 0.0f); // Shadow's color
+//    glPushMatrix();
+//    {
+//        glMultMatrixf((GLfloat *)g_shadowMatrix);
+//        DrawAllJoints(uLINK,1);
+//    }
+//    glPopMatrix();
+//    glEnable(GL_DEPTH_TEST);
+//    glEnable(GL_LIGHTING);
+
+#if zmp_filtering
+    DrawMarker(zmp_right);
+    DrawMarker(zmp_left);
+    DrawMarker(zmp_moy);
+#endif //zmp_filtering
+
+    CalcCoM(uLINK,com);
+#if colorsGL
+    glColor3ub(0,0,255);
+#endif //colorsGL
+#if materials
+    set_material(&turquoise);
+#endif //materials
+    gsl_vector_set (com, 2, 0);
+    DrawMarker(com);
+
+#if colorsGL
+    glColor3ub(255,0,0);
+#endif //colorsGL
+#if materials
+    set_material(&ruby);
+#endif //materials
+    //Hoap_calc_zmp_visu(uLINK,&Status,&zmp_c);
+
+
+
+//draw_model(&obj);
+//DrawOBJ("./cube2.obj");
+
+
+    glFlush();
+    SDL_GL_SwapBuffers();
+    //SDL_Delay(5);
+
+#if Video
+    sprintf(files,"./../../Simu_images/Test%.4d.bmp", i);
+    //glReadBuffer(GL_FRONT);
+    glReadPixels(0, 0, 1024, 768, GL_RGB, GL_UNSIGNED_BYTE, pixel_data);//GL_BGR
+    write_bmp(files, 1024, 768, pixel_data);
+#endif //Video
+
+
+#endif //!Light
+
+
+}

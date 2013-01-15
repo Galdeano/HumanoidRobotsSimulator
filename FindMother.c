@@ -1,6 +1,6 @@
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
-#include "uLINK.h"
+#include "uLink.h"
 #include "FindMother.h"
 
 void FindMother(SuLINK uLINK[],State *Status,int j)

@@ -7,20 +7,42 @@
  *  \date      10/2011
  */
 
-#define ENABLE_ZENTIMER
 
+//sherpa model
+//correction enseignements
+//marche hoap
+
+
+
+#define play_csv 0
+#define zmp_filtering 0
+#define zmp_feedback 0
+#define old_zmp 0
 #define save_data_long 0
 #define save_data_quick 1
+#define save_data_quick_temp 0
+
 #define file_motor 0
 #define reseau 1
+
 #define local 1
 #define replay 0
 #define Tasks 1
+#define file_human 1
+#define file_hoap 0
+
 #define Light 0
-#define file_human 0
 #define shadow 1
-#define colors 0
+#define colorsGL 0
 #define materials 1
+#define mathGL 0
+#define GroundResolution 20
+
+#define LoadObj 1
+/*! \def LoadObj
+    \brief 1: Load and displays the mechs associated to the model if they exists
+*/
+
 
 #define Scenarios 0
 /*! \def Scenarios
@@ -39,6 +61,28 @@
 #error Check Sc* defs
 #endif
 
+
+/*
+sandra
+
+doodle:
+alejandro
+divine
+joris
+helene
+guillaume
+nico
+
+mass pizza
+
+
+Saint-Guilhem-le-Desert
+Le Guilhaume d'Orange ou La Taverne de l Escuelle
+demander auto petraud
+echarpe cachemire
+jardin des sens
+
+*/
 
 #if Scenarios
 //Choose scenario
@@ -80,7 +124,7 @@
 
 
 
-#define Video 1
+#define Video 0
 /*! \def Video
     \brief Record images of the simulation
 */
@@ -189,10 +233,6 @@
 #error Check linearDamper and nonLinearDamper defs
 #endif
 
-#define LoadObj 0
-/*! \def LoadObj
-    \brief 1: Load and displays the mechs associated to the model if they exists
-*/
 
 
 

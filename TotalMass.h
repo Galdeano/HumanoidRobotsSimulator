@@ -3,7 +3,7 @@
 
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
-#include "uLINK.h"
+#include "uLink.h"
 
 /** \file TotalMass.h
  *  \brief Recursive computations of robot mass

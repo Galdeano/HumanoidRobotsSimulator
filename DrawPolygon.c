@@ -3,7 +3,7 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_math.h>
-#include "uLINK.h"
+#include "uLink.h"
 #include "DrawPolygon.h"
 #include "DrawForceMarker.h"
 #include "Cross.h"
@@ -93,7 +93,7 @@ void DrawPolygon(SuLINK uLINK[],int j)
 //set_material(&yellow_rubber);
 
         glBegin(GL_QUADS);
-#if colors
+#if colorsGL
         glColor3f(0.7f,0.7f,0.7f);
 #endif
 #if materials
@@ -116,7 +116,7 @@ void DrawPolygon(SuLINK uLINK[],int j)
 
         glLineWidth( 2.0f );
         glBegin(GL_LINE_LOOP);
-#if colors
+#if colorsGL
         glColor3ub(0,0,0);
 #endif
 #if materials
@@ -141,7 +141,7 @@ void DrawPolygon(SuLINK uLINK[],int j)
 
     glLineWidth( 5.0f );
     glBegin(GL_LINES);
-#if colors
+#if colorsGL
     glColor3ub(0,0,0);
 #endif
 #if materials
@@ -154,7 +154,7 @@ void DrawPolygon(SuLINK uLINK[],int j)
                (gsl_matrix_get(vert,2,0)+gsl_matrix_get(vert,2,6))/2);
     glEnd();
 
-#if colors
+#if colorsGL
     glColor3ub(0,0,255);
 #endif
 #if materials

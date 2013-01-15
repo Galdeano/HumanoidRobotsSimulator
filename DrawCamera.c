@@ -3,7 +3,7 @@
 #include <GL/glu.h>
 #include <SDL/SDL.h>
 
-#include "uLINK.h"
+#include "uLink.h"
 #include "DrawCamera.h"
 
 

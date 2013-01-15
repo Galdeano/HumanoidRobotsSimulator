@@ -4,13 +4,13 @@
 #include <gsl/gsl_math.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include "uLINK.h"
+#include "uLink.h"
 #include "DrawForceMarker.h"
 #include "CalcCoM.h"
 #include "CalcCoP.h"
 #include "DrawMarker.h"
 #include "DrawIndicators.h"
-#include "setup.h"
+#include "Setup.h"
 #include "Hoap_calc_zmp.h"
 #include "DrawLight.h"
 
@@ -31,7 +31,7 @@ void DrawIndicators(SuLINK uLINK[],State *Status,gsl_vector * com,gsl_vector * C
     }
 
     CalcCoM(uLINK,com);
-#if colors
+#if colorsGL
     glColor3ub(0,0,255);
 #endif
 #if materials
@@ -48,7 +48,7 @@ void DrawIndicators(SuLINK uLINK[],State *Status,gsl_vector * com,gsl_vector * C
     f=CalcCoP(uLINK,CoP,1);
     if (f!=0.0)
     {
-#if colors
+#if colorsGL
         glColor3ub(255,0,0);
 #endif
         gsl_vector_scale (CoP, 1/f);
@@ -56,7 +56,7 @@ void DrawIndicators(SuLINK uLINK[],State *Status,gsl_vector * com,gsl_vector * C
         DrawMarker(CoP);
     }
 
-#if colors
+#if colorsGL
     glColor3ub(0,255,0);
 #endif
     if (Status->desired_support==1)
@@ -76,7 +76,7 @@ void DrawIndicators(SuLINK uLINK[],State *Status,gsl_vector * com,gsl_vector * C
 //    gsl_vector * pos = gsl_vector_calloc (3);
 //    gsl_vector * Visu = gsl_vector_calloc (3);
 
-#if colors
+#if colorsGL
     glColor3ub(0,255,255);
 #endif
     if (Status->right_scale!=0.0)
@@ -104,7 +104,7 @@ void DrawIndicators(SuLINK uLINK[],State *Status,gsl_vector * com,gsl_vector * C
     gluQuadricDrawStyle(params,GLU_LINE);
     GLdouble rotgl[16];
     glLineWidth( 1.0f );
-#if colors
+#if colorsGL
     glColor3ub(0,0,255);
 #endif;
 #if materials
@@ -174,7 +174,7 @@ void Hoap_calc_zmp_visu(SuLINK uLINK[],State *Status,zmp_calc* zmp)
 
     if (zmp->zmp_right.W>10)
     {
-#if colors
+#if colorsGL
         glColor3ub(0,0,255);
 #endif
 #if materials
@@ -183,7 +183,7 @@ void Hoap_calc_zmp_visu(SuLINK uLINK[],State *Status,zmp_calc* zmp)
     }
     else
     {
-#if colors
+#if colorsGL
         glColor3ub(255,0,0);
 #endif
 #if materials
@@ -214,7 +214,7 @@ void Hoap_calc_zmp_visu(SuLINK uLINK[],State *Status,zmp_calc* zmp)
 
     if (zmp->zmp_left.W>10)
     {
-#if colors
+#if colorsGL
         glColor3ub(0,0,255);
 #endif
 #if materials
@@ -223,7 +223,7 @@ void Hoap_calc_zmp_visu(SuLINK uLINK[],State *Status,zmp_calc* zmp)
     }
     else
     {
-#if colors
+#if colorsGL
         glColor3ub(255,0,0);
 #endif
 #if materials
