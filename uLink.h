@@ -3,6 +3,8 @@
 
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
+#include "ObjLoader.h"
+#include "Setup.h"
 
 /** \file uLink.h
  *  \brief Link initialisation and declarations
@@ -69,6 +71,10 @@ struct StuLINK
     gsl_matrix * posContact;/*!< absolute position of contacts */
     gsl_matrix * forContact;/*!< force of contacts */
     char obj[50]; /*!< obj path */
+    #if LoadObj
+    MeshObj Mesh_obj;
+    gsl_vector * obj_offset;
+    #endif
 };
 
 typedef struct  StuLINK  SuLINK ;

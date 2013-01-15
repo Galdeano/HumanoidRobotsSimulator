@@ -3,7 +3,7 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_math.h>
-#include "uLINK.h"
+#include "uLink.h"
 #include "SetupRigidBody.h"
 #include "FindMother.h"
 #include "ForwardKinematics.h"
