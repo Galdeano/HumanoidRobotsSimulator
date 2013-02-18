@@ -6,7 +6,7 @@
 #include "Rodrigues.h"
 
 
-void Rodrigues(gsl_matrix * rot,gsl_vector * w,double dt)
+int Rodrigues(gsl_matrix * rot,gsl_vector * w,double dt)
 {
     double d,th;
 
@@ -26,6 +26,11 @@ void Rodrigues(gsl_matrix * rot,gsl_vector * w,double dt)
         init_tmp=0;
     }
 
+    #ifndef GSL_RANGE_CHECK_OFF
+    if ((rot->size1 !=3) || (rot->size2 !=3) || (w->size !=3))
+    {GSL_ERROR ("invalid length", GSL_EBADLEN);}
+    #endif
+
 //    gsl_vector * wn = gsl_vector_calloc (3);
 //    gsl_matrix * w_wedge = gsl_matrix_calloc (3, 3);
 //    gsl_matrix * w_wedge2 = gsl_matrix_calloc (3, 3);
@@ -34,6 +39,12 @@ void Rodrigues(gsl_matrix * rot,gsl_vector * w,double dt)
 
 
     d = gsl_blas_dnrm2 (w);
+    if (d<0.0000000001)
+    {
+        gsl_matrix_set_identity (rot);
+        return;
+    }
+
     th = d*dt;
     gsl_vector_memcpy (wn, w);
 //wn = w/d;		// normarized vector
@@ -58,6 +69,8 @@ void Rodrigues(gsl_matrix * rot,gsl_vector * w,double dt)
 
     gsl_matrix_scale ( w_wedge2, (1-cos(th)));
     gsl_matrix_add (rot, w_wedge2);
+
+    return GSL_SUCCESS;
 
 //R = eye(3) + w_wedge * sin(th) + w_wedge^2 * (1-cos(th));
 //    gsl_vector_free(wn);

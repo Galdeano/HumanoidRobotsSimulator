@@ -3,8 +3,13 @@
 
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
-#include "ObjLoader.h"
+
 #include "Setup.h"
+
+#if LoadObj
+#include "ObjLoader.h"
+#endif
+#include "butterworth.h"
 
 /** \file uLink.h
  *  \brief Link initialisation and declarations
@@ -57,8 +62,8 @@ struct StuLINK
     gsl_vector * hw;/*!< Axe of rotation in world reference 3*1 [-] */
     gsl_vector * hv;/*!< Axe of rotation in world reference cross by position of the link 3*1 */
     gsl_vector * isContact;/*!< is the link corner in contact */
-    float com[3];
-    float shape[3];
+    double com[3];
+    double shape[3];
     gsl_matrix * R;/*!< Absolute orientation 3*3 [-] */
     gsl_matrix * I;/*!< around the center of gravity inertia tensor 3*3 [kg.m^2] */
     gsl_matrix * vert;/*!< Shape of the link */
@@ -75,6 +80,7 @@ struct StuLINK
     MeshObj Mesh_obj;
     gsl_vector * obj_offset;
     #endif
+    ButterworthData filter;
 };
 
 typedef struct  StuLINK  SuLINK ;

@@ -28,7 +28,7 @@
 #define local 1
 #define replay 0
 #define Tasks 1
-#define file_human 1
+#define file_human 0
 #define file_hoap 0
 
 #define Light 0

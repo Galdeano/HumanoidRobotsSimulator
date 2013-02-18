@@ -5,7 +5,7 @@
 #include <gsl/gsl_matrix.h>
 
 
-void pinv( gsl_matrix * invM, gsl_matrix * M);
+int pinv( gsl_matrix * invM, gsl_matrix * M);
 
 #endif
 

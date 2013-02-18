@@ -7,10 +7,15 @@
 
 
 
-void rot2omega(gsl_matrix * R,gsl_vector * w)
+int rot2omega(gsl_matrix * R,gsl_vector * w)
 {
 
     double alpha,th;
+
+    #ifndef GSL_RANGE_CHECK_OFF
+    if ((R->size1 !=3) || (R->size2 !=3) || (w->size !=3))
+    {GSL_ERROR ("invalid length", GSL_EBADLEN);}
+    #endif
 
     alpha=(gsl_matrix_get(R,0,0)+gsl_matrix_get(R,1,1)+gsl_matrix_get(R,2,2)-1)/2;
 
@@ -26,6 +31,8 @@ void rot2omega(gsl_matrix * R,gsl_vector * w)
     gsl_vector_set(w,2,gsl_matrix_get(R,1,0)-gsl_matrix_get(R,0,1));
 
     gsl_vector_scale (w, 0.5*th/sin(th));
+
+    return GSL_SUCCESS;
 
 }
 

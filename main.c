@@ -53,7 +53,7 @@
 #include "pinv.h"
 #include "PrintGSLMatrix.h"
 #include "CalcCoMJacobian.h"
-
+#include "gsl_matrix_get_row_m.h"
 
 
 #include "Setup.h"
@@ -69,6 +69,7 @@
 #include "DrawScene.h"
 
 #include "Hoap_calc_zmp.h"
+#include "butterworth.h"
 
 #if mathGL
 #include <mgl2/mgl_cf.h>
@@ -126,8 +127,8 @@ int main(int argc, char *argv[])
         {
             //*fgets ( szInput, 25, stdin );
             //j=atoi(szInput);
-            j=24;
-            //j=18;
+            //j=24;
+            j=18;
         }
         while (!(j>2 && j<=i));
 
@@ -136,6 +137,7 @@ int main(int argc, char *argv[])
             dir = readdir(d);
         }
         strcat( RobotFile, dir->d_name );
+
 
 #ifdef WIN32
 #else
@@ -172,6 +174,7 @@ int main(int argc, char *argv[])
 
     //LoadRobotXML(uLINK,&Status,RobotFile);
     LoadRobotParserXML(uLINK,&Status,RobotFile);
+    //LoadSherpa(uLINK,&Status);
 
 
     printf("Robot wheigth: %f \n",TotalMass(uLINK,1));
@@ -197,7 +200,7 @@ int main(int argc, char *argv[])
 
 #if Video
     char buf[256];
-    d = opendir("./../../Simu_images/");
+    d = opendir("./../Simu_images/");
 
     while(dir = readdir(d))
     {
@@ -260,16 +263,49 @@ int main(int argc, char *argv[])
 
 
 
-
+#if 0
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    double freq_,t2;
 
-    for(i=1; i<(dof+2); i++)
-    {
-        uLINK[i].q = 0;
-    }
+#ifdef WIN32
+    static unsigned __int64 baseTime_;
+    static unsigned __int64 pf_;
+    QueryPerformanceFrequency( (LARGE_INTEGER *)&pf_ );
+    QueryPerformanceCounter( (LARGE_INTEGER *)&baseTime_ );
+    freq_ = 1.0 / (double)pf_;
+#else
+    static unsigned long long baseTime_;
+    static unsigned long long pf_;
+    struct timeval tv;
+    gettimeofday (&tv, NULL);
+    baseTime_ = ((unsigned long long) tv.tv_sec * 1000000) + tv.tv_usec;
+    freq_ = 0.000001;
+#endif
+
+//    for(i=1; i<(dof+2); i++)
+//    {
+//        uLINK[i].q = 0;
+//    }
 
     ForwardKinematics(uLINK,1);
+
+    if(gsl_vector_get(uLINK[Status.right_foot_ID].p, 2)<gsl_vector_get(uLINK[Status.left_foot_ID].p, 2))
+    {
+        gsl_vector_set (uLINK[Status.right_foot_ID].p, 2, 0.11);
+
+
+        gsl_matrix_set_identity(uLINK[Status.right_foot_ID].R);
+        NodeForwardKinematics(uLINK,Status.right_foot_ID,0);
+    }
+    else
+    {
+        gsl_vector_set (uLINK[Status.left_foot_ID].p, 2, 0.11);
+        //gsl_matrix_set_identity(uLINK[Status.left_foot_ID].R);
+        NodeForwardKinematics(uLINK,Status.left_foot_ID,0);
+        gsl_matrix_set_identity(uLINK[Status.right_foot_ID].R);
+        NodeForwardKinematics(uLINK,Status.right_foot_ID,0);
+    }
 
     int quitt=0;
 
@@ -277,6 +313,12 @@ int main(int argc, char *argv[])
     CamInit(&CamParamt);
 
     i=0;
+
+
+
+
+
+    double dt;
 
     while(1)
         //for (i = 0; i < 10000; i++)
@@ -304,7 +346,7 @@ int main(int argc, char *argv[])
             break;
 #if Light
         case SDL_KEYDOWN:
-            quit=1;
+            quitt=1;
             break;
 #endif
 #if !Light
@@ -328,8 +370,405 @@ int main(int argc, char *argv[])
             break;
         }
 
+
+#ifdef WIN32
+        static unsigned __int64 val_;
+        QueryPerformanceCounter( (LARGE_INTEGER *)&val_ );
+#else //WIN32
+        static unsigned long long val_;
+        struct timeval tv;
+        gettimeofday (&tv, NULL);
+        val_ = ((unsigned long long) tv.tv_sec * 1000000) + tv.tv_usec;
+#endif //WIN32
+
+#if !Light
+        printf("fps: %f \n",1/(((double)(val_ - baseTime_) * freq_ )-t2));
+#endif //!Light
+        t2=(double)(val_ - baseTime_) * freq_;
+
+
+
+
+
+
+        const int nDoF=dof+6;
+
+        static gsl_vector * idx1;
+        static gsl_vector * idx2;
+        static gsl_matrix * J1;
+        static gsl_matrix * J2;
+        static gsl_matrix * J1_l;
+        static gsl_matrix * JCoML;
+        static double *qdev;
+
+        static gsl_vector * p;
+        static gsl_matrix * R;
+        static gsl_vector * Init_task_F2F_p;
+        static gsl_matrix * Init_task_F2F_R;
+        static gsl_vector * error;
+        static gsl_vector * task2;
+        static gsl_vector * task3;
+        static gsl_vector * task3_l;
+        static gsl_vector * Stand_task_CoM;
+        static gsl_vector * Init_task_CoM;
+        static gsl_vector * taskCoML;
+        static gsl_vector * CoM;
+
+        static gsl_vector * adphi;
+        static gsl_matrix * invJ;
+        static gsl_vector * dq;
+        static gsl_matrix * P1;
+        static gsl_matrix * P2;
+        static gsl_matrix * Ptmp;
+        static gsl_vector * vec3;
+        static gsl_vector * vec3_2;
+        static gsl_vector * vec1;
+        static gsl_vector * vec1_2;
+        static gsl_matrix * Jtilde;
+        static gsl_matrix * Jtilde2;
+        static gsl_matrix * invJtilde2;
+        static gsl_matrix * invJCoM;
+        static gsl_vector * dqtmp;
+        static gsl_matrix * Ptilde;
+
+        static gsl_vector * Init_task_F2F;
+
+        static double F2F_y;
+
+        static int path1[8] = {7, 7, 6, 5, 4, 3, 2, 1};
+        static int path2[14] = {13, 13, 12, 11, 10, 9, 8, 2, 3, 4, 5, 6, 7, 7};
+
+        static int init_tmp=1;
+        if (init_tmp==1)
+        {
+            idx1 = gsl_vector_calloc (8);
+            idx2 = gsl_vector_calloc (14);
+            J1 = gsl_matrix_calloc (6,nDoF-6);
+            J2 = gsl_matrix_calloc (6,nDoF-6);
+            J1_l = gsl_matrix_calloc (1,nDoF-6);
+            JCoML = gsl_matrix_calloc (3,nDoF-6);
+
+            p = gsl_vector_calloc (3);
+            R = gsl_matrix_calloc (3,3);
+            Init_task_F2F_p=gsl_vector_calloc (3);
+            Init_task_F2F_R=gsl_matrix_calloc (3,3);
+            error = gsl_vector_calloc (3);
+            task2 = gsl_vector_calloc (6);
+            task3 = gsl_vector_calloc (3);
+            task3_l = gsl_vector_calloc (1);
+            Stand_task_CoM=gsl_vector_calloc (3);
+            Init_task_CoM=gsl_vector_calloc (3);
+            taskCoML = gsl_vector_calloc (3);
+            CoM = gsl_vector_calloc (3);
+
+            adphi = gsl_vector_calloc(nDoF-6);
+            invJ = gsl_matrix_calloc (nDoF-6,6);
+            dq = gsl_vector_calloc(nDoF-6);
+            P1 = gsl_matrix_calloc (nDoF-6,nDoF-6);
+            P2 = gsl_matrix_calloc (nDoF-6,nDoF-6);
+            Ptmp = gsl_matrix_calloc (nDoF-6,nDoF-6);
+            vec3 = gsl_vector_calloc (3);
+            vec3_2 = gsl_vector_calloc (3);
+            vec1 = gsl_vector_calloc (1);
+            vec1_2 = gsl_vector_calloc (1);
+
+            Jtilde = gsl_matrix_calloc (3,nDoF-6);
+            Jtilde2 = gsl_matrix_calloc (1,nDoF-6);
+            invJtilde2 = gsl_matrix_calloc (nDoF-6,1);
+            invJCoM = gsl_matrix_calloc (nDoF-6,3);
+            dqtmp = gsl_vector_calloc(nDoF-6);
+            Ptilde = gsl_matrix_calloc (nDoF-6,nDoF-6);
+
+            Init_task_F2F=gsl_vector_calloc (6);
+
+            qdev = calloc(nDoF-6,sizeof(double));
+
+            for(i=0; i<8; i++)
+            {
+                gsl_vector_set(idx1,i,path1[i]);
+            }
+
+
+            for(i=0; i<14; i++)
+            {
+                gsl_vector_set(idx2,i,path2[i]);
+            }
+
+            for (i=0; i<(nDoF-6); i++)
+            {
+                qdev[i]=fmin(fabs(uLINK[i+2].qmin-uLINK[i+2].qmoy),fabs(uLINK[i+2].qmax-uLINK[i+2].qmoy))*2;
+                printf("%f \n",qdev[i]);
+            }
+
+            CalcCoM(uLINK,com);
+//PrintGSLVector(com);
+
+            gsl_matrix_set_identity(R);
+            gsl_vector_set_zero(p);
+            CalcVWerrOri(uLINK, task2, p, R,idx2);
+//PrintGSLVector(task2);
+
+            gsl_vector_memcpy(Init_task_CoM,com);
+
+            gsl_vector_memcpy(Init_task_F2F,task2);
+            gsl_vector_sub(Init_task_CoM,uLINK[baseFoot].p);
+//PrintGSLVector(Init_task_CoM);
+
+//
+//            gsl_vector_set(Stand_task_CoM,0,0.026);
+//            gsl_vector_set(Stand_task_CoM,1,-0.038);
+//            gsl_vector_set(Stand_task_CoM,2,0.29-0.06);
+            gsl_vector_memcpy(Stand_task_CoM,Init_task_CoM);
+
+
+            gsl_vector_scale(Init_task_F2F,-1.0f);
+            for(j=0; j<3; j++)
+            {
+                gsl_vector_set(Init_task_F2F_p,j,gsl_vector_get(Init_task_F2F,j));
+                gsl_vector_set(vec3,j,gsl_vector_get(Init_task_F2F,j+3));
+            }
+            Rodrigues(Init_task_F2F_R,vec3,1.0);
+//PrintGSLVector(Init_task_F2F_p);
+//PrintGSLVector(vec3);
+//PrintGSLMatrix(Init_task_F2F_R);
+            F2F_y=gsl_vector_get(Init_task_F2F_p,1);
+
+            init_tmp=0;
+        }
+
+        CalcJacobianModif(uLINK,J1,idx1);
+        CalcJacobianModif(uLINK,J2,idx2);
+        CalcCoMJacobian(uLINK,&Status, JCoML, Status.left_foot_ID);
+
+
+//PrintGSLMatrix(J2);
+        gsl_matrix_get_row_m(J1_l, J1, 4);
+//gsl_matrix_get_column_m(J2_l, J2, 4);
+//PrintGSLMatrix(J1_l);
+
+        static double wO=3.0;
+        static double amp=0.02;
+        static double t_init=3.0;
+        static double t_stand=5.0;
+        static double t_stand_zmp=7.0;
+
+
+
+        if((t2)>=t_init)
+        {
+            gsl_vector_set_zero(p);
+            gsl_vector_set (p, 1, F2F_y);
+        }
+        else
+        {
+            gsl_vector_memcpy(p,Init_task_F2F_p);
+            gsl_vector_set(p,0,gsl_vector_get(p,0)*(t_init-(t2))/t_init);
+            gsl_vector_set(p,1,(gsl_vector_get(p,1)*(t_init-(t2))/t_init)+(F2F_y*(t2)/t_init));
+            gsl_vector_set(p,2,gsl_vector_get(p,2)*(t_init-(t2))/t_init);
+
+        }
+
+        if((t2)>=t_init)
+        {
+            gsl_matrix_set_identity(R);
+        }
+        else
+        {
+            gsl_matrix_memcpy(R,Init_task_F2F_R);
+            rot2omega(R,error);
+            dt = gsl_blas_dnrm2 (error);
+            if (dt>0.0000000001)
+            {
+                gsl_vector_scale (error, 1/dt);
+            }
+            dt=dt*(t_init-(t2))/t_init;
+
+            Rodrigues(R,error,dt);
+        }
+        //gsl_matrix_memcpy(R,Init_task_F2F_R);
+        CalcVWerrOri(uLINK, task2, p, R,idx2);
+        //PrintGSLVector(task2);
+
+
+
+        if(t2>t_stand_zmp)
+        {
+            gsl_vector_memcpy(p,Stand_task_CoM);
+            gsl_vector_set (p, 2,gsl_vector_get(p,2)+amp*(cos((1/wO)*M_PI*(t2-t_stand_zmp))-1));
+        }
+        else if((t2>t_init) && (t2<t_stand_zmp))
+        {
+            gsl_vector_memcpy(p,Stand_task_CoM);
+            //gsl_vector_set(p,1,gsl_vector_get(p,1));
+            //gsl_vector_set(p,2,gsl_vector_get(p,2));
+        }
+        else
+        {
+            gsl_vector_memcpy(p,Init_task_CoM);
+//            gsl_vector_scale(p,(t_init-(t*Dtime))/t_init);
+//            gsl_vector_add(p,Stand_task_CoM*(t*Dtime)/t_init);
+        }
+
+
+        //gsl_blas_dgemv(CblasNoTrans, 1.0, uLINK[Status.right_foot_ID].R, p, 0.0, taskCoMR);
+        gsl_vector_memcpy(taskCoML,p);//-foot.p
+        CalcCoM(uLINK,CoM);//-foot.p
+        gsl_vector_sub(CoM,uLINK[baseFoot].p);
+        //PrintGSLVector(CoM);
+        gsl_vector_sub(taskCoML,CoM);
+        //PrintGSLVector(taskCoML);
+
+        rot2omega(uLINK[1].R,task3);
+        gsl_vector_set(task3_l,0,-gsl_vector_get(task3,1));
+
+
+
+
+
+        for (j=0; j<(nDoF-6); j++)
+        {
+            gsl_vector_set(adphi,j,-0.05*(2*(uLINK[j+2].q-uLINK[j+2].qmoy)/(qdev[j]*qdev[j])));
+        }
+
+
+        // first task
+        pinv(invJ,J2);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, invJ, task2, 0.0, dq);
+
+        // second task
+        gsl_matrix_set_identity(P1);
+        pinv(invJ,J2);
+        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJ, J2, 0.0, Ptmp);
+        gsl_matrix_sub(P1,Ptmp);
+
+        gsl_vector_memcpy(vec3,taskCoML);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, JCoML, dq, 0.0, vec3_2);
+        gsl_vector_sub(vec3,vec3_2);
+
+        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, JCoML, P1, 0.0, Jtilde);
+        pinv(invJCoM,Jtilde);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, invJCoM, vec3, 0.0, dqtmp);
+        //gsl_blas_dgemv(CblasNoTrans, 1.0, P2, dqtmp2, 0.0, dqtmp);
+        gsl_vector_add(dq,dqtmp);
+
+
+//PrintGSLVector(task3_l);
+        // third task
+        gsl_matrix_memcpy(P2,P1);
+        pinv(invJCoM,Jtilde);
+        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJCoM, Jtilde, 0.0, Ptmp);
+        gsl_matrix_sub(P2,Ptmp);
+
+        gsl_vector_memcpy(vec1,task3_l);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, J1_l, dq, 0.0, vec1_2);
+        gsl_vector_sub(vec1,vec1_2);
+
+        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, J1_l, P2, 0.0, Jtilde2);
+        pinv(invJtilde2,Jtilde2);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, invJtilde2, vec1, 0.0, dqtmp);
+        //gsl_blas_dgemv(CblasNoTrans, 1.0, P2, dqtmp2, 0.0, dqtmp);
+        gsl_vector_add(dq,dqtmp);
+
+
+
+//gsl_vector_memcpy(debug,dq);
+//
+//        // third task
+//        gsl_matrix_memcpy(P2,P1);
+//        pinv(invJCoM,Jtilde);
+//        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJCoM, Jtilde, 0.0, Ptmp);
+//        gsl_matrix_sub(P2,Ptmp);
+//
+//        gsl_vector_memcpy(vec3,taskCoMR);
+//        gsl_blas_dgemv(CblasNoTrans, 1.0, JCoMR, dq, 0.0, vec3_2);
+//        gsl_vector_sub(vec3,vec3_2);
+//
+//        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, JCoMR, P2, 0.0, Jtilde);
+//        pinv(invJCoM,Jtilde);
+//        gsl_blas_dgemv(CblasNoTrans, 1.0, invJCoM, vec3, 0.0, dqtmp);
+//        //gsl_blas_dgemv(CblasNoTrans, 1.0, P2, dqtmp2, 0.0, dqtmp);
+//        gsl_vector_add(dq,dqtmp);
+//
+//gsl_vector_sub(debug,dq);
+//PrintGSLVector(debug);
+
+
+
+
+
+        // fourth task
+        gsl_matrix_memcpy(Ptilde,P2);
+        //gsl_matrix_set_identity(Ptilde);
+        pinv(invJtilde2,Jtilde2);
+        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJtilde2,Jtilde2, 0.0, Ptmp);
+//        pinv(invJCoM,Jtilde);
+//        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJCoM, Jtilde, 0.0, Ptmp);
+        gsl_matrix_sub(Ptilde,Ptmp);
+
+        gsl_vector_sub(adphi,dq);
+
+        pinv(Ptmp,Ptilde);
+        //gsl_matrix_memcpy(Ptmp,Ptilde);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, Ptmp, adphi, 0.0, dqtmp);
+        gsl_vector_add(dq,dqtmp);
+
+
+
+
+        for(j=0; j<dof; j++)
+        {
+            uLINK[j+2].q=uLINK[j+2].q+0.05*gsl_vector_get(dq,j);
+            //uLINK[j+2].q=uLINK[j+2].q;
+        }
+
+
+        if(gsl_vector_get(uLINK[Status.right_foot_ID].p, 2)<gsl_vector_get(uLINK[Status.left_foot_ID].p, 2))
+        {
+            gsl_vector_set (uLINK[Status.right_foot_ID].p, 2, 0.11);
+            gsl_matrix_set_identity(uLINK[Status.right_foot_ID].R);
+            NodeForwardKinematics(uLINK,Status.right_foot_ID,0);
+        }
+        else
+        {
+            gsl_vector_set (uLINK[Status.left_foot_ID].p, 2, 0.11);
+            //gsl_matrix_set_identity(uLINK[Status.left_foot_ID].R);
+            NodeForwardKinematics(uLINK,Status.left_foot_ID,0);
+            gsl_matrix_set_identity(uLINK[Status.right_foot_ID].R);
+            NodeForwardKinematics(uLINK,Status.right_foot_ID,0);
+        }
+
+
+
+        ForwardKinematics(uLINK,1);
+
         DrawScene(uLINK,&Status, &CamParamt);
 
+
+//        static int init_tmpz=1;
+//        if (init_tmpz==1)
+//        {
+//            for(j=0; j<dof; j++)
+//            {
+//                ButterworthFilterInit(&(uLINK[j+2].filter));
+//            }
+//
+//            init_tmpz=0;
+//        }
+//
+//        if((t2)>=t_init)
+//        {
+//            for(j=0; j<dof; j++)
+//            {
+//                uLINK[j+2].q=ButterworthFilter (&(uLINK[j+2].filter), uLINK[j+2].q);
+//            }
+//        }
+//        else
+//        {
+//            for(j=0; j<dof; j++)
+//            {
+//                ButterworthFilter (&(uLINK[j+2].filter), uLINK[j+2].q);
+//            }
+//        }
 
 
     }
@@ -338,6 +777,7 @@ int main(int argc, char *argv[])
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#endif
 
 
 
@@ -348,8 +788,7 @@ int main(int argc, char *argv[])
 
 
 
-
-
+#if 1
 
 
 
@@ -762,7 +1201,7 @@ int main(int argc, char *argv[])
 
     gsl_vector_set(Stand_task_CoM,0,0.026);
     gsl_vector_set(Stand_task_CoM,1,-0.038);
-    gsl_vector_set(Stand_task_CoM,2,0.29-0.06);
+    gsl_vector_set(Stand_task_CoM,2,0.29-0.04);
 
 //    gsl_vector_set(Stand_task_CoM,0,0.015);
 //    gsl_vector_set(Stand_task_CoM,1,-0.047);
@@ -1641,6 +2080,10 @@ int main(int argc, char *argv[])
 
         DrawScene(uLINK,&Status, &CamParam);
 
+
+
+
+
 #endif //!Light
 
 
@@ -2333,6 +2776,8 @@ int main(int argc, char *argv[])
 
 //system("pause");
     return EXIT_SUCCESS; // Fermeture du programme
+
+#endif
 
 }
 

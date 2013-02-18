@@ -6,12 +6,13 @@
 #include "uLink.h"
 #include "CalcCoM.h"
 
+#include <dirent.h>
 #include "DrawCamera.h"
 #include "DrawLight.h"
 #include "DrawGround.h"
 #include "DrawMarker.h"
 #include "DrawAllJoints.h"
-
+#include "bmp.h"
 #include "DrawScene.h"
 
 void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
@@ -21,6 +22,18 @@ void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
     static gsl_vector * com;
     if (init_tmp==1)
     {
+//        char buf[256];
+//        DIR *d;
+//        struct dirent *dir;
+//        d = opendir("./Robots/");
+//        d = opendir("./../Simu_images/");
+//
+//        while(dir = readdir(d))
+//        {
+//            //printf("%s\n",dir->d_name);
+//            sprintf(buf, "%s/%s", "./../../Simu_images/", dir->d_name);
+//            remove(buf);
+//        }
         com = gsl_vector_calloc (3);
         init_tmp=0;
     }
@@ -31,14 +44,14 @@ void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
     //printf(titre,"Visualisation t= %3.3f", t2);
     //SDL_WM_SetCaption(titre, NULL);
 
-    //glClearStencil(0);
+    glClearStencil(0);
 //        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT |GL_STENCIL_BUFFER_BIT);
     //glCullFace(GL_BACK);
     //glCullFace(GL_FRONT);
 
 
-    Init_light();
+
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
     Camlook(Status,CamParam);
@@ -64,7 +77,10 @@ void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
 
     glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE ); // Disable writing to the color buffer
     glDepthMask( GL_FALSE );                               // Disable writing to the depth buffer
+
+    //glDisable(GL_COLOR_MATERIAL);
     DrawGround(2.0,0.0,-0.05,6.0,6.0,0.1);
+    //glEnable(GL_COLOR_MATERIAL);
 
     glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE ); // Re-enable writing to the color buffer
     glDepthMask( GL_TRUE );                            // Re-enable writing to the depth buffer
@@ -73,7 +89,9 @@ void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
     //
     // Render the floor...
     //
+
     DrawGround(2.0,0.0,-0.05,6.0,6.0,0.1);
+
 
     //
     // Render the shadow...
@@ -83,6 +101,11 @@ void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
     glEnable( GL_STENCIL_TEST );
     glStencilFunc( GL_EQUAL, 1, 0xFFFFFFFF ); // Only write to areas where the stencil buffer has a 1.
     glStencilOp( GL_KEEP, GL_KEEP, GL_KEEP ); // Don't modify the contents of the stencil buffer
+
+//    glStencilOp(GL_KEEP,    // stencil fail
+//            GL_DECR,    // stencil pass, depth fail
+//            GL_INCR);   // stencil pass, depth pass
+//glStencilMask(0xFFFFFFFF );
 
     glDisable( GL_LIGHTING );
     glDisable( GL_DEPTH_TEST );
@@ -159,18 +182,21 @@ void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
 //draw_model(&obj);
 //DrawOBJ("./cube2.obj");
 
+    Init_light();
+
 
     glFlush();
     SDL_GL_SwapBuffers();
     //SDL_Delay(5);
 
-#if Video
-    sprintf(files,"./../../Simu_images/Test%.4d.bmp", i);
-    //glReadBuffer(GL_FRONT);
-    glReadPixels(0, 0, 1024, 768, GL_RGB, GL_UNSIGNED_BYTE, pixel_data);//GL_BGR
-    write_bmp(files, 1024, 768, pixel_data);
-#endif //Video
-
+//    static int i=0;
+//    char files[40];
+//    static char pixel_data[3*1024*768];
+//    sprintf(files,"./../Simu_images/Test%.4d.bmp", i);
+//    //glReadBuffer(GL_FRONT);
+//    glReadPixels(0, 0, 1024, 768, GL_RGB, GL_UNSIGNED_BYTE, pixel_data);//GL_BGR
+//    write_bmp(files, 1024, 768, pixel_data);
+//    i++;
 
 #endif //!Light
 

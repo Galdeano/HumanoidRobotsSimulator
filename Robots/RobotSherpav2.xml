@@ -20,9 +20,8 @@
 		<fixed>
 			0
 		</fixed>
-		<!-- PC (1.7) + alim (0.45)-->
 		<m>
-			6.100000
+			0.000000
 		</m>
 		<color>
 			3
@@ -33,21 +32,6 @@
 		<child>
 			2
 		</child>
-		<qmin>
-			-90.000000
-		</qmin>
-		<qmax>
-			90.000000
-		</qmax>
-		<qmoy>
-			0.000000
-		</qmoy>
-		<umin>
-			-2.000000
-		</umin>
-		<umax>
-			2.000000
-		</umax>
 		<a>
 			0.000000 0.000000 1.000000
 		</a>
@@ -67,7 +51,7 @@
 			0.067142 0.000000 -0.000574 0.000000 0.019827 0.000001 -0.000574 0.000001 0.055545
 		</I>
 		<obj>
-			./Robots/SherpaMesh/bassin_l.obj
+			./Robots/SherpaMesh/bassin.obj
 		</obj>
 	</Link>
 	<Link no="2">
@@ -75,7 +59,7 @@
 			RLEG_J0
 		</Name>
 		<m>
-			0.000000
+			3.050000
 		</m>
 		<fixed>
 			0
@@ -123,7 +107,7 @@
 			0.067142 0.000000 -0.000574 0.000000 0.019827 0.000001 -0.000574 0.000001 0.055545
 		</I>
 		<obj>
-			./Robots/SherpaMesh/hanche_l.obj
+			./Robots/SherpaMesh/hanche.obj
 		</obj>
 	</Link>
 	<Link no="3">
@@ -152,7 +136,7 @@
 			90.000000
 		</qmax>
 		<qmoy>
-			-10.000000
+			0.000000
 		</qmoy>
 		<umin>
 			-2.000000
@@ -179,7 +163,7 @@
 			0.000041 -0.000002 -0.000000 -0.000002 0.000034 0.000000 -0.000000 0.000000 0.000064
 		</I>
 		<obj>
-			./Robots/SherpaMesh/hanche_l.obj
+			./Robots/SherpaMesh/cheville.obj
 		</obj>
 	</Link>
 	<Link no="4">
@@ -235,7 +219,7 @@
 			0.086259 -0.000098 0.000875 -0.000098 0.083201 0.000548 0.000875 0.000548 0.012113
 		</I>
 		<obj>
-			./Robots/SherpaMesh/femur_l.obj
+			./Robots/SherpaMesh/femur.obj
 		</obj>
 	</Link>
 	<Link no="5">
@@ -264,7 +248,7 @@
 			90.000000
 		</qmax>
 		<qmoy>
-			20.000000
+			0.000000
 		</qmoy>
 		<umin>
 			-2.000000
@@ -291,7 +275,7 @@
 			0.193723 0.000010 0.028785 0.000010 0.199834 -0.001259 0.028785 -0.001259 0.035402
 		</I>
 		<obj>
-			./Robots/SherpaMesh/tibia_l.obj
+			./Robots/SherpaMesh/genou.obj
 		</obj>
 	</Link>
 	<Link no="6">
@@ -320,7 +304,7 @@
 			90.000000
 		</qmax>
 		<qmoy>
-			-10.000000
+			0.000000
 		</qmoy>
 		<umin>
 			-2.000000
@@ -347,7 +331,7 @@
 			0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000
 		</I>
 		<obj>
-			./Robots/SherpaMesh/cheville_l.obj
+			./Robots/SherpaMesh/tibia.obj
 		</obj>
 	</Link>
 	<Link no="7">
@@ -403,7 +387,7 @@
 			0.003547 -0.000014 -0.001353 -0.000014 0.007363 0.000002 -0.001353 0.000002 0.005552
 		</I>
 		<obj>
-			./Robots/SherpaMesh/pied_l.obj
+			./Robots/SherpaMesh/pied.obj
 		</obj>
 	</Link>
 	<Link no="8">
@@ -411,7 +395,7 @@
 			LLEG_J0
 		</Name>
 		<m>
-			0.000000
+			3.050000
 		</m>
 		<fixed>
 			0
@@ -459,7 +443,7 @@
 			0.067142 0.000000 -0.000574 0.000000 0.019827 0.000001 -0.000574 0.000001 0.055545
 		</I>
 		<obj>
-			./Robots/SherpaMesh/hanche_l.obj
+			./Robots/SherpaMesh/hanche.obj
 		</obj>
 	</Link>
 	<Link no="9">
@@ -488,7 +472,7 @@
 			90.000000
 		</qmax>
 		<qmoy>
-			-10.000000
+			0.000000
 		</qmoy>
 		<umin>
 			-2.000000
@@ -515,7 +499,7 @@
 			0.000041 -0.000002 -0.000000 -0.000002 0.000034 0.000000 -0.000000 0.000000 0.000064
 		</I>
 		<obj>
-			./Robots/SherpaMesh/hanche_l.obj
+			./Robots/SherpaMesh/cheville.obj
 		</obj>
 	</Link>
 	<Link no="10">
@@ -571,7 +555,7 @@
 			0.086259 -0.000098 0.000875 -0.000098 0.083201 0.000548 0.000875 0.000548 0.012113
 		</I>
 		<obj>
-			./Robots/SherpaMesh/femur_l.obj
+			./Robots/SherpaMesh/femur.obj
 		</obj>
 	</Link>
 	<Link no="11">
@@ -600,7 +584,7 @@
 			90.000000
 		</qmax>
 		<qmoy>
-			20.000000
+			0.000000
 		</qmoy>
 		<umin>
 			-2.000000
@@ -627,7 +611,7 @@
 			0.193723 0.000010 0.028785 0.000010 0.199834 -0.001259 0.028785 -0.001259 0.035402
 		</I>
 		<obj>
-			./Robots/SherpaMesh/tibia_l.obj
+			./Robots/SherpaMesh/genou.obj
 		</obj>
 	</Link>
 	<Link no="12">
@@ -656,7 +640,7 @@
 			90.000000
 		</qmax>
 		<qmoy>
-			-10.000000
+			0.000000
 		</qmoy>
 		<umin>
 			-2.000000
@@ -683,7 +667,7 @@
 			0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000
 		</I>
 		<obj>
-			./Robots/SherpaMesh/cheville_l.obj
+			./Robots/SherpaMesh/tibia.obj
 		</obj>
 	</Link>
 	<Link no="13">
@@ -739,12 +723,12 @@
 			0.003547 -0.000014 -0.001353 -0.000014 0.007363 0.000002 -0.001353 0.000002 0.005552
 		</I>
 		<obj>
-			./Robots/SherpaMesh/pied_ld.obj
+			./Robots/SherpaMesh/pied.obj
 		</obj>
 	</Link>
 	<Contacts>
 		<solid>
-			3
+			5
 		</solid>
 		<Contact no='1'>
 			<body>

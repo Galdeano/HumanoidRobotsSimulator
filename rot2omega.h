@@ -5,7 +5,7 @@
 #include <gsl/gsl_matrix.h>
 
 
-void rot2omega(gsl_matrix * R,gsl_vector * w);
+int rot2omega(gsl_matrix * R,gsl_vector * w);
 
 
 #endif

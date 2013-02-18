@@ -16,7 +16,7 @@
 
 void DrawIndicators(SuLINK uLINK[],State *Status,gsl_vector * com,gsl_vector * CoP,int ground)
 {
-    int i,j,k;
+//    int i,j,k;
 
     static double RadToDeg;
     static gsl_vector * pos;

@@ -213,12 +213,12 @@ void LoadRobotXML(SuLINK uLINK[],State *Status,char* RobotFile)
 
         for(j=0;j<2;j++)
         {fscanf (f, "%s", tmp_s);}
-        fscanf (f, "%f %f %f ", &(uLINK[body].shape[0]), &(uLINK[body].shape[1]), &(uLINK[body].shape[2]));
+        fscanf (f, "%lf %lf %lf ", &(uLINK[body].shape[0]), &(uLINK[body].shape[1]), &(uLINK[body].shape[2]));
 //printf("shape: %f %f %f \n",uLINK[body].shape[0],uLINK[body].shape[1],uLINK[body].shape[2]);
 
         for(j=0;j<2;j++)
         {fscanf (f, "%s", tmp_s);}
-        fscanf (f, "%f %f %f ", &(uLINK[body].com[0]), &(uLINK[body].com[1]), &(uLINK[body].com[2]));
+        fscanf (f, "%lf %lf %lf ", &(uLINK[body].com[0]), &(uLINK[body].com[1]), &(uLINK[body].com[2]));
 //printf("com: %f %f %f \n",uLINK[body].com[0],uLINK[body].com[1],uLINK[body].com[2]);
 
         for(j=0;j<2;j++)
@@ -583,8 +583,8 @@ void LoadRobotParserXML(SuLINK uLINK[],State *Status,char* RobotFile)
     {
         sscanf (ezxml_child(Contact, "body")->txt,"%d",&body);
         sscanf (ezxml_child(Contact, "supportHeight")->txt,"%lf",&uLINK[body].supportHeight);
-        sscanf (ezxml_child(Contact, "shape")->txt,"%f %f %f", &(uLINK[body].shape[0]), &(uLINK[body].shape[1]), &(uLINK[body].shape[2]));
-        sscanf (ezxml_child(Contact, "com")->txt,"%f %f %f", &(uLINK[body].com[0]), &(uLINK[body].com[1]), &(uLINK[body].com[2]));
+        sscanf (ezxml_child(Contact, "shape")->txt,"%lf %lf %lf", &(uLINK[body].shape[0]), &(uLINK[body].shape[1]), &(uLINK[body].shape[2]));
+        sscanf (ezxml_child(Contact, "com")->txt,"%lf %lf %lf", &(uLINK[body].com[0]), &(uLINK[body].com[1]), &(uLINK[body].com[2]));
 
         SetupRigidBody(uLINK,body);
     }

@@ -463,7 +463,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         static gsl_vector * adphi;
         static double *qdev;
         static gsl_vector * CoP;
-        static double f=0.0;
+ //       static double f=0.0;
         static gsl_vector * zmp;
         static gsl_vector * dzmp;
 
