@@ -10,7 +10,8 @@
 
 //sherpa model
 //correction enseignements
-//marche hoap
+//marche hoapq
+
 
 
 
@@ -20,18 +21,18 @@
 #define old_zmp 0
 #define save_data_long 0
 #define save_data_quick 1
-#define save_data_quick_temp 0
+#define save_data_quick_temp 1
 
 #define file_motor 0
 #define reseau 1
 
-#define local 1
+#define local 1 //
 #define replay 0
 #define Tasks 1
 #define file_human 0
 #define file_hoap 0
 
-#define Light 0
+#define Light 0 //
 #define shadow 1
 #define colorsGL 0
 #define materials 1

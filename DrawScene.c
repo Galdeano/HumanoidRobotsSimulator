@@ -20,6 +20,7 @@ void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
 
     static int init_tmp=1;
     static gsl_vector * com;
+    static gsl_vector * offset;
     if (init_tmp==1)
     {
 //        char buf[256];
@@ -34,6 +35,7 @@ void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
 //            sprintf(buf, "%s/%s", "./../../Simu_images/", dir->d_name);
 //            remove(buf);
 //        }
+        offset = gsl_vector_calloc (3);
         com = gsl_vector_calloc (3);
         init_tmp=0;
     }
@@ -131,7 +133,56 @@ void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
     glDisable( GL_STENCIL_TEST );
     glEnable(GL_COLOR_MATERIAL);
 
+
+//#if colorsGL
+//    glColor3ub(255,0,0);
+//#endif //colorsGL
+//#if materials
+//    set_material(&ruby);
+//#endif //materials
+//gsl_vector_set(offset,0,0.015);
+//gsl_vector_set(offset,1,0.0);
+//gsl_vector_set(offset,2,-0.039);
+//gsl_vector_add(offset,uLINK[7].p);
+//DrawMarker(offset);
+//
+//gsl_vector_set(offset,0,0.015);
+//gsl_vector_set(offset,1,0.0);
+//gsl_vector_set(offset,2,-0.039);
+//gsl_vector_add(offset,uLINK[13].p);
+//DrawMarker(offset);
+//
+//#if colorsGL
+//    glColor3ub(0,0,255);
+//#endif //colorsGL
+//#if materials
+//    set_material(&turquoise);
+//#endif //materials
+//
+//gsl_vector_set(offset,0,0.048);
+//gsl_vector_set(offset,1,-0.01);
+//gsl_vector_set(offset,2,-0.039);
+//gsl_vector_add(offset,uLINK[7].p);
+//DrawMarker(offset);
+//
+//gsl_vector_set(offset,0,0.033);
+//gsl_vector_set(offset,1,0.015);
+//gsl_vector_set(offset,2,-0.039);
+//gsl_vector_add(offset,uLINK[13].p);
+//DrawMarker(offset);
+
+
+// active la transparence, penser a changer material.kd[3]
+//glEnable(GL_BLEND);
+//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
     DrawAllJoints(uLINK,1);
+
+
+
+//glEnable (GL_BLEND);
+//glBlendFunc (GL_ONE, GL_ONE);
 
 #endif //shadow
 
@@ -153,11 +204,11 @@ void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
 //    glEnable(GL_DEPTH_TEST);
 //    glEnable(GL_LIGHTING);
 
-#if zmp_filtering
-    DrawMarker(zmp_right);
-    DrawMarker(zmp_left);
-    DrawMarker(zmp_moy);
-#endif //zmp_filtering
+//#if zmp_filtering
+//    DrawMarker(zmp_right);
+//    DrawMarker(zmp_left);
+//    DrawMarker(zmp_moy);
+//#endif //zmp_filtering
 
     CalcCoM(uLINK,com);
 #if colorsGL
@@ -167,7 +218,7 @@ void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
     set_material(&turquoise);
 #endif //materials
     gsl_vector_set (com, 2, 0);
-    DrawMarker(com);
+    //DrawMarker(com);
 
 #if colorsGL
     glColor3ub(255,0,0);
@@ -177,6 +228,38 @@ void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
 #endif //materials
     //Hoap_calc_zmp_visu(uLINK,&Status,&zmp_c);
 
+
+//gsl_vector_set(offset,0,0.015);
+//gsl_vector_set(offset,1,0.0);
+//gsl_vector_set(offset,2,-0.039);
+//gsl_vector_add(offset,uLINK[7].p);
+//DrawMarker(offset);
+//
+//
+//gsl_vector_set(offset,0,0.015);
+//gsl_vector_set(offset,1,0.0);
+//gsl_vector_set(offset,2,-0.039);
+//gsl_vector_add(offset,uLINK[13].p);
+//DrawMarker(offset);
+//
+//#if colorsGL
+//    glColor3ub(0,0,255);
+//#endif //colorsGL
+//#if materials
+//    set_material(&turquoise);
+//#endif //materials
+//
+//gsl_vector_set(offset,0,0.035);
+//gsl_vector_set(offset,1,-0.01);
+//gsl_vector_set(offset,2,-0.039);
+//gsl_vector_add(offset,uLINK[7].p);
+//DrawMarker(offset);
+//
+//gsl_vector_set(offset,0,0.030);
+//gsl_vector_set(offset,1,0.015);
+//gsl_vector_set(offset,2,-0.039);
+//gsl_vector_add(offset,uLINK[13].p);
+//DrawMarker(offset);
 
 
 //draw_model(&obj);

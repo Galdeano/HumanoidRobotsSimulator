@@ -247,7 +247,7 @@ void init_material()
     silver.Kd[0]=0.50754;
     silver.Kd[1]=0.50754;
     silver.Kd[2]=0.50754;
-    silver.Kd[3]=1.0;
+    silver.Kd[3]=1.0;// transparence
     silver.Ks[0]=0.50827;
     silver.Ks[1]=0.50827;
     silver.Ks[2]=0.50827;

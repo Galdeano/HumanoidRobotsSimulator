@@ -149,12 +149,12 @@ static ButterworthData data_rW;
     static int init_tmp=1;
     if (init_tmp==1)
     {
-        ButterworthFilterInit(&data_lx);
-        ButterworthFilterInit(&data_ly);
-        ButterworthFilterInit(&data_lW);
-        ButterworthFilterInit(&data_rx);
-        ButterworthFilterInit(&data_ry);
-        ButterworthFilterInit(&data_rW);
+        ButterworthFilterInit(&data_lx,0.01);
+        ButterworthFilterInit(&data_ly,0.01);
+        ButterworthFilterInit(&data_lW,0.01);
+        ButterworthFilterInit(&data_rx,0.01);
+        ButterworthFilterInit(&data_ry,0.01);
+        ButterworthFilterInit(&data_rW,0.01);
         init_tmp=0;
     }
 

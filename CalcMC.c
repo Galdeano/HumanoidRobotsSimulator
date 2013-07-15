@@ -26,6 +26,7 @@ void CalcMC( SuLINK uLINK[], gsl_vector * com, int j)
         /*        mc = uLINK(j).m * (uLINK(j).p + uLINK(j).R * uLINK(j).c);*/
         gsl_blas_dgemv(CblasNoTrans, 1.0, uLINK[j].R, uLINK[j].c, 0.0, tmp);
         gsl_vector_add (tmp, uLINK[j].p);
+        //DrawMarker(tmp);
         gsl_vector_scale (tmp, uLINK[j].m);
         gsl_vector_add (com, tmp);
 

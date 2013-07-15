@@ -12,21 +12,22 @@
 
 void DrawMarker(gsl_vector * com)
 {
-    double d = 0.1;
+    double d = 0.05;
+    float lineWidth=5.0f;
 
-    glLineWidth( 1.0f );
+    glLineWidth( lineWidth);
     glBegin(GL_LINES);
     glVertex3d(gsl_vector_get (com,0)-d,gsl_vector_get (com,1),gsl_vector_get (com,2));
     glVertex3d(gsl_vector_get (com,0)+d,gsl_vector_get (com,1),gsl_vector_get (com,2));
     glEnd();
 
-    glLineWidth( 1.0f );
+    glLineWidth( lineWidth);
     glBegin(GL_LINES);
     glVertex3d(gsl_vector_get (com,0),gsl_vector_get (com,1)-d,gsl_vector_get (com,2));
     glVertex3d(gsl_vector_get (com,0),gsl_vector_get (com,1)+d,gsl_vector_get (com,2));
     glEnd();
 
-    glLineWidth( 1.0f );
+    glLineWidth( lineWidth);
     glBegin(GL_LINES);
     glVertex3d(gsl_vector_get (com,0),gsl_vector_get (com,1),gsl_vector_get (com,2)-d);
     glVertex3d(gsl_vector_get (com,0),gsl_vector_get (com,1),gsl_vector_get (com,2)+d);

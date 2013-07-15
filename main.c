@@ -81,6 +81,8 @@
 #include <sys/time.h>
 #endif
 
+//#include "Rdtsc.h"
+
 
 
 int main(int argc, char *argv[])
@@ -262,6 +264,9 @@ int main(int argc, char *argv[])
     //gsl_vector_set (uLINK[0][1].p, 2, Lc+Lt+Lp+0.15);
 
 
+    static ButterworthData data_lx;
+    ButterworthFilterInit(&data_lx,0.01);
+
 
 #if 0
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -383,6 +388,12 @@ int main(int argc, char *argv[])
 
 #if !Light
         printf("fps: %f \n",1/(((double)(val_ - baseTime_) * freq_ )-t2));
+
+//        static uint64_t time,time2;
+//        time=rdtsc();
+//        printf("fps: %d %f \n",(double)(3200000000/(double)(time-time2)));
+//        time2=time;
+
 #endif //!Light
         t2=(double)(val_ - baseTime_) * freq_;
 
@@ -788,6 +799,26 @@ int main(int argc, char *argv[])
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #if 1
 
 
@@ -900,7 +931,7 @@ int main(int argc, char *argv[])
     buff_t = calloc(buf_size,sizeof(double));
 
 #if save_data_quick_temp
-    int temp_size=9;
+    int temp_size=19;
     double  *buff_temp;
     buff_temp = calloc(buf_size*temp_size,sizeof(double));
     if (buff_temp==NULL)
@@ -933,6 +964,7 @@ int main(int argc, char *argv[])
     static gsl_matrix * Jtilde;
     static gsl_vector * task1;
     static gsl_vector * task2;
+    static gsl_vector * task2s;
     static gsl_vector * taskCoMR;
     static gsl_vector * taskCoML;
     static gsl_vector * CoM;
@@ -1001,6 +1033,7 @@ int main(int argc, char *argv[])
         Jtilde = gsl_matrix_calloc (3,nDoF-6);
         task1 = gsl_vector_calloc (6);
         task2 = gsl_vector_calloc (6);
+        task2s = gsl_vector_calloc (6);
         taskCoMR = gsl_vector_calloc (3);
         taskCoML = gsl_vector_calloc (3);
         CoM = gsl_vector_calloc (3);
@@ -1276,6 +1309,7 @@ int main(int argc, char *argv[])
 
     t2=0.0;
 
+    static double move_com_x=0.0;
     static double move_com_y=0.0;
     static double move_com_z=0.0;
 //SDL_KeyRepeat(1);
@@ -1320,16 +1354,22 @@ int main(int argc, char *argv[])
             switch (event.key.keysym.sym)
             {
             case SDLK_LEFT:
-                move_com_y-=0.0001;
+                move_com_y-=0.0005;
                 break;
             case SDLK_RIGHT:
-                move_com_y+=0.0001;
+                move_com_y+=0.0005;
                 break;
             case SDLK_DOWN:
-                move_com_z-=0.0001;
+                move_com_z-=0.0005;
                 break;
             case SDLK_UP:
-                move_com_z+=0.0001;
+                move_com_z+=0.0005;
+                break;
+            case SDLK_PAGEDOWN:
+                move_com_x-=0.0005;
+                break;
+            case SDLK_PAGEUP:
+                move_com_x+=0.0005;
                 break;
 //            case SDLK_LEFT:
 //                angular_z-=M_PI*0.05;
@@ -1416,8 +1456,8 @@ int main(int argc, char *argv[])
 //        CalcCoMJacobian(uLINK,&Status, JCoMR, Status.right_foot_ID);
         CalcCoMJacobian(uLINK,&Status, JCoML, Status.left_foot_ID);
 
-        static double wO=3.0;
-        static double amp=0.02;
+        static double wO=1.0;//3.0
+        static double amp=0.015;
         static double t_init=3.0;
         static double t_stand=5.0;
         static double t_stand_zmp=7.0;
@@ -1503,6 +1543,8 @@ int main(int argc, char *argv[])
                 }
             }
         }
+        //CalcCoM(uLINK,CoM);
+
 #endif //file_hoap
 
 #if file_human
@@ -1575,7 +1617,21 @@ int main(int argc, char *argv[])
             dt=dt*(t_init-(t2))/t_init;
             Rodrigues(R,error,dt);
         }
-        gsl_matrix_memcpy(R,Init_task_F2F_R);
+        //gsl_matrix_memcpy(R,Init_task_F2F_R);
+
+//        if(t2>10.)
+//        {
+//            gsl_vector_set(p,0,gsl_vector_get(p,0)-0.03);
+//            gsl_vector_set(p,1,gsl_vector_get(p,1)-0.03);
+//            gsl_vector_set(p,2,gsl_vector_get(p,2)-0.03);
+//            gsl_vector_set(error,0,-0.3);
+//            gsl_vector_set(error,1,-0.3);
+//            gsl_vector_set(error,2,0.3);
+//            dt = gsl_blas_dnrm2 (error);
+//            Rodrigues(R,error,dt);
+//
+//        }
+
         CalcVWerrOri(uLINK, task2, p, R,idx2);
         //PrintGSLVector(task2);
 
@@ -1624,11 +1680,14 @@ int main(int argc, char *argv[])
         if(t2>t_stand_zmp)
         {
             gsl_vector_memcpy(p,Stand_task_CoM);
-            gsl_vector_set (p, 2,gsl_vector_get(p,2)+amp*(cos((1/wO)*M_PI*(t2-t_stand_zmp))-1));
+            gsl_vector_set(p,0,gsl_vector_get(p,0)+move_com_x);
+            gsl_vector_set(p,1,gsl_vector_get(p,1)+move_com_y);
+            gsl_vector_set (p, 2,gsl_vector_get(p,2)+amp*(cos((1/wO)*M_PI*(t2-t_stand_zmp))-1)+move_com_z);
         }
         else if((t2>t_init) && (t2<t_stand_zmp))
         {
             gsl_vector_memcpy(p,Stand_task_CoM);
+            gsl_vector_set(p,0,gsl_vector_get(p,0)+move_com_x);
             gsl_vector_set(p,1,gsl_vector_get(p,1)+move_com_y);
             gsl_vector_set(p,2,gsl_vector_get(p,2)+move_com_z);
         }
@@ -1655,6 +1714,14 @@ int main(int argc, char *argv[])
 
 #if save_data_quick_temp
         CalcCoM(uLINK,CoM);//-foot.p
+
+        gsl_vector_set_zero(p);
+        //gsl_vector_set (p, 1, F2F_y);
+        gsl_matrix_set_identity(R);
+        CalcVWerrOri(uLINK, task2s, p, R,idx2);
+
+
+
         buff_temp[(i-1)*temp_size]=gsl_vector_get(CoM,0);
         buff_temp[(i-1)*temp_size+1]=gsl_vector_get(CoM,1);
         buff_temp[(i-1)*temp_size+2]=gsl_vector_get(CoM,2);
@@ -1664,7 +1731,23 @@ int main(int argc, char *argv[])
         buff_temp[(i-1)*temp_size+6]=gsl_vector_get(uLINK[Status.left_foot_ID].p,0);
         buff_temp[(i-1)*temp_size+7]=gsl_vector_get(uLINK[Status.left_foot_ID].p,1);
         buff_temp[(i-1)*temp_size+8]=gsl_vector_get(uLINK[Status.left_foot_ID].p,2);
+        buff_temp[(i-1)*temp_size+9]=t2;
+        buff_temp[(i-1)*temp_size+10]=gsl_vector_get(task2,3);
+        buff_temp[(i-1)*temp_size+11]=gsl_vector_get(task2,4);
+        buff_temp[(i-1)*temp_size+12]=gsl_vector_get(task2,5);
+
+        gsl_vector_sub(CoM,uLINK[baseFoot].p);
+        buff_temp[(i-1)*temp_size+13]=-gsl_vector_get(task2s,0);
+        buff_temp[(i-1)*temp_size+14]=-gsl_vector_get(task2s,1);
+        buff_temp[(i-1)*temp_size+15]=-gsl_vector_get(task2s,2);
+        buff_temp[(i-1)*temp_size+16]=gsl_vector_get(CoM,0);
+        buff_temp[(i-1)*temp_size+17]=gsl_vector_get(CoM,1);
+        buff_temp[(i-1)*temp_size+18]=gsl_vector_get(CoM,2);
 #endif //save_data_quick_temp
+
+
+
+
 
 
 
@@ -1853,7 +1936,7 @@ int main(int argc, char *argv[])
 
         for (j=0; j<(nDoF-6); j++)
         {
-            gsl_vector_set(adphi,j,-0.05*(2*(uLINK[j+2].q-uLINK[j+2].qmoy)/(qdev[j]*qdev[j])));
+            gsl_vector_set(adphi,j,-0.05*(2*(uLINK[j+2].q-uLINK[j+2].qmoy)/(qdev[j]*qdev[j]))); //O.O5
         }
 
 
@@ -1921,8 +2004,16 @@ int main(int argc, char *argv[])
         {
             if(uLINK[map[j]].fixed==0)
             {
+                if(gsl_vector_get(dq,map[j]-2)<(-0.02))
+                {
+                    gsl_vector_set(dq,map[j]-2,(-0.02));
+                }
+                if(gsl_vector_get(dq,map[j]-2)>0.02)
+                {
+                    gsl_vector_set(dq,map[j]-2,0.02);
+                }
                 //uLINK[map[j]].q =uLINK[map[j]].q+0.2*gsl_vector_get(dq,map[j]-2);
-                control.q[j]=rad2deg*motor_rotation[j]*(uLINK[map[j]].q+0.5*gsl_vector_get(dq,map[j]-2))*209;
+                control.q[j]=rad2deg*motor_rotation[j]*(uLINK[map[j]].q+0.5*gsl_vector_get(dq,map[j]-2))*209;//0.2
                 //printf("%d: %d %d\n",j+1,sensor.q[j],control.q[j]);
                 if(control.q[j]<(motor_l_bound[j]+209))
                 {
@@ -2045,19 +2136,19 @@ int main(int argc, char *argv[])
         if(gsl_vector_get(uLINK[Status.right_foot_ID].p, 2)<gsl_vector_get(uLINK[Status.left_foot_ID].p, 2))
         {
             gsl_vector_set (uLINK[Status.right_foot_ID].p, 2, 0.04);
-
-
-            gsl_matrix_set_identity(uLINK[Status.right_foot_ID].R);
             NodeForwardKinematics(uLINK,Status.right_foot_ID,0);
         }
         else
         {
             gsl_vector_set (uLINK[Status.left_foot_ID].p, 2, 0.04);
-            //gsl_matrix_set_identity(uLINK[Status.left_foot_ID].R);
             NodeForwardKinematics(uLINK,Status.left_foot_ID,0);
+        }
             gsl_matrix_set_identity(uLINK[Status.right_foot_ID].R);
             NodeForwardKinematics(uLINK,Status.right_foot_ID,0);
-        }
+            //gsl_matrix_set_identity(uLINK[Status.left_foot_ID].R);
+            //NodeForwardKinematics(uLINK,Status.left_foot_ID,0);
+
+
 
 //        gsl_vector_set_zero(uLINK[baseFoot].p);
 //        gsl_vector_set (uLINK[baseFoot].p, 2, 0.04);
