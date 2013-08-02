@@ -227,3 +227,59 @@ void Ext_q_hoap_trajectory(short *oqd, int pos_in_file)
     //free (qt);
     //fclose(f);
 }
+
+
+
+void Ext_walk_trajectory(double *opd, int pos_in_file)
+{
+    int i,res;
+
+    static double *opt, *gain;
+    static double gain_x=1.0;
+    static double gain_y=1.0;
+    static double gain_z=1.0;
+
+    static FILE *f;
+    static int init_tmp=1;
+    if (init_tmp==1)
+    {
+        opt = calloc(9,sizeof(double));
+        gain = calloc(9,sizeof(double));
+        if (opt == NULL)
+        {
+            perror ("Error allocation opt");
+            printf("Error allocation opt");
+        }
+        f=fopen("./Trajectories/Hoap_Walk2.txt","r");/////////////////////
+        if (f == NULL)
+        {
+            perror ("Error opening robot trajectory file Walk");
+            printf("Error opening robot trajectory file Walk");
+        }
+
+        gain[0]=gain_x;
+        gain[1]=gain_y;
+        gain[2]=gain_z;
+        gain[3]=gain_x;
+        gain[4]=gain_y;
+        gain[5]=gain_z;
+        gain[6]=gain_x;
+        gain[7]=gain_y;
+        gain[8]=gain_z;
+
+        init_tmp=0;
+    }
+
+
+        res=fscanf (f,"%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf", &opt[0], &opt[1], &opt[2], &opt[3], &opt[4], &opt[5], &opt[6], &opt[7], &opt[8]);
+
+
+//if t
+    for(i=0; i<9; i++)
+    {
+        opd[i] = gain[i]*opt[i];
+    }
+
+    //free (qt);
+    //fclose(f);
+}

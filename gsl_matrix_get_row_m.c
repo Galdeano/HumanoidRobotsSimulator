@@ -3,6 +3,9 @@
 #include <gsl/gsl_blas.h>
 #include "gsl_matrix_get_row_m.h"
 
+
+
+
 int gsl_matrix_get_row_m(gsl_matrix * matrix_out, gsl_matrix * matrix_in, int row)
 {
     int i;
@@ -23,6 +26,10 @@ int gsl_matrix_get_row_m(gsl_matrix * matrix_out, gsl_matrix * matrix_in, int ro
     }
 #endif
 }
+
+
+
+
 
 int gsl_matrix_get_column_m(gsl_matrix * matrix_out, gsl_matrix * matrix_in, int column)
 {
@@ -46,3 +53,28 @@ int gsl_matrix_get_column_m(gsl_matrix * matrix_out, gsl_matrix * matrix_in, int
 }
 
 
+
+
+int gsl_matrix_get_part_m(gsl_matrix * matrix_out, gsl_matrix * matrix_in, int s_row, int e_row, int s_column, int e_column)
+{
+    int i,j;
+#ifndef GSL_RANGE_CHECK_OFF
+    if (((s_column-e_column) == matrix_out->size2)&&((s_row-e_row) == matrix_out->size1))
+    {
+#endif
+        for (i=s_row; i<e_row; i++)
+        {
+            for (j=s_column; j<e_column; j++)
+            {
+                gsl_matrix_set(matrix_out,i-s_row,j-s_column,gsl_matrix_get(matrix_in, i,j));
+            }
+        }
+        return GSL_SUCCESS;
+#ifndef GSL_RANGE_CHECK_OFF
+    }
+    else
+    {
+        GSL_ERROR ("invalid length", GSL_EBADLEN);
+    }
+#endif
+}

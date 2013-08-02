@@ -878,19 +878,24 @@ int main(int argc, char *argv[])
         23, 24
     };
 
-    const short motor_l_bound[21] =
+    const int motor_l_bound[21] =
     {
         -19019, -6479, -14839, -209, -12749, -5225, -19019, -20064, -19019, -209,
         -6479, -4389, -17138, -27170, -12749, -5225, -31559, -209, -19019, -24035,
         209
     };
 
-    const short motor_u_bound[21] =
+    const int motor_u_bound [21] =
     {
-        6479, 4389, 17138, 27170, 12249, 5225, 31559, 209, 19019, 24035,
+        6479, 4389, 17138, 27170, 12749, 5225, 31559, 209, 19019, 24035,
         19019, 6479, 14839, 209, 12749, 5225, 19019, 20064, 19019, 209,
         18810
     };
+
+
+
+
+
 #if file_motor
     static double *qd;
     qd = calloc(22,sizeof(double));
@@ -931,7 +936,7 @@ int main(int argc, char *argv[])
     buff_t = calloc(buf_size,sizeof(double));
 
 #if save_data_quick_temp
-    int temp_size=19;
+    int temp_size=29;
     double  *buff_temp;
     buff_temp = calloc(buf_size*temp_size,sizeof(double));
     if (buff_temp==NULL)
@@ -959,17 +964,27 @@ int main(int argc, char *argv[])
     static gsl_vector * idx2;
     static gsl_matrix * J1;
     static gsl_matrix * J2;
+    static gsl_matrix * J1_l;
+    static gsl_matrix * J1_3;
     static gsl_matrix * JCoMR;
     static gsl_matrix * JCoML;
     static gsl_matrix * Jtilde;
+    static gsl_matrix * Jtilde2;
+    static gsl_matrix * invJtilde;
+    static gsl_matrix * invJtilde2;
     static gsl_vector * task1;
     static gsl_vector * task2;
     static gsl_vector * task2s;
+    static gsl_vector * task3;
+    static gsl_vector * task3_l;
     static gsl_vector * taskCoMR;
     static gsl_vector * taskCoML;
     static gsl_vector * CoM;
     static gsl_vector * vec3;
     static gsl_vector * vec3_2;
+    static gsl_vector * vec1;
+    static gsl_vector * vec1_2;
+
     static gsl_vector * p;
     static gsl_matrix * R;
     static gsl_matrix * P1;
@@ -1017,28 +1032,41 @@ int main(int argc, char *argv[])
     static gsl_vector * taskZMP;
 
 
-    static int path1[8] = {7, 7, 6, 5, 4, 3, 2, 1};
+    //static int path1[8] = {7, 7, 6, 5, 4, 3, 2, 1};
+    //static int path1[9] = {7, 7, 6, 5, 4, 3, 2, 14, 14};
+    static int path1[10] = {14, 14, 8, 2, 3, 4, 5, 6, 7, 7};
     static int path2[14] = {13, 13, 12, 11, 10, 9, 8, 2, 3, 4, 5, 6, 7, 7};
 
 
     static int init_task=1;
     if (init_task==1)
     {
-        idx1 = gsl_vector_calloc (8);
+        idx1 = gsl_vector_calloc (10);
         idx2 = gsl_vector_calloc (14);
         J1 = gsl_matrix_calloc (6,nDoF-6);
         J2 = gsl_matrix_calloc (6,nDoF-6);
+        J1_l = gsl_matrix_calloc (1,nDoF-6);
+        J1_3 = gsl_matrix_calloc (3,nDoF-6);
         JCoMR = gsl_matrix_calloc (3,nDoF-6);
         JCoML = gsl_matrix_calloc (3,nDoF-6);
         Jtilde = gsl_matrix_calloc (3,nDoF-6);
+        Jtilde2 = gsl_matrix_calloc (1,nDoF-6);
+        invJtilde = gsl_matrix_calloc (nDoF-6,3);
+        invJtilde2 = gsl_matrix_calloc (nDoF-6,1);
+
         task1 = gsl_vector_calloc (6);
         task2 = gsl_vector_calloc (6);
         task2s = gsl_vector_calloc (6);
+        task3 = gsl_vector_calloc (3);
+        task3_l = gsl_vector_calloc (1);
         taskCoMR = gsl_vector_calloc (3);
         taskCoML = gsl_vector_calloc (3);
         CoM = gsl_vector_calloc (3);
         vec3 = gsl_vector_calloc (3);
         vec3_2 = gsl_vector_calloc (3);
+        vec1 = gsl_vector_calloc (1);
+        vec1_2 = gsl_vector_calloc (1);
+
         p = gsl_vector_calloc (3);
         R = gsl_matrix_calloc (3,3);
         P1 = gsl_matrix_calloc (nDoF-6,nDoF-6);
@@ -1085,7 +1113,7 @@ int main(int argc, char *argv[])
         init_task=0;
 
 
-        for(i=0; i<8; i++)
+        for(i=0; i<10; i++)
         {
             gsl_vector_set(idx1,i,path1[i]);
         }
@@ -1195,6 +1223,19 @@ int main(int argc, char *argv[])
 //    gsl_vector_set (uLINK[baseFoot].p, 1, opd[7]);
 //    gsl_vector_set (uLINK[baseFoot].p, 2, opd[8]+foot_Z_offset);
 //    gsl_vector_scale(uLINK[baseFoot].p,0.352);//scale F2F
+
+#elif file_walk
+    Ext_walk_trajectory(opd, 0);
+
+    for(j=0; j<9; j++)
+    {
+        opd_old[j]=opd[j];
+        opd_old2[j]=opd[j];
+    }
+
+    gsl_vector_set_zero(uLINK[baseFoot].p);
+    gsl_vector_set (uLINK[baseFoot].p, 2, 0.04);
+
 #else //file_human
     gsl_vector_set_zero(uLINK[baseFoot].p);
     gsl_vector_set (uLINK[baseFoot].p, 2, 0.04);
@@ -1275,6 +1316,10 @@ int main(int argc, char *argv[])
     scale_task_CoM=gsl_blas_dnrm2(Init_task_CoM)/gsl_blas_dnrm2(p);
     printf("scale_task_CoM %f \n",scale_task_CoM);
 
+#elif file_walk
+
+
+
 #endif //file_human
 
 
@@ -1314,6 +1359,8 @@ int main(int argc, char *argv[])
     static double move_com_z=0.0;
 //SDL_KeyRepeat(1);
 
+
+
     while(1)
         //for (i = 0; i < 10000; i++)
     {
@@ -1331,6 +1378,12 @@ int main(int argc, char *argv[])
         {
             break;
         }
+
+        if (t2>30)
+        {
+            break;
+        }
+
 
 //SDL_PumpEvents() ;
         SDL_PollEvent(&event);
@@ -1392,6 +1445,8 @@ int main(int argc, char *argv[])
         default:
             break;
         }
+
+
 
 #if reseau
         hoapSensor(hoap, &sensor);
@@ -1456,7 +1511,7 @@ int main(int argc, char *argv[])
 //        CalcCoMJacobian(uLINK,&Status, JCoMR, Status.right_foot_ID);
         CalcCoMJacobian(uLINK,&Status, JCoML, Status.left_foot_ID);
 
-        static double wO=1.0;//3.0
+        static double wO=3.0;//3.0//1.O
         static double amp=0.015;
         static double t_init=3.0;
         static double t_stand=5.0;
@@ -1499,7 +1554,36 @@ int main(int argc, char *argv[])
             }
 
         }
+
+#elif file_walk
+
+        static double vitesse=1.0;
+        static double gain_1,gain_2;
+        static int pos_in_file=1;
+        if((t2)>=t_init)
+        {
+            while(((t2-t_init)*vitesse)>(0.005*pos_in_file))
+            {
+                for(j=0; j<9; j++)
+                {
+                    opd_old2[j]=opd_old[j];
+                }
+                Ext_walk_trajectory(opd_old, pos_in_file);
+                pos_in_file++;
+            }
+
+            // interpolation of data
+            gain_1=-(((t2-t_init)*vitesse)-(0.005*pos_in_file))/0.005;
+            gain_2=1+(((t2-t_init)*vitesse)-(0.005*pos_in_file))/0.005;
+            for(j=0; j<9; j++)
+            {
+                opd[j]=gain_1*opd_old2[j]+gain_2*opd_old[j];
+            }
+
+        }
 #endif //file_human
+
+
 
 
 #if file_hoap
@@ -1547,6 +1631,7 @@ int main(int argc, char *argv[])
 
 #endif //file_hoap
 
+
 #if file_human
         static double z_f=1.0;
         static double F2F_y=-0.078;
@@ -1587,23 +1672,6 @@ int main(int argc, char *argv[])
         //printf("%f \n",correction);
 
 
-#else //file_human
-        static double F2F_y=-0.078;
-        if((t2)>=t_init)
-        {
-            gsl_vector_set_zero(p);
-            gsl_vector_set (p, 1, F2F_y);
-        }
-        else
-        {
-            gsl_vector_memcpy(p,Init_task_F2F_p);
-            gsl_vector_set(p,0,gsl_vector_get(p,0)*(t_init-(t2))/t_init);
-            gsl_vector_set(p,1,(gsl_vector_get(p,1)*(t_init-(t2))/t_init)+(F2F_y*(t2)/t_init));
-            gsl_vector_set(p,2,gsl_vector_get(p,2)*(t_init-(t2))/t_init);
-
-        }
-#endif //file_human
-
         if((t2)>=t_init)
         {
             gsl_matrix_set_identity(R);
@@ -1619,18 +1687,101 @@ int main(int argc, char *argv[])
         }
         //gsl_matrix_memcpy(R,Init_task_F2F_R);
 
-//        if(t2>10.)
-//        {
-//            gsl_vector_set(p,0,gsl_vector_get(p,0)-0.03);
-//            gsl_vector_set(p,1,gsl_vector_get(p,1)-0.03);
-//            gsl_vector_set(p,2,gsl_vector_get(p,2)-0.03);
-//            gsl_vector_set(error,0,-0.3);
-//            gsl_vector_set(error,1,-0.3);
-//            gsl_vector_set(error,2,0.3);
+#elif file_walk
+
+        if((t2)>=t_init)
+        {
+            gsl_vector_set (p, 0, opd[3]);
+            gsl_vector_set (p, 1, opd[4]);
+            gsl_vector_set (p, 2, opd[5]);
+
+        }
+        else
+        {
+            gsl_vector_memcpy(p,Init_task_F2F_p);
+            gsl_vector_set(p,0,(gsl_vector_get(p,0)*(t_init-(t2))/t_init)+(opd[3]*(t2)/t_init));
+            gsl_vector_set(p,1,(gsl_vector_get(p,1)*(t_init-(t2))/t_init)+(opd[4]*(t2)/t_init));
+            gsl_vector_set(p,2,(gsl_vector_get(p,2)*(t_init-(t2))/t_init)+(opd[5]*(t2)/t_init));
+        }
+
+        if((t2)>=t_init)
+        {
+            //gsl_matrix_set_identity(R);
+            gsl_vector_set (error, 0, -opd[6]);
+            gsl_vector_set (error, 1, -opd[7]);
+            gsl_vector_set (error, 2, -opd[8]);
+            dt=1.0;
+            Rodrigues(R,error,dt);
+        }
+        else
+        {
+//            gsl_matrix_memcpy(R,Init_task_F2F_R);
+//            rot2omega(R,error);
 //            dt = gsl_blas_dnrm2 (error);
+//            gsl_vector_scale (error, 1/dt);
+//            dt=dt*(t_init-(t2))/t_init;
 //            Rodrigues(R,error,dt);
+
+            gsl_vector_set (error, 0, -opd[6]);
+            gsl_vector_set (error, 1, -opd[7]);
+            gsl_vector_set (error, 2, -opd[8]);
+            dt=1.0;
+            Rodrigues(R,error,dt);
+        }
+
+
+        //gsl_matrix_memcpy(R,Init_task_F2F_R);
+
+#else //file_human
+        static double F2F_y=-0.078;
+        if((t2)>=t_init)
+        {
+            gsl_vector_set_zero(p);
+            gsl_vector_set (p, 1, F2F_y);
+        }
+        else
+        {
+            gsl_vector_memcpy(p,Init_task_F2F_p);
+            gsl_vector_set(p,0,gsl_vector_get(p,0)*(t_init-(t2))/t_init);
+            gsl_vector_set(p,1,(gsl_vector_get(p,1)*(t_init-(t2))/t_init)+(F2F_y*(t2)/t_init));
+            gsl_vector_set(p,2,gsl_vector_get(p,2)*(t_init-(t2))/t_init);
+
+        }
+
+        if((t2)>=t_init)
+        {
+            gsl_matrix_set_identity(R);
+        }
+        else
+        {
+            gsl_matrix_memcpy(R,Init_task_F2F_R);
+            rot2omega(R,error);
+            dt = gsl_blas_dnrm2 (error);
+            gsl_vector_scale (error, 1/dt);
+            dt=dt*(t_init-(t2))/t_init;
+            Rodrigues(R,error,dt);
+        }
+        //gsl_matrix_memcpy(R,Init_task_F2F_R);
+#endif //file_human
+
+
 //
+//        if((t2)>=t_init)
+//        {
+//            gsl_matrix_set_identity(R);
 //        }
+//        else
+//        {
+//            gsl_matrix_memcpy(R,Init_task_F2F_R);
+//            rot2omega(R,error);
+//            dt = gsl_blas_dnrm2 (error);
+//            gsl_vector_scale (error, 1/dt);
+//            dt=dt*(t_init-(t2))/t_init;
+//            Rodrigues(R,error,dt);
+//        }
+//        //gsl_matrix_memcpy(R,Init_task_F2F_R);
+
+
 
         CalcVWerrOri(uLINK, task2, p, R,idx2);
         //PrintGSLVector(task2);
@@ -1675,14 +1826,45 @@ int main(int argc, char *argv[])
         //gsl_vector_set(p,1,gsl_vector_get(p,1)+correction/2);
 
 
+#elif file_walk
+
+
+        if(t2>t_init)
+        {
+            gsl_vector_set (p, 0, opd[0]);
+            gsl_vector_set (p, 1, opd[1]);
+            gsl_vector_set (p, 2, opd[2]);
+        }
+        else
+        {
+            gsl_vector_memcpy(p,Init_task_CoM);
+            gsl_vector_set(p,0,((gsl_vector_get(p,0))*(t_init-(t2))/t_init)+(opd[0]*(t2)/t_init));
+            gsl_vector_set(p,1,((gsl_vector_get(p,1))*(t_init-(t2))/t_init)+(opd[1]*(t2)/t_init));
+            gsl_vector_set(p,2,((gsl_vector_get(p,2))*(t_init-(t2))/t_init)+(opd[2]*(t2)/t_init));
+        }
+
 #else //file_human
+static float wi;
+//wi=wO-(t2-t_stand_zmp)*1/25;
+//wi=3.0*exp(-(t2-t_stand_zmp)/50);
+//wi=1.5*exp(-(t2-t_stand_zmp)/100);
+wi=1.1*exp(-(t2-t_stand_zmp)/170);
+
+#if save_data_quick_temp
+
+        buff_temp[(i-1)*temp_size+19]=wi;
+
+#endif //save_data_quick_temp
 
         if(t2>t_stand_zmp)
         {
             gsl_vector_memcpy(p,Stand_task_CoM);
-            gsl_vector_set(p,0,gsl_vector_get(p,0)+move_com_x);
+            gsl_vector_set(p,0,gsl_vector_get(p,0)+amp*(cos((1/wi)*M_PI*(t2-t_stand_zmp))-1)+move_com_x);
             gsl_vector_set(p,1,gsl_vector_get(p,1)+move_com_y);
-            gsl_vector_set (p, 2,gsl_vector_get(p,2)+amp*(cos((1/wO)*M_PI*(t2-t_stand_zmp))-1)+move_com_z);
+            gsl_vector_set(p,2,gsl_vector_get(p,2)+move_com_z);
+//            gsl_vector_set(p,0,gsl_vector_get(p,0)+move_com_x);
+//            gsl_vector_set(p,1,gsl_vector_get(p,1)+move_com_y);
+//            gsl_vector_set (p, 2,gsl_vector_get(p,2)+amp*(cos((1/wO)*M_PI*(t2-t_stand_zmp))-1)+move_com_z);
         }
         else if((t2>t_init) && (t2<t_stand_zmp))
         {
@@ -1712,41 +1894,6 @@ int main(int argc, char *argv[])
         gsl_vector_sub(taskCoML,CoM);
         //PrintGSLVector(taskCoMR);
 
-#if save_data_quick_temp
-        CalcCoM(uLINK,CoM);//-foot.p
-
-        gsl_vector_set_zero(p);
-        //gsl_vector_set (p, 1, F2F_y);
-        gsl_matrix_set_identity(R);
-        CalcVWerrOri(uLINK, task2s, p, R,idx2);
-
-
-
-        buff_temp[(i-1)*temp_size]=gsl_vector_get(CoM,0);
-        buff_temp[(i-1)*temp_size+1]=gsl_vector_get(CoM,1);
-        buff_temp[(i-1)*temp_size+2]=gsl_vector_get(CoM,2);
-        buff_temp[(i-1)*temp_size+3]=gsl_vector_get(uLINK[Status.right_foot_ID].p,0);
-        buff_temp[(i-1)*temp_size+4]=gsl_vector_get(uLINK[Status.right_foot_ID].p,1);
-        buff_temp[(i-1)*temp_size+5]=gsl_vector_get(uLINK[Status.right_foot_ID].p,2);
-        buff_temp[(i-1)*temp_size+6]=gsl_vector_get(uLINK[Status.left_foot_ID].p,0);
-        buff_temp[(i-1)*temp_size+7]=gsl_vector_get(uLINK[Status.left_foot_ID].p,1);
-        buff_temp[(i-1)*temp_size+8]=gsl_vector_get(uLINK[Status.left_foot_ID].p,2);
-        buff_temp[(i-1)*temp_size+9]=t2;
-        buff_temp[(i-1)*temp_size+10]=gsl_vector_get(task2,3);
-        buff_temp[(i-1)*temp_size+11]=gsl_vector_get(task2,4);
-        buff_temp[(i-1)*temp_size+12]=gsl_vector_get(task2,5);
-
-        gsl_vector_sub(CoM,uLINK[baseFoot].p);
-        buff_temp[(i-1)*temp_size+13]=-gsl_vector_get(task2s,0);
-        buff_temp[(i-1)*temp_size+14]=-gsl_vector_get(task2s,1);
-        buff_temp[(i-1)*temp_size+15]=-gsl_vector_get(task2s,2);
-        buff_temp[(i-1)*temp_size+16]=gsl_vector_get(CoM,0);
-        buff_temp[(i-1)*temp_size+17]=gsl_vector_get(CoM,1);
-        buff_temp[(i-1)*temp_size+18]=gsl_vector_get(CoM,2);
-#endif //save_data_quick_temp
-
-
-
 
 
 
@@ -1765,8 +1912,8 @@ int main(int argc, char *argv[])
             zmp_right = gsl_vector_calloc (3);
             zmp_moy = gsl_vector_calloc (3);
 
-            zmp_x_magin=0.01;
-            zmp_y_magin=0.02;
+            zmp_x_magin=0.08;
+            zmp_y_magin=0.16;
 
             init_task_zmp=0;
         }
@@ -1774,7 +1921,7 @@ int main(int argc, char *argv[])
 
 
 
-        if(t2>t_init && (zmp_c.zmp_left.W+zmp_c.zmp_right.W)>20 && (zmp_c.zmp_left.W+zmp_c.zmp_right.W)<90)
+        if(t2>t_init && (zmp_c.zmp_left.W+zmp_c.zmp_right.W)>15 && (zmp_c.zmp_left.W+zmp_c.zmp_right.W)<100)
         {
 //            if (zmp_c.zmp_left.W<10) //protect against false value due to too low pressure
 //            {
@@ -1808,14 +1955,14 @@ int main(int argc, char *argv[])
 
                 gsl_vector_memcpy(taskZMP,zmp_moy);
                 gsl_vector_sub(taskZMP,p);
-                gsl_vector_scale(taskZMP,0.05);
+                gsl_vector_scale(taskZMP,-0.02);
                 //gsl_vector_set (taskZMP, 2, 0);
 
                 gsl_vector_memcpy(dzmp,zmp_moy);
                 gsl_vector_sub(dzmp,zmp);
                 gsl_vector_memcpy(zmp,zmp_moy);
                 gsl_vector_scale (dzmp, Te);
-                gsl_vector_scale (dzmp, 0.005);
+                gsl_vector_scale (dzmp, 0.00005);
                 gsl_vector_add(taskZMP,dzmp);
 
 
@@ -1835,21 +1982,32 @@ int main(int argc, char *argv[])
                 {
                     gsl_vector_set(taskZMP,1,zmp_y_magin);
                 }
+                gsl_vector_set (taskZMP, 2, 0);
 #if zmp_feedback
                 gsl_vector_add(taskCoML,taskZMP);
 #endif
 
 //limites sur taskzmp et sa derivee
 #if save_data_quick_temp
-                buff_temp[(i-1)*temp_size]=gsl_vector_get(taskCoML,0);
-                buff_temp[(i-1)*temp_size+1]=gsl_vector_get(taskCoML,1);
-                buff_temp[(i-1)*temp_size+2]=gsl_vector_get(taskCoML,2);
-                buff_temp[(i-1)*temp_size+3]=gsl_vector_get(zmp_moy,0);
-                buff_temp[(i-1)*temp_size+4]=gsl_vector_get(zmp_moy,1);
-                buff_temp[(i-1)*temp_size+5]=gsl_vector_get(zmp_moy,2);
-                buff_temp[(i-1)*temp_size+6]=gsl_vector_get(taskZMP,0);
-                buff_temp[(i-1)*temp_size+7]=gsl_vector_get(taskZMP,1);
-                buff_temp[(i-1)*temp_size+8]=gsl_vector_get(taskZMP,2);
+//                buff_temp[(i-1)*temp_size]=gsl_vector_get(taskCoML,0);
+//                buff_temp[(i-1)*temp_size+1]=gsl_vector_get(taskCoML,1);
+//                buff_temp[(i-1)*temp_size+2]=gsl_vector_get(taskCoML,2);
+//                buff_temp[(i-1)*temp_size+3]=gsl_vector_get(zmp_moy,0);
+//                buff_temp[(i-1)*temp_size+4]=gsl_vector_get(zmp_moy,1);
+//                buff_temp[(i-1)*temp_size+5]=gsl_vector_get(zmp_moy,2);
+//                buff_temp[(i-1)*temp_size+6]=gsl_vector_get(taskZMP,0);
+//                buff_temp[(i-1)*temp_size+7]=gsl_vector_get(taskZMP,1);
+//                buff_temp[(i-1)*temp_size+8]=gsl_vector_get(taskZMP,2);
+//        buff_temp[(i-1)*temp_size+19]=wi;
+        buff_temp[(i-1)*temp_size+20]=gsl_vector_get(taskCoML,0);
+        buff_temp[(i-1)*temp_size+21]=gsl_vector_get(taskCoML,1);
+        buff_temp[(i-1)*temp_size+22]=gsl_vector_get(taskCoML,2);
+        buff_temp[(i-1)*temp_size+23]=gsl_vector_get(zmp_moy,0);
+        buff_temp[(i-1)*temp_size+24]=gsl_vector_get(zmp_moy,1);
+        buff_temp[(i-1)*temp_size+25]=gsl_vector_get(zmp_moy,2);
+        buff_temp[(i-1)*temp_size+26]=gsl_vector_get(taskZMP,0);
+        buff_temp[(i-1)*temp_size+27]=gsl_vector_get(taskZMP,1);
+        buff_temp[(i-1)*temp_size+28]=gsl_vector_get(taskZMP,2);
 #endif //save_data_quick_temp
             }
 #endif //!old_zmp
@@ -1913,17 +2071,17 @@ int main(int argc, char *argv[])
 #endif
 
 //limites sur taskzmp et sa derivee
-#if save_data_quick_temp
-                buff_temp[(i-1)*temp_size]=gsl_vector_get(taskCoML,0);
-                buff_temp[(i-1)*temp_size+1]=gsl_vector_get(taskCoML,1);
-                buff_temp[(i-1)*temp_size+2]=gsl_vector_get(taskCoML,2);
-                buff_temp[(i-1)*temp_size+3]=gsl_vector_get(zmp_moy,0);
-                buff_temp[(i-1)*temp_size+4]=gsl_vector_get(zmp_moy,1);
-                buff_temp[(i-1)*temp_size+5]=gsl_vector_get(zmp_moy,2);
-                buff_temp[(i-1)*temp_size+6]=gsl_vector_get(taskZMP,0);
-                buff_temp[(i-1)*temp_size+7]=gsl_vector_get(taskZMP,1);
-                buff_temp[(i-1)*temp_size+8]=gsl_vector_get(taskZMP,2);
-#endif //save_data_quick_temp
+//#if save_data_quick_temp
+//                buff_temp[(i-1)*temp_size]=gsl_vector_get(taskCoML,0);
+//                buff_temp[(i-1)*temp_size+1]=gsl_vector_get(taskCoML,1);
+//                buff_temp[(i-1)*temp_size+2]=gsl_vector_get(taskCoML,2);
+//                buff_temp[(i-1)*temp_size+3]=gsl_vector_get(zmp_moy,0);
+//                buff_temp[(i-1)*temp_size+4]=gsl_vector_get(zmp_moy,1);
+//                buff_temp[(i-1)*temp_size+5]=gsl_vector_get(zmp_moy,2);
+//                buff_temp[(i-1)*temp_size+6]=gsl_vector_get(taskZMP,0);
+//                buff_temp[(i-1)*temp_size+7]=gsl_vector_get(taskZMP,1);
+//                buff_temp[(i-1)*temp_size+8]=gsl_vector_get(taskZMP,2);
+//#endif //save_data_quick_temp
 
 
             }
@@ -1934,10 +2092,42 @@ int main(int argc, char *argv[])
 
 
 
-        for (j=0; j<(nDoF-6); j++)
-        {
-            gsl_vector_set(adphi,j,-0.05*(2*(uLINK[j+2].q-uLINK[j+2].qmoy)/(qdev[j]*qdev[j]))); //O.O5
-        }
+#if save_data_quick_temp
+        CalcCoM(uLINK,CoM);//-foot.p
+
+        gsl_vector_set_zero(p);
+        //gsl_vector_set (p, 1, F2F_y);
+        gsl_matrix_set_identity(R);
+        CalcVWerrOri(uLINK, task2s, p, R,idx2);
+
+
+
+        buff_temp[(i-1)*temp_size]=gsl_vector_get(CoM,0);
+        buff_temp[(i-1)*temp_size+1]=gsl_vector_get(CoM,1);
+        buff_temp[(i-1)*temp_size+2]=gsl_vector_get(CoM,2);
+        buff_temp[(i-1)*temp_size+3]=gsl_vector_get(uLINK[Status.right_foot_ID].p,0);
+        buff_temp[(i-1)*temp_size+4]=gsl_vector_get(uLINK[Status.right_foot_ID].p,1);
+        buff_temp[(i-1)*temp_size+5]=gsl_vector_get(uLINK[Status.right_foot_ID].p,2);
+        buff_temp[(i-1)*temp_size+6]=gsl_vector_get(uLINK[Status.left_foot_ID].p,0);
+        buff_temp[(i-1)*temp_size+7]=gsl_vector_get(uLINK[Status.left_foot_ID].p,1);
+        buff_temp[(i-1)*temp_size+8]=gsl_vector_get(uLINK[Status.left_foot_ID].p,2);
+        buff_temp[(i-1)*temp_size+9]=t2;
+        buff_temp[(i-1)*temp_size+10]=gsl_vector_get(task2s,3);
+        buff_temp[(i-1)*temp_size+11]=gsl_vector_get(task2s,4);
+        buff_temp[(i-1)*temp_size+12]=gsl_vector_get(task2s,5);
+
+        gsl_vector_sub(CoM,uLINK[baseFoot].p);
+        buff_temp[(i-1)*temp_size+13]=-gsl_vector_get(task2s,0);
+        buff_temp[(i-1)*temp_size+14]=-gsl_vector_get(task2s,1);
+        buff_temp[(i-1)*temp_size+15]=-gsl_vector_get(task2s,2);
+        buff_temp[(i-1)*temp_size+16]=gsl_vector_get(CoM,0);
+        buff_temp[(i-1)*temp_size+17]=gsl_vector_get(CoM,1);
+        buff_temp[(i-1)*temp_size+18]=gsl_vector_get(CoM,2);
+
+#endif //save_data_quick_temp
+
+
+
 
 
         // first task
@@ -1982,12 +2172,73 @@ int main(int argc, char *argv[])
 //gsl_vector_sub(debug,dq);
 //PrintGSLVector(debug);
 
-        // fourth task
-        gsl_matrix_memcpy(Ptilde,P1);
-        //gsl_matrix_set_identity(Ptilde);
+#if oritrunk
+    CalcJacobianModif(uLINK,J1,idx1);
+    gsl_matrix_get_row_m(J1_l, J1, 3);
+    gsl_matrix_get_part_m(J1_3, J1, 3, 6,0, dof);
+    rot2omega(uLINK[14].R,task3);
+    gsl_vector_set(task3_l,0,gsl_vector_get(task3,0));
+
+
+       // third task
+       //printf("tache ori x \n");
+        gsl_matrix_memcpy(P2,P1);
         pinv(invJCoM,Jtilde);
         gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJCoM, Jtilde, 0.0, Ptmp);
+        gsl_matrix_sub(P2,Ptmp);
+
+////PrintGSLVector(task3);
+
+//        //gsl_vector_scale(task3,-1.);
+//        gsl_vector_memcpy(vec3,task3);
+//        gsl_blas_dgemv(CblasNoTrans, 1.0, J1_3, dq, 0.0, vec3_2);
+//        gsl_vector_sub(vec3,vec3_2);
+//
+//        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, J1_3, P2, 0.0, Jtilde);
+//        pinv(invJtilde,Jtilde);
+//        gsl_blas_dgemv(CblasNoTrans, 1.0, invJtilde, vec3, 0.0, dqtmp);
+//        //gsl_blas_dgemv(CblasNoTrans, 1.0, P2, dqtmp2, 0.0, dqtmp);
+//        gsl_vector_add(dq,dqtmp);
+
+        gsl_vector_memcpy(vec1,task3_l);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, J1_l, dq, 0.0, vec1_2);
+        gsl_vector_sub(vec1,vec1_2);
+
+        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, J1_l, P2, 0.0, Jtilde2);
+        pinv(invJtilde2,Jtilde2);
+        gsl_blas_dgemv(CblasNoTrans, 1.0, invJtilde2, vec1, 0.0, dqtmp);
+        gsl_vector_add(dq,dqtmp);
+
+
+#endif // oritrunk
+
+
+//        for (i=0; i<(nDoF-6); i++)
+//        {
+//            qdev[i]=fmin(fabs(uLINK[i+2].qmin-uLINK[i+2].qmoy),fabs(uLINK[i+2].qmax-uLINK[i+2].qmoy))*2;
+//        }
+
+        for (j=0; j<(nDoF-6); j++)
+        {
+
+            //gsl_vector_set(adphi,j,-0.05*((2*(uLINK[j+2].q-uLINK[j+2].qmoy)/(qdev[j]*qdev[j])))); //O.O5//gsl_pow_3
+            gsl_vector_set(adphi,j,-0.05*(2*(uLINK[j+2].q-uLINK[j+2].qmoy)/(qdev[j]*qdev[j]))-0.1*gsl_pow_3(2*(uLINK[j+2].q-uLINK[j+2].qmoy)/(qdev[j]*qdev[j]))); //O.O5//gsl_pow_3
+        }
+
+        // fourth task
+#if oritrunk
+        gsl_matrix_memcpy(Ptilde,P2);
+//        pinv(invJCoM,Jtilde);
+//        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJCoM, Jtilde, 0.0, Ptmp);
+        pinv(invJtilde2,Jtilde2);
+        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJtilde2,Jtilde2, 0.0, Ptmp);
+#else
+        gsl_matrix_memcpy(Ptilde,P1);
+        pinv(invJCoM,Jtilde);
+        gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, invJCoM, Jtilde, 0.0, Ptmp);
+#endif // oritrunk
         gsl_matrix_sub(Ptilde,Ptmp);
+
 
         gsl_vector_sub(adphi,dq);
 
@@ -1999,31 +2250,41 @@ int main(int argc, char *argv[])
 
 
 #if reseau
+static const float dqlim=0.12;
+
 
         for(j=0; j<(dof); j++)
         {
             if(uLINK[map[j]].fixed==0)
             {
-                if(gsl_vector_get(dq,map[j]-2)<(-0.02))
+                if(gsl_vector_get(dq,map[j]-2)<(-dqlim))
                 {
-                    gsl_vector_set(dq,map[j]-2,(-0.02));
+                    gsl_vector_set(dq,map[j]-2,(-dqlim));
+                    //printf("dmin %d\n",map[j]);
                 }
-                if(gsl_vector_get(dq,map[j]-2)>0.02)
+                if(gsl_vector_get(dq,map[j]-2)>dqlim)
                 {
-                    gsl_vector_set(dq,map[j]-2,0.02);
+                    gsl_vector_set(dq,map[j]-2,dqlim);
+                    //printf("dmax %d\n",map[j]);
                 }
                 //uLINK[map[j]].q =uLINK[map[j]].q+0.2*gsl_vector_get(dq,map[j]-2);
-                control.q[j]=rad2deg*motor_rotation[j]*(uLINK[map[j]].q+0.5*gsl_vector_get(dq,map[j]-2))*209;//0.2
+                control.q[j]=rad2deg*motor_rotation[j]*(uLINK[map[j]].q+0.5*gsl_vector_get(dq,map[j]-2))*209;//0.2//0.5
                 //printf("%d: %d %d\n",j+1,sensor.q[j],control.q[j]);
+
                 if(control.q[j]<(motor_l_bound[j]+209))
                 {
                     control.q[j]=motor_l_bound[j]+209;
+                    //printf("min %d %d %d [%d %d ] \n",map[j],j,control.q[j],motor_l_bound[j],motor_u_bound[j]);
                 }
                 if(control.q[j]>(motor_u_bound[j]-209))
                 {
                     control.q[j]=motor_u_bound[j]-209;
+                    //printf("max %d %d %d [%d %d ] \n",map[j],j,control.q[j],motor_l_bound[j],motor_u_bound[j]);
                 }
+//printf("test %d %d %d [%d %d]\n",map[j],j,control.q[j],motor_l_bound[j],motor_u_bound[j]);
             }
+
+
         }
 
 #if file_hoap

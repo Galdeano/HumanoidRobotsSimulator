@@ -14,4 +14,6 @@ void Ext_op_trajectory_LIPM(double *opd, double t);
 
 void Ext_q_hoap_trajectory(short *oqd, int pos_in_file);
 
+void Ext_walk_trajectory(double *opd, int pos_in_file);
+
 #endif

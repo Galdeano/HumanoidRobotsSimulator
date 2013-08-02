@@ -8,16 +8,14 @@
  */
 
 
-//sherpa model
-//correction enseignements
-//marche hoapq
+
 
 
 
 
 #define play_csv 0
-#define zmp_filtering 0
-#define zmp_feedback 0
+#define zmp_filtering 1
+#define zmp_feedback 1//
 #define old_zmp 0
 #define save_data_long 0
 #define save_data_quick 1
@@ -26,18 +24,21 @@
 #define file_motor 0
 #define reseau 1
 
-#define local 1 //
+#define local 0//
 #define replay 0
 #define Tasks 1
 #define file_human 0
 #define file_hoap 0
+#define file_walk 1
 
-#define Light 0 //
+#define Light 1//
 #define shadow 1
 #define colorsGL 0
 #define materials 1
 #define mathGL 0
 #define GroundResolution 20
+
+#define oritrunk 1//
 
 #define LoadObj 1
 /*! \def LoadObj
