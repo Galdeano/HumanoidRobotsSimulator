@@ -20,6 +20,8 @@ void ButterworthFilterInit (ButterworthData *data,double wc);
 void ButterworthFilterValue (ButterworthData *data,double value);
 
 double ButterworthFilter (ButterworthData *data, double input);
+double ButterworthFilterZero (ButterworthData *data, double input);
+double ButterworthFilterLimits (ButterworthData *data, double input, double low, double high);
 
 
 #endif

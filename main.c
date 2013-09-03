@@ -1915,13 +1915,14 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
             zmp_x_magin=0.08;
             zmp_y_magin=0.16;
 
+
             init_task_zmp=0;
         }
 
 
 
 
-        if(t2>t_init && (zmp_c.zmp_left.W+zmp_c.zmp_right.W)>15 && (zmp_c.zmp_left.W+zmp_c.zmp_right.W)<100)
+        if( (zmp_c.zmp_left.W+zmp_c.zmp_right.W)>15 && (zmp_c.zmp_left.W+zmp_c.zmp_right.W)<100)
         {
 //            if (zmp_c.zmp_left.W<10) //protect against false value due to too low pressure
 //            {
@@ -1947,7 +1948,7 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
             gsl_vector_memcpy(zmp_moy,zmp_left);
             gsl_vector_add(zmp_moy,zmp_right);
 
-            if(t2>t_stand)
+            //if(t2>t_stand)
             {
                 gsl_vector_set (p, 0, 0);
                 gsl_vector_set (p, 1, 0);
@@ -1955,7 +1956,7 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
 
                 gsl_vector_memcpy(taskZMP,zmp_moy);
                 gsl_vector_sub(taskZMP,p);
-                gsl_vector_scale(taskZMP,-0.02);
+                gsl_vector_scale(taskZMP,0.2);
                 //gsl_vector_set (taskZMP, 2, 0);
 
                 gsl_vector_memcpy(dzmp,zmp_moy);
@@ -1984,7 +1985,10 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
                 }
                 gsl_vector_set (taskZMP, 2, 0);
 #if zmp_feedback
+            if(t2>t_init)
+            {
                 gsl_vector_add(taskCoML,taskZMP);
+            }
 #endif
 
 //limites sur taskzmp et sa derivee
@@ -2247,6 +2251,11 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
         gsl_blas_dgemv(CblasNoTrans, 1.0, Ptmp, adphi, 0.0, dqtmp);
         gsl_vector_add(dq,dqtmp);
 
+
+        if(t2<t_init)
+        {
+            gsl_vector_scale(dq,t2/t_init);
+        }
 
 
 #if reseau

@@ -15,7 +15,7 @@
 
 #define play_csv 0
 #define zmp_filtering 1
-#define zmp_feedback 1//
+#define zmp_feedback 0//
 #define old_zmp 0
 #define save_data_long 0
 #define save_data_quick 1
@@ -64,27 +64,7 @@
 #endif
 
 
-/*
-sandra
 
-doodle:
-alejandro
-divine
-joris
-helene
-guillaume
-nico
-
-mass pizza
-
-
-Saint-Guilhem-le-Desert
-Le Guilhaume d'Orange ou La Taverne de l Escuelle
-demander auto petraud
-echarpe cachemire
-jardin des sens
-
-*/
 
 #if Scenarios
 //Choose scenario

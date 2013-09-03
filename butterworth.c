@@ -114,7 +114,76 @@ double ButterworthFilter (ButterworthData *data, double input)
 
 // checker: http://www.exstrom.com/journal/sigproc/
 
+double ButterworthFilterZero (ButterworthData *data, double input)
+{
 
+    data->xv[0] = data->xv[1];
+    data->xv[1] = data->xv[2];
+    data->xv[2] = data->xv[3];
+    data->xv[3] = input;
+    data->yv[0] = data->yv[1];
+    data->yv[1] = data->yv[2];
+    data->yv[2] = data->yv[3];
+    data->yv[3] = (double)((data->b[0]*data->xv[3]
+                            +data->b[1]*data->xv[2]
+                            +data->b[2]*data->xv[1]
+                            +data->b[3]*data->xv[0])
+                            +(-data->a[1]*data->yv[2]
+                              -data->a[2]*data->yv[1]
+                              -data->a[3]*data->yv[0]));
+
+    if ((input<0.01)||(data->yv[3]<0.01))
+    {
+        data->yv[3] = 0.01;
+    }
+
+    return (data->yv[3]);
+}
+
+
+double ButterworthFilterLimits (ButterworthData *data, double input, double low, double high)
+{
+
+    data->xv[0] = data->xv[1];
+    data->xv[1] = data->xv[2];
+    data->xv[2] = data->xv[3];
+    data->xv[3] = input;
+    data->yv[0] = data->yv[1];
+    data->yv[1] = data->yv[2];
+    data->yv[2] = data->yv[3];
+    data->yv[3] = (double)((data->b[0]*data->xv[3]
+                            +data->b[1]*data->xv[2]
+                            +data->b[2]*data->xv[1]
+                            +data->b[3]*data->xv[0])
+                            +(-data->a[1]*data->yv[2]
+                              -data->a[2]*data->yv[1]
+                              -data->a[3]*data->yv[0]));
+
+    if (data->yv[3]<low)
+    {
+        data->xv[0] = low;
+        data->xv[1] = low;
+        data->xv[2] = low;
+        data->xv[3] = low;
+        data->yv[0] = low;
+        data->yv[1] = low;
+        data->yv[2] = low;
+        data->yv[3] = low;
+    }
+    if (data->yv[3]>high)
+    {
+        data->xv[0] = high;
+        data->xv[1] = high;
+        data->xv[2] = high;
+        data->xv[3] = high;
+        data->yv[0] = high;
+        data->yv[1] = high;
+        data->yv[2] = high;
+        data->yv[3] = high;
+    }
+
+    return (data->yv[3]);
+}
 
 
 

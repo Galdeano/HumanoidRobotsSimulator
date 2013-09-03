@@ -62,6 +62,25 @@ void Hoap_calc_zmp_right(HoapSensor* sensor,zmp_calc* zmp)
     zmp->zmp_right.x=(Q[0]+Q[1])*Ly*0.00981/W - My;
 
 
+    if (zmp->zmp_right.x>56)
+    {
+        zmp->zmp_right.x=56;
+    }
+    else if (zmp->zmp_right.x<-42)
+    {
+        zmp->zmp_right.x=-42;
+    }
+
+    if (zmp->zmp_right.y>31.5)
+    {
+        zmp->zmp_right.y=31.5;
+    }
+    else if (zmp->zmp_right.y<-31.5)
+    {
+        zmp->zmp_right.y=-31.5;
+    }
+
+
 }
 
 
@@ -125,6 +144,23 @@ void Hoap_calc_zmp_left(HoapSensor* sensor,zmp_calc* zmp)
     zmp->zmp_left.x=(Q[0]+Q[1])*Ly*0.00981/W - My;
 
 
+    if (zmp->zmp_left.x>56)
+    {
+        zmp->zmp_left.x=56;
+    }
+    else if (zmp->zmp_left.x<-42)
+    {
+        zmp->zmp_left.x=-42;
+    }
+
+    if (zmp->zmp_left.y>31.5)
+    {
+        zmp->zmp_left.y=31.5;
+    }
+    else if (zmp->zmp_left.y<-31.5)
+    {
+        zmp->zmp_left.y=-31.5;
+    }
 
 }
 
@@ -159,51 +195,60 @@ static ButterworthData data_rW;
     }
 
 
-    if (zmp_c->zmp_right.x>56)
-    {
-        zmp_c->zmp_right.x=56;
-    }
-    else if (zmp_c->zmp_right.x<-42)
-    {
-        zmp_c->zmp_right.x=-42;
-    }
+//    if (zmp_c->zmp_right.x>56)
+//    {
+//        zmp_c->zmp_right.x=56;
+//    }
+//    else if (zmp_c->zmp_right.x<-42)
+//    {
+//        zmp_c->zmp_right.x=-42;
+//    }
+//
+//    if (zmp_c->zmp_right.y>31.5)
+//    {
+//        zmp_c->zmp_right.y=31.5;
+//    }
+//    else if (zmp_c->zmp_right.y<-31.5)
+//    {
+//        zmp_c->zmp_right.y=-31.5;
+//    }
+//
+//
+//    if (zmp_c->zmp_left.x>56)
+//    {
+//        zmp_c->zmp_left.x=56;
+//    }
+//    else if (zmp_c->zmp_left.x<-42)
+//    {
+//        zmp_c->zmp_left.x=-42;
+//    }
+//
+//    if (zmp_c->zmp_left.y>31.5)
+//    {
+//        zmp_c->zmp_left.y=31.5;
+//    }
+//    else if (zmp_c->zmp_left.y<-31.5)
+//    {
+//        zmp_c->zmp_left.y=-31.5;
+//    }
 
-    if (zmp_c->zmp_right.y>31.5)
-    {
-        zmp_c->zmp_right.y=31.5;
-    }
-    else if (zmp_c->zmp_right.y<-31.5)
-    {
-        zmp_c->zmp_right.y=-31.5;
-    }
+zmp_f->zmp_left.x=ButterworthFilterLimits (&data_lx, zmp_c->zmp_left.x,-42,56);
+zmp_f->zmp_left.y=ButterworthFilterLimits (&data_ly, zmp_c->zmp_left.y,-31.5,31.5);
+zmp_f->zmp_left.W=ButterworthFilterLimits (&data_lW, zmp_c->zmp_left.W,0.01,1000);
+zmp_f->zmp_right.x=ButterworthFilterLimits (&data_rx, zmp_c->zmp_right.x,-42,56);
+zmp_f->zmp_right.y=ButterworthFilterLimits (&data_ry, zmp_c->zmp_right.y,-31.5,31.5);
+zmp_f->zmp_right.W=ButterworthFilterLimits (&data_rW, zmp_c->zmp_right.W,0.01,1000);
 
+//zmp_f->zmp_left.x=ButterworthFilter (&data_lx, zmp_c->zmp_left.x);
+//zmp_f->zmp_left.y=ButterworthFilter (&data_ly, zmp_c->zmp_left.y);
+//zmp_f->zmp_left.W=ButterworthFilter (&data_lW, zmp_c->zmp_left.W);
+//zmp_f->zmp_right.x=ButterworthFilter (&data_rx, zmp_c->zmp_right.x);
+//zmp_f->zmp_right.y=ButterworthFilter (&data_ry, zmp_c->zmp_right.y);
+//zmp_f->zmp_right.W=ButterworthFilter (&data_rW, zmp_c->zmp_right.W);
 
-    if (zmp_c->zmp_left.x>56)
-    {
-        zmp_c->zmp_left.x=56;
-    }
-    else if (zmp_c->zmp_left.x<-42)
-    {
-        zmp_c->zmp_left.x=-42;
-    }
-
-    if (zmp_c->zmp_left.y>31.5)
-    {
-        zmp_c->zmp_left.y=31.5;
-    }
-    else if (zmp_c->zmp_left.y<-31.5)
-    {
-        zmp_c->zmp_left.y=-31.5;
-    }
-
-zmp_f->zmp_left.x=ButterworthFilter (&data_lx, zmp_c->zmp_left.x);
-zmp_f->zmp_left.y=ButterworthFilter (&data_ly, zmp_c->zmp_left.y);
-zmp_f->zmp_left.W=ButterworthFilter (&data_lW, zmp_c->zmp_left.W);
-zmp_f->zmp_right.x=ButterworthFilter (&data_rx, zmp_c->zmp_right.x);
-zmp_f->zmp_right.y=ButterworthFilter (&data_ry, zmp_c->zmp_right.y);
-zmp_f->zmp_right.W=ButterworthFilter (&data_rW, zmp_c->zmp_right.W);
 
 }
+
 
 
 

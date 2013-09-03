@@ -6,7 +6,7 @@ close all;
 
 importdata('./Hoap_Walk.txt');
 
-ti=1.2;
+ti=1.0;
 step=4;
 
 t=0:0.005:(step*2+3)*ti;
@@ -21,12 +21,19 @@ oris=zeros(taille,3);
 
 
 ssods=0.40; % single support over double support
+ssodsf=ssods; % single support over double support
 
-ycamp=0.037;
+xcoff=0.014;
+ycamp=0.030;
+%ycamp=0.046;
+%ycamp=0.030;
 xfamp=0.03;%0.02
-zfamp=0.015;
+zfamp=0.01;
 
 %% x
+
+
+
 s=0*(0:0.005:((1.5+(1-ssods)/2)*ti-0.005));
 s2=fnval(csape([0 ti*ssods],[0 0.0 -xfamp 0],[1 1]), 0:0.005:(ti*ssods-0.005));
 wd=-xfamp+0*(0:0.005:(ti*(1-ssods)-0.005));
@@ -46,19 +53,70 @@ end
 x=[x wu f f2];
 
 %tcoms(:,1)=0.005+0.5*x;
-tcoms(:,1)=0.008+0.5*x;
+%tcoms(:,1)=0.009+0.5*x;
 tf2fs(:,1)=x;
 
-% tcoms(:,1)=0.005+0.5*[s s2 wd u wu d wd u wu d wd u wu d wd u wu f f2];
-% tf2fs(:,1)=[s s2 wd u wu d wd u wu d wd u wu d wd u wu f f2];
 
+xco=xfamp*0.5
+
+dv=2.*xfamp/ti
+
+s=0*(0:0.005:((1.5+(1-ssodsf)/2)*ti-0.005));
+s2=fnval(csape([0 ti*ssodsf],[0 0.0 -xco dv],[1 1]), 0:0.005:(ti*ssodsf-0.005));
+d=fnval(csape([0 ti*ssodsf],[dv xco -xco dv],[1 1]), 0:0.005:(ti*ssodsf-0.005));
+u2=fnval(csape([0 (ti*(1-ssodsf))],[dv -xco xco dv],[1 1]), 0:0.005:(ti*(1-ssodsf)-0.005));
+f=fnval(csape([0 ti*ssodsf],[dv xco 0.0 0],[1 1]), 0:0.005:ti*ssodsf);
+f2=0*(0:0.005:((0.5+(1-ssodsf)/2)*ti-0.005));
+
+% p=[s s2 wd u wu d wd u wu d wd u wu d wd u wu f f2];
+% plot(p)
+% break
+
+x2=[s s2 u2 d];
+for i=0:(step-2)
+    x2=[x2 u2 d u2 d];
+end
+x2=[x2 u2 f f2];
+
+tcoms(:,1)=xcoff+0.5*x+0.5*x2;
+%tcoms(:,1)=0.009+0.5*x2;
+%tcoms(:,1)=0.009+0.5*x2-0.5*x;
+%tcoms(:,1)=0.009+0.5*x2-1*x;
+
+figure(20)
+plot(diff(tcoms(:,1)))
+
+figure(21)
+plot(diff(tcoms(:,1),2))
+
+% figure(8)
+% plot(tcoms(:,1))
+
+% xco=xfamp*0.75
+% s=0*(0:0.005:((1.5+(1-ssods)/2)*ti-0.005));
+% s2=fnval(csape([0 ti*ssods],[0 0.0 -xco 0],[1 1]), 0:0.005:(ti*ssods-0.005));
+% d2=fnval(csape([0 (ti*(1-ssods))],[0 xco -xco 0],[1 1]), 0:0.005:(ti*(1-ssods)-0.005));
+% u3=fnval(csape([0 ti+(ti*(ssods))],[0 -xco xco 0],[1 1]), 0:0.005:(ti+(ti*(ssods))-0.005));
+% f=fnval(csape([0 ti*(1-ssods)],[0 xco 0.0 0],[1 1]), 0:0.005:ti*(1-ssods));
+% f2=0*(0:0.005:((0.5+(1-ssods)/2)*ti-0.005));
+% 
+% x3=[s s2];
+% for i=0:(step-2)
+%     x3=[x3 u3 d2];
+% end
+% x3=[x3 u3 f f2];
+% 
+% tcoms(:,1)=x3+0.009
+
+
+%break
 
 %% y
 clear s s2 wu d wd u f f2
-s=fnval(csape([0 ti/2 3*ti/4 ti],[0 0.0 0.0 0.7*ycamp ycamp 0],[1 1]), 0:0.005:(ti-0.005));
+s=fnval(csape([0 ti/2 3*ti/4 ti],[0 0.0 0.0 0.72*ycamp ycamp 0],[1 1]), 0:0.005:(ti-0.005));
 d=fnval(csape([0 ti/4 3*ti/4 ti],[0 ycamp 0.75*ycamp -0.75*ycamp -ycamp 0],[1 1]), 0:0.005:(ti-0.005));
 u=fnval(csape([0 ti/4 3*ti/4 ti],[0 -ycamp -0.75*ycamp 0.75*ycamp ycamp 0],[1 1]), 0:0.005:(ti-0.005));
-f=fnval(csape([0 ti/4 ti/2 ti],[0 -ycamp -0.7*ycamp 0.0 0.0 0],[1 1]), 0:0.005:ti);
+f=fnval(csape([0 ti/4 ti/2 ti],[0 -ycamp -0.72*ycamp 0.0 0.0 0],[1 1]), 0:0.005:ti);
 
 % s=fnval(csape([0 ti/2 ti],[0 0.0 0.0 ycamp 0],[1 1]), 0:0.005:(ti-0.005));
 % d=fnval(csape([0 ti],[0 ycamp -ycamp 0],[1 1]), 0:0.005:(ti-0.005));
@@ -94,7 +152,13 @@ end
 z=[z f];
 
 tcoms(:,3)=0.24+z;
-u=fnval(csape([0 ti*ssods/2 ti*ssods],[0 0.0 zfamp 0.0 0],[1 1]), 0:0.005:(ti*ssods-0.005));
+
+s=0*(0:0.005:((1.5+(1-ssodsf)/2)*ti-0.005));
+w=0*(0:0.005:(ti*(1-ssodsf)-0.005));
+d=fnval(csape([0 ti*ssodsf/2 ti*ssodsf],[0 0.0 -zfamp 0.0 0],[1 1]), 0:0.005:(ti*ssodsf-0.005));
+u=fnval(csape([0 ti*ssodsf/2 ti*ssodsf],[0 0.0 zfamp 0.0 0],[1 1]), 0:0.005:(ti*ssodsf-0.005));
+f=0*(0:0.005:((0.5+(1-ssodsf)/2)*ti));
+
 
 z=[s d];
 for i=0:(step-1)
@@ -115,10 +179,48 @@ tf2fs(:,3)=z;
 % figure(2)
 % plot(tf2fs)
 
-figure(3)
+% figure(1)
+% plot(diff(tcoms,2))
+% figure(2)
+% plot(diff(tf2fs,2))
+
+% figure(3)
+% hold on 
+% plot(tcoms(:,2))
+% plot(tcoms(:,2)-(0.24/9.81)*[0;diff(tcoms(:,2),2)./(0.005*0.005);0])
+
+v=0
+for i=1:length(t)
+    if tf2fs(i,3)<0
+        v(i+1)=v(i)-(tf2fs(i,1)-tf2fs((i-1),1));
+    else
+        v(i+1)=v(i);
+    end
+    tx(i)=tcoms(i,1)+v(i+1);
+end
+
+figure(4)
+plot(tx)
+
+figure(5)
+plot(diff(tx))
+    
+figure(6)
+plot(tx,tcoms(:,2))
+
+figure(7)
 hold on 
-plot(tcoms(:,2))
-plot(tcoms(:,2)-(0.24/9.81)*[0;diff(tcoms(:,2),2)./(0.005*0.005);0])
+plot(tx,tcoms(:,2))
+%tx-(0.24/9.81)*[0;diff(tx,2)./(0.005*0.005);0]
+plot(tx-(0.24/9.81)*[0,diff(tx,2)./(0.005*0.005),0],tcoms(:,2)-(0.24/9.81)*[0;diff(tcoms(:,2),2)./(0.005*0.005);0])
+
+
+% figure(5)
+% plot(v)
+% 
+% figure(6)
+% plot(x2)
+
 
 % break
 
@@ -130,6 +232,7 @@ fprintf(fid, '%2.10f,%2.10f,%2.10f,%2.10f,%2.10f,%2.10f,%2.10f,%2.10f,%2.10f\n',
 end
 fclose(fid)
 
+close all
 
 %%
 % tk=0:0.01:2;
