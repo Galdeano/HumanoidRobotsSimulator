@@ -17,11 +17,11 @@
 #include "ping.h"
 
 #define No_opt 0
-#define Use_displayList 0
+#define Use_displayList 0//low perf graphic card
 #define Use_vertexArrays 0
-#define Use_vertexArraysHeavy 1
+#define Use_vertexArraysHeavy 0//classic
 #define Use_vertexBufferObjects 0
-#define Use_vertexBufferObjectsHeavy 0
+#define Use_vertexBufferObjectsHeavy 1//high perf graphic card
 
 void DrawOBJ(char *fName)
 {
@@ -377,7 +377,7 @@ void draw_model(MeshObj *obj)
 #endif
 #if materials
         set_material(&silver);
-#endif;
+#endif
         //glColor3ub(200,200,200);
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_NORMAL_ARRAY);

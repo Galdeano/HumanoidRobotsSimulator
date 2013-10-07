@@ -33,15 +33,15 @@ zfamp=0.01;
 %% x
 
 
-
-s=0*(0:0.005:((1.5+(1-ssods)/2)*ti-0.005));
-s2=fnval(csape([0 ti*ssods],[0 0.0 -xfamp 0],[1 1]), 0:0.005:(ti*ssods-0.005));
+comp=0.005;
+s=0.0*(0:0.005:((1.5+(1-ssods)/2)*ti-0.005));
+s2=fnval(csape([0 ti*ssods],[0 0.0 -xfamp comp],[1 1]), 0:0.005:(ti*ssods-0.005));
 wd=-xfamp+0*(0:0.005:(ti*(1-ssods)-0.005));
 wu=xfamp+0*(0:0.005:(ti*(1-ssods)-0.005));
-d=fnval(csape([0 ti*ssods],[0 xfamp -xfamp 0],[1 1]), 0:0.005:(ti*ssods-0.005));
+d=fnval(csape([0 ti*ssods],[0 xfamp -xfamp comp],[1 1]), 0:0.005:(ti*ssods-0.005));
 u=fnval(csape([0 ti*ssods],[0 -xfamp xfamp 0],[1 1]), 0:0.005:(ti*ssods-0.005));
-f=fnval(csape([0 ti*ssods],[0 xfamp 0.0 0],[1 1]), 0:0.005:ti*ssods);
-f2=0*(0:0.005:((0.5+(1-ssods)/2)*ti-0.005));
+f=fnval(csape([0 ti*ssods],[0 xfamp 0.0 comp],[1 1]), 0:0.005:ti*ssods);
+f2=0.0*(0:0.005:((0.5+(1-ssods)/2)*ti-0.005));
 
 % p=[s s2 wd u wu d wd u wu d wd u wu d wd u wu f f2];
 % plot(p)
@@ -55,18 +55,18 @@ x=[x wu f f2];
 %tcoms(:,1)=0.005+0.5*x;
 %tcoms(:,1)=0.009+0.5*x;
 tf2fs(:,1)=x;
+%plot(diff(tf2fs(:,1),2))
 
+xco=xfamp*0.5;
 
-xco=xfamp*0.5
+dv=2.3*xfamp/ti;
 
-dv=2.*xfamp/ti
-
-s=0*(0:0.005:((1.5+(1-ssodsf)/2)*ti-0.005));
-s2=fnval(csape([0 ti*ssodsf],[0 0.0 -xco dv],[1 1]), 0:0.005:(ti*ssodsf-0.005));
+s=0.0*(0:0.005:((1.5+(1-ssodsf)/2)*ti-0.005));
+s2=fnval(csape([0 ti*ssodsf],[0.0 0.0 -xco dv],[1 1]), 0:0.005:(ti*ssodsf-0.005));
 d=fnval(csape([0 ti*ssodsf],[dv xco -xco dv],[1 1]), 0:0.005:(ti*ssodsf-0.005));
 u2=fnval(csape([0 (ti*(1-ssodsf))],[dv -xco xco dv],[1 1]), 0:0.005:(ti*(1-ssodsf)-0.005));
 f=fnval(csape([0 ti*ssodsf],[dv xco 0.0 0],[1 1]), 0:0.005:ti*ssodsf);
-f2=0*(0:0.005:((0.5+(1-ssodsf)/2)*ti-0.005));
+f2=0.0*(0:0.005:((0.5+(1-ssodsf)/2)*ti-0.005));
 
 % p=[s s2 wd u wu d wd u wu d wd u wu d wd u wu f f2];
 % plot(p)
@@ -83,11 +83,11 @@ tcoms(:,1)=xcoff+0.5*x+0.5*x2;
 %tcoms(:,1)=0.009+0.5*x2-0.5*x;
 %tcoms(:,1)=0.009+0.5*x2-1*x;
 
-figure(20)
-plot(diff(tcoms(:,1)))
-
-figure(21)
-plot(diff(tcoms(:,1),2))
+% figure(20)
+% plot(diff(tcoms(:,1)))
+% 
+% figure(21)
+% plot(diff(tcoms(:,1),2))
 
 % figure(8)
 % plot(tcoms(:,1))
@@ -113,10 +113,12 @@ plot(diff(tcoms(:,1),2))
 
 %% y
 clear s s2 wu d wd u f f2
-s=fnval(csape([0 ti/2 3*ti/4 ti],[0 0.0 0.0 0.72*ycamp ycamp 0],[1 1]), 0:0.005:(ti-0.005));
-d=fnval(csape([0 ti/4 3*ti/4 ti],[0 ycamp 0.75*ycamp -0.75*ycamp -ycamp 0],[1 1]), 0:0.005:(ti-0.005));
-u=fnval(csape([0 ti/4 3*ti/4 ti],[0 -ycamp -0.75*ycamp 0.75*ycamp ycamp 0],[1 1]), 0:0.005:(ti-0.005));
-f=fnval(csape([0 ti/4 ti/2 ti],[0 -ycamp -0.72*ycamp 0.0 0.0 0],[1 1]), 0:0.005:ti);
+g1=0.76;
+g2=0.74;
+s=fnval(csape([0 ti/2 3*ti/4 ti],[0 0.0 0.0 g2*ycamp ycamp 0],[1 1]), 0:0.005:(ti-0.005));
+d=fnval(csape([0 ti/4 3*ti/4 ti],[0 ycamp g1*ycamp -g1*ycamp -ycamp 0],[1 1]), 0:0.005:(ti-0.005));
+u=fnval(csape([0 ti/4 3*ti/4 ti],[0 -ycamp -g1*ycamp g1*ycamp ycamp 0],[1 1]), 0:0.005:(ti-0.005));
+f=fnval(csape([0 ti/4 ti/2 ti],[0 -ycamp -g2*ycamp 0.0 0.0 0],[1 1]), 0:0.005:ti);
 
 % s=fnval(csape([0 ti/2 ti],[0 0.0 0.0 ycamp 0],[1 1]), 0:0.005:(ti-0.005));
 % d=fnval(csape([0 ti],[0 ycamp -ycamp 0],[1 1]), 0:0.005:(ti-0.005));
@@ -202,11 +204,11 @@ end
 figure(4)
 plot(tx)
 
-figure(5)
-plot(diff(tx))
-    
-figure(6)
-plot(tx,tcoms(:,2))
+% figure(5)
+% plot(diff(tx))
+%     
+% figure(6)
+% plot(tx,tcoms(:,2))
 
 figure(7)
 hold on 
@@ -232,7 +234,7 @@ fprintf(fid, '%2.10f,%2.10f,%2.10f,%2.10f,%2.10f,%2.10f,%2.10f,%2.10f,%2.10f\n',
 end
 fclose(fid)
 
-close all
+%close all
 
 %%
 % tk=0:0.01:2;

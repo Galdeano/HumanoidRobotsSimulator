@@ -268,7 +268,7 @@ void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
     Init_light();
 
 
-    glFlush();
+    //glFlush();
     SDL_GL_SwapBuffers();
     //SDL_Delay(5);
 

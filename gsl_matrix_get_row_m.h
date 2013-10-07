@@ -30,4 +30,6 @@ int gsl_matrix_get_column_m(gsl_matrix * matrix_out, gsl_matrix * matrix_in, int
 
 int gsl_matrix_get_part_m(gsl_matrix * matrix_out, gsl_matrix * matrix_in, int s_row, int e_row, int s_column, int e_column);
 
+int gsl_matrix_get_part2_m(gsl_matrix * matrix_out, gsl_matrix * matrix_in, int s_row, int e_row, int s_column, int e_column);
+
 #endif

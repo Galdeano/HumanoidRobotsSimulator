@@ -22,7 +22,7 @@ int gsl_matrix_get_row_m(gsl_matrix * matrix_out, gsl_matrix * matrix_in, int ro
     }
     else
     {
-        GSL_ERROR ("invalid length", GSL_EBADLEN);
+        GSL_ERROR ("invalid length row", GSL_EBADLEN);
     }
 #endif
 }
@@ -47,7 +47,7 @@ int gsl_matrix_get_column_m(gsl_matrix * matrix_out, gsl_matrix * matrix_in, int
     }
     else
     {
-        GSL_ERROR ("invalid length", GSL_EBADLEN);
+        GSL_ERROR ("invalid length column", GSL_EBADLEN);
     }
 #endif
 }
@@ -73,8 +73,35 @@ int gsl_matrix_get_part_m(gsl_matrix * matrix_out, gsl_matrix * matrix_in, int s
 #ifndef GSL_RANGE_CHECK_OFF
     }
     else
+    {   printf("%d %d %d %d ",s_row-e_row,s_column-e_column,matrix_out->size1,matrix_out->size2);
+        PrintGSLMatrix(matrix_in);
+        GSL_ERROR ("invalid length part", GSL_EBADLEN);
+    }
+#endif
+}
+
+int gsl_matrix_get_part2_m(gsl_matrix * matrix_out, gsl_matrix * matrix_in, int s_row, int e_row, int s_column, int e_column)
+{
+    int i,j;
+#ifndef GSL_RANGE_CHECK_OFF
+    if (((e_column-s_column) == matrix_out->size2)&&((e_row-s_row) == matrix_out->size1))
     {
-        GSL_ERROR ("invalid length", GSL_EBADLEN);
+#endif
+        for (i=e_row; i<s_row; i++)
+        {
+            for (j=e_column; j<s_column; j++)
+            {
+                gsl_matrix_set(matrix_out,i-e_row,j-e_column,gsl_matrix_get(matrix_in, i,j));
+            }
+        }
+        return GSL_SUCCESS;
+#ifndef GSL_RANGE_CHECK_OFF
+    }
+    else
+    {
+        //printf("%d %d %d %d ",e_row-s_row,e_column-s_column,matrix_out->size1,matrix_out->size2);
+        //PrintGSLMatrix(matrix_in);
+        GSL_ERROR ("invalid length part", GSL_EBADLEN);
     }
 #endif
 }

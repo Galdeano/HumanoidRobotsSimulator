@@ -70,6 +70,7 @@
 
 #include "Hoap_calc_zmp.h"
 #include "butterworth.h"
+#include "NPD.h"
 
 #if mathGL
 #include <mgl2/mgl_cf.h>
@@ -219,10 +220,12 @@ int main(int argc, char *argv[])
     SDL_Init(SDL_INIT_VIDEO); // Initialisation de la SDL
     atexit(SDL_Quit);
 
-//SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0);
+SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0); // vertical retrace sync off
     //SDL_SetVideoMode(640, 480, 32, SDL_OPENGL); // vga// Ouverture de la fenêtre
     SDL_SetVideoMode(1024, 768, 32, SDL_OPENGL); // xga// Ouverture de la fenêtre
     //SDL_SetVideoMode(1400, 1050, 32, SDL_OPENGL); // sxga+// Ouverture de la fenêtre
+
+    //SDL_Surface *screen = SDL_SetVideoMode(HORIZONTAL_RESOLUTION, VERTICAL_RESOLUTION,video->vfmt->BitsPerPixel, SDL_OPENGL);
 
     SDL_WM_SetCaption("Visualisation", NULL);
     SDL_Event event;
@@ -236,6 +239,8 @@ int main(int argc, char *argv[])
     //gluPerspective(70, 640/480, 0.001, 1000);// vga
     gluPerspective(70, 1024/768, 0.001, 1000);// xga
     //gluPerspective(70, 1400/1050, 0.001, 1000);// sxga+
+
+
 
     //gluPerspective(50,(double)640/480,1,1000);
     //gluLookAt(1, 0, 0, 0, 0, 0, 0, 0, 1);
@@ -892,7 +897,16 @@ int main(int argc, char *argv[])
         18810
     };
 
-
+    double com_err[23]=     {
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0
+    };
+    double command[23]=     {
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        0.0, 0.0, 0.0
+    };
 
 
 
@@ -1182,6 +1196,10 @@ int main(int argc, char *argv[])
             uLINK[map[j]].q = 0;
         }
         control.q[j]=sensor.q[j];
+
+        com_err[j]=sensor.q[j];
+        command[j]=sensor.q[j];
+
         printf("%4.6f ",rad2deg*uLINK[map[j]].q);
     }
     printf("\n");
@@ -1379,7 +1397,7 @@ int main(int argc, char *argv[])
             break;
         }
 
-        if (t2>30)
+        if (t2>60)
         {
             break;
         }
@@ -1515,7 +1533,7 @@ int main(int argc, char *argv[])
         static double amp=0.015;
         static double t_init=3.0;
         static double t_stand=5.0;
-        static double t_stand_zmp=7.0;
+        static double t_stand_zmp=70.0;
 
 
 //        static double wO=2.0;
@@ -1912,8 +1930,8 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
             zmp_right = gsl_vector_calloc (3);
             zmp_moy = gsl_vector_calloc (3);
 
-            zmp_x_magin=0.08;
-            zmp_y_magin=0.16;
+            zmp_x_magin=0.32;
+            zmp_y_magin=0.64;
 
 
             init_task_zmp=0;
@@ -1950,20 +1968,25 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
 
             //if(t2>t_stand)
             {
-                gsl_vector_set (p, 0, 0);
-                gsl_vector_set (p, 1, 0);
-                gsl_vector_set (p, 2, 0);
+//                gsl_vector_set (p, 0, 0);
+//                gsl_vector_set (p, 1, 0);
+//                gsl_vector_set (p, 2, 0);
 
                 gsl_vector_memcpy(taskZMP,zmp_moy);
-                gsl_vector_sub(taskZMP,p);
-                gsl_vector_scale(taskZMP,0.2);
+//                gsl_vector_sub(taskZMP,p);
+
+                //gsl_vector_scale(taskZMP,-0.03);//-0.02
+                //gsl_vector_scale(taskZMP,-0.03*npd(gsl_blas_dnrm2(taskZMP),0.75,0.01));//-0.02
+                gsl_vector_scale(taskZMP,-0.03*npd(gsl_blas_dnrm2(taskZMP),0.75,0.01));//-0.02
                 //gsl_vector_set (taskZMP, 2, 0);
 
                 gsl_vector_memcpy(dzmp,zmp_moy);
                 gsl_vector_sub(dzmp,zmp);
                 gsl_vector_memcpy(zmp,zmp_moy);
                 gsl_vector_scale (dzmp, Te);
-                gsl_vector_scale (dzmp, 0.00005);
+                //gsl_vector_scale (dzmp, -0.002);//-0.0002
+                //gsl_vector_scale (dzmp, -0.002*npd(gsl_blas_dnrm2(dzmp),1.25,0.01));//-0.0002
+                gsl_vector_scale (dzmp, -0.002*npd(gsl_blas_dnrm2(dzmp),1.25,0.01));//-0.0002
                 gsl_vector_add(taskZMP,dzmp);
 
 
@@ -2179,7 +2202,7 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
 #if oritrunk
     CalcJacobianModif(uLINK,J1,idx1);
     gsl_matrix_get_row_m(J1_l, J1, 3);
-    gsl_matrix_get_part_m(J1_3, J1, 3, 6,0, dof);
+    gsl_matrix_get_part2_m(J1_3, J1, 3, 6,0, dof);
     rot2omega(uLINK[14].R,task3);
     gsl_vector_set(task3_l,0,gsl_vector_get(task3,0));
 
@@ -2225,8 +2248,8 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
         for (j=0; j<(nDoF-6); j++)
         {
 
-            //gsl_vector_set(adphi,j,-0.05*((2*(uLINK[j+2].q-uLINK[j+2].qmoy)/(qdev[j]*qdev[j])))); //O.O5//gsl_pow_3
-            gsl_vector_set(adphi,j,-0.05*(2*(uLINK[j+2].q-uLINK[j+2].qmoy)/(qdev[j]*qdev[j]))-0.1*gsl_pow_3(2*(uLINK[j+2].q-uLINK[j+2].qmoy)/(qdev[j]*qdev[j]))); //O.O5//gsl_pow_3
+            //gsl_vector_set(adphi,j,-0.05*(2*(uLINK[j+2].q-uLINK[j+2].qmoy)/(qdev[j]*qdev[j]))-0.1*gsl_pow_3(2*(uLINK[j+2].q-uLINK[j+2].qmoy)/(qdev[j]*qdev[j]))); //O.O5//gsl_pow_3
+            gsl_vector_set(adphi,j,-0.001*(2*(uLINK[j+2].q-uLINK[j+2].qmoy)/(qdev[j]*qdev[j]))-0.01*gsl_pow_3(2*(uLINK[j+2].q-uLINK[j+2].qmoy)/(qdev[j]*qdev[j]))); //O.O5//gsl_pow_3
         }
 
         // fourth task
@@ -2277,7 +2300,13 @@ static const float dqlim=0.12;
                     //printf("dmax %d\n",map[j]);
                 }
                 //uLINK[map[j]].q =uLINK[map[j]].q+0.2*gsl_vector_get(dq,map[j]-2);
-                control.q[j]=rad2deg*motor_rotation[j]*(uLINK[map[j]].q+0.5*gsl_vector_get(dq,map[j]-2))*209;//0.2//0.5
+//                com_err[j]=command[j];
+//                command[j]= rad2deg*motor_rotation[j]*(uLINK[map[j]].q+0.9*gsl_vector_get(dq,map[j]-2))*209;
+//                com_err[j]-=command[j];
+//                control.q[j]=(short)(command[j]);
+//                //control.q[j]=(short)(command[j]-0.05*com_err[j]);
+
+                control.q[j]=(short)(rad2deg*motor_rotation[j]*(uLINK[map[j]].q+0.1*gsl_vector_get(dq,map[j]-2))*209);//0.5
                 //printf("%d: %d %d\n",j+1,sensor.q[j],control.q[j]);
 
                 if(control.q[j]<(motor_l_bound[j]+209))
