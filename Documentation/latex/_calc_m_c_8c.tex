@@ -1,0 +1,73 @@
+\hypertarget{_calc_m_c_8c}{\section{Calc\-M\-C.\-c File Reference}
+\label{_calc_m_c_8c}\index{Calc\-M\-C.\-c@{Calc\-M\-C.\-c}}
+}
+{\ttfamily \#include $<$gsl/gsl\-\_\-vector.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-matrix.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-blas.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}u\-Link.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Calc\-M\-C.\-h\char`\"{}}\\*
+Include dependency graph for Calc\-M\-C.\-c\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_calc_m_c_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{_calc_m_c_8c_ae1ac5dd3e92965aa232a169e6639bb37}{Calc\-M\-C} (\hyperlink{struct_su_l_i_n_k}{Su\-L\-I\-N\-K} u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, gsl\-\_\-vector $\ast$com, int j)
+\begin{DoxyCompactList}\small\item\em Recursive computations of center of mass position. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{_calc_m_c_8c_ae1ac5dd3e92965aa232a169e6639bb37}{\index{Calc\-M\-C.\-c@{Calc\-M\-C.\-c}!Calc\-M\-C@{Calc\-M\-C}}
+\index{Calc\-M\-C@{Calc\-M\-C}!CalcMC.c@{Calc\-M\-C.\-c}}
+\subsubsection[{Calc\-M\-C}]{\setlength{\rightskip}{0pt plus 5cm}void Calc\-M\-C (
+\begin{DoxyParamCaption}
+\item[{{\bf Su\-L\-I\-N\-K}}]{u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, }
+\item[{gsl\-\_\-vector $\ast$}]{com, }
+\item[{int}]{j}
+\end{DoxyParamCaption}
+)}}\label{_calc_m_c_8c_ae1ac5dd3e92965aa232a169e6639bb37}
+
+
+Recursive computations of center of mass position. 
+
+Must be used as follow\-: 
+\begin{DoxyCode}
+\hyperlink{_calc_m_c_8c_ae1ac5dd3e92965aa232a169e6639bb37}{CalcMC}(uLINK,com,1); 
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}} & Structure wich describe the robot link by link \\
+\hline
+{\em com} & Out\-: vector containing the center of mass position \\
+\hline
+{\em j} & I\-D of the link \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=134pt]{_calc_m_c_8c_ae1ac5dd3e92965aa232a169e6639bb37_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_calc_m_c_8c_ae1ac5dd3e92965aa232a169e6639bb37_icgraph}
+\end{center}
+\end{figure}
+
+

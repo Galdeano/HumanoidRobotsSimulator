@@ -1,0 +1,175 @@
+\hypertarget{_print_state_8h}{\section{Print\-State.\-h File Reference}
+\label{_print_state_8h}\index{Print\-State.\-h@{Print\-State.\-h}}
+}
+
+
+Save and load states.  
+
+
+{\ttfamily \#include $<$gsl/gsl\-\_\-vector.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-matrix.\-h$>$}\\*
+Include dependency graph for Print\-State.\-h\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=270pt]{_print_state_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_print_state_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct_save_l_i_n_k}{Save\-L\-I\-N\-K}
+\begin{DoxyCompactList}\small\item\em \hyperlink{struct_save_l_i_n_k}{Save\-L\-I\-N\-K} is a copy of Sulink with no pointer to allow a binary save of every variables in the robot state. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{_print_state_8h_af0e3c24913611958874c13283abe42c1}{Save\-State\-X\-M\-L} (\hyperlink{struct_su_l_i_n_k}{Su\-L\-I\-N\-K} u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, \hyperlink{struct_state}{State} $\ast$Status, double t)
+\item 
+void \hyperlink{_print_state_8h_ac242566f596168727113a63c01758500}{Save\-Robot\-X\-M\-L} (\hyperlink{struct_su_l_i_n_k}{Su\-L\-I\-N\-K} u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, \hyperlink{struct_state}{State} $\ast$Status)
+\item 
+void \hyperlink{_print_state_8h_a83702f76c3a2aacabe82bfc62046b511}{Save\-State} (\hyperlink{struct_su_l_i_n_k}{Su\-L\-I\-N\-K} u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, \hyperlink{struct_state}{State} $\ast$Status, long $\ast$t)
+\item 
+void \hyperlink{_print_state_8h_a3981218ef0babd158e2a5e21d4bd77c1}{Save\-Stuct\-Link} (\hyperlink{struct_su_l_i_n_k}{Su\-L\-I\-N\-K} u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, \hyperlink{struct_save_l_i_n_k}{Save\-L\-I\-N\-K} Copyu\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, \hyperlink{struct_state}{State} $\ast$Status)
+\item 
+void \hyperlink{_print_state_8h_a37bbe26eef4aaa94b81eaaad1ba04f04}{Load\-State} (\hyperlink{struct_su_l_i_n_k}{Su\-L\-I\-N\-K} u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, \hyperlink{struct_state}{State} $\ast$Status, long $\ast$t)
+\item 
+void \hyperlink{_print_state_8h_a410c6ac47e77f517ce372f805b824c48}{Load\-Stuct\-Link} (\hyperlink{struct_su_l_i_n_k}{Su\-L\-I\-N\-K} u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, \hyperlink{struct_save_l_i_n_k}{Save\-L\-I\-N\-K} Copyu\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, \hyperlink{struct_state}{State} $\ast$Status)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Save and load states. \begin{DoxyAuthor}{Author}
+David Galdeano 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+10/2011
+\end{DoxyDate}
+These files allow saving and loading some state of the robot 
+
+\subsection{Function Documentation}
+\hypertarget{_print_state_8h_a37bbe26eef4aaa94b81eaaad1ba04f04}{\index{Print\-State.\-h@{Print\-State.\-h}!Load\-State@{Load\-State}}
+\index{Load\-State@{Load\-State}!PrintState.h@{Print\-State.\-h}}
+\subsubsection[{Load\-State}]{\setlength{\rightskip}{0pt plus 5cm}void Load\-State (
+\begin{DoxyParamCaption}
+\item[{{\bf Su\-L\-I\-N\-K}}]{u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, }
+\item[{{\bf State} $\ast$}]{Status, }
+\item[{long $\ast$}]{t}
+\end{DoxyParamCaption}
+)}}\label{_print_state_8h_a37bbe26eef4aaa94b81eaaad1ba04f04}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=258pt]{_print_state_8h_a37bbe26eef4aaa94b81eaaad1ba04f04_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=216pt]{_print_state_8h_a37bbe26eef4aaa94b81eaaad1ba04f04_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{_print_state_8h_a410c6ac47e77f517ce372f805b824c48}{\index{Print\-State.\-h@{Print\-State.\-h}!Load\-Stuct\-Link@{Load\-Stuct\-Link}}
+\index{Load\-Stuct\-Link@{Load\-Stuct\-Link}!PrintState.h@{Print\-State.\-h}}
+\subsubsection[{Load\-Stuct\-Link}]{\setlength{\rightskip}{0pt plus 5cm}void Load\-Stuct\-Link (
+\begin{DoxyParamCaption}
+\item[{{\bf Su\-L\-I\-N\-K}}]{u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, }
+\item[{{\bf Save\-L\-I\-N\-K}}]{Copyu\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, }
+\item[{{\bf State} $\ast$}]{Status}
+\end{DoxyParamCaption}
+)}}\label{_print_state_8h_a410c6ac47e77f517ce372f805b824c48}
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=332pt]{_print_state_8h_a410c6ac47e77f517ce372f805b824c48_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{_print_state_8h_ac242566f596168727113a63c01758500}{\index{Print\-State.\-h@{Print\-State.\-h}!Save\-Robot\-X\-M\-L@{Save\-Robot\-X\-M\-L}}
+\index{Save\-Robot\-X\-M\-L@{Save\-Robot\-X\-M\-L}!PrintState.h@{Print\-State.\-h}}
+\subsubsection[{Save\-Robot\-X\-M\-L}]{\setlength{\rightskip}{0pt plus 5cm}void Save\-Robot\-X\-M\-L (
+\begin{DoxyParamCaption}
+\item[{{\bf Su\-L\-I\-N\-K}}]{u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, }
+\item[{{\bf State} $\ast$}]{Status}
+\end{DoxyParamCaption}
+)}}\label{_print_state_8h_ac242566f596168727113a63c01758500}
+\hypertarget{_print_state_8h_a83702f76c3a2aacabe82bfc62046b511}{\index{Print\-State.\-h@{Print\-State.\-h}!Save\-State@{Save\-State}}
+\index{Save\-State@{Save\-State}!PrintState.h@{Print\-State.\-h}}
+\subsubsection[{Save\-State}]{\setlength{\rightskip}{0pt plus 5cm}void Save\-State (
+\begin{DoxyParamCaption}
+\item[{{\bf Su\-L\-I\-N\-K}}]{u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, }
+\item[{{\bf State} $\ast$}]{Status, }
+\item[{long $\ast$}]{t}
+\end{DoxyParamCaption}
+)}}\label{_print_state_8h_a83702f76c3a2aacabe82bfc62046b511}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=258pt]{_print_state_8h_a83702f76c3a2aacabe82bfc62046b511_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=216pt]{_print_state_8h_a83702f76c3a2aacabe82bfc62046b511_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{_print_state_8h_af0e3c24913611958874c13283abe42c1}{\index{Print\-State.\-h@{Print\-State.\-h}!Save\-State\-X\-M\-L@{Save\-State\-X\-M\-L}}
+\index{Save\-State\-X\-M\-L@{Save\-State\-X\-M\-L}!PrintState.h@{Print\-State.\-h}}
+\subsubsection[{Save\-State\-X\-M\-L}]{\setlength{\rightskip}{0pt plus 5cm}void Save\-State\-X\-M\-L (
+\begin{DoxyParamCaption}
+\item[{{\bf Su\-L\-I\-N\-K}}]{u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, }
+\item[{{\bf State} $\ast$}]{Status, }
+\item[{double}]{t}
+\end{DoxyParamCaption}
+)}}\label{_print_state_8h_af0e3c24913611958874c13283abe42c1}
+\hypertarget{_print_state_8h_a3981218ef0babd158e2a5e21d4bd77c1}{\index{Print\-State.\-h@{Print\-State.\-h}!Save\-Stuct\-Link@{Save\-Stuct\-Link}}
+\index{Save\-Stuct\-Link@{Save\-Stuct\-Link}!PrintState.h@{Print\-State.\-h}}
+\subsubsection[{Save\-Stuct\-Link}]{\setlength{\rightskip}{0pt plus 5cm}void Save\-Stuct\-Link (
+\begin{DoxyParamCaption}
+\item[{{\bf Su\-L\-I\-N\-K}}]{u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, }
+\item[{{\bf Save\-L\-I\-N\-K}}]{Copyu\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, }
+\item[{{\bf State} $\ast$}]{Status}
+\end{DoxyParamCaption}
+)}}\label{_print_state_8h_a3981218ef0babd158e2a5e21d4bd77c1}
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=332pt]{_print_state_8h_a3981218ef0babd158e2a5e21d4bd77c1_icgraph}
+\end{center}
+\end{figure}
+
+

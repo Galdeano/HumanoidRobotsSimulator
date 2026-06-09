@@ -22,7 +22,7 @@ int rot2omega(gsl_matrix * R,gsl_vector * w)
     if (fabs(alpha-1) <0.0000001)
     {
         gsl_vector_set_zero(w);
-        return;
+        return GSL_SUCCESS;
     }
 
     th= acos(alpha);

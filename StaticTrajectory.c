@@ -11,7 +11,7 @@
 
 
 
-void PDStaticTrajectory(SuLINK uLINK[],State *Status, gsl_vector * qd, double Dtime, double t)
+void PDStaticTrajectory(SuLINK uLINK[],State *Status, gsl_vector * qd, double d_time, double t)
 {
     int n;
 //    float kd=100;

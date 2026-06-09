@@ -1,0 +1,2 @@
+nmake pdf
+pause

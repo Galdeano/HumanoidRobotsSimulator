@@ -1,0 +1,92 @@
+\hypertarget{u_link_8h}{\section{u\-Link.\-h File Reference}
+\label{u_link_8h}\index{u\-Link.\-h@{u\-Link.\-h}}
+}
+
+
+Link initialisation and declarations.  
+
+
+{\ttfamily \#include $<$gsl/gsl\-\_\-vector.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-matrix.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}Setup.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Obj\-Loader.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}butterworth.\-h\char`\"{}}\\*
+Include dependency graph for u\-Link.\-h\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{u_link_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{u_link_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct_stu_l_i_n_k}{Stu\-L\-I\-N\-K}
+\item 
+struct \hyperlink{struct_state}{State}
+\begin{DoxyCompactList}\small\item\em \hyperlink{struct_state}{State} contain some global information about the robot state. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{struct_stu_l_i_n_k}{Stu\-L\-I\-N\-K} \hyperlink{u_link_8h_acca1d1ee72b91d775c8f477383e4da95}{Su\-L\-I\-N\-K}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{u_link_8h_ae420e3d1a86aca06b7286b7678b4ecb6}{Setup\-Robot} (\hyperlink{struct_su_l_i_n_k}{Su\-L\-I\-N\-K} u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, \hyperlink{struct_state}{State} $\ast$Status)
+\begin{DoxyCompactList}\small\item\em Initialize the link structure with the model value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Link initialisation and declarations. \begin{DoxyAuthor}{Author}
+David Galdeano 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+10/2011
+\end{DoxyDate}
+This file describe link properties. Every bodies is represent by a link whith many properties (like mass, position, inertia,...) in this formulation. 
+
+\subsection{Typedef Documentation}
+\hypertarget{u_link_8h_acca1d1ee72b91d775c8f477383e4da95}{\index{u\-Link.\-h@{u\-Link.\-h}!Su\-L\-I\-N\-K@{Su\-L\-I\-N\-K}}
+\index{Su\-L\-I\-N\-K@{Su\-L\-I\-N\-K}!uLink.h@{u\-Link.\-h}}
+\subsubsection[{Su\-L\-I\-N\-K}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf Stu\-L\-I\-N\-K} {\bf Su\-L\-I\-N\-K}}}\label{u_link_8h_acca1d1ee72b91d775c8f477383e4da95}
+
+
+\subsection{Function Documentation}
+\hypertarget{u_link_8h_ae420e3d1a86aca06b7286b7678b4ecb6}{\index{u\-Link.\-h@{u\-Link.\-h}!Setup\-Robot@{Setup\-Robot}}
+\index{Setup\-Robot@{Setup\-Robot}!uLink.h@{u\-Link.\-h}}
+\subsubsection[{Setup\-Robot}]{\setlength{\rightskip}{0pt plus 5cm}void Setup\-Robot (
+\begin{DoxyParamCaption}
+\item[{{\bf Su\-L\-I\-N\-K}}]{u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, }
+\item[{{\bf State} $\ast$}]{Status}
+\end{DoxyParamCaption}
+)}}\label{u_link_8h_ae420e3d1a86aca06b7286b7678b4ecb6}
+
+
+Initialize the link structure with the model value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}} & Structure wich describe the robot link by link \\
+\hline
+{\em Status} & Structure wich describe the state of the robot \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{u_link_8h_ae420e3d1a86aca06b7286b7678b4ecb6_cgraph}
+\end{center}
+\end{figure}
+
+

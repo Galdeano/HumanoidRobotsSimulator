@@ -1,0 +1,72 @@
+\hypertarget{_static_trajectory_8c}{\section{Static\-Trajectory.\-c File Reference}
+\label{_static_trajectory_8c}\index{Static\-Trajectory.\-c@{Static\-Trajectory.\-c}}
+}
+{\ttfamily \#include $<$gsl/gsl\-\_\-vector.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-matrix.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-blas.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-math.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}u\-L\-I\-N\-K.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Inverse\-Sherpa\-Kinematics.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Calc\-Co\-M.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Spline.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Static\-Trajectory.\-h\char`\"{}}\\*
+Include dependency graph for Static\-Trajectory.\-c\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_static_trajectory_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{_static_trajectory_8c_a8c9164cc46563f475ba06fab0b9325e5}{P\-D\-Static\-Trajectory} (\hyperlink{struct_su_l_i_n_k}{Su\-L\-I\-N\-K} u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, \hyperlink{struct_state}{State} $\ast$Status, gsl\-\_\-vector $\ast$qd, double \hyperlink{_setup_8h_a01e9bc592e0a618cce57ea6b496d327d}{Dtime}, double t)
+\item 
+void \hyperlink{_static_trajectory_8c_aa7d2b8af0fe7e8bf25dab47d2494c807}{P\-Static\-Trajectory} (\hyperlink{struct_su_l_i_n_k}{Su\-L\-I\-N\-K} u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, \hyperlink{struct_state}{State} $\ast$Status, gsl\-\_\-vector $\ast$u, double t)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{_static_trajectory_8c_a8c9164cc46563f475ba06fab0b9325e5}{\index{Static\-Trajectory.\-c@{Static\-Trajectory.\-c}!P\-D\-Static\-Trajectory@{P\-D\-Static\-Trajectory}}
+\index{P\-D\-Static\-Trajectory@{P\-D\-Static\-Trajectory}!StaticTrajectory.c@{Static\-Trajectory.\-c}}
+\subsubsection[{P\-D\-Static\-Trajectory}]{\setlength{\rightskip}{0pt plus 5cm}void P\-D\-Static\-Trajectory (
+\begin{DoxyParamCaption}
+\item[{{\bf Su\-L\-I\-N\-K}}]{u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, }
+\item[{{\bf State} $\ast$}]{Status, }
+\item[{gsl\-\_\-vector $\ast$}]{qd, }
+\item[{double}]{Dtime, }
+\item[{double}]{t}
+\end{DoxyParamCaption}
+)}}\label{_static_trajectory_8c_a8c9164cc46563f475ba06fab0b9325e5}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_static_trajectory_8c_a8c9164cc46563f475ba06fab0b9325e5_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{_static_trajectory_8c_aa7d2b8af0fe7e8bf25dab47d2494c807}{\index{Static\-Trajectory.\-c@{Static\-Trajectory.\-c}!P\-Static\-Trajectory@{P\-Static\-Trajectory}}
+\index{P\-Static\-Trajectory@{P\-Static\-Trajectory}!StaticTrajectory.c@{Static\-Trajectory.\-c}}
+\subsubsection[{P\-Static\-Trajectory}]{\setlength{\rightskip}{0pt plus 5cm}void P\-Static\-Trajectory (
+\begin{DoxyParamCaption}
+\item[{{\bf Su\-L\-I\-N\-K}}]{u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, }
+\item[{{\bf State} $\ast$}]{Status, }
+\item[{gsl\-\_\-vector $\ast$}]{u, }
+\item[{double}]{t}
+\end{DoxyParamCaption}
+)}}\label{_static_trajectory_8c_aa7d2b8af0fe7e8bf25dab47d2494c807}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_static_trajectory_8c_aa7d2b8af0fe7e8bf25dab47d2494c807_cgraph}
+\end{center}
+\end{figure}
+
+

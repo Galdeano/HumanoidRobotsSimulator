@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node4" href="$_load_robot_8h.html#a71e30d503a5bf98bdf7dff52a0cbb1cf" title="Load the robot from a XML file." alt="" coords="160,5,269,32"/>
+<area shape="rect" id="node6" href="$_load_robot_8h.html#aa6eab383d16a325eb0d672ee3b958c5f" title="Load the robot from a XML file." alt="" coords="141,56,288,83"/>
+<area shape="rect" id="node10" href="$u_link_8h.html#ae420e3d1a86aca06b7286b7678b4ecb6" title="Initialize the link structure with the model value." alt="" coords="169,107,260,133"/>
+<area shape="rect" id="node8" href="$main_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title="main" alt="" coords="336,56,387,83"/>
+</map>

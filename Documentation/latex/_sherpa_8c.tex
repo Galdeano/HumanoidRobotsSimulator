@@ -1,0 +1,396 @@
+\hypertarget{_sherpa_8c}{\section{Sherpa.\-c File Reference}
+\label{_sherpa_8c}\index{Sherpa.\-c@{Sherpa.\-c}}
+}
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$math.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}..\textbackslash{}\-Os\-Lib\textbackslash{}\-Mcr\-Timer.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}..\textbackslash{}\-St\-Lib\textbackslash{}\-Port\-S\-T\-I\-Board.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}..\textbackslash{}\-St\-Lib\textbackslash{}\-Temps.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}..\textbackslash{}\-St\-Lib\textbackslash{}\-Mcr\-E\-S.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}..\textbackslash{}\-St\-Lib\textbackslash{}\-Mat.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}..\textbackslash{}\-St\-Lib\textbackslash{}\-Obsrv.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}..\textbackslash{}\-Capt\-Lib\textbackslash{}\-Abs\-Enc.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}..\textbackslash{}\-Capt\-Lib\textbackslash{}\-A\-T\-I.\-h\char`\"{}}\\*
+Include dependency graph for Sherpa.\-c\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_sherpa_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{_sherpa_8c_ae5c00df567eb90348a30be15a14d6647}{N\-A\-Max}~12
+\item 
+\#define \hyperlink{_sherpa_8c_a68eddd535923d17ddbc8bb03bab70b3b}{N\-A}~12
+\item 
+\#define \hyperlink{_sherpa_8c_a02590e2d070ed9d69e76964f0595b751}{N\-A\-T\-I}~2
+\item 
+\#define \hyperlink{_sherpa_8c_aea3831df0360a7f999a8dcdb806f8da1}{Asserv\-Q}~1
+\item 
+\#define \hyperlink{_sherpa_8c_a382f70f2853bf1bd620104761d598a96}{Num\-Axe}~5
+\item 
+\#define \hyperlink{_sherpa_8c_aa6baf59867fbac76104bbf4c70f15038}{M\-C\-Reglage\-Gains\-Sin}~0
+\item 
+\#define \hyperlink{_sherpa_8c_affaad2c4299fea284e85e7a268e58ebe}{M\-C\-Reglage\-Gains\-Ech}~0
+\item 
+\#define \hyperlink{_sherpa_8c_adaf0e60a7f6119f027d61126351e6801}{M\-C\-Sin}~0
+\item 
+\#define \hyperlink{_sherpa_8c_aa6cb6086fcec133af1a2e12bf031016a}{M\-C\-Trajectoire}~1
+\item 
+\#define \hyperlink{_sherpa_8c_a0943855ff532d8f3f641d08709136eaf}{M\-C\-Position}~0
+\item 
+\#define \hyperlink{_sherpa_8c_ac8c84723d961cbf1d679a980772f546a}{Tache\-Asserv}~1
+\item 
+\#define \hyperlink{_sherpa_8c_a3be31070dd51baca3d1180395b7d90b9}{Codeurs\-C\-N\-A}~0
+\item 
+\#define \hyperlink{_sherpa_8c_a885308c94888c26eb87883517b23bf55}{A\-T\-I}~0
+\item 
+\#define \hyperlink{_sherpa_8c_a52baa3aedf4e6a6fb79fcc7118a8cdcf}{Secu\-Chien\-Enable}~0
+\item 
+\#define \hyperlink{_sherpa_8c_a4457e8bf1643cc3e5885f3b0274b42fa}{Bouton\-Arret}~0
+\item 
+\#define \hyperlink{_sherpa_8c_a5a785aa894272132f7c5b3a6ebf7de59}{Observateur}~1
+\item 
+\#define \hyperlink{_sherpa_8c_acbcbc1892a7eb258a724b96768891f82}{Temps\-Reel}~1
+\item 
+\#define \hyperlink{_sherpa_8c_a90ed66db9e6a0f5035d1a6e7351eb4b8}{R\-T\-X}~1
+\item 
+\#define \hyperlink{_sherpa_8c_a4ffe4df9ca7c459cf0970de5b2d77c1c}{Avatar}~0
+\item 
+\#define \hyperlink{_sherpa_8c_a6a156e181d5d76e0ddd73ecc409ac9c3}{Te}~0.\-005
+\item 
+\#define \hyperlink{_sherpa_8c_a39c199150303146b7d46cd5d34bd9ee3}{Time\-Out\-Periode}~0.\-0001
+\item 
+\#define \hyperlink{_sherpa_8c_a17be1daa766c924864d6cb6c41b57545}{Time\-Out\-Tache}~0.\-00015
+\item 
+\#define \hyperlink{_sherpa_8c_a8c2e182c06aad12971f55c50893d1df4}{No\-Error}~0
+\item 
+\#define \hyperlink{_sherpa_8c_a66e06bc597914897efa0f77399670b13}{Err\-Arret\-Poussoir}~1
+\item 
+\#define \hyperlink{_sherpa_8c_ab3b0bf78b556b84c889b874a9c0a4095}{Err\-Arret\-Fin\-Trajectoire}~2
+\item 
+\#define \hyperlink{_sherpa_8c_ab4220251ccb94530c6ccda045990c55d}{Err\-Time\-Out\-Periode}~3
+\item 
+\#define \hyperlink{_sherpa_8c_ade79bc33f28f228ce47dc67d08a23a1b}{Err\-Time\-Out\-Tache}~4
+\item 
+\#define \hyperlink{_sherpa_8c_a9d26a24cde9468e92e94bad5fe504a04}{Err\-Time\-Out\-Trajectoire}~5
+\item 
+\#define \hyperlink{_sherpa_8c_a63be523e01db93e5b955e585823aace2}{Err\-Poursuite}~100
+\item 
+\#define \hyperlink{_sherpa_8c_a060d0027284d5500187eb0bc29c901d1}{Err\-Butee\-Qi\-Plus}~200
+\item 
+\#define \hyperlink{_sherpa_8c_a587b14951c4715d2365448c4a8de1740}{Err\-Butee\-Qi\-Moins}~300
+\item 
+\#define \hyperlink{_sherpa_8c_a111b3c0a464e6abe1e30335f09f81db9}{Err\-Butee\-Mi\-Plus}~400
+\item 
+\#define \hyperlink{_sherpa_8c_a41ffa8b31b5a1b7ab353ff855d392c12}{Err\-Butee\-Mi\-Moins}~500
+\item 
+\#define \hyperlink{_sherpa_8c_a918c97b541788f575223c0ef0415f3ce}{Nb\-Boucles}~1
+\item 
+\#define \hyperlink{_sherpa_8c_a1fc8e441f4e92600b28beee7567a6d43}{Time\-Out\-Trajectoire}~30.
+\item 
+\#define \hyperlink{_sherpa_8c_a65d2ca3c08efb8a8aae53cfabd1c907a}{Taille\-Max}~5000
+\item 
+\#define \hyperlink{_sherpa_8c_af33e6404f59fc7747f48b2490b045013}{N\-A\-Fichiers}~12
+\item 
+\#define \hyperlink{_sherpa_8c_a95cf1ca63ff303311d342d1a53d51f38}{S\-E\-P}~0.\-3f
+\item 
+\#define \hyperlink{_sherpa_8c_a53ea98b781822865ae470fca6165b02e}{Pif}~3.\-1415926535f
+\item 
+\#define \hyperlink{_sherpa_8c_ad3a48579c0414889a906c97514b767c7}{Rr}~( 8.f $\ast$ \hyperlink{_sherpa_8c_a53ea98b781822865ae470fca6165b02e}{Pif} )
+\item 
+\#define \hyperlink{_sherpa_8c_a06cdccd8b89732ac2c275548ca198f03}{Kci}~0.\-17f
+\item 
+\#define \hyperlink{_sherpa_8c_aa1044bde2f0653831a7732bb11024778}{Imax}~5.\-9f
+\item 
+\#define \hyperlink{_sherpa_8c_ab9fd76ca1d4c571dde133c4d0456ab1a}{Vmax}~10.f
+\item 
+\#define \hyperlink{_sherpa_8c_a1ae2456431d66b3a6d68b40dbae7e8a8}{Kcv}~( \hyperlink{_sherpa_8c_aa1044bde2f0653831a7732bb11024778}{Imax} / \hyperlink{_sherpa_8c_ab9fd76ca1d4c571dde133c4d0456ab1a}{Vmax} )
+\item 
+\#define \hyperlink{_sherpa_8c_a49d4d35d1b907b488ffb539462210d06}{Priorite}~7
+\item 
+\#define \hyperlink{_sherpa_8c_a8fe78e7c133b2ffb264a8f0fcdebd4cb}{Nb\-Enr}~12000
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{_sherpa_8c_a655faa6790b7b75d8f92e165355131b2}{Q\-To\-Poulies} (float \-\_\-poulie\mbox{[}\hyperlink{_sherpa_8c_a68eddd535923d17ddbc8bb03bab70b3b}{N\-A}\mbox{]}, const float \-\_\-q\mbox{[}\hyperlink{_sherpa_8c_a68eddd535923d17ddbc8bb03bab70b3b}{N\-A}\mbox{]})
+\item 
+float $\ast$ \hyperlink{_sherpa_8c_afb136a30db64a353779981a7ae99acad}{Mesures} ()
+\item 
+float $\ast$ \hyperlink{_sherpa_8c_a7629767cc0bbef801b5565542b55a270}{M\-C} (int \-\_\-non\-Utilise)
+\item 
+void \hyperlink{_sherpa_8c_ad3548e136b9b35dcfb6c4023ce282125}{Asserv} ()
+\item 
+int \hyperlink{_sherpa_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{main} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{_sherpa_8c_aea3831df0360a7f999a8dcdb806f8da1}{\index{Sherpa.\-c@{Sherpa.\-c}!Asserv\-Q@{Asserv\-Q}}
+\index{Asserv\-Q@{Asserv\-Q}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Asserv\-Q}]{\setlength{\rightskip}{0pt plus 5cm}\#define Asserv\-Q~1}}\label{_sherpa_8c_aea3831df0360a7f999a8dcdb806f8da1}
+\hypertarget{_sherpa_8c_a885308c94888c26eb87883517b23bf55}{\index{Sherpa.\-c@{Sherpa.\-c}!A\-T\-I@{A\-T\-I}}
+\index{A\-T\-I@{A\-T\-I}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{A\-T\-I}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\-T\-I~0}}\label{_sherpa_8c_a885308c94888c26eb87883517b23bf55}
+\hypertarget{_sherpa_8c_a4ffe4df9ca7c459cf0970de5b2d77c1c}{\index{Sherpa.\-c@{Sherpa.\-c}!Avatar@{Avatar}}
+\index{Avatar@{Avatar}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Avatar}]{\setlength{\rightskip}{0pt plus 5cm}\#define Avatar~0}}\label{_sherpa_8c_a4ffe4df9ca7c459cf0970de5b2d77c1c}
+\hypertarget{_sherpa_8c_a4457e8bf1643cc3e5885f3b0274b42fa}{\index{Sherpa.\-c@{Sherpa.\-c}!Bouton\-Arret@{Bouton\-Arret}}
+\index{Bouton\-Arret@{Bouton\-Arret}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Bouton\-Arret}]{\setlength{\rightskip}{0pt plus 5cm}\#define Bouton\-Arret~0}}\label{_sherpa_8c_a4457e8bf1643cc3e5885f3b0274b42fa}
+\hypertarget{_sherpa_8c_a3be31070dd51baca3d1180395b7d90b9}{\index{Sherpa.\-c@{Sherpa.\-c}!Codeurs\-C\-N\-A@{Codeurs\-C\-N\-A}}
+\index{Codeurs\-C\-N\-A@{Codeurs\-C\-N\-A}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Codeurs\-C\-N\-A}]{\setlength{\rightskip}{0pt plus 5cm}\#define Codeurs\-C\-N\-A~0}}\label{_sherpa_8c_a3be31070dd51baca3d1180395b7d90b9}
+\hypertarget{_sherpa_8c_ab3b0bf78b556b84c889b874a9c0a4095}{\index{Sherpa.\-c@{Sherpa.\-c}!Err\-Arret\-Fin\-Trajectoire@{Err\-Arret\-Fin\-Trajectoire}}
+\index{Err\-Arret\-Fin\-Trajectoire@{Err\-Arret\-Fin\-Trajectoire}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Err\-Arret\-Fin\-Trajectoire}]{\setlength{\rightskip}{0pt plus 5cm}\#define Err\-Arret\-Fin\-Trajectoire~2}}\label{_sherpa_8c_ab3b0bf78b556b84c889b874a9c0a4095}
+\hypertarget{_sherpa_8c_a66e06bc597914897efa0f77399670b13}{\index{Sherpa.\-c@{Sherpa.\-c}!Err\-Arret\-Poussoir@{Err\-Arret\-Poussoir}}
+\index{Err\-Arret\-Poussoir@{Err\-Arret\-Poussoir}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Err\-Arret\-Poussoir}]{\setlength{\rightskip}{0pt plus 5cm}\#define Err\-Arret\-Poussoir~1}}\label{_sherpa_8c_a66e06bc597914897efa0f77399670b13}
+\hypertarget{_sherpa_8c_a41ffa8b31b5a1b7ab353ff855d392c12}{\index{Sherpa.\-c@{Sherpa.\-c}!Err\-Butee\-Mi\-Moins@{Err\-Butee\-Mi\-Moins}}
+\index{Err\-Butee\-Mi\-Moins@{Err\-Butee\-Mi\-Moins}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Err\-Butee\-Mi\-Moins}]{\setlength{\rightskip}{0pt plus 5cm}\#define Err\-Butee\-Mi\-Moins~500}}\label{_sherpa_8c_a41ffa8b31b5a1b7ab353ff855d392c12}
+\hypertarget{_sherpa_8c_a111b3c0a464e6abe1e30335f09f81db9}{\index{Sherpa.\-c@{Sherpa.\-c}!Err\-Butee\-Mi\-Plus@{Err\-Butee\-Mi\-Plus}}
+\index{Err\-Butee\-Mi\-Plus@{Err\-Butee\-Mi\-Plus}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Err\-Butee\-Mi\-Plus}]{\setlength{\rightskip}{0pt plus 5cm}\#define Err\-Butee\-Mi\-Plus~400}}\label{_sherpa_8c_a111b3c0a464e6abe1e30335f09f81db9}
+\hypertarget{_sherpa_8c_a587b14951c4715d2365448c4a8de1740}{\index{Sherpa.\-c@{Sherpa.\-c}!Err\-Butee\-Qi\-Moins@{Err\-Butee\-Qi\-Moins}}
+\index{Err\-Butee\-Qi\-Moins@{Err\-Butee\-Qi\-Moins}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Err\-Butee\-Qi\-Moins}]{\setlength{\rightskip}{0pt plus 5cm}\#define Err\-Butee\-Qi\-Moins~300}}\label{_sherpa_8c_a587b14951c4715d2365448c4a8de1740}
+\hypertarget{_sherpa_8c_a060d0027284d5500187eb0bc29c901d1}{\index{Sherpa.\-c@{Sherpa.\-c}!Err\-Butee\-Qi\-Plus@{Err\-Butee\-Qi\-Plus}}
+\index{Err\-Butee\-Qi\-Plus@{Err\-Butee\-Qi\-Plus}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Err\-Butee\-Qi\-Plus}]{\setlength{\rightskip}{0pt plus 5cm}\#define Err\-Butee\-Qi\-Plus~200}}\label{_sherpa_8c_a060d0027284d5500187eb0bc29c901d1}
+\hypertarget{_sherpa_8c_a63be523e01db93e5b955e585823aace2}{\index{Sherpa.\-c@{Sherpa.\-c}!Err\-Poursuite@{Err\-Poursuite}}
+\index{Err\-Poursuite@{Err\-Poursuite}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Err\-Poursuite}]{\setlength{\rightskip}{0pt plus 5cm}\#define Err\-Poursuite~100}}\label{_sherpa_8c_a63be523e01db93e5b955e585823aace2}
+\hypertarget{_sherpa_8c_ab4220251ccb94530c6ccda045990c55d}{\index{Sherpa.\-c@{Sherpa.\-c}!Err\-Time\-Out\-Periode@{Err\-Time\-Out\-Periode}}
+\index{Err\-Time\-Out\-Periode@{Err\-Time\-Out\-Periode}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Err\-Time\-Out\-Periode}]{\setlength{\rightskip}{0pt plus 5cm}\#define Err\-Time\-Out\-Periode~3}}\label{_sherpa_8c_ab4220251ccb94530c6ccda045990c55d}
+\hypertarget{_sherpa_8c_ade79bc33f28f228ce47dc67d08a23a1b}{\index{Sherpa.\-c@{Sherpa.\-c}!Err\-Time\-Out\-Tache@{Err\-Time\-Out\-Tache}}
+\index{Err\-Time\-Out\-Tache@{Err\-Time\-Out\-Tache}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Err\-Time\-Out\-Tache}]{\setlength{\rightskip}{0pt plus 5cm}\#define Err\-Time\-Out\-Tache~4}}\label{_sherpa_8c_ade79bc33f28f228ce47dc67d08a23a1b}
+\hypertarget{_sherpa_8c_a9d26a24cde9468e92e94bad5fe504a04}{\index{Sherpa.\-c@{Sherpa.\-c}!Err\-Time\-Out\-Trajectoire@{Err\-Time\-Out\-Trajectoire}}
+\index{Err\-Time\-Out\-Trajectoire@{Err\-Time\-Out\-Trajectoire}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Err\-Time\-Out\-Trajectoire}]{\setlength{\rightskip}{0pt plus 5cm}\#define Err\-Time\-Out\-Trajectoire~5}}\label{_sherpa_8c_a9d26a24cde9468e92e94bad5fe504a04}
+\hypertarget{_sherpa_8c_aa1044bde2f0653831a7732bb11024778}{\index{Sherpa.\-c@{Sherpa.\-c}!Imax@{Imax}}
+\index{Imax@{Imax}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Imax}]{\setlength{\rightskip}{0pt plus 5cm}\#define Imax~5.\-9f}}\label{_sherpa_8c_aa1044bde2f0653831a7732bb11024778}
+\hypertarget{_sherpa_8c_a06cdccd8b89732ac2c275548ca198f03}{\index{Sherpa.\-c@{Sherpa.\-c}!Kci@{Kci}}
+\index{Kci@{Kci}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Kci}]{\setlength{\rightskip}{0pt plus 5cm}\#define Kci~0.\-17f}}\label{_sherpa_8c_a06cdccd8b89732ac2c275548ca198f03}
+\hypertarget{_sherpa_8c_a1ae2456431d66b3a6d68b40dbae7e8a8}{\index{Sherpa.\-c@{Sherpa.\-c}!Kcv@{Kcv}}
+\index{Kcv@{Kcv}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Kcv}]{\setlength{\rightskip}{0pt plus 5cm}\#define Kcv~( {\bf Imax} / {\bf Vmax} )}}\label{_sherpa_8c_a1ae2456431d66b3a6d68b40dbae7e8a8}
+\hypertarget{_sherpa_8c_a0943855ff532d8f3f641d08709136eaf}{\index{Sherpa.\-c@{Sherpa.\-c}!M\-C\-Position@{M\-C\-Position}}
+\index{M\-C\-Position@{M\-C\-Position}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{M\-C\-Position}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\-C\-Position~0}}\label{_sherpa_8c_a0943855ff532d8f3f641d08709136eaf}
+\hypertarget{_sherpa_8c_affaad2c4299fea284e85e7a268e58ebe}{\index{Sherpa.\-c@{Sherpa.\-c}!M\-C\-Reglage\-Gains\-Ech@{M\-C\-Reglage\-Gains\-Ech}}
+\index{M\-C\-Reglage\-Gains\-Ech@{M\-C\-Reglage\-Gains\-Ech}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{M\-C\-Reglage\-Gains\-Ech}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\-C\-Reglage\-Gains\-Ech~0}}\label{_sherpa_8c_affaad2c4299fea284e85e7a268e58ebe}
+\hypertarget{_sherpa_8c_aa6baf59867fbac76104bbf4c70f15038}{\index{Sherpa.\-c@{Sherpa.\-c}!M\-C\-Reglage\-Gains\-Sin@{M\-C\-Reglage\-Gains\-Sin}}
+\index{M\-C\-Reglage\-Gains\-Sin@{M\-C\-Reglage\-Gains\-Sin}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{M\-C\-Reglage\-Gains\-Sin}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\-C\-Reglage\-Gains\-Sin~0}}\label{_sherpa_8c_aa6baf59867fbac76104bbf4c70f15038}
+\hypertarget{_sherpa_8c_adaf0e60a7f6119f027d61126351e6801}{\index{Sherpa.\-c@{Sherpa.\-c}!M\-C\-Sin@{M\-C\-Sin}}
+\index{M\-C\-Sin@{M\-C\-Sin}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{M\-C\-Sin}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\-C\-Sin~0}}\label{_sherpa_8c_adaf0e60a7f6119f027d61126351e6801}
+\hypertarget{_sherpa_8c_aa6cb6086fcec133af1a2e12bf031016a}{\index{Sherpa.\-c@{Sherpa.\-c}!M\-C\-Trajectoire@{M\-C\-Trajectoire}}
+\index{M\-C\-Trajectoire@{M\-C\-Trajectoire}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{M\-C\-Trajectoire}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\-C\-Trajectoire~1}}\label{_sherpa_8c_aa6cb6086fcec133af1a2e12bf031016a}
+\hypertarget{_sherpa_8c_a68eddd535923d17ddbc8bb03bab70b3b}{\index{Sherpa.\-c@{Sherpa.\-c}!N\-A@{N\-A}}
+\index{N\-A@{N\-A}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{N\-A}]{\setlength{\rightskip}{0pt plus 5cm}\#define N\-A~12}}\label{_sherpa_8c_a68eddd535923d17ddbc8bb03bab70b3b}
+\hypertarget{_sherpa_8c_af33e6404f59fc7747f48b2490b045013}{\index{Sherpa.\-c@{Sherpa.\-c}!N\-A\-Fichiers@{N\-A\-Fichiers}}
+\index{N\-A\-Fichiers@{N\-A\-Fichiers}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{N\-A\-Fichiers}]{\setlength{\rightskip}{0pt plus 5cm}\#define N\-A\-Fichiers~12}}\label{_sherpa_8c_af33e6404f59fc7747f48b2490b045013}
+\hypertarget{_sherpa_8c_ae5c00df567eb90348a30be15a14d6647}{\index{Sherpa.\-c@{Sherpa.\-c}!N\-A\-Max@{N\-A\-Max}}
+\index{N\-A\-Max@{N\-A\-Max}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{N\-A\-Max}]{\setlength{\rightskip}{0pt plus 5cm}\#define N\-A\-Max~12}}\label{_sherpa_8c_ae5c00df567eb90348a30be15a14d6647}
+\hypertarget{_sherpa_8c_a02590e2d070ed9d69e76964f0595b751}{\index{Sherpa.\-c@{Sherpa.\-c}!N\-A\-T\-I@{N\-A\-T\-I}}
+\index{N\-A\-T\-I@{N\-A\-T\-I}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{N\-A\-T\-I}]{\setlength{\rightskip}{0pt plus 5cm}\#define N\-A\-T\-I~2}}\label{_sherpa_8c_a02590e2d070ed9d69e76964f0595b751}
+\hypertarget{_sherpa_8c_a918c97b541788f575223c0ef0415f3ce}{\index{Sherpa.\-c@{Sherpa.\-c}!Nb\-Boucles@{Nb\-Boucles}}
+\index{Nb\-Boucles@{Nb\-Boucles}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Nb\-Boucles}]{\setlength{\rightskip}{0pt plus 5cm}\#define Nb\-Boucles~1}}\label{_sherpa_8c_a918c97b541788f575223c0ef0415f3ce}
+\hypertarget{_sherpa_8c_a8fe78e7c133b2ffb264a8f0fcdebd4cb}{\index{Sherpa.\-c@{Sherpa.\-c}!Nb\-Enr@{Nb\-Enr}}
+\index{Nb\-Enr@{Nb\-Enr}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Nb\-Enr}]{\setlength{\rightskip}{0pt plus 5cm}\#define Nb\-Enr~12000}}\label{_sherpa_8c_a8fe78e7c133b2ffb264a8f0fcdebd4cb}
+\hypertarget{_sherpa_8c_a8c2e182c06aad12971f55c50893d1df4}{\index{Sherpa.\-c@{Sherpa.\-c}!No\-Error@{No\-Error}}
+\index{No\-Error@{No\-Error}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{No\-Error}]{\setlength{\rightskip}{0pt plus 5cm}\#define No\-Error~0}}\label{_sherpa_8c_a8c2e182c06aad12971f55c50893d1df4}
+\hypertarget{_sherpa_8c_a382f70f2853bf1bd620104761d598a96}{\index{Sherpa.\-c@{Sherpa.\-c}!Num\-Axe@{Num\-Axe}}
+\index{Num\-Axe@{Num\-Axe}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Num\-Axe}]{\setlength{\rightskip}{0pt plus 5cm}\#define Num\-Axe~5}}\label{_sherpa_8c_a382f70f2853bf1bd620104761d598a96}
+\hypertarget{_sherpa_8c_a5a785aa894272132f7c5b3a6ebf7de59}{\index{Sherpa.\-c@{Sherpa.\-c}!Observateur@{Observateur}}
+\index{Observateur@{Observateur}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Observateur}]{\setlength{\rightskip}{0pt plus 5cm}\#define Observateur~1}}\label{_sherpa_8c_a5a785aa894272132f7c5b3a6ebf7de59}
+\hypertarget{_sherpa_8c_a53ea98b781822865ae470fca6165b02e}{\index{Sherpa.\-c@{Sherpa.\-c}!Pif@{Pif}}
+\index{Pif@{Pif}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Pif}]{\setlength{\rightskip}{0pt plus 5cm}\#define Pif~3.\-1415926535f}}\label{_sherpa_8c_a53ea98b781822865ae470fca6165b02e}
+\hypertarget{_sherpa_8c_a49d4d35d1b907b488ffb539462210d06}{\index{Sherpa.\-c@{Sherpa.\-c}!Priorite@{Priorite}}
+\index{Priorite@{Priorite}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Priorite}]{\setlength{\rightskip}{0pt plus 5cm}\#define Priorite~7}}\label{_sherpa_8c_a49d4d35d1b907b488ffb539462210d06}
+\hypertarget{_sherpa_8c_ad3a48579c0414889a906c97514b767c7}{\index{Sherpa.\-c@{Sherpa.\-c}!Rr@{Rr}}
+\index{Rr@{Rr}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Rr}]{\setlength{\rightskip}{0pt plus 5cm}\#define Rr~( 8.f $\ast$ {\bf Pif} )}}\label{_sherpa_8c_ad3a48579c0414889a906c97514b767c7}
+\hypertarget{_sherpa_8c_a90ed66db9e6a0f5035d1a6e7351eb4b8}{\index{Sherpa.\-c@{Sherpa.\-c}!R\-T\-X@{R\-T\-X}}
+\index{R\-T\-X@{R\-T\-X}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{R\-T\-X}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\-T\-X~1}}\label{_sherpa_8c_a90ed66db9e6a0f5035d1a6e7351eb4b8}
+\hypertarget{_sherpa_8c_a52baa3aedf4e6a6fb79fcc7118a8cdcf}{\index{Sherpa.\-c@{Sherpa.\-c}!Secu\-Chien\-Enable@{Secu\-Chien\-Enable}}
+\index{Secu\-Chien\-Enable@{Secu\-Chien\-Enable}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Secu\-Chien\-Enable}]{\setlength{\rightskip}{0pt plus 5cm}\#define Secu\-Chien\-Enable~0}}\label{_sherpa_8c_a52baa3aedf4e6a6fb79fcc7118a8cdcf}
+\hypertarget{_sherpa_8c_a95cf1ca63ff303311d342d1a53d51f38}{\index{Sherpa.\-c@{Sherpa.\-c}!S\-E\-P@{S\-E\-P}}
+\index{S\-E\-P@{S\-E\-P}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{S\-E\-P}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\-E\-P~0.\-3f}}\label{_sherpa_8c_a95cf1ca63ff303311d342d1a53d51f38}
+\hypertarget{_sherpa_8c_ac8c84723d961cbf1d679a980772f546a}{\index{Sherpa.\-c@{Sherpa.\-c}!Tache\-Asserv@{Tache\-Asserv}}
+\index{Tache\-Asserv@{Tache\-Asserv}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Tache\-Asserv}]{\setlength{\rightskip}{0pt plus 5cm}\#define Tache\-Asserv~1}}\label{_sherpa_8c_ac8c84723d961cbf1d679a980772f546a}
+\hypertarget{_sherpa_8c_a65d2ca3c08efb8a8aae53cfabd1c907a}{\index{Sherpa.\-c@{Sherpa.\-c}!Taille\-Max@{Taille\-Max}}
+\index{Taille\-Max@{Taille\-Max}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Taille\-Max}]{\setlength{\rightskip}{0pt plus 5cm}\#define Taille\-Max~5000}}\label{_sherpa_8c_a65d2ca3c08efb8a8aae53cfabd1c907a}
+\hypertarget{_sherpa_8c_a6a156e181d5d76e0ddd73ecc409ac9c3}{\index{Sherpa.\-c@{Sherpa.\-c}!Te@{Te}}
+\index{Te@{Te}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Te}]{\setlength{\rightskip}{0pt plus 5cm}\#define Te~0.\-005}}\label{_sherpa_8c_a6a156e181d5d76e0ddd73ecc409ac9c3}
+\hypertarget{_sherpa_8c_acbcbc1892a7eb258a724b96768891f82}{\index{Sherpa.\-c@{Sherpa.\-c}!Temps\-Reel@{Temps\-Reel}}
+\index{Temps\-Reel@{Temps\-Reel}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Temps\-Reel}]{\setlength{\rightskip}{0pt plus 5cm}\#define Temps\-Reel~1}}\label{_sherpa_8c_acbcbc1892a7eb258a724b96768891f82}
+\hypertarget{_sherpa_8c_a39c199150303146b7d46cd5d34bd9ee3}{\index{Sherpa.\-c@{Sherpa.\-c}!Time\-Out\-Periode@{Time\-Out\-Periode}}
+\index{Time\-Out\-Periode@{Time\-Out\-Periode}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Time\-Out\-Periode}]{\setlength{\rightskip}{0pt plus 5cm}\#define Time\-Out\-Periode~0.\-0001}}\label{_sherpa_8c_a39c199150303146b7d46cd5d34bd9ee3}
+\hypertarget{_sherpa_8c_a17be1daa766c924864d6cb6c41b57545}{\index{Sherpa.\-c@{Sherpa.\-c}!Time\-Out\-Tache@{Time\-Out\-Tache}}
+\index{Time\-Out\-Tache@{Time\-Out\-Tache}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Time\-Out\-Tache}]{\setlength{\rightskip}{0pt plus 5cm}\#define Time\-Out\-Tache~0.\-00015}}\label{_sherpa_8c_a17be1daa766c924864d6cb6c41b57545}
+\hypertarget{_sherpa_8c_a1fc8e441f4e92600b28beee7567a6d43}{\index{Sherpa.\-c@{Sherpa.\-c}!Time\-Out\-Trajectoire@{Time\-Out\-Trajectoire}}
+\index{Time\-Out\-Trajectoire@{Time\-Out\-Trajectoire}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Time\-Out\-Trajectoire}]{\setlength{\rightskip}{0pt plus 5cm}\#define Time\-Out\-Trajectoire~30.}}\label{_sherpa_8c_a1fc8e441f4e92600b28beee7567a6d43}
+\hypertarget{_sherpa_8c_ab9fd76ca1d4c571dde133c4d0456ab1a}{\index{Sherpa.\-c@{Sherpa.\-c}!Vmax@{Vmax}}
+\index{Vmax@{Vmax}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Vmax}]{\setlength{\rightskip}{0pt plus 5cm}\#define Vmax~10.f}}\label{_sherpa_8c_ab9fd76ca1d4c571dde133c4d0456ab1a}
+
+
+\subsection{Function Documentation}
+\hypertarget{_sherpa_8c_ad3548e136b9b35dcfb6c4023ce282125}{\index{Sherpa.\-c@{Sherpa.\-c}!Asserv@{Asserv}}
+\index{Asserv@{Asserv}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Asserv}]{\setlength{\rightskip}{0pt plus 5cm}void Asserv (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{_sherpa_8c_ad3548e136b9b35dcfb6c4023ce282125}
+!!!!!!!!!!!!!!!!! est dans le for i !!!!!!!!!!!!! pas bon 
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=326pt]{_sherpa_8c_ad3548e136b9b35dcfb6c4023ce282125_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=202pt]{_sherpa_8c_ad3548e136b9b35dcfb6c4023ce282125_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{_sherpa_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{\index{Sherpa.\-c@{Sherpa.\-c}!main@{main}}
+\index{main@{main}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{main}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{_sherpa_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_sherpa_8c_ae66f6b31b5ad750f1fe042a706a4e3d4_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{_sherpa_8c_a7629767cc0bbef801b5565542b55a270}{\index{Sherpa.\-c@{Sherpa.\-c}!M\-C@{M\-C}}
+\index{M\-C@{M\-C}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{M\-C}]{\setlength{\rightskip}{0pt plus 5cm}float$\ast$ M\-C (
+\begin{DoxyParamCaption}
+\item[{int}]{\-\_\-non\-Utilise}
+\end{DoxyParamCaption}
+)}}\label{_sherpa_8c_a7629767cc0bbef801b5565542b55a270}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=220pt]{_sherpa_8c_a7629767cc0bbef801b5565542b55a270_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=270pt]{_sherpa_8c_a7629767cc0bbef801b5565542b55a270_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{_sherpa_8c_afb136a30db64a353779981a7ae99acad}{\index{Sherpa.\-c@{Sherpa.\-c}!Mesures@{Mesures}}
+\index{Mesures@{Mesures}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Mesures}]{\setlength{\rightskip}{0pt plus 5cm}float$\ast$ Mesures (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{_sherpa_8c_afb136a30db64a353779981a7ae99acad}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=238pt]{_sherpa_8c_afb136a30db64a353779981a7ae99acad_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=292pt]{_sherpa_8c_afb136a30db64a353779981a7ae99acad_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{_sherpa_8c_a655faa6790b7b75d8f92e165355131b2}{\index{Sherpa.\-c@{Sherpa.\-c}!Q\-To\-Poulies@{Q\-To\-Poulies}}
+\index{Q\-To\-Poulies@{Q\-To\-Poulies}!Sherpa.c@{Sherpa.\-c}}
+\subsubsection[{Q\-To\-Poulies}]{\setlength{\rightskip}{0pt plus 5cm}void Q\-To\-Poulies (
+\begin{DoxyParamCaption}
+\item[{float}]{\-\_\-poulie\mbox{[}\-N\-A\mbox{]}, }
+\item[{const float}]{\-\_\-q\mbox{[}\-N\-A\mbox{]}}
+\end{DoxyParamCaption}
+)}}\label{_sherpa_8c_a655faa6790b7b75d8f92e165355131b2}
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_sherpa_8c_a655faa6790b7b75d8f92e165355131b2_icgraph}
+\end{center}
+\end{figure}
+
+

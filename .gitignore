@@ -1,0 +1,41 @@
+# Build directories
+build/
+bin/
+obj/
+out/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Compiled binaries and libraries
+*.exe
+*.dll
+*.so
+*.dylib
+*.o
+*.obj
+*.lib
+*.a
+*.gch
+*.pch
+*.out
+
+# IDEs and Editors
+.vscode/
+.vs/
+.idea/
+*.layout
+*.suo
+*.user
+*.depend
+
+# Backup and Autosave files
+*~
+*.asv
+*.bak
+\#*\#
+.#*
+
+# Textures/logs/outputs (optional - adjust if some are required)
+# but we keep those in the Robots and Textures directories explicitly

@@ -1,0 +1,87 @@
+\hypertarget{_forward_dynamics_8c}{\section{Forward\-Dynamics.\-c File Reference}
+\label{_forward_dynamics_8c}\index{Forward\-Dynamics.\-c@{Forward\-Dynamics.\-c}}
+}
+{\ttfamily \#include $<$gsl/gsl\-\_\-vector.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-matrix.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-blas.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-linalg.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-math.\-h$>$}\\*
+{\ttfamily \#include $<$G\-L/gl.\-h$>$}\\*
+{\ttfamily \#include $<$G\-L/glu.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}u\-Link.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Inv\-Dyn.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Calc\-Co\-M.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Cross.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Draw\-Marker.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Draw\-Force\-Marker.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Stabilizator.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Gravity.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}External\-Forces.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Forward\-Dynamics.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Load\-Robot\-\_\-f.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}u\-L\-I\-N\-K\-\_\-f.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Ext\-\_\-traj.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Static\-Trajectory\-\_\-f.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Scenarios.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Forward\-Kinematics\-\_\-f.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Calc\-Co\-M\-\_\-f.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Gravity\-\_\-f.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Stabilizator\-\_\-f.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Draw\-Markerf.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Calc\-Jacobian\-Modif.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Calc\-V\-Werr\-Ori.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pinv.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Print\-G\-S\-L\-Matrix.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Calc\-Co\-M\-Jacobian.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Calc\-Co\-P.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Calc\-Jacobian\-Modif\-\_\-f.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Calc\-V\-Werr\-Ori\-\_\-f.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}vec2tab.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Mat.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Setup.\-h\char`\"{}}\\*
+Include dependency graph for Forward\-Dynamics.\-c\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_forward_dynamics_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{_forward_dynamics_8c_af604af2dec4161503e5ac1f828b1e357}{Forward\-Dynamics} (\hyperlink{struct_su_l_i_n_k}{Su\-L\-I\-N\-K} u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, \hyperlink{struct_state}{State} $\ast$Status, long t)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{_forward_dynamics_8c_af604af2dec4161503e5ac1f828b1e357}{\index{Forward\-Dynamics.\-c@{Forward\-Dynamics.\-c}!Forward\-Dynamics@{Forward\-Dynamics}}
+\index{Forward\-Dynamics@{Forward\-Dynamics}!ForwardDynamics.c@{Forward\-Dynamics.\-c}}
+\subsubsection[{Forward\-Dynamics}]{\setlength{\rightskip}{0pt plus 5cm}void Forward\-Dynamics (
+\begin{DoxyParamCaption}
+\item[{{\bf Su\-L\-I\-N\-K}}]{u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, }
+\item[{{\bf State} $\ast$}]{Status, }
+\item[{long}]{t}
+\end{DoxyParamCaption}
+)}}\label{_forward_dynamics_8c_af604af2dec4161503e5ac1f828b1e357}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{_forward_dynamics_8c_af604af2dec4161503e5ac1f828b1e357_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=250pt]{_forward_dynamics_8c_af604af2dec4161503e5ac1f828b1e357_icgraph}
+\end{center}
+\end{figure}
+
+

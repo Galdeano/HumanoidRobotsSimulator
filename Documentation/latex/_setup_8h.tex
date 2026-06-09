@@ -1,0 +1,336 @@
+\hypertarget{_setup_8h}{\section{Setup.\-h File Reference}
+\label{_setup_8h}\index{Setup.\-h@{Setup.\-h}}
+}
+
+
+Contain setup of simulations.  
+
+
+This graph shows which files directly or indirectly include this file\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_setup_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{_setup_8h_a73e979d51655786dc79fd954670db170}{play\-\_\-csv}~0
+\item 
+\#define \hyperlink{_setup_8h_a9b2f01078393f4eaa854927bb1391657}{zmp\-\_\-filtering}~1
+\item 
+\#define \hyperlink{_setup_8h_a2eb8cca44d3bc8610aae6c7951b2dde9}{zmp\-\_\-feedback}~1
+\item 
+\#define \hyperlink{_setup_8h_a3a2308f9562d782ba49fa37002960950}{old\-\_\-zmp}~0
+\item 
+\#define \hyperlink{_setup_8h_a4b83ce20b530e09c7fe4055f9a318a04}{save\-\_\-data\-\_\-long}~0
+\item 
+\#define \hyperlink{_setup_8h_a417c9585c77dfd969c98812a4fed2693}{save\-\_\-data\-\_\-quick}~1
+\item 
+\#define \hyperlink{_setup_8h_a949573f94135d0fa04220f1063cd48ef}{save\-\_\-data\-\_\-quick\-\_\-temp}~1
+\item 
+\#define \hyperlink{_setup_8h_a17eba7cc9791497d79d84e2415b6baf4}{file\-\_\-motor}~0
+\item 
+\#define \hyperlink{_setup_8h_ac875f9d147acebadc28c6fb1317c6bdf}{reseau}~1
+\item 
+\#define \hyperlink{_setup_8h_a08023ea6765c99d60a6a3840cd07156e}{local}~1
+\item 
+\#define \hyperlink{_setup_8h_ac85cc23949c046a6cc2eeed16d94ae72}{replay}~0
+\item 
+\#define \hyperlink{_setup_8h_aac1e3a02c36afb061358e5f34761a14f}{Tasks}~1
+\item 
+\#define \hyperlink{_setup_8h_ac79e8a65cb82f4bc4b9fd50a19264f3e}{file\-\_\-human}~0
+\item 
+\#define \hyperlink{_setup_8h_a2c12823058b7db7534b3b82a96bdd024}{file\-\_\-hoap}~0
+\item 
+\#define \hyperlink{_setup_8h_a5cd9ce15c064f00f5baf198b60f81682}{file\-\_\-walk}~1
+\item 
+\#define \hyperlink{_setup_8h_a0722439ec70543eb62cbffcd396baa5c}{Light}~0
+\item 
+\#define \hyperlink{_setup_8h_a7c6c817437c376708b5aeefca570bdf3}{shadow}~1
+\item 
+\#define \hyperlink{_setup_8h_a97e63f52f107c536e855b1bb7f135c33}{colors\-G\-L}~0
+\item 
+\#define \hyperlink{_setup_8h_a4f817679e3794c50be2173df5776b6e3}{materials}~1
+\item 
+\#define \hyperlink{_setup_8h_aea33182f34d3b46032fa726d713dc26d}{math\-G\-L}~0
+\item 
+\#define \hyperlink{_setup_8h_aa1c23221d0a95fb202b2652fa536a88f}{Ground\-Resolution}~20
+\item 
+\#define \hyperlink{_setup_8h_ab6a2e6bcc307b7afc4dcaa85cfe79de0}{oritrunk}~1
+\item 
+\#define \hyperlink{_setup_8h_a5c7f2c5cfac38ebcdb4b4e27cc49040c}{oritrunk3}~1
+\item 
+\#define \hyperlink{_setup_8h_a07fbecdee8559326e079ed96fccf6fdd}{Load\-Obj}~1
+\begin{DoxyCompactList}\small\item\em 1\-: Load and displays the mechs associated to the model if they exists \end{DoxyCompactList}\item 
+\#define \hyperlink{_setup_8h_a941f7b3566d8456486b5c167e4dbb7df}{Scenarios}~0
+\begin{DoxyCompactList}\small\item\em Uses trajectories from scenarios for demonstrations purposes. \end{DoxyCompactList}\item 
+\#define \hyperlink{_setup_8h_a8443a9d5cb590d504ed9f9fb41fcc640}{Trajectories}~1
+\begin{DoxyCompactList}\small\item\em Uses trajectories for tasks. \end{DoxyCompactList}\item 
+\#define \hyperlink{_setup_8h_a28f21211516e9719b3dbcf2226ef673b}{Ext\-\_\-traj}~0
+\begin{DoxyCompactList}\small\item\em Uses trajectories from file. \end{DoxyCompactList}\item 
+\#define \hyperlink{_setup_8h_a65a9a277f69b273b860fbd00ef2cc887}{Video}~0
+\begin{DoxyCompactList}\small\item\em Record images of the simulation. \end{DoxyCompactList}\item 
+\#define \hyperlink{_setup_8h_a30b32d8bb67daa3f851fc12800e34e6c}{Suspendu}~0
+\begin{DoxyCompactList}\small\item\em 1 if the robot is hanged and dont touch the ground \end{DoxyCompactList}\item 
+\#define \hyperlink{_setup_8h_a15d1fa9f2c7cfdcf73875d85fef41f1d}{Visualisation}~1
+\begin{DoxyCompactList}\small\item\em Record variables of the simulation. \end{DoxyCompactList}\item 
+\#define \hyperlink{_setup_8h_a6a156e181d5d76e0ddd73ecc409ac9c3}{Te}~0.\-005
+\begin{DoxyCompactList}\small\item\em Sampling period of control loop in second. \end{DoxyCompactList}\item 
+\#define \hyperlink{_setup_8h_a01e9bc592e0a618cce57ea6b496d327d}{Dtime}~0.\-0001
+\begin{DoxyCompactList}\small\item\em Simulation sampling period. \end{DoxyCompactList}\item 
+\#define \hyperlink{_setup_8h_afa9f746a0bd707180ead3bb1691f0c03}{Sherpa}~0
+\begin{DoxyCompactList}\small\item\em Sherpa robot model is used. \end{DoxyCompactList}\item 
+\#define \hyperlink{_setup_8h_a8acf64b03194b60dfbc21f5da4298dc0}{Generic}~1
+\begin{DoxyCompactList}\small\item\em Generic robot model is used. \end{DoxyCompactList}\item 
+\#define \hyperlink{_setup_8h_a692ea772dd69745735792b354316715d}{Human}~0
+\begin{DoxyCompactList}\small\item\em Human model is used. \end{DoxyCompactList}\item 
+\#define \hyperlink{_setup_8h_a960c2f6c3fca885af2c1ea2b88dee7b7}{P\-D}~0
+\begin{DoxyCompactList}\small\item\em Proportional derivative command is used. \end{DoxyCompactList}\item 
+\#define \hyperlink{_setup_8h_a2d2c08ad50ed50292bc9931d293385c6}{Dynamic}~0
+\begin{DoxyCompactList}\small\item\em Dynamic command is used. \end{DoxyCompactList}\item 
+\#define \hyperlink{_setup_8h_aa7049b2479ace55e05e4aa8a5cf7a791}{Task}~1
+\begin{DoxyCompactList}\small\item\em Task control is used. \end{DoxyCompactList}\item 
+\#define \hyperlink{_setup_8h_add7225c64044a979aa4805808fc54dc0}{Static\-C\-O\-M}~0
+\begin{DoxyCompactList}\small\item\em 1\-: do not compute the dynamic of the robot \end{DoxyCompactList}\item 
+\#define \hyperlink{_setup_8h_aae205875755a8d3bc7c55a08bdfd5a40}{Visu\-Articulars\-Limits}~0
+\item 
+\#define \hyperlink{_setup_8h_a98464dae1f0d011a51f0ddb71c36f96b}{Visu\-Torques\-Color}~1
+\begin{DoxyCompactList}\small\item\em 1\-: display toques via color change on joints articulation \end{DoxyCompactList}\item 
+\#define \hyperlink{_setup_8h_a8391b5bf2a79b5bdbf2841f6e2c6194f}{base\-Foot}~13
+\item 
+\#define \hyperlink{_setup_8h_af0994a6506d69dde76e5ae05eab207c7}{x\-Contact}~5
+\item 
+\#define \hyperlink{_setup_8h_ae7de2deaaa8a3e8513aa89b30ba5bfe1}{y\-Contact}~4
+\item 
+\#define \hyperlink{_setup_8h_a5b3d538df98b36d1d0b984a1e5b6afc0}{linear\-Damper}~1
+\begin{DoxyCompactList}\small\item\em 1\-: Use a spring damper contact \end{DoxyCompactList}\item 
+\#define \hyperlink{_setup_8h_a9aef1d202007551bb6ea8323eec1b2d1}{non\-Linear\-Damper}~0
+\begin{DoxyCompactList}\small\item\em 1\-: Use a non linear damper contact \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Contain setup of simulations. \begin{DoxyAuthor}{Author}
+David Galdeano 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+10/2011 
+\end{DoxyDate}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{_setup_8h_a8391b5bf2a79b5bdbf2841f6e2c6194f}{\index{Setup.\-h@{Setup.\-h}!base\-Foot@{base\-Foot}}
+\index{base\-Foot@{base\-Foot}!Setup.h@{Setup.\-h}}
+\subsubsection[{base\-Foot}]{\setlength{\rightskip}{0pt plus 5cm}\#define base\-Foot~13}}\label{_setup_8h_a8391b5bf2a79b5bdbf2841f6e2c6194f}
+\hypertarget{_setup_8h_a97e63f52f107c536e855b1bb7f135c33}{\index{Setup.\-h@{Setup.\-h}!colors\-G\-L@{colors\-G\-L}}
+\index{colors\-G\-L@{colors\-G\-L}!Setup.h@{Setup.\-h}}
+\subsubsection[{colors\-G\-L}]{\setlength{\rightskip}{0pt plus 5cm}\#define colors\-G\-L~0}}\label{_setup_8h_a97e63f52f107c536e855b1bb7f135c33}
+\hypertarget{_setup_8h_a01e9bc592e0a618cce57ea6b496d327d}{\index{Setup.\-h@{Setup.\-h}!Dtime@{Dtime}}
+\index{Dtime@{Dtime}!Setup.h@{Setup.\-h}}
+\subsubsection[{Dtime}]{\setlength{\rightskip}{0pt plus 5cm}\#define Dtime~0.\-0001}}\label{_setup_8h_a01e9bc592e0a618cce57ea6b496d327d}
+
+
+Simulation sampling period. 
+
+\hypertarget{_setup_8h_a2d2c08ad50ed50292bc9931d293385c6}{\index{Setup.\-h@{Setup.\-h}!Dynamic@{Dynamic}}
+\index{Dynamic@{Dynamic}!Setup.h@{Setup.\-h}}
+\subsubsection[{Dynamic}]{\setlength{\rightskip}{0pt plus 5cm}\#define Dynamic~0}}\label{_setup_8h_a2d2c08ad50ed50292bc9931d293385c6}
+
+
+Dynamic command is used. 
+
+\hypertarget{_setup_8h_a28f21211516e9719b3dbcf2226ef673b}{\index{Setup.\-h@{Setup.\-h}!Ext\-\_\-traj@{Ext\-\_\-traj}}
+\index{Ext\-\_\-traj@{Ext\-\_\-traj}!Setup.h@{Setup.\-h}}
+\subsubsection[{Ext\-\_\-traj}]{\setlength{\rightskip}{0pt plus 5cm}\#define Ext\-\_\-traj~0}}\label{_setup_8h_a28f21211516e9719b3dbcf2226ef673b}
+
+
+Uses trajectories from file. 
+
+\hypertarget{_setup_8h_a2c12823058b7db7534b3b82a96bdd024}{\index{Setup.\-h@{Setup.\-h}!file\-\_\-hoap@{file\-\_\-hoap}}
+\index{file\-\_\-hoap@{file\-\_\-hoap}!Setup.h@{Setup.\-h}}
+\subsubsection[{file\-\_\-hoap}]{\setlength{\rightskip}{0pt plus 5cm}\#define file\-\_\-hoap~0}}\label{_setup_8h_a2c12823058b7db7534b3b82a96bdd024}
+\hypertarget{_setup_8h_ac79e8a65cb82f4bc4b9fd50a19264f3e}{\index{Setup.\-h@{Setup.\-h}!file\-\_\-human@{file\-\_\-human}}
+\index{file\-\_\-human@{file\-\_\-human}!Setup.h@{Setup.\-h}}
+\subsubsection[{file\-\_\-human}]{\setlength{\rightskip}{0pt plus 5cm}\#define file\-\_\-human~0}}\label{_setup_8h_ac79e8a65cb82f4bc4b9fd50a19264f3e}
+\hypertarget{_setup_8h_a17eba7cc9791497d79d84e2415b6baf4}{\index{Setup.\-h@{Setup.\-h}!file\-\_\-motor@{file\-\_\-motor}}
+\index{file\-\_\-motor@{file\-\_\-motor}!Setup.h@{Setup.\-h}}
+\subsubsection[{file\-\_\-motor}]{\setlength{\rightskip}{0pt plus 5cm}\#define file\-\_\-motor~0}}\label{_setup_8h_a17eba7cc9791497d79d84e2415b6baf4}
+\hypertarget{_setup_8h_a5cd9ce15c064f00f5baf198b60f81682}{\index{Setup.\-h@{Setup.\-h}!file\-\_\-walk@{file\-\_\-walk}}
+\index{file\-\_\-walk@{file\-\_\-walk}!Setup.h@{Setup.\-h}}
+\subsubsection[{file\-\_\-walk}]{\setlength{\rightskip}{0pt plus 5cm}\#define file\-\_\-walk~1}}\label{_setup_8h_a5cd9ce15c064f00f5baf198b60f81682}
+\hypertarget{_setup_8h_a8acf64b03194b60dfbc21f5da4298dc0}{\index{Setup.\-h@{Setup.\-h}!Generic@{Generic}}
+\index{Generic@{Generic}!Setup.h@{Setup.\-h}}
+\subsubsection[{Generic}]{\setlength{\rightskip}{0pt plus 5cm}\#define Generic~1}}\label{_setup_8h_a8acf64b03194b60dfbc21f5da4298dc0}
+
+
+Generic robot model is used. 
+
+\hypertarget{_setup_8h_aa1c23221d0a95fb202b2652fa536a88f}{\index{Setup.\-h@{Setup.\-h}!Ground\-Resolution@{Ground\-Resolution}}
+\index{Ground\-Resolution@{Ground\-Resolution}!Setup.h@{Setup.\-h}}
+\subsubsection[{Ground\-Resolution}]{\setlength{\rightskip}{0pt plus 5cm}\#define Ground\-Resolution~20}}\label{_setup_8h_aa1c23221d0a95fb202b2652fa536a88f}
+\hypertarget{_setup_8h_a692ea772dd69745735792b354316715d}{\index{Setup.\-h@{Setup.\-h}!Human@{Human}}
+\index{Human@{Human}!Setup.h@{Setup.\-h}}
+\subsubsection[{Human}]{\setlength{\rightskip}{0pt plus 5cm}\#define Human~0}}\label{_setup_8h_a692ea772dd69745735792b354316715d}
+
+
+Human model is used. 
+
+\hypertarget{_setup_8h_a0722439ec70543eb62cbffcd396baa5c}{\index{Setup.\-h@{Setup.\-h}!Light@{Light}}
+\index{Light@{Light}!Setup.h@{Setup.\-h}}
+\subsubsection[{Light}]{\setlength{\rightskip}{0pt plus 5cm}\#define Light~0}}\label{_setup_8h_a0722439ec70543eb62cbffcd396baa5c}
+\hypertarget{_setup_8h_a5b3d538df98b36d1d0b984a1e5b6afc0}{\index{Setup.\-h@{Setup.\-h}!linear\-Damper@{linear\-Damper}}
+\index{linear\-Damper@{linear\-Damper}!Setup.h@{Setup.\-h}}
+\subsubsection[{linear\-Damper}]{\setlength{\rightskip}{0pt plus 5cm}\#define linear\-Damper~1}}\label{_setup_8h_a5b3d538df98b36d1d0b984a1e5b6afc0}
+
+
+1\-: Use a spring damper contact 
+
+\hypertarget{_setup_8h_a07fbecdee8559326e079ed96fccf6fdd}{\index{Setup.\-h@{Setup.\-h}!Load\-Obj@{Load\-Obj}}
+\index{Load\-Obj@{Load\-Obj}!Setup.h@{Setup.\-h}}
+\subsubsection[{Load\-Obj}]{\setlength{\rightskip}{0pt plus 5cm}\#define Load\-Obj~1}}\label{_setup_8h_a07fbecdee8559326e079ed96fccf6fdd}
+
+
+1\-: Load and displays the mechs associated to the model if they exists 
+
+\hypertarget{_setup_8h_a08023ea6765c99d60a6a3840cd07156e}{\index{Setup.\-h@{Setup.\-h}!local@{local}}
+\index{local@{local}!Setup.h@{Setup.\-h}}
+\subsubsection[{local}]{\setlength{\rightskip}{0pt plus 5cm}\#define local~1}}\label{_setup_8h_a08023ea6765c99d60a6a3840cd07156e}
+\hypertarget{_setup_8h_a4f817679e3794c50be2173df5776b6e3}{\index{Setup.\-h@{Setup.\-h}!materials@{materials}}
+\index{materials@{materials}!Setup.h@{Setup.\-h}}
+\subsubsection[{materials}]{\setlength{\rightskip}{0pt plus 5cm}\#define materials~1}}\label{_setup_8h_a4f817679e3794c50be2173df5776b6e3}
+\hypertarget{_setup_8h_aea33182f34d3b46032fa726d713dc26d}{\index{Setup.\-h@{Setup.\-h}!math\-G\-L@{math\-G\-L}}
+\index{math\-G\-L@{math\-G\-L}!Setup.h@{Setup.\-h}}
+\subsubsection[{math\-G\-L}]{\setlength{\rightskip}{0pt plus 5cm}\#define math\-G\-L~0}}\label{_setup_8h_aea33182f34d3b46032fa726d713dc26d}
+\hypertarget{_setup_8h_a9aef1d202007551bb6ea8323eec1b2d1}{\index{Setup.\-h@{Setup.\-h}!non\-Linear\-Damper@{non\-Linear\-Damper}}
+\index{non\-Linear\-Damper@{non\-Linear\-Damper}!Setup.h@{Setup.\-h}}
+\subsubsection[{non\-Linear\-Damper}]{\setlength{\rightskip}{0pt plus 5cm}\#define non\-Linear\-Damper~0}}\label{_setup_8h_a9aef1d202007551bb6ea8323eec1b2d1}
+
+
+1\-: Use a non linear damper contact 
+
+\hypertarget{_setup_8h_a3a2308f9562d782ba49fa37002960950}{\index{Setup.\-h@{Setup.\-h}!old\-\_\-zmp@{old\-\_\-zmp}}
+\index{old\-\_\-zmp@{old\-\_\-zmp}!Setup.h@{Setup.\-h}}
+\subsubsection[{old\-\_\-zmp}]{\setlength{\rightskip}{0pt plus 5cm}\#define old\-\_\-zmp~0}}\label{_setup_8h_a3a2308f9562d782ba49fa37002960950}
+\hypertarget{_setup_8h_ab6a2e6bcc307b7afc4dcaa85cfe79de0}{\index{Setup.\-h@{Setup.\-h}!oritrunk@{oritrunk}}
+\index{oritrunk@{oritrunk}!Setup.h@{Setup.\-h}}
+\subsubsection[{oritrunk}]{\setlength{\rightskip}{0pt plus 5cm}\#define oritrunk~1}}\label{_setup_8h_ab6a2e6bcc307b7afc4dcaa85cfe79de0}
+\hypertarget{_setup_8h_a5c7f2c5cfac38ebcdb4b4e27cc49040c}{\index{Setup.\-h@{Setup.\-h}!oritrunk3@{oritrunk3}}
+\index{oritrunk3@{oritrunk3}!Setup.h@{Setup.\-h}}
+\subsubsection[{oritrunk3}]{\setlength{\rightskip}{0pt plus 5cm}\#define oritrunk3~1}}\label{_setup_8h_a5c7f2c5cfac38ebcdb4b4e27cc49040c}
+\hypertarget{_setup_8h_a960c2f6c3fca885af2c1ea2b88dee7b7}{\index{Setup.\-h@{Setup.\-h}!P\-D@{P\-D}}
+\index{P\-D@{P\-D}!Setup.h@{Setup.\-h}}
+\subsubsection[{P\-D}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\-D~0}}\label{_setup_8h_a960c2f6c3fca885af2c1ea2b88dee7b7}
+
+
+Proportional derivative command is used. 
+
+\hypertarget{_setup_8h_a73e979d51655786dc79fd954670db170}{\index{Setup.\-h@{Setup.\-h}!play\-\_\-csv@{play\-\_\-csv}}
+\index{play\-\_\-csv@{play\-\_\-csv}!Setup.h@{Setup.\-h}}
+\subsubsection[{play\-\_\-csv}]{\setlength{\rightskip}{0pt plus 5cm}\#define play\-\_\-csv~0}}\label{_setup_8h_a73e979d51655786dc79fd954670db170}
+\hypertarget{_setup_8h_ac85cc23949c046a6cc2eeed16d94ae72}{\index{Setup.\-h@{Setup.\-h}!replay@{replay}}
+\index{replay@{replay}!Setup.h@{Setup.\-h}}
+\subsubsection[{replay}]{\setlength{\rightskip}{0pt plus 5cm}\#define replay~0}}\label{_setup_8h_ac85cc23949c046a6cc2eeed16d94ae72}
+\hypertarget{_setup_8h_ac875f9d147acebadc28c6fb1317c6bdf}{\index{Setup.\-h@{Setup.\-h}!reseau@{reseau}}
+\index{reseau@{reseau}!Setup.h@{Setup.\-h}}
+\subsubsection[{reseau}]{\setlength{\rightskip}{0pt plus 5cm}\#define reseau~1}}\label{_setup_8h_ac875f9d147acebadc28c6fb1317c6bdf}
+\hypertarget{_setup_8h_a4b83ce20b530e09c7fe4055f9a318a04}{\index{Setup.\-h@{Setup.\-h}!save\-\_\-data\-\_\-long@{save\-\_\-data\-\_\-long}}
+\index{save\-\_\-data\-\_\-long@{save\-\_\-data\-\_\-long}!Setup.h@{Setup.\-h}}
+\subsubsection[{save\-\_\-data\-\_\-long}]{\setlength{\rightskip}{0pt plus 5cm}\#define save\-\_\-data\-\_\-long~0}}\label{_setup_8h_a4b83ce20b530e09c7fe4055f9a318a04}
+\hypertarget{_setup_8h_a417c9585c77dfd969c98812a4fed2693}{\index{Setup.\-h@{Setup.\-h}!save\-\_\-data\-\_\-quick@{save\-\_\-data\-\_\-quick}}
+\index{save\-\_\-data\-\_\-quick@{save\-\_\-data\-\_\-quick}!Setup.h@{Setup.\-h}}
+\subsubsection[{save\-\_\-data\-\_\-quick}]{\setlength{\rightskip}{0pt plus 5cm}\#define save\-\_\-data\-\_\-quick~1}}\label{_setup_8h_a417c9585c77dfd969c98812a4fed2693}
+\hypertarget{_setup_8h_a949573f94135d0fa04220f1063cd48ef}{\index{Setup.\-h@{Setup.\-h}!save\-\_\-data\-\_\-quick\-\_\-temp@{save\-\_\-data\-\_\-quick\-\_\-temp}}
+\index{save\-\_\-data\-\_\-quick\-\_\-temp@{save\-\_\-data\-\_\-quick\-\_\-temp}!Setup.h@{Setup.\-h}}
+\subsubsection[{save\-\_\-data\-\_\-quick\-\_\-temp}]{\setlength{\rightskip}{0pt plus 5cm}\#define save\-\_\-data\-\_\-quick\-\_\-temp~1}}\label{_setup_8h_a949573f94135d0fa04220f1063cd48ef}
+\hypertarget{_setup_8h_a941f7b3566d8456486b5c167e4dbb7df}{\index{Setup.\-h@{Setup.\-h}!Scenarios@{Scenarios}}
+\index{Scenarios@{Scenarios}!Setup.h@{Setup.\-h}}
+\subsubsection[{Scenarios}]{\setlength{\rightskip}{0pt plus 5cm}\#define Scenarios~0}}\label{_setup_8h_a941f7b3566d8456486b5c167e4dbb7df}
+
+
+Uses trajectories from scenarios for demonstrations purposes. 
+
+\hypertarget{_setup_8h_a7c6c817437c376708b5aeefca570bdf3}{\index{Setup.\-h@{Setup.\-h}!shadow@{shadow}}
+\index{shadow@{shadow}!Setup.h@{Setup.\-h}}
+\subsubsection[{shadow}]{\setlength{\rightskip}{0pt plus 5cm}\#define shadow~1}}\label{_setup_8h_a7c6c817437c376708b5aeefca570bdf3}
+\hypertarget{_setup_8h_afa9f746a0bd707180ead3bb1691f0c03}{\index{Setup.\-h@{Setup.\-h}!Sherpa@{Sherpa}}
+\index{Sherpa@{Sherpa}!Setup.h@{Setup.\-h}}
+\subsubsection[{Sherpa}]{\setlength{\rightskip}{0pt plus 5cm}\#define Sherpa~0}}\label{_setup_8h_afa9f746a0bd707180ead3bb1691f0c03}
+
+
+Sherpa robot model is used. 
+
+\hypertarget{_setup_8h_add7225c64044a979aa4805808fc54dc0}{\index{Setup.\-h@{Setup.\-h}!Static\-C\-O\-M@{Static\-C\-O\-M}}
+\index{Static\-C\-O\-M@{Static\-C\-O\-M}!Setup.h@{Setup.\-h}}
+\subsubsection[{Static\-C\-O\-M}]{\setlength{\rightskip}{0pt plus 5cm}\#define Static\-C\-O\-M~0}}\label{_setup_8h_add7225c64044a979aa4805808fc54dc0}
+
+
+1\-: do not compute the dynamic of the robot 
+
+For debug use only \hypertarget{_setup_8h_a30b32d8bb67daa3f851fc12800e34e6c}{\index{Setup.\-h@{Setup.\-h}!Suspendu@{Suspendu}}
+\index{Suspendu@{Suspendu}!Setup.h@{Setup.\-h}}
+\subsubsection[{Suspendu}]{\setlength{\rightskip}{0pt plus 5cm}\#define Suspendu~0}}\label{_setup_8h_a30b32d8bb67daa3f851fc12800e34e6c}
+
+
+1 if the robot is hanged and dont touch the ground 
+
+\hypertarget{_setup_8h_aa7049b2479ace55e05e4aa8a5cf7a791}{\index{Setup.\-h@{Setup.\-h}!Task@{Task}}
+\index{Task@{Task}!Setup.h@{Setup.\-h}}
+\subsubsection[{Task}]{\setlength{\rightskip}{0pt plus 5cm}\#define Task~1}}\label{_setup_8h_aa7049b2479ace55e05e4aa8a5cf7a791}
+
+
+Task control is used. 
+
+\hypertarget{_setup_8h_aac1e3a02c36afb061358e5f34761a14f}{\index{Setup.\-h@{Setup.\-h}!Tasks@{Tasks}}
+\index{Tasks@{Tasks}!Setup.h@{Setup.\-h}}
+\subsubsection[{Tasks}]{\setlength{\rightskip}{0pt plus 5cm}\#define Tasks~1}}\label{_setup_8h_aac1e3a02c36afb061358e5f34761a14f}
+\hypertarget{_setup_8h_a6a156e181d5d76e0ddd73ecc409ac9c3}{\index{Setup.\-h@{Setup.\-h}!Te@{Te}}
+\index{Te@{Te}!Setup.h@{Setup.\-h}}
+\subsubsection[{Te}]{\setlength{\rightskip}{0pt plus 5cm}\#define Te~0.\-005}}\label{_setup_8h_a6a156e181d5d76e0ddd73ecc409ac9c3}
+
+
+Sampling period of control loop in second. 
+
+\hypertarget{_setup_8h_a8443a9d5cb590d504ed9f9fb41fcc640}{\index{Setup.\-h@{Setup.\-h}!Trajectories@{Trajectories}}
+\index{Trajectories@{Trajectories}!Setup.h@{Setup.\-h}}
+\subsubsection[{Trajectories}]{\setlength{\rightskip}{0pt plus 5cm}\#define Trajectories~1}}\label{_setup_8h_a8443a9d5cb590d504ed9f9fb41fcc640}
+
+
+Uses trajectories for tasks. 
+
+\hypertarget{_setup_8h_a65a9a277f69b273b860fbd00ef2cc887}{\index{Setup.\-h@{Setup.\-h}!Video@{Video}}
+\index{Video@{Video}!Setup.h@{Setup.\-h}}
+\subsubsection[{Video}]{\setlength{\rightskip}{0pt plus 5cm}\#define Video~0}}\label{_setup_8h_a65a9a277f69b273b860fbd00ef2cc887}
+
+
+Record images of the simulation. 
+
+\hypertarget{_setup_8h_a15d1fa9f2c7cfdcf73875d85fef41f1d}{\index{Setup.\-h@{Setup.\-h}!Visualisation@{Visualisation}}
+\index{Visualisation@{Visualisation}!Setup.h@{Setup.\-h}}
+\subsubsection[{Visualisation}]{\setlength{\rightskip}{0pt plus 5cm}\#define Visualisation~1}}\label{_setup_8h_a15d1fa9f2c7cfdcf73875d85fef41f1d}
+
+
+Record variables of the simulation. 
+
+\hypertarget{_setup_8h_aae205875755a8d3bc7c55a08bdfd5a40}{\index{Setup.\-h@{Setup.\-h}!Visu\-Articulars\-Limits@{Visu\-Articulars\-Limits}}
+\index{Visu\-Articulars\-Limits@{Visu\-Articulars\-Limits}!Setup.h@{Setup.\-h}}
+\subsubsection[{Visu\-Articulars\-Limits}]{\setlength{\rightskip}{0pt plus 5cm}\#define Visu\-Articulars\-Limits~0}}\label{_setup_8h_aae205875755a8d3bc7c55a08bdfd5a40}
+\hypertarget{_setup_8h_a98464dae1f0d011a51f0ddb71c36f96b}{\index{Setup.\-h@{Setup.\-h}!Visu\-Torques\-Color@{Visu\-Torques\-Color}}
+\index{Visu\-Torques\-Color@{Visu\-Torques\-Color}!Setup.h@{Setup.\-h}}
+\subsubsection[{Visu\-Torques\-Color}]{\setlength{\rightskip}{0pt plus 5cm}\#define Visu\-Torques\-Color~1}}\label{_setup_8h_a98464dae1f0d011a51f0ddb71c36f96b}
+
+
+1\-: display toques via color change on joints articulation 
+
+\hypertarget{_setup_8h_af0994a6506d69dde76e5ae05eab207c7}{\index{Setup.\-h@{Setup.\-h}!x\-Contact@{x\-Contact}}
+\index{x\-Contact@{x\-Contact}!Setup.h@{Setup.\-h}}
+\subsubsection[{x\-Contact}]{\setlength{\rightskip}{0pt plus 5cm}\#define x\-Contact~5}}\label{_setup_8h_af0994a6506d69dde76e5ae05eab207c7}
+\hypertarget{_setup_8h_ae7de2deaaa8a3e8513aa89b30ba5bfe1}{\index{Setup.\-h@{Setup.\-h}!y\-Contact@{y\-Contact}}
+\index{y\-Contact@{y\-Contact}!Setup.h@{Setup.\-h}}
+\subsubsection[{y\-Contact}]{\setlength{\rightskip}{0pt plus 5cm}\#define y\-Contact~4}}\label{_setup_8h_ae7de2deaaa8a3e8513aa89b30ba5bfe1}
+\hypertarget{_setup_8h_a2eb8cca44d3bc8610aae6c7951b2dde9}{\index{Setup.\-h@{Setup.\-h}!zmp\-\_\-feedback@{zmp\-\_\-feedback}}
+\index{zmp\-\_\-feedback@{zmp\-\_\-feedback}!Setup.h@{Setup.\-h}}
+\subsubsection[{zmp\-\_\-feedback}]{\setlength{\rightskip}{0pt plus 5cm}\#define zmp\-\_\-feedback~1}}\label{_setup_8h_a2eb8cca44d3bc8610aae6c7951b2dde9}
+\hypertarget{_setup_8h_a9b2f01078393f4eaa854927bb1391657}{\index{Setup.\-h@{Setup.\-h}!zmp\-\_\-filtering@{zmp\-\_\-filtering}}
+\index{zmp\-\_\-filtering@{zmp\-\_\-filtering}!Setup.h@{Setup.\-h}}
+\subsubsection[{zmp\-\_\-filtering}]{\setlength{\rightskip}{0pt plus 5cm}\#define zmp\-\_\-filtering~1}}\label{_setup_8h_a9b2f01078393f4eaa854927bb1391657}

@@ -1,0 +1,131 @@
+\hypertarget{struct_state}{\section{State Struct Reference}
+\label{struct_state}\index{State@{State}}
+}
+
+
+\hyperlink{struct_state}{State} contain some global information about the robot state.  
+
+
+
+
+{\ttfamily \#include $<$u\-Link.\-h$>$}
+
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+char \hyperlink{struct_state_a56f05fd9f431f5460c0cd19f7b6113d5}{Robot\-File} \mbox{[}255\mbox{]}
+\item 
+int \hyperlink{struct_state_a8067647d8a7eea1d16f30f80cea4dec4}{desired\-\_\-support}
+\item 
+int \hyperlink{struct_state_a6e1faaa1458e3828ba45cde20902bb6d}{ddl}
+\item 
+int \hyperlink{struct_state_ae8470b9dfef111e0d72a983ce72e4c9c}{support}
+\item 
+int \hyperlink{struct_state_a412b58628ab2f6728a48e833b58afa71}{right\-\_\-foot\-\_\-\-I\-D}
+\item 
+int \hyperlink{struct_state_a4083f916ed4e5eb445d0fcd498bc6d61}{left\-\_\-foot\-\_\-\-I\-D}
+\item 
+int \hyperlink{struct_state_ad91000ed96d0c4f360d6ec95cf41803f}{nb\-\_\-limb}
+\item 
+double \hyperlink{struct_state_a14b89c1ada80dbb1e2318987479bcccb}{right\-\_\-scale}
+\item 
+double \hyperlink{struct_state_ac2972677a49eea464b96c7dfec5badac}{left\-\_\-scale}
+\item 
+double \hyperlink{struct_state_a76a6b73b7f13cc4ef20a22f8b4dd17c3}{integral\-\_\-\-R}
+\item 
+double \hyperlink{struct_state_a44f97c1460cb92c4aedb1cb49e34c0f7}{integral\-\_\-\-L}
+\item 
+double \hyperlink{struct_state_a3027c945c3ccd5eef8ef7cc5a730c231}{distribution\-\_\-y}
+\item 
+double \hyperlink{struct_state_a0991a52aa3fa76765202f861a97aca77}{distribution\-\_\-x}
+\item 
+gsl\-\_\-vector $\ast$ \hyperlink{struct_state_a537e2512e9aca2c9b68c41054ad52fa8}{com\-\_\-old}
+\item 
+gsl\-\_\-vector $\ast$ \hyperlink{struct_state_afc53045e2ea4e9521ec9608a84ee8b1f}{pos\-Co\-P\-\_\-\-R}
+\item 
+gsl\-\_\-vector $\ast$ \hyperlink{struct_state_a9bfd73cabe3e218b5e5079b181cc01a1}{for\-Co\-P\-\_\-\-R}
+\item 
+gsl\-\_\-vector $\ast$ \hyperlink{struct_state_a251c7ab891911d7972645a9e87be3384}{pos\-Co\-P\-\_\-\-L}
+\item 
+gsl\-\_\-vector $\ast$ \hyperlink{struct_state_a19d113450a14578f13b0ba9d4877f1b7}{for\-Co\-P\-\_\-\-L}
+\item 
+gsl\-\_\-vector $\ast$ \hyperlink{struct_state_a51184d897ab6397cf45b437fb882b8b1}{Foot\-Center\-\_\-\-R}
+\item 
+gsl\-\_\-vector $\ast$ \hyperlink{struct_state_a7ff3e7422300d409b859408677fe0430}{Foot\-Center\-\_\-\-L}
+\item 
+gsl\-\_\-vector $\ast$ \hyperlink{struct_state_a1064297106518125c173bb04ca3a61b2}{limb\-I\-D}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{struct_state}{State} contain some global information about the robot state. 
+
+\subsection{Field Documentation}
+\hypertarget{struct_state_a537e2512e9aca2c9b68c41054ad52fa8}{\index{State@{State}!com\-\_\-old@{com\-\_\-old}}
+\index{com\-\_\-old@{com\-\_\-old}!State@{State}}
+\subsubsection[{com\-\_\-old}]{\setlength{\rightskip}{0pt plus 5cm}gsl\-\_\-vector$\ast$ com\-\_\-old}}\label{struct_state_a537e2512e9aca2c9b68c41054ad52fa8}
+Position of the Center of Mass at previous iteration \mbox{[}m\mbox{]} \hypertarget{struct_state_a6e1faaa1458e3828ba45cde20902bb6d}{\index{State@{State}!ddl@{ddl}}
+\index{ddl@{ddl}!State@{State}}
+\subsubsection[{ddl}]{\setlength{\rightskip}{0pt plus 5cm}int ddl}}\label{struct_state_a6e1faaa1458e3828ba45cde20902bb6d}
+Number of Degrees of freedom \hypertarget{struct_state_a8067647d8a7eea1d16f30f80cea4dec4}{\index{State@{State}!desired\-\_\-support@{desired\-\_\-support}}
+\index{desired\-\_\-support@{desired\-\_\-support}!State@{State}}
+\subsubsection[{desired\-\_\-support}]{\setlength{\rightskip}{0pt plus 5cm}int desired\-\_\-support}}\label{struct_state_a8067647d8a7eea1d16f30f80cea4dec4}
+Desired foot of support\-: 0\-:none,1\-:right,2\-:left,3\-:both \hypertarget{struct_state_a0991a52aa3fa76765202f861a97aca77}{\index{State@{State}!distribution\-\_\-x@{distribution\-\_\-x}}
+\index{distribution\-\_\-x@{distribution\-\_\-x}!State@{State}}
+\subsubsection[{distribution\-\_\-x}]{\setlength{\rightskip}{0pt plus 5cm}double distribution\-\_\-x}}\label{struct_state_a0991a52aa3fa76765202f861a97aca77}
+External forces distribution betwenn the two legs on x axis \mbox{[}-\/\mbox{]} \hypertarget{struct_state_a3027c945c3ccd5eef8ef7cc5a730c231}{\index{State@{State}!distribution\-\_\-y@{distribution\-\_\-y}}
+\index{distribution\-\_\-y@{distribution\-\_\-y}!State@{State}}
+\subsubsection[{distribution\-\_\-y}]{\setlength{\rightskip}{0pt plus 5cm}double distribution\-\_\-y}}\label{struct_state_a3027c945c3ccd5eef8ef7cc5a730c231}
+External forces distribution betwenn the two legs on y axis \mbox{[}-\/\mbox{]} \hypertarget{struct_state_a7ff3e7422300d409b859408677fe0430}{\index{State@{State}!Foot\-Center\-\_\-\-L@{Foot\-Center\-\_\-\-L}}
+\index{Foot\-Center\-\_\-\-L@{Foot\-Center\-\_\-\-L}!State@{State}}
+\subsubsection[{Foot\-Center\-\_\-\-L}]{\setlength{\rightskip}{0pt plus 5cm}gsl\-\_\-vector$\ast$ Foot\-Center\-\_\-\-L}}\label{struct_state_a7ff3e7422300d409b859408677fe0430}
+Left foot position 3$\ast$1 \mbox{[}m\mbox{]} \hypertarget{struct_state_a51184d897ab6397cf45b437fb882b8b1}{\index{State@{State}!Foot\-Center\-\_\-\-R@{Foot\-Center\-\_\-\-R}}
+\index{Foot\-Center\-\_\-\-R@{Foot\-Center\-\_\-\-R}!State@{State}}
+\subsubsection[{Foot\-Center\-\_\-\-R}]{\setlength{\rightskip}{0pt plus 5cm}gsl\-\_\-vector$\ast$ Foot\-Center\-\_\-\-R}}\label{struct_state_a51184d897ab6397cf45b437fb882b8b1}
+Right foot position 3$\ast$1 \mbox{[}m\mbox{]} \hypertarget{struct_state_a19d113450a14578f13b0ba9d4877f1b7}{\index{State@{State}!for\-Co\-P\-\_\-\-L@{for\-Co\-P\-\_\-\-L}}
+\index{for\-Co\-P\-\_\-\-L@{for\-Co\-P\-\_\-\-L}!State@{State}}
+\subsubsection[{for\-Co\-P\-\_\-\-L}]{\setlength{\rightskip}{0pt plus 5cm}gsl\-\_\-vector$\ast$ for\-Co\-P\-\_\-\-L}}\label{struct_state_a19d113450a14578f13b0ba9d4877f1b7}
+Left foot external forces amplitude 3$\ast$1 \mbox{[}N\mbox{]} \hypertarget{struct_state_a9bfd73cabe3e218b5e5079b181cc01a1}{\index{State@{State}!for\-Co\-P\-\_\-\-R@{for\-Co\-P\-\_\-\-R}}
+\index{for\-Co\-P\-\_\-\-R@{for\-Co\-P\-\_\-\-R}!State@{State}}
+\subsubsection[{for\-Co\-P\-\_\-\-R}]{\setlength{\rightskip}{0pt plus 5cm}gsl\-\_\-vector$\ast$ for\-Co\-P\-\_\-\-R}}\label{struct_state_a9bfd73cabe3e218b5e5079b181cc01a1}
+Right foot external forces amplitude 3$\ast$1 \mbox{[}N\mbox{]} \hypertarget{struct_state_a44f97c1460cb92c4aedb1cb49e34c0f7}{\index{State@{State}!integral\-\_\-\-L@{integral\-\_\-\-L}}
+\index{integral\-\_\-\-L@{integral\-\_\-\-L}!State@{State}}
+\subsubsection[{integral\-\_\-\-L}]{\setlength{\rightskip}{0pt plus 5cm}double integral\-\_\-\-L}}\label{struct_state_a44f97c1460cb92c4aedb1cb49e34c0f7}
+Stabilisator command \hypertarget{struct_state_a76a6b73b7f13cc4ef20a22f8b4dd17c3}{\index{State@{State}!integral\-\_\-\-R@{integral\-\_\-\-R}}
+\index{integral\-\_\-\-R@{integral\-\_\-\-R}!State@{State}}
+\subsubsection[{integral\-\_\-\-R}]{\setlength{\rightskip}{0pt plus 5cm}double integral\-\_\-\-R}}\label{struct_state_a76a6b73b7f13cc4ef20a22f8b4dd17c3}
+Stabilisator command \hypertarget{struct_state_a4083f916ed4e5eb445d0fcd498bc6d61}{\index{State@{State}!left\-\_\-foot\-\_\-\-I\-D@{left\-\_\-foot\-\_\-\-I\-D}}
+\index{left\-\_\-foot\-\_\-\-I\-D@{left\-\_\-foot\-\_\-\-I\-D}!State@{State}}
+\subsubsection[{left\-\_\-foot\-\_\-\-I\-D}]{\setlength{\rightskip}{0pt plus 5cm}int left\-\_\-foot\-\_\-\-I\-D}}\label{struct_state_a4083f916ed4e5eb445d0fcd498bc6d61}
+Right foot I\-D \hypertarget{struct_state_ac2972677a49eea464b96c7dfec5badac}{\index{State@{State}!left\-\_\-scale@{left\-\_\-scale}}
+\index{left\-\_\-scale@{left\-\_\-scale}!State@{State}}
+\subsubsection[{left\-\_\-scale}]{\setlength{\rightskip}{0pt plus 5cm}double left\-\_\-scale}}\label{struct_state_ac2972677a49eea464b96c7dfec5badac}
+External forces drawing \hypertarget{struct_state_a1064297106518125c173bb04ca3a61b2}{\index{State@{State}!limb\-I\-D@{limb\-I\-D}}
+\index{limb\-I\-D@{limb\-I\-D}!State@{State}}
+\subsubsection[{limb\-I\-D}]{\setlength{\rightskip}{0pt plus 5cm}gsl\-\_\-vector$\ast$ limb\-I\-D}}\label{struct_state_a1064297106518125c173bb04ca3a61b2}
+\hypertarget{struct_state_ad91000ed96d0c4f360d6ec95cf41803f}{\index{State@{State}!nb\-\_\-limb@{nb\-\_\-limb}}
+\index{nb\-\_\-limb@{nb\-\_\-limb}!State@{State}}
+\subsubsection[{nb\-\_\-limb}]{\setlength{\rightskip}{0pt plus 5cm}int nb\-\_\-limb}}\label{struct_state_ad91000ed96d0c4f360d6ec95cf41803f}
+\hypertarget{struct_state_a251c7ab891911d7972645a9e87be3384}{\index{State@{State}!pos\-Co\-P\-\_\-\-L@{pos\-Co\-P\-\_\-\-L}}
+\index{pos\-Co\-P\-\_\-\-L@{pos\-Co\-P\-\_\-\-L}!State@{State}}
+\subsubsection[{pos\-Co\-P\-\_\-\-L}]{\setlength{\rightskip}{0pt plus 5cm}gsl\-\_\-vector$\ast$ pos\-Co\-P\-\_\-\-L}}\label{struct_state_a251c7ab891911d7972645a9e87be3384}
+Left foot external forces position 3$\ast$1 \mbox{[}m\mbox{]} \hypertarget{struct_state_afc53045e2ea4e9521ec9608a84ee8b1f}{\index{State@{State}!pos\-Co\-P\-\_\-\-R@{pos\-Co\-P\-\_\-\-R}}
+\index{pos\-Co\-P\-\_\-\-R@{pos\-Co\-P\-\_\-\-R}!State@{State}}
+\subsubsection[{pos\-Co\-P\-\_\-\-R}]{\setlength{\rightskip}{0pt plus 5cm}gsl\-\_\-vector$\ast$ pos\-Co\-P\-\_\-\-R}}\label{struct_state_afc53045e2ea4e9521ec9608a84ee8b1f}
+Right foot external forces position 3$\ast$1 \mbox{[}m\mbox{]} \hypertarget{struct_state_a412b58628ab2f6728a48e833b58afa71}{\index{State@{State}!right\-\_\-foot\-\_\-\-I\-D@{right\-\_\-foot\-\_\-\-I\-D}}
+\index{right\-\_\-foot\-\_\-\-I\-D@{right\-\_\-foot\-\_\-\-I\-D}!State@{State}}
+\subsubsection[{right\-\_\-foot\-\_\-\-I\-D}]{\setlength{\rightskip}{0pt plus 5cm}int right\-\_\-foot\-\_\-\-I\-D}}\label{struct_state_a412b58628ab2f6728a48e833b58afa71}
+Right foot I\-D \hypertarget{struct_state_a14b89c1ada80dbb1e2318987479bcccb}{\index{State@{State}!right\-\_\-scale@{right\-\_\-scale}}
+\index{right\-\_\-scale@{right\-\_\-scale}!State@{State}}
+\subsubsection[{right\-\_\-scale}]{\setlength{\rightskip}{0pt plus 5cm}double right\-\_\-scale}}\label{struct_state_a14b89c1ada80dbb1e2318987479bcccb}
+External forces drawing \hypertarget{struct_state_a56f05fd9f431f5460c0cd19f7b6113d5}{\index{State@{State}!Robot\-File@{Robot\-File}}
+\index{Robot\-File@{Robot\-File}!State@{State}}
+\subsubsection[{Robot\-File}]{\setlength{\rightskip}{0pt plus 5cm}char Robot\-File\mbox{[}255\mbox{]}}}\label{struct_state_a56f05fd9f431f5460c0cd19f7b6113d5}
+Path of X\-M\-L file for robot description \hypertarget{struct_state_ae8470b9dfef111e0d72a983ce72e4c9c}{\index{State@{State}!support@{support}}
+\index{support@{support}!State@{State}}
+\subsubsection[{support}]{\setlength{\rightskip}{0pt plus 5cm}int support}}\label{struct_state_ae8470b9dfef111e0d72a983ce72e4c9c}
+Foot of support\-: 0\-:none,1\-:right,2\-:left,3\-:both 
+
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{u_link_8h}{u\-Link.\-h}\end{DoxyCompactItemize}

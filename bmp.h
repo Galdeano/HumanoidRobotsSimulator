@@ -19,7 +19,7 @@
  */
 struct BMPHeader
 {
-    char bfType[2];       /*!< "BM" */
+    char bfType[3];       /*!< "BM" */
     int bfSize;           /*!< Size of file in bytes */
     int bfReserved;       /*!< set to 0 */
     int bfOffBits;        /*!< Byte offset to actual bitmap data (= 54) */

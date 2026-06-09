@@ -250,7 +250,7 @@ void Ext_walk_trajectory(double *opd, int pos_in_file)
             perror ("Error allocation opt");
             printf("Error allocation opt");
         }
-        f=fopen("./Trajectories/Hoap_Walk2.txt","r");/////////////////////
+        f=fopen("./Trajectories/Hoap_Walk4.txt","r");/////////////////////
         if (f == NULL)
         {
             perror ("Error opening robot trajectory file Walk");

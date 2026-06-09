@@ -1,0 +1,144 @@
+\hypertarget{_obj_loader_8h}{\section{Obj\-Loader.\-h File Reference}
+\label{_obj_loader_8h}\index{Obj\-Loader.\-h@{Obj\-Loader.\-h}}
+}
+{\ttfamily \#include $<$G\-L/gl.\-h$>$}\\*
+{\ttfamily \#include $<$G\-L/glu.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}u\-Link.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Setup.\-h\char`\"{}}\\*
+Include dependency graph for Obj\-Loader.\-h\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_obj_loader_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_obj_loader_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct_triangle}{Triangle}
+\item 
+struct \hyperlink{struct_vertex}{Vertex}
+\item 
+struct \hyperlink{struct_normals}{Normals}
+\item 
+struct \hyperlink{struct_float_vector}{Float\-Vector}
+\item 
+struct \hyperlink{struct_material}{Material}
+\item 
+struct \hyperlink{struct_mesh_obj}{Mesh\-Obj}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{_obj_loader_8h_ae76d86325ddfec5d9386875dae01796d}{load\-\_\-obj} (char $\ast$f\-Name, \hyperlink{struct_mesh_obj}{Mesh\-Obj} $\ast$obj)
+\item 
+void \hyperlink{_obj_loader_8h_a48eec95bed4d5d5cbc0450ed6b160a8e}{load\-\_\-mtl} (char $\ast$f\-Name)
+\item 
+void \hyperlink{_obj_loader_8h_a86f84ec1f1c819271b46597ec9914be4}{draw\-\_\-model} (\hyperlink{struct_mesh_obj}{Mesh\-Obj} $\ast$obj)
+\item 
+void \hyperlink{_obj_loader_8h_aae87c8186484c2761711378fc89bdc30}{set\-Materials\-And\-Tex} (\hyperlink{struct_material}{Material} mats, G\-Luint tex)
+\item 
+void \hyperlink{_obj_loader_8h_a7ae7a6264e21e0c5ebcd41709d6d3360}{Draw\-O\-B\-J} (char $\ast$f\-Name)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{_obj_loader_8h_a86f84ec1f1c819271b46597ec9914be4}{\index{Obj\-Loader.\-h@{Obj\-Loader.\-h}!draw\-\_\-model@{draw\-\_\-model}}
+\index{draw\-\_\-model@{draw\-\_\-model}!ObjLoader.h@{Obj\-Loader.\-h}}
+\subsubsection[{draw\-\_\-model}]{\setlength{\rightskip}{0pt plus 5cm}void draw\-\_\-model (
+\begin{DoxyParamCaption}
+\item[{{\bf Mesh\-Obj} $\ast$}]{obj}
+\end{DoxyParamCaption}
+)}}\label{_obj_loader_8h_a86f84ec1f1c819271b46597ec9914be4}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=256pt]{_obj_loader_8h_a86f84ec1f1c819271b46597ec9914be4_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_obj_loader_8h_a86f84ec1f1c819271b46597ec9914be4_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{_obj_loader_8h_a7ae7a6264e21e0c5ebcd41709d6d3360}{\index{Obj\-Loader.\-h@{Obj\-Loader.\-h}!Draw\-O\-B\-J@{Draw\-O\-B\-J}}
+\index{Draw\-O\-B\-J@{Draw\-O\-B\-J}!ObjLoader.h@{Obj\-Loader.\-h}}
+\subsubsection[{Draw\-O\-B\-J}]{\setlength{\rightskip}{0pt plus 5cm}void Draw\-O\-B\-J (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{f\-Name}
+\end{DoxyParamCaption}
+)}}\label{_obj_loader_8h_a7ae7a6264e21e0c5ebcd41709d6d3360}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=318pt]{_obj_loader_8h_a7ae7a6264e21e0c5ebcd41709d6d3360_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{_obj_loader_8h_a48eec95bed4d5d5cbc0450ed6b160a8e}{\index{Obj\-Loader.\-h@{Obj\-Loader.\-h}!load\-\_\-mtl@{load\-\_\-mtl}}
+\index{load\-\_\-mtl@{load\-\_\-mtl}!ObjLoader.h@{Obj\-Loader.\-h}}
+\subsubsection[{load\-\_\-mtl}]{\setlength{\rightskip}{0pt plus 5cm}void load\-\_\-mtl (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{f\-Name}
+\end{DoxyParamCaption}
+)}}\label{_obj_loader_8h_a48eec95bed4d5d5cbc0450ed6b160a8e}
+\hypertarget{_obj_loader_8h_ae76d86325ddfec5d9386875dae01796d}{\index{Obj\-Loader.\-h@{Obj\-Loader.\-h}!load\-\_\-obj@{load\-\_\-obj}}
+\index{load\-\_\-obj@{load\-\_\-obj}!ObjLoader.h@{Obj\-Loader.\-h}}
+\subsubsection[{load\-\_\-obj}]{\setlength{\rightskip}{0pt plus 5cm}void load\-\_\-obj (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{f\-Name, }
+\item[{{\bf Mesh\-Obj} $\ast$}]{obj}
+\end{DoxyParamCaption}
+)}}\label{_obj_loader_8h_ae76d86325ddfec5d9386875dae01796d}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=312pt]{_obj_loader_8h_ae76d86325ddfec5d9386875dae01796d_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_obj_loader_8h_ae76d86325ddfec5d9386875dae01796d_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{_obj_loader_8h_aae87c8186484c2761711378fc89bdc30}{\index{Obj\-Loader.\-h@{Obj\-Loader.\-h}!set\-Materials\-And\-Tex@{set\-Materials\-And\-Tex}}
+\index{set\-Materials\-And\-Tex@{set\-Materials\-And\-Tex}!ObjLoader.h@{Obj\-Loader.\-h}}
+\subsubsection[{set\-Materials\-And\-Tex}]{\setlength{\rightskip}{0pt plus 5cm}void set\-Materials\-And\-Tex (
+\begin{DoxyParamCaption}
+\item[{{\bf Material}}]{mats, }
+\item[{G\-Luint}]{tex}
+\end{DoxyParamCaption}
+)}}\label{_obj_loader_8h_aae87c8186484c2761711378fc89bdc30}

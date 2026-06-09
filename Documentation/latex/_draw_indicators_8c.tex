@@ -1,0 +1,120 @@
+\hypertarget{_draw_indicators_8c}{\section{Draw\-Indicators.\-c File Reference}
+\label{_draw_indicators_8c}\index{Draw\-Indicators.\-c@{Draw\-Indicators.\-c}}
+}
+{\ttfamily \#include $<$gsl/gsl\-\_\-vector.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-matrix.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-blas.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-math.\-h$>$}\\*
+{\ttfamily \#include $<$G\-L/gl.\-h$>$}\\*
+{\ttfamily \#include $<$G\-L/glu.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}u\-Link.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Draw\-Force\-Marker.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Calc\-Co\-M.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Calc\-Co\-P.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Draw\-Marker.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Draw\-Indicators.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Setup.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Hoap\-\_\-calc\-\_\-zmp.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Draw\-Light.\-h\char`\"{}}\\*
+Include dependency graph for Draw\-Indicators.\-c\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_draw_indicators_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{_draw_indicators_8c_a4631bbef547576ce86515f11826cca4d}{Draw\-Indicators} (\hyperlink{struct_su_l_i_n_k}{Su\-L\-I\-N\-K} u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, \hyperlink{struct_state}{State} $\ast$Status, gsl\-\_\-vector $\ast$com, gsl\-\_\-vector $\ast$Co\-P, int ground)
+\begin{DoxyCompactList}\small\item\em Draw the Center of Mass position, the Center of Pressure position, the feet position and the external force applied on foot. \end{DoxyCompactList}\item 
+void \hyperlink{_draw_indicators_8c_a4591408c9eb690fd91d7fb07468f894e}{Hoap\-\_\-calc\-\_\-zmp\-\_\-visu} (\hyperlink{struct_su_l_i_n_k}{Su\-L\-I\-N\-K} u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, \hyperlink{struct_state}{State} $\ast$Status, \hyperlink{structzmp__calc}{zmp\-\_\-calc} $\ast$zmp)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{_draw_indicators_8c_a4631bbef547576ce86515f11826cca4d}{\index{Draw\-Indicators.\-c@{Draw\-Indicators.\-c}!Draw\-Indicators@{Draw\-Indicators}}
+\index{Draw\-Indicators@{Draw\-Indicators}!DrawIndicators.c@{Draw\-Indicators.\-c}}
+\subsubsection[{Draw\-Indicators}]{\setlength{\rightskip}{0pt plus 5cm}void Draw\-Indicators (
+\begin{DoxyParamCaption}
+\item[{{\bf Su\-L\-I\-N\-K}}]{u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, }
+\item[{{\bf State} $\ast$}]{Status, }
+\item[{gsl\-\_\-vector $\ast$}]{com, }
+\item[{gsl\-\_\-vector $\ast$}]{Co\-P, }
+\item[{int}]{ground}
+\end{DoxyParamCaption}
+)}}\label{_draw_indicators_8c_a4631bbef547576ce86515f11826cca4d}
+
+
+Draw the Center of Mass position, the Center of Pressure position, the feet position and the external force applied on foot. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000001}{Todo}]insert all gsl vector in local, not as argument of this function\end{DoxyRefDesc}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}} & Structure wich describe the robot link by link \\
+\hline
+{\em Status} & Structure wich describe the state of the robot \\
+\hline
+{\em com} & vector containing the Co\-M position \\
+\hline
+{\em Co\-P} & vector containing the Co\-P position \\
+\hline
+{\em ground} & 0\-: display the Co\-M or 1\-: display the P\-Co\-M \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_draw_indicators_8c_a4631bbef547576ce86515f11826cca4d_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=238pt]{_draw_indicators_8c_a4631bbef547576ce86515f11826cca4d_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{_draw_indicators_8c_a4591408c9eb690fd91d7fb07468f894e}{\index{Draw\-Indicators.\-c@{Draw\-Indicators.\-c}!Hoap\-\_\-calc\-\_\-zmp\-\_\-visu@{Hoap\-\_\-calc\-\_\-zmp\-\_\-visu}}
+\index{Hoap\-\_\-calc\-\_\-zmp\-\_\-visu@{Hoap\-\_\-calc\-\_\-zmp\-\_\-visu}!DrawIndicators.c@{Draw\-Indicators.\-c}}
+\subsubsection[{Hoap\-\_\-calc\-\_\-zmp\-\_\-visu}]{\setlength{\rightskip}{0pt plus 5cm}void Hoap\-\_\-calc\-\_\-zmp\-\_\-visu (
+\begin{DoxyParamCaption}
+\item[{{\bf Su\-L\-I\-N\-K}}]{u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, }
+\item[{{\bf State} $\ast$}]{Status, }
+\item[{{\bf zmp\-\_\-calc} $\ast$}]{zmp}
+\end{DoxyParamCaption}
+)}}\label{_draw_indicators_8c_a4591408c9eb690fd91d7fb07468f894e}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=296pt]{_draw_indicators_8c_a4591408c9eb690fd91d7fb07468f894e_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=264pt]{_draw_indicators_8c_a4591408c9eb690fd91d7fb07468f894e_icgraph}
+\end{center}
+\end{figure}
+
+

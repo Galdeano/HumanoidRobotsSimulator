@@ -1,0 +1,91 @@
+\hypertarget{_calc_m_c_8h}{\section{Calc\-M\-C.\-h File Reference}
+\label{_calc_m_c_8h}\index{Calc\-M\-C.\-h@{Calc\-M\-C.\-h}}
+}
+
+
+Recursive computations of center of mass position.  
+
+
+{\ttfamily \#include $<$gsl/gsl\-\_\-vector.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-matrix.\-h$>$}\\*
+Include dependency graph for Calc\-M\-C.\-h\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=270pt]{_calc_m_c_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=224pt]{_calc_m_c_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{_calc_m_c_8h_ae1ac5dd3e92965aa232a169e6639bb37}{Calc\-M\-C} (\hyperlink{struct_su_l_i_n_k}{Su\-L\-I\-N\-K} u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, gsl\-\_\-vector $\ast$com, int j)
+\begin{DoxyCompactList}\small\item\em Recursive computations of center of mass position. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Recursive computations of center of mass position. \begin{DoxyAuthor}{Author}
+David Galdeano 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+10/2011 
+\end{DoxyDate}
+
+
+\subsection{Function Documentation}
+\hypertarget{_calc_m_c_8h_ae1ac5dd3e92965aa232a169e6639bb37}{\index{Calc\-M\-C.\-h@{Calc\-M\-C.\-h}!Calc\-M\-C@{Calc\-M\-C}}
+\index{Calc\-M\-C@{Calc\-M\-C}!CalcMC.h@{Calc\-M\-C.\-h}}
+\subsubsection[{Calc\-M\-C}]{\setlength{\rightskip}{0pt plus 5cm}void Calc\-M\-C (
+\begin{DoxyParamCaption}
+\item[{{\bf Su\-L\-I\-N\-K}}]{u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, }
+\item[{gsl\-\_\-vector $\ast$}]{com, }
+\item[{int}]{j}
+\end{DoxyParamCaption}
+)}}\label{_calc_m_c_8h_ae1ac5dd3e92965aa232a169e6639bb37}
+
+
+Recursive computations of center of mass position. 
+
+Must be used as follow\-: 
+\begin{DoxyCode}
+\hyperlink{_calc_m_c_8c_ae1ac5dd3e92965aa232a169e6639bb37}{CalcMC}(uLINK,com,1); 
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}} & Structure wich describe the robot link by link \\
+\hline
+{\em com} & Out\-: vector containing the center of mass position \\
+\hline
+{\em j} & I\-D of the link \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=224pt]{_calc_m_c_8h_ae1ac5dd3e92965aa232a169e6639bb37_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_calc_m_c_8h_ae1ac5dd3e92965aa232a169e6639bb37_icgraph}
+\end{center}
+\end{figure}
+
+

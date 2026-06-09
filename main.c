@@ -1,3 +1,4 @@
+#include <winsock2.h>
 
 /*!
  *  \file main.c
@@ -71,6 +72,7 @@
 #include "Hoap_calc_zmp.h"
 #include "butterworth.h"
 #include "NPD.h"
+#include "lecture_ecriture.h"
 
 #if mathGL
 #include <mgl2/mgl_cf.h>
@@ -1169,9 +1171,6 @@ SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0); // vertical retrace sync off
     CamParam_s CamParam;
     CamInit(&CamParam);
 
-#if reseau
-    HoapSensor sensor;
-    HoapControl control;
     zmp_calc zmp_c;
     zmp_calc zmp_f;
     zmp_f.zmp_right.W=0;
@@ -1180,6 +1179,10 @@ SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0); // vertical retrace sync off
     zmp_f.zmp_left.W=0;
     zmp_f.zmp_left.x=0;
     zmp_f.zmp_left.y=0;
+
+#if reseau
+    HoapSensor sensor;
+    HoapControl control;
 
 
     Hoap hoap = hoapConnect("10.59.145.197", 55000, &sensor);
@@ -1920,8 +1923,13 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
         static gsl_vector * zmp_left;
         static gsl_vector * zmp_right;
         static gsl_vector * zmp_moy;
+        static gsl_vector * izmp; // integral of ZMP
+        static gsl_vector * izmps;
+        static gsl_vector * zmpsp; //sphere projection
         static double zmp_x_magin;
         static double zmp_y_magin;
+        static double hcom;
+
 
         static int init_task_zmp=1;
         if (init_task_zmp==1)
@@ -1929,9 +1937,12 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
             zmp_left = gsl_vector_calloc (3);
             zmp_right = gsl_vector_calloc (3);
             zmp_moy = gsl_vector_calloc (3);
-
-            zmp_x_magin=0.32;
-            zmp_y_magin=0.64;
+            izmp = gsl_vector_calloc (3);
+            izmps = gsl_vector_calloc (3);
+            zmpsp = gsl_vector_calloc (3);
+            hcom=gsl_vector_get(Stand_task_CoM,2);
+            zmp_x_magin=0.32*2;
+            zmp_y_magin=0.64*2;
 
 
             init_task_zmp=0;
@@ -1957,7 +1968,10 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
             gsl_vector_set(zmp_right,0,zmp_f.zmp_right.x/1000);
             gsl_vector_set(zmp_right,1,zmp_f.zmp_right.y/1000);
 
+
 #if !old_zmp
+
+
             static double alpha;
             alpha=zmp_f.zmp_right.W/(zmp_f.zmp_left.W+zmp_f.zmp_right.W);
             gsl_vector_scale(zmp_left,alpha);
@@ -1965,6 +1979,11 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
 
             gsl_vector_memcpy(zmp_moy,zmp_left);
             gsl_vector_add(zmp_moy,zmp_right);
+
+            //gsl_vector_set(zmp_moy,0,gsl_vector_get(CoM,0));
+            //gsl_vector_set(zmp_moy,1,gsl_vector_get(CoM,1));
+
+
 
             //if(t2>t_stand)
             {
@@ -1980,6 +1999,11 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
                 gsl_vector_scale(taskZMP,-0.03*npd(gsl_blas_dnrm2(taskZMP),0.75,0.01));//-0.02
                 //gsl_vector_set (taskZMP, 2, 0);
 
+                gsl_vector_add(izmps,zmp_moy);
+                gsl_vector_memcpy(izmp,izmps);
+                gsl_vector_scale (izmp, -0.0005);//-0.0002
+                gsl_vector_add(taskZMP,izmp);
+
                 gsl_vector_memcpy(dzmp,zmp_moy);
                 gsl_vector_sub(dzmp,zmp);
                 gsl_vector_memcpy(zmp,zmp_moy);
@@ -1988,6 +2012,7 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
                 //gsl_vector_scale (dzmp, -0.002*npd(gsl_blas_dnrm2(dzmp),1.25,0.01));//-0.0002
                 gsl_vector_scale (dzmp, -0.002*npd(gsl_blas_dnrm2(dzmp),1.25,0.01));//-0.0002
                 gsl_vector_add(taskZMP,dzmp);
+
 
 
                 if (gsl_vector_get(taskZMP,0)<-zmp_x_magin)
@@ -2006,10 +2031,16 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
                 {
                     gsl_vector_set(taskZMP,1,zmp_y_magin);
                 }
-                gsl_vector_set (taskZMP, 2, 0);
+                gsl_vector_set (taskZMP, 2, 0.0);
 #if zmp_feedback
+
             if(t2>t_init)
             {
+//                gsl_vector_set(zmpsp,0,0.0*hcom*sin(gsl_vector_get(taskZMP,0)/hcom));
+//                gsl_vector_set(zmpsp,1,hcom*sin(gsl_vector_get(taskZMP,1)/hcom));
+//                gsl_vector_set(zmpsp,2,0.0*hcom*((cos(gsl_vector_get(taskZMP,0)/hcom)+cos(gsl_vector_get(taskZMP,1)/hcom))/2-1));
+
+                //gsl_vector_add(taskCoML,zmpsp);
                 gsl_vector_add(taskCoML,taskZMP);
             }
 #endif
@@ -2113,6 +2144,7 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
 
             }
 #endif //old_zmp
+
         }
 
 #endif //zmp_filtering

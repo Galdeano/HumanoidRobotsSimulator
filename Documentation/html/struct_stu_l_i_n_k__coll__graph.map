@@ -1,0 +1,9 @@
+<map id="G" name="G">
+<area shape="rect" id="node2" href="$struct_mesh_obj.html" title="MeshObj" alt="" coords="121,187,196,213"/>
+<area shape="rect" id="node4" href="$struct_triangle.html" title="Triangle" alt="" coords="5,96,72,123"/>
+<area shape="rect" id="node6" href="$struct_vertex.html" title="Vertex" alt="" coords="97,96,156,123"/>
+<area shape="rect" id="node8" href="$struct_material.html" title="Material" alt="" coords="181,96,248,123"/>
+<area shape="rect" id="node10" href="$struct_float_vector.html" title="FloatVector" alt="" coords="170,5,259,32"/>
+<area shape="rect" id="node12" href="$struct_normals.html" title="Normals" alt="" coords="273,96,343,123"/>
+<area shape="rect" id="node14" href="$struct_butterworth_data.html" title="ButterworthData" alt="" coords="220,187,335,213"/>
+</map>

@@ -1,0 +1,10 @@
+var searchData=
+[
+  ['pdstatictrajectory',['PDStaticTrajectory',['../_static_trajectory_8c.html#a8c9164cc46563f475ba06fab0b9325e5',1,'PDStaticTrajectory(SuLINK uLINK[], State *Status, gsl_vector *qd, double Dtime, double t):&#160;StaticTrajectory.c'],['../_static_trajectory_8h.html#a294e520eccee504f360b4cb4f3ffcdb2',1,'PDStaticTrajectory(SuLINK uLINK[], State *Status, gsl_vector *u, double Dtime, double t):&#160;StaticTrajectory.c']]],
+  ['ping',['ping',['../ping_8c.html#a92049f2a158188d3414ff56a32108744',1,'ping(int i):&#160;ping.c'],['../ping_8h.html#a92049f2a158188d3414ff56a32108744',1,'ping(int i):&#160;ping.c']]],
+  ['pinv',['pinv',['../pinv_8c.html#a05a020a371128930bbc7b205a649f280',1,'pinv(gsl_matrix *invA, gsl_matrix *A):&#160;pinv.c'],['../pinv_8h.html#a32830a811eb26c87ed601d450642ab88',1,'pinv(gsl_matrix *invM, gsl_matrix *M):&#160;pinv.c']]],
+  ['printgslmatrix',['PrintGSLMatrix',['../_print_g_s_l_matrix_8c.html#ac4477b0b02c43de76aa8526689b7dd30',1,'PrintGSLMatrix(gsl_matrix *M):&#160;PrintGSLMatrix.c'],['../_print_g_s_l_matrix_8h.html#ac4477b0b02c43de76aa8526689b7dd30',1,'PrintGSLMatrix(gsl_matrix *M):&#160;PrintGSLMatrix.c']]],
+  ['printgslmatrixtranspose',['PrintGSLMatrixTranspose',['../_print_g_s_l_matrix_8c.html#a0aa55f9011835219acf39516290c70ca',1,'PrintGSLMatrixTranspose(gsl_matrix *M):&#160;PrintGSLMatrix.c'],['../_print_g_s_l_matrix_8h.html#a0aa55f9011835219acf39516290c70ca',1,'PrintGSLMatrixTranspose(gsl_matrix *M):&#160;PrintGSLMatrix.c']]],
+  ['printgslvector',['PrintGSLVector',['../_print_g_s_l_matrix_8c.html#a6d87cd69a26e0a5df0bdc7c66dbbc7c6',1,'PrintGSLVector(gsl_vector *V):&#160;PrintGSLMatrix.c'],['../_print_g_s_l_matrix_8h.html#a6d87cd69a26e0a5df0bdc7c66dbbc7c6',1,'PrintGSLVector(gsl_vector *V):&#160;PrintGSLMatrix.c']]],
+  ['pstatictrajectory',['PStaticTrajectory',['../_static_trajectory_8c.html#aa7d2b8af0fe7e8bf25dab47d2494c807',1,'PStaticTrajectory(SuLINK uLINK[], State *Status, gsl_vector *u, double t):&#160;StaticTrajectory.c'],['../_static_trajectory_8h.html#aa7d2b8af0fe7e8bf25dab47d2494c807',1,'PStaticTrajectory(SuLINK uLINK[], State *Status, gsl_vector *u, double t):&#160;StaticTrajectory.c']]]
+];

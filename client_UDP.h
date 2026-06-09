@@ -92,7 +92,7 @@ static int Send_Order(){ //ATTENTION, LA CONNECTION DOIT ETRE PARAMETREE AVANT D
     //exit(1);
     }
 
-    if(sendto(sock,&client_data,sizeof(client_data),0,(SOCKADDR *)&sock_sin,sin_size)<0){
+    if(sendto(sock,(const char *)&client_data,sizeof(client_data),0,(SOCKADDR *)&sock_sin,sin_size)<0){
         printf("         Echec de l'envoie Send_Ordre\n");
         return 0;
     }
@@ -129,9 +129,14 @@ static int Param_connec_locale(){
         sock_sin.sin_port = htons(PORT);
         printf("socket cree en mode local");
 
+#ifdef WIN32
+        u_long mode = 1;
+        ioctlsocket(sock, FIONBIO, &mode);
+#else
         int flags = fcntl(sock, F_GETFL);
         flags |= O_NONBLOCK;
         fcntl(sock, F_SETFL, flags);
+#endif
 
         return sizeof(sock_sin);
 }
@@ -146,16 +151,21 @@ static int Param_connec(){
         sock_sin.sin_port = htons(PORT);
         printf("socket cree en mode local");
 
+#ifdef WIN32
+        u_long mode = 1;
+        ioctlsocket(sock, FIONBIO, &mode);
+#else
         int flags = fcntl(sock, F_GETFL);
         flags |= O_NONBLOCK;
         fcntl(sock, F_SETFL, flags);
+#endif
 
         return sizeof(sock_sin);
 }
 
 
 static int Receive_Data(){
-    if((recvfrom(sock, &buff_data, sizeof(buff_data), 0, (SOCKADDR *)&sock_sin, &sin_size)) < 0){
+    if((recvfrom(sock, (char *)&buff_data, sizeof(buff_data), 0, (SOCKADDR *)&sock_sin, &sin_size)) < 0){
         return 0;
         }
     else {

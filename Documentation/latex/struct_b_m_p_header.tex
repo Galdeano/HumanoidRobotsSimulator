@@ -1,0 +1,101 @@
+\hypertarget{struct_b_m_p_header}{\section{B\-M\-P\-Header Struct Reference}
+\label{struct_b_m_p_header}\index{B\-M\-P\-Header@{B\-M\-P\-Header}}
+}
+
+
+\hyperlink{struct_b_m_p_header}{B\-M\-P\-Header} contain header for a bitmap file.  
+
+
+
+
+{\ttfamily \#include $<$bmp.\-h$>$}
+
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+char \hyperlink{struct_b_m_p_header_ac6cb60ac603fc181a760b3d252c85829}{bf\-Type} \mbox{[}2\mbox{]}
+\item 
+int \hyperlink{struct_b_m_p_header_abff21fa85cedcc94d4949ed5214e8dc2}{bf\-Size}
+\item 
+int \hyperlink{struct_b_m_p_header_af31f2c0e9e9e9adf7327c70ca2b52a64}{bf\-Reserved}
+\item 
+int \hyperlink{struct_b_m_p_header_a932d1972e87bc927f385b50d374dbaad}{bf\-Off\-Bits}
+\item 
+int \hyperlink{struct_b_m_p_header_adf06257c48b39f5858d2e07d85eaf444}{bi\-Size}
+\item 
+int \hyperlink{struct_b_m_p_header_ace6c561432416b3580c63d8ff417769d}{bi\-Width}
+\item 
+int \hyperlink{struct_b_m_p_header_aef892a195d593f028267e1e28995ceea}{bi\-Height}
+\item 
+short \hyperlink{struct_b_m_p_header_ae86ef424e75373d65c827825cbd3ad57}{bi\-Planes}
+\item 
+short \hyperlink{struct_b_m_p_header_aba79d93395d17ce8b58efd73a3ccd4c5}{bi\-Bit\-Count}
+\item 
+int \hyperlink{struct_b_m_p_header_ad92c25fd24fe77a53ad1cb5bbecf2e74}{bi\-Compression}
+\item 
+int \hyperlink{struct_b_m_p_header_a68e2cd9db6e5f913d47c13e68b6d47c8}{bi\-Size\-Image}
+\item 
+int \hyperlink{struct_b_m_p_header_a8e1b6c75b62310e58d67b6c9d92c6e76}{bi\-X\-Pels\-Per\-Meter}
+\item 
+int \hyperlink{struct_b_m_p_header_ae4128f44823bc8af79105ba92ad33ec8}{bi\-Y\-Pels\-Per\-Meter}
+\item 
+int \hyperlink{struct_b_m_p_header_a536ccf8791198f9379357e5c4b17bc17}{bi\-Clr\-Used}
+\item 
+int \hyperlink{struct_b_m_p_header_a90f7e4028ab6037cbb7591fac3b83d23}{bi\-Clr\-Important}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{struct_b_m_p_header}{B\-M\-P\-Header} contain header for a bitmap file. 
+
+\subsection{Field Documentation}
+\hypertarget{struct_b_m_p_header_a932d1972e87bc927f385b50d374dbaad}{\index{B\-M\-P\-Header@{B\-M\-P\-Header}!bf\-Off\-Bits@{bf\-Off\-Bits}}
+\index{bf\-Off\-Bits@{bf\-Off\-Bits}!BMPHeader@{B\-M\-P\-Header}}
+\subsubsection[{bf\-Off\-Bits}]{\setlength{\rightskip}{0pt plus 5cm}int bf\-Off\-Bits}}\label{struct_b_m_p_header_a932d1972e87bc927f385b50d374dbaad}
+Byte offset to actual bitmap data (= 54) \hypertarget{struct_b_m_p_header_af31f2c0e9e9e9adf7327c70ca2b52a64}{\index{B\-M\-P\-Header@{B\-M\-P\-Header}!bf\-Reserved@{bf\-Reserved}}
+\index{bf\-Reserved@{bf\-Reserved}!BMPHeader@{B\-M\-P\-Header}}
+\subsubsection[{bf\-Reserved}]{\setlength{\rightskip}{0pt plus 5cm}int bf\-Reserved}}\label{struct_b_m_p_header_af31f2c0e9e9e9adf7327c70ca2b52a64}
+set to 0 \hypertarget{struct_b_m_p_header_abff21fa85cedcc94d4949ed5214e8dc2}{\index{B\-M\-P\-Header@{B\-M\-P\-Header}!bf\-Size@{bf\-Size}}
+\index{bf\-Size@{bf\-Size}!BMPHeader@{B\-M\-P\-Header}}
+\subsubsection[{bf\-Size}]{\setlength{\rightskip}{0pt plus 5cm}int bf\-Size}}\label{struct_b_m_p_header_abff21fa85cedcc94d4949ed5214e8dc2}
+Size of file in bytes \hypertarget{struct_b_m_p_header_ac6cb60ac603fc181a760b3d252c85829}{\index{B\-M\-P\-Header@{B\-M\-P\-Header}!bf\-Type@{bf\-Type}}
+\index{bf\-Type@{bf\-Type}!BMPHeader@{B\-M\-P\-Header}}
+\subsubsection[{bf\-Type}]{\setlength{\rightskip}{0pt plus 5cm}char bf\-Type\mbox{[}2\mbox{]}}}\label{struct_b_m_p_header_ac6cb60ac603fc181a760b3d252c85829}
+\char`\"{}\-B\-M\char`\"{} \hypertarget{struct_b_m_p_header_aba79d93395d17ce8b58efd73a3ccd4c5}{\index{B\-M\-P\-Header@{B\-M\-P\-Header}!bi\-Bit\-Count@{bi\-Bit\-Count}}
+\index{bi\-Bit\-Count@{bi\-Bit\-Count}!BMPHeader@{B\-M\-P\-Header}}
+\subsubsection[{bi\-Bit\-Count}]{\setlength{\rightskip}{0pt plus 5cm}short bi\-Bit\-Count}}\label{struct_b_m_p_header_aba79d93395d17ce8b58efd73a3ccd4c5}
+Bits per pixel (24 in this case) \hypertarget{struct_b_m_p_header_a90f7e4028ab6037cbb7591fac3b83d23}{\index{B\-M\-P\-Header@{B\-M\-P\-Header}!bi\-Clr\-Important@{bi\-Clr\-Important}}
+\index{bi\-Clr\-Important@{bi\-Clr\-Important}!BMPHeader@{B\-M\-P\-Header}}
+\subsubsection[{bi\-Clr\-Important}]{\setlength{\rightskip}{0pt plus 5cm}int bi\-Clr\-Important}}\label{struct_b_m_p_header_a90f7e4028ab6037cbb7591fac3b83d23}
+Number of important colors. If 0, all colors are important \hypertarget{struct_b_m_p_header_a536ccf8791198f9379357e5c4b17bc17}{\index{B\-M\-P\-Header@{B\-M\-P\-Header}!bi\-Clr\-Used@{bi\-Clr\-Used}}
+\index{bi\-Clr\-Used@{bi\-Clr\-Used}!BMPHeader@{B\-M\-P\-Header}}
+\subsubsection[{bi\-Clr\-Used}]{\setlength{\rightskip}{0pt plus 5cm}int bi\-Clr\-Used}}\label{struct_b_m_p_header_a536ccf8791198f9379357e5c4b17bc17}
+Number of colors in the color table (if 0, use maximum allowed by bi\-Bit\-Count) \hypertarget{struct_b_m_p_header_ad92c25fd24fe77a53ad1cb5bbecf2e74}{\index{B\-M\-P\-Header@{B\-M\-P\-Header}!bi\-Compression@{bi\-Compression}}
+\index{bi\-Compression@{bi\-Compression}!BMPHeader@{B\-M\-P\-Header}}
+\subsubsection[{bi\-Compression}]{\setlength{\rightskip}{0pt plus 5cm}int bi\-Compression}}\label{struct_b_m_p_header_ad92c25fd24fe77a53ad1cb5bbecf2e74}
+Type of compression (0 if no compression) \hypertarget{struct_b_m_p_header_aef892a195d593f028267e1e28995ceea}{\index{B\-M\-P\-Header@{B\-M\-P\-Header}!bi\-Height@{bi\-Height}}
+\index{bi\-Height@{bi\-Height}!BMPHeader@{B\-M\-P\-Header}}
+\subsubsection[{bi\-Height}]{\setlength{\rightskip}{0pt plus 5cm}int bi\-Height}}\label{struct_b_m_p_header_aef892a195d593f028267e1e28995ceea}
+Height of images, in pixels \hypertarget{struct_b_m_p_header_ae86ef424e75373d65c827825cbd3ad57}{\index{B\-M\-P\-Header@{B\-M\-P\-Header}!bi\-Planes@{bi\-Planes}}
+\index{bi\-Planes@{bi\-Planes}!BMPHeader@{B\-M\-P\-Header}}
+\subsubsection[{bi\-Planes}]{\setlength{\rightskip}{0pt plus 5cm}short bi\-Planes}}\label{struct_b_m_p_header_ae86ef424e75373d65c827825cbd3ad57}
+Number of planes in target device (set to 1) \hypertarget{struct_b_m_p_header_adf06257c48b39f5858d2e07d85eaf444}{\index{B\-M\-P\-Header@{B\-M\-P\-Header}!bi\-Size@{bi\-Size}}
+\index{bi\-Size@{bi\-Size}!BMPHeader@{B\-M\-P\-Header}}
+\subsubsection[{bi\-Size}]{\setlength{\rightskip}{0pt plus 5cm}int bi\-Size}}\label{struct_b_m_p_header_adf06257c48b39f5858d2e07d85eaf444}
+Size of B\-I\-T\-M\-A\-P\-I\-N\-F\-O\-H\-E\-A\-D\-E\-R, in bytes (= 40) \hypertarget{struct_b_m_p_header_a68e2cd9db6e5f913d47c13e68b6d47c8}{\index{B\-M\-P\-Header@{B\-M\-P\-Header}!bi\-Size\-Image@{bi\-Size\-Image}}
+\index{bi\-Size\-Image@{bi\-Size\-Image}!BMPHeader@{B\-M\-P\-Header}}
+\subsubsection[{bi\-Size\-Image}]{\setlength{\rightskip}{0pt plus 5cm}int bi\-Size\-Image}}\label{struct_b_m_p_header_a68e2cd9db6e5f913d47c13e68b6d47c8}
+Image size, in bytes (0 if no compression) \hypertarget{struct_b_m_p_header_ace6c561432416b3580c63d8ff417769d}{\index{B\-M\-P\-Header@{B\-M\-P\-Header}!bi\-Width@{bi\-Width}}
+\index{bi\-Width@{bi\-Width}!BMPHeader@{B\-M\-P\-Header}}
+\subsubsection[{bi\-Width}]{\setlength{\rightskip}{0pt plus 5cm}int bi\-Width}}\label{struct_b_m_p_header_ace6c561432416b3580c63d8ff417769d}
+Width of image, in pixels \hypertarget{struct_b_m_p_header_a8e1b6c75b62310e58d67b6c9d92c6e76}{\index{B\-M\-P\-Header@{B\-M\-P\-Header}!bi\-X\-Pels\-Per\-Meter@{bi\-X\-Pels\-Per\-Meter}}
+\index{bi\-X\-Pels\-Per\-Meter@{bi\-X\-Pels\-Per\-Meter}!BMPHeader@{B\-M\-P\-Header}}
+\subsubsection[{bi\-X\-Pels\-Per\-Meter}]{\setlength{\rightskip}{0pt plus 5cm}int bi\-X\-Pels\-Per\-Meter}}\label{struct_b_m_p_header_a8e1b6c75b62310e58d67b6c9d92c6e76}
+Resolution in pixels/meter of display device \hypertarget{struct_b_m_p_header_ae4128f44823bc8af79105ba92ad33ec8}{\index{B\-M\-P\-Header@{B\-M\-P\-Header}!bi\-Y\-Pels\-Per\-Meter@{bi\-Y\-Pels\-Per\-Meter}}
+\index{bi\-Y\-Pels\-Per\-Meter@{bi\-Y\-Pels\-Per\-Meter}!BMPHeader@{B\-M\-P\-Header}}
+\subsubsection[{bi\-Y\-Pels\-Per\-Meter}]{\setlength{\rightskip}{0pt plus 5cm}int bi\-Y\-Pels\-Per\-Meter}}\label{struct_b_m_p_header_ae4128f44823bc8af79105ba92ad33ec8}
+Resolution in pixels/meter of display device 
+
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{bmp_8h}{bmp.\-h}\end{DoxyCompactItemize}

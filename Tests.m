@@ -20,10 +20,13 @@
 % 
 % cross(a,b)
 
+clear all
+close all
 
+t2=0:0.05:60;
+amp=0.015*exp((t2)/200);
 
-
-
+plot(t2,amp)
 
 
 

@@ -87,13 +87,15 @@ int gsl_matrix_get_part2_m(gsl_matrix * matrix_out, gsl_matrix * matrix_in, int 
     if (((e_column-s_column) == matrix_out->size2)&&((e_row-s_row) == matrix_out->size1))
     {
 #endif
+//printf("%d ",1000);
         for (i=e_row; i<s_row; i++)
-        {
+        {//printf("i %d ",i);
             for (j=e_column; j<s_column; j++)
             {
+            //printf("%d ",i*j+j);
                 gsl_matrix_set(matrix_out,i-e_row,j-e_column,gsl_matrix_get(matrix_in, i,j));
             }
-        }
+        }//PrintGSLMatrix(matrix_in);
         return GSL_SUCCESS;
 #ifndef GSL_RANGE_CHECK_OFF
     }

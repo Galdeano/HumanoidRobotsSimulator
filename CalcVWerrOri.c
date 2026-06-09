@@ -42,7 +42,8 @@ void CalcVWerrOri( SuLINK uLINK[], gsl_vector * err, gsl_vector * p, gsl_matrix 
         gsl_vector_set(err,i,gsl_vector_get(error,i));
     }
 
-    pinv( rot, uLINK[now].R);
+    //pinv( rot, uLINK[now].R); //todo use transpose:its an orientation matrix
+    gsl_matrix_transpose_memcpy (rot, uLINK[now].R);
     gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, rot, uLINK[ori].R, 0.0, rot2);
     //gsl_matrix_memcpy(rot,rot2);
     gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, rot2, R, 0.0, rot);

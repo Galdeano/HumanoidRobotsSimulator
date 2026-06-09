@@ -1,0 +1,125 @@
+\hypertarget{_draw_light_8c}{\section{Draw\-Light.\-c File Reference}
+\label{_draw_light_8c}\index{Draw\-Light.\-c@{Draw\-Light.\-c}}
+}
+{\ttfamily \#include $<$G\-L/gl.\-h$>$}\\*
+{\ttfamily \#include $<$G\-L/glu.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}Draw\-Light.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Setup.\-h\char`\"{}}\\*
+Include dependency graph for Draw\-Light.\-c\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_draw_light_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{_draw_light_8c_a0fa6d811bac0406a6964e98ebfa98c5f}{init\-\_\-material} ()
+\item 
+void \hyperlink{_draw_light_8c_a1bc0d6ca69653194a3f611332cc336b6}{set\-\_\-material} (\hyperlink{structmaterial_struct}{material\-Struct} $\ast$mat)
+\item 
+void \hyperlink{_draw_light_8c_a31eaf36dbcd77e361bc72e738cb88f7f}{build\-Shadow\-Matrix} (float f\-Matrix\mbox{[}16\mbox{]}, float f\-Light\-Pos\mbox{[}4\mbox{]}, float f\-Plane\mbox{[}4\mbox{]})
+\item 
+void \hyperlink{_draw_light_8c_a85137382bc755f74945d14a069aa0c24}{find\-Plane} (G\-Lfloat plane\mbox{[}4\mbox{]}, G\-Lfloat v0\mbox{[}3\mbox{]}, G\-Lfloat v1\mbox{[}3\mbox{]}, G\-Lfloat v2\mbox{[}3\mbox{]})
+\item 
+void \hyperlink{_draw_light_8c_a9937d4376b6bdce090e95fe4ea7fd545}{Init\-\_\-light} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{_draw_light_8c_a31eaf36dbcd77e361bc72e738cb88f7f}{\index{Draw\-Light.\-c@{Draw\-Light.\-c}!build\-Shadow\-Matrix@{build\-Shadow\-Matrix}}
+\index{build\-Shadow\-Matrix@{build\-Shadow\-Matrix}!DrawLight.c@{Draw\-Light.\-c}}
+\subsubsection[{build\-Shadow\-Matrix}]{\setlength{\rightskip}{0pt plus 5cm}void build\-Shadow\-Matrix (
+\begin{DoxyParamCaption}
+\item[{float}]{f\-Matrix\mbox{[}16\mbox{]}, }
+\item[{float}]{f\-Light\-Pos\mbox{[}4\mbox{]}, }
+\item[{float}]{f\-Plane\mbox{[}4\mbox{]}}
+\end{DoxyParamCaption}
+)}}\label{_draw_light_8c_a31eaf36dbcd77e361bc72e738cb88f7f}
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_draw_light_8c_a31eaf36dbcd77e361bc72e738cb88f7f_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{_draw_light_8c_a85137382bc755f74945d14a069aa0c24}{\index{Draw\-Light.\-c@{Draw\-Light.\-c}!find\-Plane@{find\-Plane}}
+\index{find\-Plane@{find\-Plane}!DrawLight.c@{Draw\-Light.\-c}}
+\subsubsection[{find\-Plane}]{\setlength{\rightskip}{0pt plus 5cm}void find\-Plane (
+\begin{DoxyParamCaption}
+\item[{G\-Lfloat}]{plane\mbox{[}4\mbox{]}, }
+\item[{G\-Lfloat}]{v0\mbox{[}3\mbox{]}, }
+\item[{G\-Lfloat}]{v1\mbox{[}3\mbox{]}, }
+\item[{G\-Lfloat}]{v2\mbox{[}3\mbox{]}}
+\end{DoxyParamCaption}
+)}}\label{_draw_light_8c_a85137382bc755f74945d14a069aa0c24}
+\hypertarget{_draw_light_8c_a9937d4376b6bdce090e95fe4ea7fd545}{\index{Draw\-Light.\-c@{Draw\-Light.\-c}!Init\-\_\-light@{Init\-\_\-light}}
+\index{Init\-\_\-light@{Init\-\_\-light}!DrawLight.c@{Draw\-Light.\-c}}
+\subsubsection[{Init\-\_\-light}]{\setlength{\rightskip}{0pt plus 5cm}void Init\-\_\-light (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{_draw_light_8c_a9937d4376b6bdce090e95fe4ea7fd545}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=240pt]{_draw_light_8c_a9937d4376b6bdce090e95fe4ea7fd545_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=312pt]{_draw_light_8c_a9937d4376b6bdce090e95fe4ea7fd545_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{_draw_light_8c_a0fa6d811bac0406a6964e98ebfa98c5f}{\index{Draw\-Light.\-c@{Draw\-Light.\-c}!init\-\_\-material@{init\-\_\-material}}
+\index{init\-\_\-material@{init\-\_\-material}!DrawLight.c@{Draw\-Light.\-c}}
+\subsubsection[{init\-\_\-material}]{\setlength{\rightskip}{0pt plus 5cm}void init\-\_\-material (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{_draw_light_8c_a0fa6d811bac0406a6964e98ebfa98c5f}
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_draw_light_8c_a0fa6d811bac0406a6964e98ebfa98c5f_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{_draw_light_8c_a1bc0d6ca69653194a3f611332cc336b6}{\index{Draw\-Light.\-c@{Draw\-Light.\-c}!set\-\_\-material@{set\-\_\-material}}
+\index{set\-\_\-material@{set\-\_\-material}!DrawLight.c@{Draw\-Light.\-c}}
+\subsubsection[{set\-\_\-material}]{\setlength{\rightskip}{0pt plus 5cm}void set\-\_\-material (
+\begin{DoxyParamCaption}
+\item[{{\bf material\-Struct} $\ast$}]{mat}
+\end{DoxyParamCaption}
+)}}\label{_draw_light_8c_a1bc0d6ca69653194a3f611332cc336b6}
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_draw_light_8c_a1bc0d6ca69653194a3f611332cc336b6_icgraph}
+\end{center}
+\end{figure}
+
+

@@ -1,0 +1,88 @@
+\hypertarget{_forward_velocity_8h}{\section{Forward\-Velocity.\-h File Reference}
+\label{_forward_velocity_8h}\index{Forward\-Velocity.\-h@{Forward\-Velocity.\-h}}
+}
+
+
+Recursive velocities computations of robot.  
+
+
+{\ttfamily \#include $<$gsl/gsl\-\_\-vector.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-matrix.\-h$>$}\\*
+Include dependency graph for Forward\-Velocity.\-h\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=270pt]{_forward_velocity_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_forward_velocity_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{_forward_velocity_8h_ad3bfaea752c445b6aa7acf78cf9a6725}{Forward\-Velocity} (\hyperlink{struct_su_l_i_n_k}{Su\-L\-I\-N\-K} u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, int j)
+\begin{DoxyCompactList}\small\item\em Recursively compute the linear velocities for robot. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Recursive velocities computations of robot. \begin{DoxyAuthor}{Author}
+David Galdeano 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+10/2011 
+\end{DoxyDate}
+
+
+\subsection{Function Documentation}
+\hypertarget{_forward_velocity_8h_ad3bfaea752c445b6aa7acf78cf9a6725}{\index{Forward\-Velocity.\-h@{Forward\-Velocity.\-h}!Forward\-Velocity@{Forward\-Velocity}}
+\index{Forward\-Velocity@{Forward\-Velocity}!ForwardVelocity.h@{Forward\-Velocity.\-h}}
+\subsubsection[{Forward\-Velocity}]{\setlength{\rightskip}{0pt plus 5cm}void Forward\-Velocity (
+\begin{DoxyParamCaption}
+\item[{{\bf Su\-L\-I\-N\-K}}]{u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, }
+\item[{int}]{j}
+\end{DoxyParamCaption}
+)}}\label{_forward_velocity_8h_ad3bfaea752c445b6aa7acf78cf9a6725}
+
+
+Recursively compute the linear velocities for robot. 
+
+Must be used as follow\-: 
+\begin{DoxyCode}
+\hyperlink{_forward_velocity_8c_ad3bfaea752c445b6aa7acf78cf9a6725}{ForwardVelocity}(uLINK,1); 
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}} & Structure wich describe the robot link by link \\
+\hline
+{\em j} & I\-D of the link \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_forward_velocity_8h_ad3bfaea752c445b6aa7acf78cf9a6725_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_forward_velocity_8h_ad3bfaea752c445b6aa7acf78cf9a6725_icgraph}
+\end{center}
+\end{figure}
+
+

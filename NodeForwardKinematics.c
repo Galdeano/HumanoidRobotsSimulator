@@ -38,7 +38,8 @@ void NodeForwardKinematics(SuLINK uLINK[],int j, int sender)
 //                gsl_matrix * rot = gsl_matrix_calloc (3, 3);
 //                gsl_matrix * rot2 = gsl_matrix_calloc (3, 3);
                 Rodrigues( rot ,uLINK[sender].a, uLINK[sender].q);
-                pinv(rot2,rot);
+                //pinv(rot2,rot);//todo use transpose:its an orientation matrix
+                gsl_matrix_transpose_memcpy (rot2,rot);
                 gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, uLINK[sender].R, rot2, 0.0, uLINK[j].R);
 //                gsl_matrix_free(rot);
 //                gsl_matrix_free(rot2);
@@ -51,7 +52,8 @@ void NodeForwardKinematics(SuLINK uLINK[],int j, int sender)
 //                gsl_matrix * rot = gsl_matrix_calloc (3, 3);
 //                gsl_matrix * rot2 = gsl_matrix_calloc (3, 3);
                 Rodrigues( rot ,uLINK[sender].a, uLINK[sender].q);
-                pinv(rot2,rot);
+                //pinv(rot2,rot);//todo use transpose:its an orientation matrix
+                gsl_matrix_transpose_memcpy (rot2,rot);
                 gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, uLINK[sender].R, rot2, 0.0, uLINK[uLINK[sender].mother].R);
 //                gsl_matrix_free(rot);
 //                gsl_matrix_free(rot2);

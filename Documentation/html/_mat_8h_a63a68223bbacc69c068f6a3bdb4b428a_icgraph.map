@@ -1,0 +1,21 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$_cross__f_8h.html#ad8c15b3bb054f2a340db65f3174a5b91" title="Cross_f" alt="" coords="452,384,519,411"/>
+<area shape="rect" id="node5" href="$_gravity__f_8h.html#aa777d8db274c2afd6989ef3dead1b2ee" title="Gravity_f" alt="" coords="648,308,720,335"/>
+<area shape="rect" id="node13" href="$_mat_8h.html#ae5dcc36ff446d01426b9ce7fbd5e1f83" title="MatMulf" alt="" coords="127,183,195,209"/>
+<area shape="rect" id="node21" href="$_stabilizator__f_8h.html#a74a1b7b459ecc5196ca891d90f3cbdba" title="Stabilizator_f" alt="" coords="635,467,733,493"/>
+<area shape="rect" id="node46" href="$_sherpa_8c.html#afb136a30db64a353779981a7ae99acad" title="Mesures" alt="" coords="125,536,197,563"/>
+<area shape="rect" id="node52" href="$_sherpa_8c.html#a7629767cc0bbef801b5565542b55a270" title="MC" alt="" coords="140,587,183,613"/>
+<area shape="rect" id="node7" href="$_forward_dynamics_8h.html#af604af2dec4161503e5ac1f828b1e357" title="ForwardDynamics" alt="" coords="811,208,938,235"/>
+<area shape="rect" id="node9" href="$main_8c.html#a0ddf1224851353fc92bfbff6f499fa97" title="main" alt="" coords="987,208,1037,235"/>
+<area shape="rect" id="node15" href="$_calc_m_c__f_8h.html#a03d7357479685d973ed953be72ec1edc" title="CalcMC_f" alt="" coords="266,333,345,360"/>
+<area shape="rect" id="node25" href="$_forward_kinematics__f_8h.html#a49f6cca4c90c96af885008f4e7dfe6be" title="ForwardKinematics_f" alt="" coords="414,107,557,133"/>
+<area shape="rect" id="node37" href="$_mat_8h.html#a36041502ba33fb13a8c5b4f9112243b0" title="MatPseudoInvf" alt="" coords="252,5,359,32"/>
+<area shape="rect" id="node39" href="$_mat_8h.html#ae8e0d9d094b36fd7aa5d222e70d93953" title="MatProVectorielf" alt="" coords="246,157,365,184"/>
+<area shape="rect" id="node43" href="$_rodrigues__f_8h.html#aaaa6bcd06ebc53837aa9a98d73e0d16a" title="Rodrigues_f" alt="" coords="260,107,351,133"/>
+<area shape="rect" id="node17" href="$_calc_co_m__f_8h.html#a8fea9bef886765bbb3aba70734b500a9" title="CalcCoM_f" alt="" coords="443,435,528,461"/>
+<area shape="rect" id="node29" href="$_load_robot_8h.html#ae7e4bbc3a53fa25f60dd111e26ed9ead" title="Load the robot from a XML file." alt="" coords="625,107,743,133"/>
+<area shape="rect" id="node31" href="$_load_robot_8h.html#a5a3ce59c39d50784edcbf1db93ac6310" title="Load the robot from a XML file." alt="" coords="605,56,763,83"/>
+<area shape="rect" id="node34" href="$u_l_i_n_k__f_8h.html#a54f9468da7eb807f29fa55e10b543d8e" title="Initialize the link structure with the model value (used in control loop). See SetupRobot." alt="" coords="634,157,734,184"/>
+<area shape="rect" id="node48" href="$_sherpa_8c.html#ad3548e136b9b35dcfb6c4023ce282125" title="Asserv" alt="" coords="275,536,336,563"/>
+<area shape="rect" id="node50" href="$_sherpa_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="main" alt="" coords="460,561,511,588"/>
+</map>

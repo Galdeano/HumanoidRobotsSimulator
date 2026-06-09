@@ -185,52 +185,23 @@ static ButterworthData data_rW;
     static int init_tmp=1;
     if (init_tmp==1)
     {
-        ButterworthFilterInit(&data_lx,0.01);
-        ButterworthFilterInit(&data_ly,0.01);
-        ButterworthFilterInit(&data_lW,0.01);
-        ButterworthFilterInit(&data_rx,0.01);
-        ButterworthFilterInit(&data_ry,0.01);
-        ButterworthFilterInit(&data_rW,0.01);
+//        ButterworthFilterInit(&data_lx,0.5);
+//        ButterworthFilterInit(&data_ly,0.5);
+//        ButterworthFilterInit(&data_lW,0.5);
+//        ButterworthFilterInit(&data_rx,0.5);
+//        ButterworthFilterInit(&data_ry,0.5);
+//        ButterworthFilterInit(&data_rW,0.5);
+
+        ButterworthFilterInit(&data_lx,0.9);
+        ButterworthFilterInit(&data_ly,0.9);
+        ButterworthFilterInit(&data_lW,0.9);
+        ButterworthFilterInit(&data_rx,0.9);
+        ButterworthFilterInit(&data_ry,0.9);
+        ButterworthFilterInit(&data_rW,0.9);
         init_tmp=0;
     }
 
 
-//    if (zmp_c->zmp_right.x>56)
-//    {
-//        zmp_c->zmp_right.x=56;
-//    }
-//    else if (zmp_c->zmp_right.x<-42)
-//    {
-//        zmp_c->zmp_right.x=-42;
-//    }
-//
-//    if (zmp_c->zmp_right.y>31.5)
-//    {
-//        zmp_c->zmp_right.y=31.5;
-//    }
-//    else if (zmp_c->zmp_right.y<-31.5)
-//    {
-//        zmp_c->zmp_right.y=-31.5;
-//    }
-//
-//
-//    if (zmp_c->zmp_left.x>56)
-//    {
-//        zmp_c->zmp_left.x=56;
-//    }
-//    else if (zmp_c->zmp_left.x<-42)
-//    {
-//        zmp_c->zmp_left.x=-42;
-//    }
-//
-//    if (zmp_c->zmp_left.y>31.5)
-//    {
-//        zmp_c->zmp_left.y=31.5;
-//    }
-//    else if (zmp_c->zmp_left.y<-31.5)
-//    {
-//        zmp_c->zmp_left.y=-31.5;
-//    }
 
 zmp_f->zmp_left.x=ButterworthFilterLimits (&data_lx, zmp_c->zmp_left.x,-42,56);
 zmp_f->zmp_left.y=ButterworthFilterLimits (&data_ly, zmp_c->zmp_left.y,-31.5,31.5);

@@ -17,7 +17,7 @@ plot(t,h1,t,h2,t,h3,t,h4);
 axis equal
 
 
-%positions et vitesses désirées
+%positions et vitesses dï¿½sirï¿½es
 p1=0;
 v1=1;
 p2=0.5;
@@ -28,6 +28,25 @@ S1=v1*h3+p1*h1+p2*h2+v2*h4;
 figure(2);
 plot(t,S1);
 axis equal
+
+
+%Besier basis functions
+h1b = -1*t.^3 + 3*t.^2 - 3*t + 1;
+h2b =  3*t.^3 - 6*t.^2 + 3*t;
+h3b = -3*t.^3 + 3*t.^2;
+h4b = t.^3;
+
+figure(3);
+plot(t,h1b,t,h2b,t,h3b,t,h4b);
+axis equal
+
+S1b=v1*h3b+p1*h1b+p2*h2b+v2*h4b;
+
+figure(4);
+plot(t,S1b);
+axis equal
+
+break
 
 %%
 
@@ -43,7 +62,7 @@ h2 = -2*t.^3 +3*t.^2;
 h3 = t.^3 - 2*t.^2 + t;
 h4 = t.^3 -t.^2;
 
-%positions et vitesses désirées
+%positions et vitesses dï¿½sirï¿½es
 p1=0;
 v1=-1;
 p2=1;
@@ -103,7 +122,7 @@ h22 = -2*ts.^3 +3*ts.^2;
 h23 = ts.^3 - 2*ts.^2 + ts;
 h24 = ts.^3 -ts.^2;
 
-%positions et vitesses désirées
+%positions et vitesses dï¿½sirï¿½es
 p1=0;
 v1=-1;
 p2=0.7;

@@ -8,11 +8,6 @@
  */
 
 
-
-
-
-
-
 #define play_csv 0
 #define zmp_filtering 1
 #define zmp_feedback 1//
@@ -22,14 +17,14 @@
 #define save_data_quick_temp 1
 
 #define file_motor 0
-#define reseau 1
+#define reseau 0
 
 #define local 1//
 #define replay 0
 #define Tasks 1
 #define file_human 0
 #define file_hoap 0
-#define file_walk 0
+#define file_walk 1//
 
 #define Light 0//
 #define shadow 1
@@ -39,6 +34,7 @@
 #define GroundResolution 20
 
 #define oritrunk 1//
+#define oritrunk3 1//
 
 #define LoadObj 1
 /*! \def LoadObj

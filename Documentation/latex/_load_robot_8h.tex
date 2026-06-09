@@ -1,0 +1,151 @@
+\hypertarget{_load_robot_8h}{\section{Load\-Robot.\-h File Reference}
+\label{_load_robot_8h}\index{Load\-Robot.\-h@{Load\-Robot.\-h}}
+}
+
+
+Load a robot model.  
+
+
+{\ttfamily \#include $<$gsl/gsl\-\_\-vector.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-matrix.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}u\-Link.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}u\-L\-I\-N\-K\-\_\-f.\-h\char`\"{}}\\*
+Include dependency graph for Load\-Robot.\-h\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_load_robot_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_load_robot_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{_load_robot_8h_a71e30d503a5bf98bdf7dff52a0cbb1cf}{Load\-Robot\-X\-M\-L} (\hyperlink{struct_su_l_i_n_k}{Su\-L\-I\-N\-K} u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, \hyperlink{struct_state}{State} $\ast$Status, char $\ast$Robot\-File)
+\begin{DoxyCompactList}\small\item\em Load the robot from a X\-M\-L file. \end{DoxyCompactList}\item 
+void \hyperlink{_load_robot_8h_ae7e4bbc3a53fa25f60dd111e26ed9ead}{Load\-Robot\-X\-M\-L\-\_\-f} (\hyperlink{struct_struct__u_l_i_n_k}{Struct\-\_\-u\-L\-I\-N\-K} u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, \hyperlink{struct_struct___state}{Struct\-\_\-\-State} $\ast$Status, char $\ast$Robot\-File)
+\begin{DoxyCompactList}\small\item\em Load the robot from a X\-M\-L file. \end{DoxyCompactList}\item 
+void \hyperlink{_load_robot_8h_aa6eab383d16a325eb0d672ee3b958c5f}{Load\-Robot\-Parser\-X\-M\-L} (\hyperlink{struct_su_l_i_n_k}{Su\-L\-I\-N\-K} u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, \hyperlink{struct_state}{State} $\ast$Status, char $\ast$Robot\-File)
+\begin{DoxyCompactList}\small\item\em Load the robot from a X\-M\-L file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Load a robot model. \begin{DoxyAuthor}{Author}
+David Galdeano 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+11/2011
+\end{DoxyDate}
+These files allow loading a robot model 
+
+\subsection{Function Documentation}
+\hypertarget{_load_robot_8h_aa6eab383d16a325eb0d672ee3b958c5f}{\index{Load\-Robot.\-h@{Load\-Robot.\-h}!Load\-Robot\-Parser\-X\-M\-L@{Load\-Robot\-Parser\-X\-M\-L}}
+\index{Load\-Robot\-Parser\-X\-M\-L@{Load\-Robot\-Parser\-X\-M\-L}!LoadRobot.h@{Load\-Robot.\-h}}
+\subsubsection[{Load\-Robot\-Parser\-X\-M\-L}]{\setlength{\rightskip}{0pt plus 5cm}void Load\-Robot\-Parser\-X\-M\-L (
+\begin{DoxyParamCaption}
+\item[{{\bf Su\-L\-I\-N\-K}}]{u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, }
+\item[{{\bf State} $\ast$}]{Status, }
+\item[{char $\ast$}]{Robot\-File}
+\end{DoxyParamCaption}
+)}}\label{_load_robot_8h_aa6eab383d16a325eb0d672ee3b958c5f}
+
+
+Load the robot from a X\-M\-L file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}} & Structure wich describe the robot link by link \\
+\hline
+{\em t} & Current time \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_load_robot_8h_aa6eab383d16a325eb0d672ee3b958c5f_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=268pt]{_load_robot_8h_aa6eab383d16a325eb0d672ee3b958c5f_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{_load_robot_8h_a71e30d503a5bf98bdf7dff52a0cbb1cf}{\index{Load\-Robot.\-h@{Load\-Robot.\-h}!Load\-Robot\-X\-M\-L@{Load\-Robot\-X\-M\-L}}
+\index{Load\-Robot\-X\-M\-L@{Load\-Robot\-X\-M\-L}!LoadRobot.h@{Load\-Robot.\-h}}
+\subsubsection[{Load\-Robot\-X\-M\-L}]{\setlength{\rightskip}{0pt plus 5cm}void Load\-Robot\-X\-M\-L (
+\begin{DoxyParamCaption}
+\item[{{\bf Su\-L\-I\-N\-K}}]{u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, }
+\item[{{\bf State} $\ast$}]{Status, }
+\item[{char $\ast$}]{Robot\-File}
+\end{DoxyParamCaption}
+)}}\label{_load_robot_8h_a71e30d503a5bf98bdf7dff52a0cbb1cf}
+
+
+Load the robot from a X\-M\-L file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}} & Structure wich describe the robot link by link \\
+\hline
+{\em t} & Current time \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_load_robot_8h_a71e30d503a5bf98bdf7dff52a0cbb1cf_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{_load_robot_8h_ae7e4bbc3a53fa25f60dd111e26ed9ead}{\index{Load\-Robot.\-h@{Load\-Robot.\-h}!Load\-Robot\-X\-M\-L\-\_\-f@{Load\-Robot\-X\-M\-L\-\_\-f}}
+\index{Load\-Robot\-X\-M\-L\-\_\-f@{Load\-Robot\-X\-M\-L\-\_\-f}!LoadRobot.h@{Load\-Robot.\-h}}
+\subsubsection[{Load\-Robot\-X\-M\-L\-\_\-f}]{\setlength{\rightskip}{0pt plus 5cm}void Load\-Robot\-X\-M\-L\-\_\-f (
+\begin{DoxyParamCaption}
+\item[{{\bf Struct\-\_\-u\-L\-I\-N\-K}}]{u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, }
+\item[{{\bf Struct\-\_\-\-State} $\ast$}]{Status, }
+\item[{char $\ast$}]{Robot\-File}
+\end{DoxyParamCaption}
+)}}\label{_load_robot_8h_ae7e4bbc3a53fa25f60dd111e26ed9ead}
+
+
+Load the robot from a X\-M\-L file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}} & Structure wich describe the robot link by link \\
+\hline
+{\em t} & Current time \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_load_robot_8h_ae7e4bbc3a53fa25f60dd111e26ed9ead_cgraph}
+\end{center}
+\end{figure}
+
+

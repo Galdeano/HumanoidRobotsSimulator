@@ -1,0 +1,34 @@
+<map id="main (Copie de portrob2 en conflit 2012&#45;12&#45;20).c" name="main (Copie de portrob2 en conflit 2012&#45;12&#45;20).c">
+<area shape="rect" id="node29" href="$u_link_8h.html" title="Link initialisation and declarations. " alt="" coords="724,179,788,208"/>
+<area shape="rect" id="node33" href="$_setup_8h.html" title="Contain setup of simulations. " alt="" coords="653,333,720,363"/>
+<area shape="rect" id="node35" href="$_obj_loader_8h.html" title="ObjLoader.h" alt="" coords="559,256,649,285"/>
+<area shape="rect" id="node43" href="$_draw_all_joints_8h.html" title="Draw recursively the model of the robot. " alt="" coords="2911,179,3025,208"/>
+<area shape="rect" id="node47" href="$_print_state_8h.html" title="Save and load states. " alt="" coords="1068,179,1159,208"/>
+<area shape="rect" id="node51" href="$bmp_8h.html" title="read and write bmp images " alt="" coords="1528,101,1587,131"/>
+<area shape="rect" id="node53" href="$_integrate_euler_8h.html" title="IntegrateEuler.h" alt="" coords="1183,179,1297,208"/>
+<area shape="rect" id="node57" href="$_forward_dynamics_8h.html" title="Compute the Forward dynamic of the robot. " alt="" coords="2348,179,2487,208"/>
+<area shape="rect" id="node61" href="$_forward_kinematics_8h.html" title="Recursive kinematics computations of robot. " alt="" coords="2511,179,2655,208"/>
+<area shape="rect" id="node65" href="$_load_robot_8h.html" title="Load a robot model. " alt="" coords="1189,101,1285,131"/>
+<area shape="rect" id="node72" href="$_inverse_sherpa_kinematics_8h.html" title="Inverse kinematics computations for Sherpa robot. " alt="" coords="3049,179,3231,208"/>
+<area shape="rect" id="node76" href="$_calc_co_m_8h.html" title="Compute the Center of Mass position. " alt="" coords="3255,179,3343,208"/>
+<area shape="rect" id="node80" href="$_draw_marker_8h.html" title="Draw a cross in 3D. " alt="" coords="3367,179,3471,208"/>
+<area shape="rect" id="node84" href="$_ext__traj_8h.html" title="Ext_traj.h" alt="" coords="1965,101,2043,131"/>
+<area shape="rect" id="node86" href="$_draw_indicators_8h.html" title="Draw severals indicators. " alt="" coords="3404,101,3524,131"/>
+<area shape="rect" id="node90" href="$_hoap__calc__zmp_8h.html" title="Hoap_calc_zmp.h" alt="" coords="3748,179,3873,208"/>
+<area shape="rect" id="node92" href="$net_h_o_a_p_8h.html" title="netHOAP.h" alt="" coords="3816,256,3904,285"/>
+<area shape="rect" id="node94" href="$_node_forward_kinematics_8h.html" title="Recursive kinematics computations of robot from any link. " alt="" coords="1321,179,1497,208"/>
+<area shape="rect" id="node98" href="$_draw_ground_8h.html" title="Draw ground. " alt="" coords="1521,179,1628,208"/>
+<area shape="rect" id="node102" href="$ping_8h.html" title="ping.h" alt="" coords="2320,101,2376,131"/>
+<area shape="rect" id="node104" href="$_calc_jacobian_modif_8h.html" title="Recursive computations of center of mass position. " alt="" coords="1652,179,1796,208"/>
+<area shape="rect" id="node108" href="$_calc_v_werr_ori_8h.html" title="CalcVWerrOri.h" alt="" coords="1820,179,1935,208"/>
+<area shape="rect" id="node112" href="$pinv_8h.html" title="pinv.h" alt="" coords="1959,179,2015,208"/>
+<area shape="rect" id="node116" href="$_print_g_s_l_matrix_8h.html" title="PrintGSLMatrix.h" alt="" coords="2039,179,2161,208"/>
+<area shape="rect" id="node120" href="$_calc_co_m_jacobian_8h.html" title="CalcCoMJacobian.h" alt="" coords="2185,179,2324,208"/>
+<area shape="rect" id="node125" href="$_total_mass_8h.html" title="Recursive computations of robot mass. " alt="" coords="1360,101,1453,131"/>
+<area shape="rect" id="node131" href="$_draw_light_8h.html" title="DrawLight.h" alt="" coords="3599,101,3689,131"/>
+<area shape="rect" id="node133" href="$_draw_camera_8h.html" title="DrawCamera.h" alt="" coords="3713,101,3823,131"/>
+<area shape="rect" id="node136" href="$_rodrigues_8h.html" title="Compute the rotation matrix from an axis of rotation and an angle of rotation. " alt="" coords="2679,179,2769,208"/>
+<area shape="rect" id="node140" href="$rot2omega_8h.html" title="rot2omega.h" alt="" coords="2793,179,2887,208"/>
+<area shape="rect" id="node41" href="$butterworth_8h.html" title="butterworth.h" alt="" coords="775,256,873,285"/>
+<area shape="rect" id="node70" href="$u_l_i_n_k__f_8h.html" title="uLINK_f.h" alt="" coords="863,179,943,208"/>
+</map>

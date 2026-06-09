@@ -7,7 +7,7 @@ close all;
 importdata('./Hoap_Walk.txt');
 
 ti=1.0;
-step=4;
+step=6;
 
 t=0:0.005:(step*2+3)*ti;
 
@@ -28,7 +28,7 @@ ycamp=0.030;
 %ycamp=0.046;
 %ycamp=0.030;
 xfamp=0.03;%0.02
-zfamp=0.01;
+zfamp=0.02;
 
 %% x
 
@@ -202,7 +202,7 @@ for i=1:length(t)
 end
 
 figure(4)
-plot(tx)
+plot(t,tx)
 
 % figure(5)
 % plot(diff(tx))
@@ -228,7 +228,7 @@ plot(tx-(0.24/9.81)*[0,diff(tx,2)./(0.005*0.005),0],tcoms(:,2)-(0.24/9.81)*[0;di
 
 %% rec
 
-fid = fopen('./Hoap_Walk2.txt', 'w');
+fid = fopen('./Hoap_Walk3.txt', 'w');
 for i=1:size(t,2)
 fprintf(fid, '%2.10f,%2.10f,%2.10f,%2.10f,%2.10f,%2.10f,%2.10f,%2.10f,%2.10f\n', tcoms(i,1),tcoms(i,2),tcoms(i,3),tf2fs(i,1),tf2fs(i,2),tf2fs(i,3),oris(i,1),oris(i,2),oris(i,3));
 end

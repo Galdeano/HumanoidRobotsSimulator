@@ -42,7 +42,7 @@ int Rodrigues(gsl_matrix * rot,gsl_vector * w,double dt)
     if (d<0.0000000001)
     {
         gsl_matrix_set_identity (rot);
-        return;
+        return GSL_SUCCESS;
     }
 
     th = d*dt;

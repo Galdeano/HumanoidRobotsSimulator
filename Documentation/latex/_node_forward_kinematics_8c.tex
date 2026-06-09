@@ -1,0 +1,78 @@
+\hypertarget{_node_forward_kinematics_8c}{\section{Node\-Forward\-Kinematics.\-c File Reference}
+\label{_node_forward_kinematics_8c}\index{Node\-Forward\-Kinematics.\-c@{Node\-Forward\-Kinematics.\-c}}
+}
+{\ttfamily \#include $<$gsl/gsl\-\_\-vector.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-matrix.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-blas.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-linalg.\-h$>$}\\*
+{\ttfamily \#include $<$gsl/gsl\-\_\-math.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}u\-Link.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Node\-Forward\-Kinematics.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}Rodrigues.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}pinv.\-h\char`\"{}}\\*
+Include dependency graph for Node\-Forward\-Kinematics.\-c\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_node_forward_kinematics_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{_node_forward_kinematics_8c_a3376ca50cf34c0ad91f8eae7bcb9a895}{Node\-Forward\-Kinematics} (\hyperlink{struct_su_l_i_n_k}{Su\-L\-I\-N\-K} u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, int j, int sender)
+\begin{DoxyCompactList}\small\item\em Recursively compute the kinematics for robot from a base with q coordinates. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{_node_forward_kinematics_8c_a3376ca50cf34c0ad91f8eae7bcb9a895}{\index{Node\-Forward\-Kinematics.\-c@{Node\-Forward\-Kinematics.\-c}!Node\-Forward\-Kinematics@{Node\-Forward\-Kinematics}}
+\index{Node\-Forward\-Kinematics@{Node\-Forward\-Kinematics}!NodeForwardKinematics.c@{Node\-Forward\-Kinematics.\-c}}
+\subsubsection[{Node\-Forward\-Kinematics}]{\setlength{\rightskip}{0pt plus 5cm}void Node\-Forward\-Kinematics (
+\begin{DoxyParamCaption}
+\item[{{\bf Su\-L\-I\-N\-K}}]{u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}, }
+\item[{int}]{j, }
+\item[{int}]{sender}
+\end{DoxyParamCaption}
+)}}\label{_node_forward_kinematics_8c_a3376ca50cf34c0ad91f8eae7bcb9a895}
+
+
+Recursively compute the kinematics for robot from a base with q coordinates. 
+
+Must be used as follow\-: 
+\begin{DoxyCode}
+\hyperlink{_node_forward_kinematics_8c_a3376ca50cf34c0ad91f8eae7bcb9a895}{NodeForwardKinematics}(uLINK,base,0); 
+\end{DoxyCode}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em u\-L\-I\-N\-K\mbox{[}$\,$\mbox{]}} & Structure wich describe the robot link by link \\
+\hline
+{\em j} & I\-D of the current link \\
+\hline
+{\em sender} & I\-D of the link wich call the function \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=302pt]{_node_forward_kinematics_8c_a3376ca50cf34c0ad91f8eae7bcb9a895_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_node_forward_kinematics_8c_a3376ca50cf34c0ad91f8eae7bcb9a895_icgraph}
+\end{center}
+\end{figure}
+
+

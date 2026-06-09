@@ -11,18 +11,33 @@ void CamInit(CamParam_s *CamParam)
 {
     CamParam->holdl = 0; //au départ on part du principe que le bouton n'est pas maintenu
     CamParam->holdw = 0; //au départ on part du principe que le bouton n'est pas maintenu
-    CamParam->angleY = 30;
-    CamParam->angleZ = 45;
-    CamParam->distance = 1.3; //distance initiale de la caméra avec le centre de la scène
+    CamParam->angleY = 23;
+    CamParam->angleZ = 94;
+    CamParam->distance = 0.1; //distance initiale de la caméra avec le centre de la scène
     CamParam->motionSensivity = 0.3;
     CamParam->scrollSensivity = 0.1;
     CamParam->strafeSensivity = 0.002;
-    CamParam->X = 0.0;
-    CamParam->Y = 0.0;
-    CamParam->Z = 0.0;
+    CamParam->X = -0.8;
+    CamParam->Y = -0.32;
+    CamParam->Z = -0.23;
 
 }
 
+//void CamInit(CamParam_s *CamParam)
+//{
+//    CamParam->holdl = 0; //au départ on part du principe que le bouton n'est pas maintenu
+//    CamParam->holdw = 0; //au départ on part du principe que le bouton n'est pas maintenu
+//    CamParam->angleY = 30;
+//    CamParam->angleZ = 45;
+//    CamParam->distance = 1.3; //distance initiale de la caméra avec le centre de la scène
+//    CamParam->motionSensivity = 0.3;
+//    CamParam->scrollSensivity = 0.1;
+//    CamParam->strafeSensivity = 0.002;
+//    CamParam->X = 0.0;
+//    CamParam->Y = 0.0;
+//    CamParam->Z = 0.0;
+//
+//}
 
 void OnMouseMotion(CamParam_s *CamParam, SDL_MouseMotionEvent event)
 {
@@ -93,6 +108,8 @@ void Camlook(State *Status, CamParam_s *CamParam)
     glTranslated(CamParam->X, CamParam->Y, CamParam->Z);
     glRotated(CamParam->angleY,0,1,0); //la scène est tournée autour de l'axe Y
     glRotated(CamParam->angleZ,0,0,1); //la scène est tournée autour de l'axe Z
+
+//printf("cam: %f %f %f %f %f %f \n",CamParam->angleY,CamParam->angleZ,CamParam->distance,CamParam->X,CamParam->Y,CamParam->Z);
 
 }
 

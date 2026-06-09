@@ -1,0 +1,92 @@
+\hypertarget{butterworth_8c}{\section{butterworth.\-c File Reference}
+\label{butterworth_8c}\index{butterworth.\-c@{butterworth.\-c}}
+}
+{\ttfamily \#include $<$gsl/gsl\-\_\-math.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}butterworth.\-h\char`\"{}}\\*
+Include dependency graph for butterworth.\-c\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=252pt]{butterworth_8c__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{butterworth_8c_af68c58322fe414b050052ef02935409a}{Butterworth\-Filter\-Init} (\hyperlink{struct_butterworth_data}{Butterworth\-Data} $\ast$data, double wc)
+\item 
+void \hyperlink{butterworth_8c_a91fbfe3d348f7814e5fa95f07ca51884}{Butterworth\-Filter\-Value} (\hyperlink{struct_butterworth_data}{Butterworth\-Data} $\ast$data, double value)
+\item 
+double \hyperlink{butterworth_8c_adbb95e9ff32da06fc8e46ba552579391}{Butterworth\-Filter} (\hyperlink{struct_butterworth_data}{Butterworth\-Data} $\ast$data, double input)
+\item 
+double \hyperlink{butterworth_8c_acbd52b33958c7b66ef43c2683ab7c856}{Butterworth\-Filter\-Zero} (\hyperlink{struct_butterworth_data}{Butterworth\-Data} $\ast$data, double input)
+\item 
+double \hyperlink{butterworth_8c_a3680adae192e0ffd9d302ce6fb8d7801}{Butterworth\-Filter\-Limits} (\hyperlink{struct_butterworth_data}{Butterworth\-Data} $\ast$data, double input, double low, double high)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{butterworth_8c_adbb95e9ff32da06fc8e46ba552579391}{\index{butterworth.\-c@{butterworth.\-c}!Butterworth\-Filter@{Butterworth\-Filter}}
+\index{Butterworth\-Filter@{Butterworth\-Filter}!butterworth.c@{butterworth.\-c}}
+\subsubsection[{Butterworth\-Filter}]{\setlength{\rightskip}{0pt plus 5cm}double Butterworth\-Filter (
+\begin{DoxyParamCaption}
+\item[{{\bf Butterworth\-Data} $\ast$}]{data, }
+\item[{double}]{input}
+\end{DoxyParamCaption}
+)}}\label{butterworth_8c_adbb95e9ff32da06fc8e46ba552579391}
+\hypertarget{butterworth_8c_af68c58322fe414b050052ef02935409a}{\index{butterworth.\-c@{butterworth.\-c}!Butterworth\-Filter\-Init@{Butterworth\-Filter\-Init}}
+\index{Butterworth\-Filter\-Init@{Butterworth\-Filter\-Init}!butterworth.c@{butterworth.\-c}}
+\subsubsection[{Butterworth\-Filter\-Init}]{\setlength{\rightskip}{0pt plus 5cm}void Butterworth\-Filter\-Init (
+\begin{DoxyParamCaption}
+\item[{{\bf Butterworth\-Data} $\ast$}]{data, }
+\item[{double}]{wc}
+\end{DoxyParamCaption}
+)}}\label{butterworth_8c_af68c58322fe414b050052ef02935409a}
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{butterworth_8c_af68c58322fe414b050052ef02935409a_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{butterworth_8c_a3680adae192e0ffd9d302ce6fb8d7801}{\index{butterworth.\-c@{butterworth.\-c}!Butterworth\-Filter\-Limits@{Butterworth\-Filter\-Limits}}
+\index{Butterworth\-Filter\-Limits@{Butterworth\-Filter\-Limits}!butterworth.c@{butterworth.\-c}}
+\subsubsection[{Butterworth\-Filter\-Limits}]{\setlength{\rightskip}{0pt plus 5cm}double Butterworth\-Filter\-Limits (
+\begin{DoxyParamCaption}
+\item[{{\bf Butterworth\-Data} $\ast$}]{data, }
+\item[{double}]{input, }
+\item[{double}]{low, }
+\item[{double}]{high}
+\end{DoxyParamCaption}
+)}}\label{butterworth_8c_a3680adae192e0ffd9d302ce6fb8d7801}
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{butterworth_8c_a3680adae192e0ffd9d302ce6fb8d7801_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{butterworth_8c_a91fbfe3d348f7814e5fa95f07ca51884}{\index{butterworth.\-c@{butterworth.\-c}!Butterworth\-Filter\-Value@{Butterworth\-Filter\-Value}}
+\index{Butterworth\-Filter\-Value@{Butterworth\-Filter\-Value}!butterworth.c@{butterworth.\-c}}
+\subsubsection[{Butterworth\-Filter\-Value}]{\setlength{\rightskip}{0pt plus 5cm}void Butterworth\-Filter\-Value (
+\begin{DoxyParamCaption}
+\item[{{\bf Butterworth\-Data} $\ast$}]{data, }
+\item[{double}]{value}
+\end{DoxyParamCaption}
+)}}\label{butterworth_8c_a91fbfe3d348f7814e5fa95f07ca51884}
+\hypertarget{butterworth_8c_acbd52b33958c7b66ef43c2683ab7c856}{\index{butterworth.\-c@{butterworth.\-c}!Butterworth\-Filter\-Zero@{Butterworth\-Filter\-Zero}}
+\index{Butterworth\-Filter\-Zero@{Butterworth\-Filter\-Zero}!butterworth.c@{butterworth.\-c}}
+\subsubsection[{Butterworth\-Filter\-Zero}]{\setlength{\rightskip}{0pt plus 5cm}double Butterworth\-Filter\-Zero (
+\begin{DoxyParamCaption}
+\item[{{\bf Butterworth\-Data} $\ast$}]{data, }
+\item[{double}]{input}
+\end{DoxyParamCaption}
+)}}\label{butterworth_8c_acbd52b33958c7b66ef43c2683ab7c856}

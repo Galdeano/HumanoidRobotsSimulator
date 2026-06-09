@@ -5,7 +5,7 @@
 #include <gsl/gsl_matrix.h>
 
 
-void PDStaticTrajectory(SuLINK uLINK[],State *Status, gsl_vector * u, double Dtime, double t);
+void PDStaticTrajectory(SuLINK uLINK[],State *Status, gsl_vector * u, double d_time, double t);
 
 void PStaticTrajectory(SuLINK uLINK[],State *Status, gsl_vector * u, double t);
 
