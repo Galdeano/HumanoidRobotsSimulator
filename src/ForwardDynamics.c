@@ -44,7 +44,27 @@
 #endif
 
 #include "Setup.h"
+#include <sys/stat.h>
+#ifdef WIN32
+#include <direct.h>
+#endif
 
+
+
+static void ensure_simu_data_dir(void) {
+    static int checked = 0;
+    if (!checked) {
+        struct stat st;
+        if (stat("./../Simu_data", &st) != 0) {
+#ifdef WIN32
+            _mkdir("./../Simu_data");
+#else
+            mkdir("./../Simu_data", 0755);
+#endif
+        }
+        checked = 1;
+    }
+}
 
 void ForwardDynamics(SuLINK uLINK[],State *Status,ForwardDynamicsWorkspace *ws,long t)
 {
@@ -362,6 +382,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,ForwardDynamicsWorkspace *ws,l
 
         if (Visualisation)
         {
+            ensure_simu_data_dir();
             FILE *q_file=fopen("./../Simu_data/q.txt","a");
             for(n=0; n<nDoF-6; n++)
             {
