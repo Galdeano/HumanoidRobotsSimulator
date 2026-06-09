@@ -1160,7 +1160,7 @@ int main(int argc, char *argv[])
     zmp_f.zmp_left.x=0;
     zmp_f.zmp_left.y=0;
 
-#if reseau
+#if use_network
     HoapSensor sensor;
     HoapControl control;
 
@@ -1187,7 +1187,7 @@ int main(int argc, char *argv[])
     }
     printf("\n");
     hoapControl(hoap, &sensor, &control);
-#else //reseau
+#else //use_network
     for(j=0; j<(dof); j++)
     {
         buff_data.val[j]=rad2deg*motor_rotation[j]*uLINK[map[j]].q*209;
@@ -1201,7 +1201,7 @@ int main(int argc, char *argv[])
         printf("%4.6f ",rad2deg*uLINK[map[i]].q);
     }
     printf("\n");
-#endif //reseau
+#endif //use_network
 
 
 
@@ -1449,7 +1449,7 @@ int main(int argc, char *argv[])
 
 
 
-#if reseau
+#if use_network
         hoapSensor(hoap, &sensor);
 
         for(j=0; j<(dof); j++)
@@ -1465,7 +1465,7 @@ int main(int argc, char *argv[])
         }
         Hoap_calc_zmp(&sensor,&zmp_c);
 
-#endif //reseau
+#endif //use_network
 
 #if file_motor
         for(j=0; j<10; j++)
@@ -1531,12 +1531,12 @@ int main(int argc, char *argv[])
         //gsl_vector_set_zero(p);
 
 #if file_human
-        static double vitesse=0.5;
+        static double speed=0.5;
         static double gain_1,gain_2;
         static int pos_in_file=1;
         if((t2)>=t_stand_zmp)
         {
-            while(((t2-t_stand_zmp)*vitesse)>(0.005*pos_in_file))
+            while(((t2-t_stand_zmp)*speed)>(0.005*pos_in_file))
             {
                 for(j=0; j<9; j++)
                 {
@@ -1547,8 +1547,8 @@ int main(int argc, char *argv[])
             }
 
             // interpolation of data
-            gain_1=-(((t2-t_stand_zmp)*vitesse)-(0.005*pos_in_file))/0.005;
-            gain_2=1+(((t2-t_stand_zmp)*vitesse)-(0.005*pos_in_file))/0.005;
+            gain_1=-(((t2-t_stand_zmp)*speed)-(0.005*pos_in_file))/0.005;
+            gain_2=1+(((t2-t_stand_zmp)*speed)-(0.005*pos_in_file))/0.005;
             for(j=0; j<9; j++)
             {
                 opd[j]=gain_1*opd_old2[j]+gain_2*opd_old[j];
@@ -1558,12 +1558,12 @@ int main(int argc, char *argv[])
 
 #elif file_walk
 
-        static double vitesse=1.0;
+        static double speed=1.0;
         static double gain_1,gain_2;
         static int pos_in_file=1;
         if((t2)>=t_init)
         {
-            while(((t2-t_init)*vitesse)>(0.005*pos_in_file))
+            while(((t2-t_init)*speed)>(0.005*pos_in_file))
             {
                 for(j=0; j<9; j++)
                 {
@@ -1574,8 +1574,8 @@ int main(int argc, char *argv[])
             }
 
             // interpolation of data
-            gain_1=-(((t2-t_init)*vitesse)-(0.005*pos_in_file))/0.005;
-            gain_2=1+(((t2-t_init)*vitesse)-(0.005*pos_in_file))/0.005;
+            gain_1=-(((t2-t_init)*speed)-(0.005*pos_in_file))/0.005;
+            gain_2=1+(((t2-t_init)*speed)-(0.005*pos_in_file))/0.005;
             for(j=0; j<9; j++)
             {
                 opd[j]=gain_1*opd_old2[j]+gain_2*opd_old[j];
@@ -1588,12 +1588,12 @@ int main(int argc, char *argv[])
 
 
 #if file_hoap
-        static double vitesse=1.0;
+        static double speed=1.0;
         static double gain_1,gain_2;
         static int pos_in_file=1;
         if((t2)>=t_stand_zmp)
         {
-            while(((t2-t_stand_zmp)*vitesse)>(0.001*pos_in_file))
+            while(((t2-t_stand_zmp)*speed)>(0.001*pos_in_file))
             {
                 for(j=0; j<dof; j++)
                 {
@@ -1604,8 +1604,8 @@ int main(int argc, char *argv[])
             }
 
             // interpolation of data
-            gain_1=-(((t2-t_stand_zmp)*vitesse)-(0.001*pos_in_file))/0.001;
-            gain_2=1+(((t2-t_stand_zmp)*vitesse)-(0.001*pos_in_file))/0.001;
+            gain_1=-(((t2-t_stand_zmp)*speed)-(0.001*pos_in_file))/0.001;
+            gain_2=1+(((t2-t_stand_zmp)*speed)-(0.001*pos_in_file))/0.001;
             for(j=0; j<dof; j++)
             {
                 oqd[j]=gain_1*oqd_old2[j]+gain_2*oqd_old[j];
@@ -2293,7 +2293,7 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
         }
 
 
-#if reseau
+#if use_network
 static const float dqlim=0.12;
 
 
@@ -2395,13 +2395,13 @@ static const float dqlim=0.12;
 //            uLINK[map[j]].q = deg2rad*control.q[j]*motor_rotation[j]/209;
 //        }
 
-#else //reseau
+#else //use_network
         for(j=0; j<(dof); j++)
         {
             buff_data.val[j]=rad2deg*motor_rotation[j]*(uLINK[map[j]].q+0.001*gsl_vector_get(dq,map[j]-2))*209;
             //buff_data.val[j]=rad2deg*motor_rotation[j]*uLINK[map[j]].q*209;
         }
-#endif //reseau
+#endif //use_network
 
 
 
@@ -2471,7 +2471,7 @@ static const float dqlim=0.12;
 
 
 
-#endif //reseau
+#endif //use_network
 
         ForwardKinematics(uLINK,1);
 
@@ -2495,9 +2495,9 @@ static const float dqlim=0.12;
     fclose(file);
 #endif //file_motor
 
-#if reseau
+#if use_network
     hoapDisconnect(hoap);
-#endif //reseau
+#endif //use_network
 
 
 #if save_data_long

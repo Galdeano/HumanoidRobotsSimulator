@@ -17,7 +17,7 @@
 #define save_data_quick_temp 1
 
 #define file_motor 0
-#define reseau 0
+#define use_network 0
 
 #define local 1//
 #define replay 0
