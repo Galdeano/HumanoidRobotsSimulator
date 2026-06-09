@@ -29,7 +29,7 @@ add_compile_definitions(HAVE_INLINE GSL_RANGE_CHECK_OFF)
 
 # Set compile options for MinGW
 if(CMAKE_COMPILER_IS_GNUCC)
-    add_compile_options(-O3 -msse2 -fcommon)
+    add_compile_options(-O3 -msse2)
 endif()
 
 # Executable target
