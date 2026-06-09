@@ -58,6 +58,7 @@
 
 
 #include "Setup.h"
+#include "ForwardDynamicsWorkspace.h"
 
 
 #include "TotalMass.h"
@@ -147,6 +148,7 @@ int main(int argc, char *argv[])
 
     //LoadRobotXML(uLINK,&Status,RobotFile);
     LoadRobotParserXML(uLINK,&Status,RobotFile);
+    ForwardDynamicsWorkspace *ws = ForwardDynamicsWorkspace_alloc(Status.ddl);
     //LoadSherpa(uLINK,&Status);
 
 
@@ -3015,7 +3017,7 @@ static const float dqlim=0.12;
 //      glFlush();
 //      SDL_GL_SwapBuffers();
 //      SDL_Delay(100);
-//      ForwardDynamics(uLINK,&Status,t);
+//      ForwardDynamics(uLINK,&Status,ws,t);
 //      IntegrateEuler(uLINK,1);
 //    }
 //    return EXIT_SUCCESS; // Fermeture du programme
@@ -3125,7 +3127,7 @@ static const float dqlim=0.12;
 
 #if !StaticCOM
 
-            //ForwardDynamics(uLINK,&Status,t);
+            //ForwardDynamics(uLINK,&Status,ws,t);
             //IntegrateEuler(uLINK,1);
             DrawAllJoints(uLINK,1);
             DrawIndicators(uLINK,&Status,com,CoP,ground);
@@ -3159,7 +3161,7 @@ static const float dqlim=0.12;
             //gsl_vector_set_zero(uLINK[1].p);
             //gsl_vector_set (uLINK[1].p, 2, 1.2);
             //gsl_vector_set_zero(uLINK[1].vo);
-            ForwardDynamics(uLINK,&Status,t);
+            ForwardDynamics(uLINK,&Status,ws,t);
             IntegrateEuler(uLINK,1);
             /// \todo Runge kuta
         }
@@ -3169,6 +3171,7 @@ static const float dqlim=0.12;
 
     SDL_Quit(); // Arrêt de la SDL
 
+    ForwardDynamicsWorkspace_free(ws);
     gsl_vector_free(com);
     gsl_vector_free(CoP);
     gsl_vector_free(q);
