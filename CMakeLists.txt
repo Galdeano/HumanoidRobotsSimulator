@@ -11,17 +11,17 @@ find_package(SDL REQUIRED)
 
 # Add GSL, SDL, OpenGL include directories
 include_directories(
-    .
-    ezxml
+    src
+    src/ezxml
     ${GSL_INCLUDE_DIRS}
     ${SDL_INCLUDE_DIR}
 )
 
 # Collect root C source files and ezxml library sources
-file(GLOB ROOT_SOURCES "*.c")
+file(GLOB ROOT_SOURCES "src/*.c")
 set(SOURCES
     ${ROOT_SOURCES}
-    ezxml/ezxml.c
+    src/ezxml/ezxml.c
 )
 
 # Optimization compile flags and definitions
