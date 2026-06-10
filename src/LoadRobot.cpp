@@ -420,7 +420,7 @@ void LoadRobotParserXML(SuLINK uLINK[],State *Status,char* RobotFile)
     int dof,numlink,body;
     double DegToRad = M_PI/180;
 
-    ezxml_t robot = ezxml_parse_file(RobotFile), State, Link, Contacts, Contact;
+    ezxml_t robot = (ezxml_t)ezxml_parse_file(RobotFile), State, Link, Contacts, Contact;
 
 
     sscanf (ezxml_child(robot, "DoF")->txt,"%d",&dof);

@@ -168,7 +168,7 @@ void SaveState(SuLINK uLINK[],State *Status,long *t)
 {
 
     SaveLINK *CopyuLINK;
-    CopyuLINK = calloc((Status->ddl)+2-6,sizeof(SaveLINK));
+    CopyuLINK = (SaveLINK *)calloc((Status->ddl)+2-6,sizeof(SaveLINK));
     SaveStuctLink(uLINK,CopyuLINK,Status);
 
     FILE *f=fopen("SherpaState.bin","wb");
@@ -217,7 +217,7 @@ void SaveStuctLink(SuLINK uLINK[],SaveLINK CopyuLINK[],State *Status)
 void LoadState(SuLINK uLINK[],State *Status,long *t)
 {
     SaveLINK *CopyuLINK;
-    CopyuLINK = calloc((Status->ddl)+2-6,sizeof(SaveLINK));
+    CopyuLINK = (SaveLINK *)calloc((Status->ddl)+2-6,sizeof(SaveLINK));
 
     FILE *f=fopen("SherpaState.bin","rb");
     fread(CopyuLINK, ((Status->ddl)+2-6)* sizeof(SaveLINK), 1, f);

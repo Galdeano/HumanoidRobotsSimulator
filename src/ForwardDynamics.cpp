@@ -82,7 +82,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
     if (init==1)
     {
 
-        uLINKc = calloc((Status->ddl)+2-6,sizeof(Struct_uLINK));
+        uLINKc = (Struct_uLINK *)calloc((Status->ddl)+2-6,sizeof(Struct_uLINK));
         Inertia_Motor = gsl_matrix_calloc (nDoF, nDoF);
         A = gsl_matrix_calloc (nDoF, nDoF);
         b = gsl_vector_calloc (nDoF);
@@ -203,9 +203,9 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         static double *dqd;
         if (init_com==1)
         {
-            uPD = calloc((Status->ddl)-6,sizeof(double));
-            qd = calloc((Status->ddl)-6,sizeof(double));
-            dqd = calloc((Status->ddl)-6,sizeof(double));
+            uPD = (double *)calloc((Status->ddl)-6,sizeof(double));
+            qd = (double *)calloc((Status->ddl)-6,sizeof(double));
+            dqd = (double *)calloc((Status->ddl)-6,sizeof(double));
             init_com=0;
         }
 
@@ -310,10 +310,10 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         static int init_G=1;
         if (init_G==1)
         {
-            uG = calloc((Status->ddl)-6,sizeof(double));
-            fG = calloc((Status->ddl)-6,sizeof(double));
-            tG = calloc((Status->ddl)-6,sizeof(double));
-            uStab = calloc((Status->ddl)-6,sizeof(double));
+            uG = (double *)calloc((Status->ddl)-6,sizeof(double));
+            fG = (double *)calloc((Status->ddl)-6,sizeof(double));
+            tG = (double *)calloc((Status->ddl)-6,sizeof(double));
+            uStab = (double *)calloc((Status->ddl)-6,sizeof(double));
             init_G=0;
         }
 
@@ -512,10 +512,10 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
             dq_old = gsl_vector_calloc(nDoF-6);
             ddq = gsl_vector_calloc(nDoF-6);
 
-            opd = calloc(9,sizeof(double));
+            opd = (double *)calloc(9,sizeof(double));
             trace = gsl_vector_calloc (3);
             adphi = gsl_vector_calloc(nDoF-6);
-            qdev = calloc(nDoF-6,sizeof(double));
+            qdev = (double *)calloc(nDoF-6,sizeof(double));
             CoP = gsl_vector_calloc (3);
             zmp = gsl_vector_calloc (3);
             dzmp = gsl_vector_calloc (3);
@@ -544,12 +544,12 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
             }
 
 
-            Jf = calloc(6*(nDoF-6),sizeof(double));
-            pf = calloc(3,sizeof(double));
-            Rf = calloc(9,sizeof(double));
-            taskf = calloc(6,sizeof(double));
-            invf = calloc((nDoF-6)*6,sizeof(double));
-            dqf = calloc((nDoF-6),sizeof(double));
+            Jf = (double *)calloc(6*(nDoF-6),sizeof(double));
+            pf = (double *)calloc(3,sizeof(double));
+            Rf = (double *)calloc(9,sizeof(double));
+            taskf = (double *)calloc(6,sizeof(double));
+            invf = (double *)calloc((nDoF-6)*6,sizeof(double));
+            dqf = (double *)calloc((nDoF-6),sizeof(double));
         }
 
 

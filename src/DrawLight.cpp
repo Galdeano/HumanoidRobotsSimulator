@@ -1,6 +1,40 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include "DrawLight.h"
+
+float g_shadowMatrix[16];
+
+materialStruct test;
+materialStruct red_shiny_plastic;
+materialStruct white_shiny_plastic;
+materialStruct shiny_gold;
+
+materialStruct emerald;
+materialStruct jade;
+materialStruct obsidian;
+materialStruct pearl;
+materialStruct ruby;
+materialStruct turquoise;
+materialStruct brass;
+materialStruct bronze;
+materialStruct chrome;
+materialStruct copper;
+materialStruct gold;
+materialStruct silver;
+materialStruct black_plastic;
+materialStruct cyan_plastic;
+materialStruct green_plastic;
+materialStruct red_plastic;
+materialStruct white_plastic;
+materialStruct yellow_plastic;
+materialStruct black_rubber;
+materialStruct cyan_rubber;
+materialStruct green_rubber;
+materialStruct red_rubber;
+materialStruct white_rubber;
+materialStruct yellow_rubber;
+
+
 #include "Setup.h"
 
 void init_material()

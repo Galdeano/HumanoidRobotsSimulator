@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
 
 
     SuLINK *uLINK;
-    uLINK = calloc(dof+2,sizeof(SuLINK));
+    uLINK = (SuLINK *)calloc(dof+2,sizeof(SuLINK));
     //SuLINK uLINK[NbLinks];
 
     State Status;
@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
     int frame=0;
     //char pixel_data[3*1024*768];
     char *pixel_data;
-    pixel_data=calloc(3*1024*768,sizeof(double));
+    pixel_data=(char *)calloc(3*1024*768,sizeof(double));
 
 
     gsl_vector * com = gsl_vector_calloc (3);
@@ -506,7 +506,7 @@ int main(int argc, char *argv[])
 
             Init_task_F2F=gsl_vector_calloc (6);
 
-            qdev = calloc(nDoF-6,sizeof(double));
+            qdev = (double *)calloc(nDoF-6,sizeof(double));
 
             for(i=0; i<8; i++)
             {
@@ -848,7 +848,7 @@ int main(int argc, char *argv[])
 
 #if Ext_traj
     double *qd;
-    qd = calloc(dof,sizeof(double));
+    qd = (double *)calloc(dof,sizeof(double));
     Ext_trajectory_init(qd);
 
     for(i=1; i<(dof+2); i++)
@@ -921,7 +921,7 @@ int main(int argc, char *argv[])
 
 #if file_motor
     static double *qd;
-    qd = calloc(22,sizeof(double));
+    qd = (double *)calloc(22,sizeof(double));
     FILE *file=fopen("./Trajectories/motor.dat","r");
     if (file== NULL) perror ("Error opening robot trajectory file");
     int nb_scan;
@@ -950,18 +950,18 @@ int main(int argc, char *argv[])
 
     const int buf_size=200000;
     HoapSensor *buff_sensor;
-    buff_sensor = calloc(buf_size,sizeof(HoapSensor));
+    buff_sensor = (HoapSensor *)calloc(buf_size,sizeof(HoapSensor));
     zmp_calc *buff_zmp_c;
-    buff_zmp_c = calloc(buf_size,sizeof(zmp_calc));
+    buff_zmp_c = (zmp_calc *)calloc(buf_size,sizeof(zmp_calc));
     zmp_calc *buff_zmp_f;
-    buff_zmp_f = calloc(buf_size,sizeof(zmp_calc));
+    buff_zmp_f = (zmp_calc *)calloc(buf_size,sizeof(zmp_calc));
     double  *buff_t;
-    buff_t = calloc(buf_size,sizeof(double));
+    buff_t = (double *)calloc(buf_size,sizeof(double));
 
 #if save_data_quick_temp
     int temp_size=29;
     double  *buff_temp;
-    buff_temp = calloc(buf_size*temp_size,sizeof(double));
+    buff_temp = (double *)calloc(buf_size*temp_size,sizeof(double));
     if (buff_temp==NULL)
     {
         printf("error allocation buff_temp");
@@ -1106,17 +1106,17 @@ int main(int argc, char *argv[])
         dq_old = gsl_vector_calloc(nDoF-6);
         ddq = gsl_vector_calloc(nDoF-6);
 
-        opd = calloc(9,sizeof(double));
-        opd_old = calloc(9,sizeof(double));
-        opd_old2 = calloc(9,sizeof(double));
+        opd = (double *)calloc(9,sizeof(double));
+        opd_old = (double *)calloc(9,sizeof(double));
+        opd_old2 = (double *)calloc(9,sizeof(double));
 
-        oqd = calloc(nDoF-6,sizeof(double));
-        oqd_old = calloc(nDoF-6,sizeof(short));
-        oqd_old2 = calloc(nDoF-6,sizeof(short));
+        oqd = (double *)calloc(nDoF-6,sizeof(double));
+        oqd_old = (short *)calloc(nDoF-6,sizeof(short));
+        oqd_old2 = (short *)calloc(nDoF-6,sizeof(short));
 
         trace = gsl_vector_calloc (3);
         adphi = gsl_vector_calloc(nDoF-6);
-        qdev = calloc(nDoF-6,sizeof(double));
+        qdev = (double *)calloc(nDoF-6,sizeof(double));
         //CoP = gsl_vector_calloc (3);
         zmp = gsl_vector_calloc (3);
         dzmp = gsl_vector_calloc (3);
@@ -2556,13 +2556,13 @@ static const float dqlim=0.12;
 #endif //save_data_quick_temp
 
     double  *temp;
-    temp = calloc(((i-2)*21),sizeof(double));
+    temp = (double *)calloc(((i-2)*21),sizeof(double));
     if (temp==NULL)
     {
         printf("error");
     }
     double  *temp2;
-    temp2 = calloc(i-2,sizeof(double));
+    temp2 = (double *)calloc(i-2,sizeof(double));
     if (temp2==NULL)
     {
         printf("error");
@@ -2810,7 +2810,7 @@ static const float dqlim=0.12;
         static int init_task=1;
         if (init_task==1)
         {
-            opd = calloc(9,sizeof(double));
+            opd = (double *)calloc(9,sizeof(double));
             trace = gsl_vector_calloc (3);
 
             idx1 = gsl_vector_calloc (8);

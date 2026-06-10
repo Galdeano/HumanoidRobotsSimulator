@@ -24,7 +24,7 @@ void Ext_q_trajectory(double *qd, double t)
     static int init_tmp=1;
     if (init_tmp==1)
     {
-        qt = calloc(22,sizeof(double));
+        qt = (double *)calloc(22,sizeof(double));
         f=fopen("./Trajectories/Human_q3.txt","r");
         if (f == NULL) perror ("Error opening robot trajectory file");
         init_tmp=0;
@@ -57,8 +57,8 @@ void Ext_op_trajectory(double *opd, int pos_in_file)
     static int init_tmp=1;
     if (init_tmp==1)
     {
-        opt = calloc(9,sizeof(double));
-        gain = calloc(9,sizeof(double));
+        opt = (double *)calloc(9,sizeof(double));
+        gain = (double *)calloc(9,sizeof(double));
         if (opt == NULL)
         {
             perror ("Error allocation opt");
@@ -112,8 +112,8 @@ void Ext_op_trajectory2(double *opd, int pos_in_file)
     static int init_tmp=1;
     if (init_tmp==1)
     {
-        opt = calloc(9,sizeof(double));
-        gain = calloc(9,sizeof(double));
+        opt = (double *)calloc(9,sizeof(double));
+        gain = (double *)calloc(9,sizeof(double));
         if (opt == NULL)
         {
             perror ("Error allocation opt");
@@ -162,7 +162,7 @@ void Ext_op_trajectory_LIPM(double *opd, double t)
     static int init_tmp=1;
     if (init_tmp==1)
     {
-        opt = calloc(9,sizeof(double));
+        opt = (double *)calloc(9,sizeof(double));
         f=fopen("./Trajectories/LIPM_op.txt","r");
         if (f == NULL) perror ("Error opening robot trajectory file");
         init_tmp=0;
@@ -193,7 +193,7 @@ void Ext_q_hoap_trajectory(short *oqd, int pos_in_file)
     static int init_tmp=1;
     if (init_tmp==1)
     {
-        qt = calloc(21,sizeof(short));
+        qt = (short *)calloc(21,sizeof(short));
         if (qt == NULL)
         {
             perror ("Error allocation opt");
@@ -243,8 +243,8 @@ void Ext_walk_trajectory(double *opd, int pos_in_file)
     static int init_tmp=1;
     if (init_tmp==1)
     {
-        opt = calloc(9,sizeof(double));
-        gain = calloc(9,sizeof(double));
+        opt = (double *)calloc(9,sizeof(double));
+        gain = (double *)calloc(9,sizeof(double));
         if (opt == NULL)
         {
             perror ("Error allocation opt");
