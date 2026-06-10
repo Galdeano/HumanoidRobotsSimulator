@@ -2965,7 +2965,7 @@ static const float dqlim=0.12;
             gsl_vector_set (trace, 2, opd[2+3*j]);
             DrawMarker(trace);
         }
-        DrawGround(2.0,0.0,-0.2,6.0,6.0,0.1);
+        DrawGround(2.0,0.0,-0.05,6.0,6.0,0.1);
         glFlush();
         SDL_GL_SwapWindow(window);
         SDL_Delay(5);
@@ -3161,7 +3161,7 @@ static const float dqlim=0.12;
             uLINK[13].q=gsl_vector_get (q,5);
             ForwardKinematics(uLINK,1);
             DrawAllJoints(uLINK,1);
-            DrawGround(2.0,0.0,-0.2,6.0,6.0,0.1);
+            DrawGround(2.0,0.0,-0.05,6.0,6.0,0.1);
             CalcCoM(uLINK,com);
             glColor3ub(0,0,255);
             if (!ground)
@@ -3182,7 +3182,7 @@ static const float dqlim=0.12;
             //IntegrateEuler(uLINK,1);
             DrawAllJoints(uLINK,1);
             DrawIndicators(uLINK,&Status,com,CoP,ground);
-            DrawGround(2.0,0.0,-0.2,6.0,6.0,0.1);
+            DrawGround(2.0,0.0,-0.05,6.0,6.0,0.1);
 
 #endif
 
