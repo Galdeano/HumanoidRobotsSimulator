@@ -74,7 +74,7 @@ int pinv( gsl_matrix * invA, gsl_matrix * A)
 
     //THE PSEUDOINVERSE//
     //----------------------------------------------------------
-    //Computation of the pseudoinverse of trans(A) as pinv(A) = U·inv(S).trans(V)   with trans(A) = U.S.trans(V)
+    //Computation of the pseudoinverse of trans(A) as pinv(A) = UÂ·inv(S).trans(V)   with trans(A) = U.S.trans(V)
     //----------------------------------------------------------
     gsl_matrix * SIpVT = gsl_matrix_alloc (n_fil, n_fil);
     gsl_blas_dgemm (CblasNoTrans, CblasNoTrans,				// Calculating  inv(S).trans(V)
@@ -82,7 +82,7 @@ int pinv( gsl_matrix * invA, gsl_matrix * A)
                     0.0, SIpVT);
 
 
-    //gsl_matrix * pinv = gsl_matrix_alloc (n_col, n_fil);	// Calculating  U·inv(S).trans(V)
+    //gsl_matrix * pinv = gsl_matrix_alloc (n_col, n_fil);	// Calculating  UÂ·inv(S).trans(V)
     gsl_blas_dgemm (CblasNoTrans, CblasNoTrans,
                     1.0, U, SIpVT,
                     0.0, invA);

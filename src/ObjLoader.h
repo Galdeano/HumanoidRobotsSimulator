@@ -67,7 +67,7 @@ typedef struct
 
 void load_obj(char *fName,MeshObj *obj);
 /* void charger_obj(std::string,MeshObj *first=NULL);
-   Charge un fichier OBJ et son MTL, prend en arguments le nom du modèle à charger et le pointeur de la première frame si le modèle appartient à une animation (sinon laissez-le à NULL). Cette fonction est appelée par le constructeur.
+   Charge un fichier OBJ et son MTL, prend en arguments le nom du modÃ¨le Ã  charger et le pointeur de la premiÃ¨re frame si le modÃ¨le appartient Ã  une animation (sinon laissez-le Ã  NULL). Cette fonction est appelÃ©e par le constructeur.
    Aucune valeur de retour.
 */
 //MeshObj obj;
@@ -75,20 +75,20 @@ void load_obj(char *fName,MeshObj *obj);
 
 void load_mtl(char *fName);
 /* void charger_mtl(std::string);
-   Charge un fichier MTL, prend en argument le nom du fichier à charger. Cette fonction est appelée par charger_obj.
+   Charge un fichier MTL, prend en argument le nom du fichier Ã  charger. Cette fonction est appelÃ©e par charger_obj.
    Aucune valeur de retour.
 */
 
 void draw_model(MeshObj *obj);
 /* void draw_model(bool nor=true,bool tex=false);
-   Dessine le modèle, prend en arguments deux booléens représentant respectivement les normales et la texture. Si nor vaut true alors on prend en compte les normales, et si tex vaut true alors on applique la texture.
+   Dessine le modÃ¨le, prend en arguments deux boolÃ©ens reprÃ©sentant respectivement les normales et la texture. Si nor vaut true alors on prend en compte les normales, et si tex vaut true alors on applique la texture.
    Aucune valeur de retour.
 */
 //draw_model(&obj);
 
 void setMaterialsAndTex(Material mats,GLuint tex);
 /* void setMaterialsAndTex(std::vector<Material*> mats,GLuint tex);
-   Définit directement les matériaux et la texture du modèle, prend en arguments un vector<Material*> et la texture. Cette fonction est appelée par giveMaterialsAndTex.
+   DÃ©finit directement les matÃ©riaux et la texture du modÃ¨le, prend en arguments un vector<Material*> et la texture. Cette fonction est appelÃ©e par giveMaterialsAndTex.
    Aucune valeur de retour.
 */
 

@@ -24,7 +24,19 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_math.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
+SDL_Window* window = NULL;
+SDL_GLContext gl_context = NULL;
+
+void cleanup_sdl(void) {
+    if (gl_context) {
+        SDL_GL_DeleteContext(gl_context);
+    }
+    if (window) {
+        SDL_DestroyWindow(window);
+    }
+    SDL_Quit();
+}
 #include <GL/gl.h>
 #include <GL/glu.h>
 
@@ -195,21 +207,27 @@ int main(int argc, char *argv[])
         }
         exit(101);
     }
-    atexit(SDL_Quit);
+    atexit(cleanup_sdl);
 
-    SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0); // vertical retrace sync off
-    if (SDL_SetVideoMode(1024, 768, 32, SDL_OPENGL) == NULL) {
+    window = SDL_CreateWindow("Visualisation", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1024, 768, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+    if (window == NULL) {
         FILE *err_file = fopen("sdl_error.txt", "w");
         if (err_file) {
-            fprintf(err_file, "SDL_SetVideoMode failed: %s\n", SDL_GetError());
+            fprintf(err_file, "SDL_CreateWindow failed: %s\n", SDL_GetError());
             fclose(err_file);
         }
         exit(102);
     }
-
-    //SDL_Surface *screen = SDL_SetVideoMode(HORIZONTAL_RESOLUTION, VERTICAL_RESOLUTION,video->vfmt->BitsPerPixel, SDL_OPENGL);
-
-    SDL_WM_SetCaption("Visualisation", NULL);
+    gl_context = SDL_GL_CreateContext(window);
+    if (gl_context == NULL) {
+        FILE *err_file = fopen("sdl_error.txt", "w");
+        if (err_file) {
+            fprintf(err_file, "SDL_GL_CreateContext failed: %s\n", SDL_GetError());
+            fclose(err_file);
+        }
+        exit(103);
+    }
+    SDL_GL_SetSwapInterval(0); // vertical retrace sync off
     SDL_Event event;
 
 //Handle=FindWindow("SDL_app","Visualisation");
@@ -350,12 +368,21 @@ int main(int argc, char *argv[])
                 break;
             }
             break;
-        case SDL_MOUSEMOTION: //la souris est bougée, ça n'intéresse que la caméra
+        case SDL_MOUSEMOTION: //la souris est bougÃ©e, Ã§a n'intÃ©resse que la camÃ©ra
             OnMouseMotion(&CamParamt,event.motion);
             break;
         case SDL_MOUSEBUTTONUP:
         case SDL_MOUSEBUTTONDOWN:
-            OnMouseButton(&CamParamt,event.button); //tous les événements boutons (up ou down) sont donnés à la caméra
+            OnMouseButton(&CamParamt,event.button); //tous les Ã©vÃ©nements boutons (up ou down) sont donnÃ©s Ã  la camÃ©ra
+            break;
+        case SDL_MOUSEWHEEL:
+            {
+                SDL_MouseButtonEvent dummy_btn_event;
+                memset(&dummy_btn_event, 0, sizeof(dummy_btn_event));
+                dummy_btn_event.type = SDL_MOUSEBUTTONDOWN;
+                dummy_btn_event.button = (event.wheel.y > 0) ? SDL_BUTTON_WHEELUP : SDL_BUTTON_WHEELDOWN;
+                OnMouseButton(&CamParamt, dummy_btn_event);
+            }
             break;
 #endif //!Light
         default:
@@ -1435,12 +1462,21 @@ int main(int argc, char *argv[])
                 break;
             }
             break;
-        case SDL_MOUSEMOTION: //la souris est bougée, ça n'intéresse que la caméra
+        case SDL_MOUSEMOTION: //la souris est bougÃ©e, Ã§a n'intÃ©resse que la camÃ©ra
             OnMouseMotion(&CamParam,event.motion);
             break;
         case SDL_MOUSEBUTTONUP:
         case SDL_MOUSEBUTTONDOWN:
-            OnMouseButton(&CamParam,event.button); //tous les événements boutons (up ou down) sont donnés à la caméra
+            OnMouseButton(&CamParam,event.button); //tous les Ã©vÃ©nements boutons (up ou down) sont donnÃ©s Ã  la camÃ©ra
+            break;
+        case SDL_MOUSEWHEEL:
+            {
+                SDL_MouseButtonEvent dummy_btn_event;
+                memset(&dummy_btn_event, 0, sizeof(dummy_btn_event));
+                dummy_btn_event.type = SDL_MOUSEBUTTONDOWN;
+                dummy_btn_event.button = (event.wheel.y > 0) ? SDL_BUTTON_WHEELUP : SDL_BUTTON_WHEELDOWN;
+                OnMouseButton(&CamParam, dummy_btn_event);
+            }
             break;
 #endif //!Light
         default:
@@ -2477,7 +2513,7 @@ static const float dqlim=0.12;
 
 #if !Light
         sprintf(titre,"Visualisation t= %3.3f", t2);
-        SDL_WM_SetCaption(titre, NULL);
+        SDL_SetWindowTitle(window, titre);
 
 
         DrawScene(uLINK,&Status, &CamParam);
@@ -2914,7 +2950,7 @@ static const float dqlim=0.12;
         }
         DrawGround(2.0,0.0,-0.2,6.0,6.0,0.1);
         glFlush();
-        SDL_GL_SwapBuffers();
+        SDL_GL_SwapWindow(window);
         SDL_Delay(5);
     }
 
@@ -3013,7 +3049,7 @@ static const float dqlim=0.12;
 //
 //      DrawGround(2.0,0.0,-0.2,6.0,6.0,0.1);
 //      glFlush();
-//      SDL_GL_SwapBuffers();
+//      SDL_GL_SwapWindow(window);
 //      SDL_Delay(100);
 //      ForwardDynamics(uLINK,&Status,t);
 //      IntegrateEuler(uLINK,1);
@@ -3062,7 +3098,7 @@ static const float dqlim=0.12;
         }
 
 
-        if (t*Dtime>180) //Arret du programme à x sacondes de simulation pour vidéo
+        if (t*Dtime>180) //Arret du programme Ã  x sacondes de simulation pour vidÃ©o
         {
             break;
         }
@@ -3077,7 +3113,7 @@ static const float dqlim=0.12;
             sprintf(titre,"Visualisation t= %3.3f", t*Dtime);
             //sprintf(titre,"Visualisation t= %3.3f, %1.6f", t*Dtime, Lc+Lt+Lp-gsl_vector_get (uLINK[0][1].p, 2) );
             //sprintf(titre,"Visualisation t= %2.3f cop=%f center=%f", t*Dtime,Status[0].integral_R,Status[0].integral_L);
-            SDL_WM_SetCaption(titre, NULL);
+            SDL_SetWindowTitle(window, titre);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glMatrixMode( GL_MODELVIEW );
             glLoadIdentity( );
@@ -3116,7 +3152,7 @@ static const float dqlim=0.12;
                 gsl_vector_set (com, 2, 0);
             }
             //sprintf(titre,"Visualisation t= %2.3f, x= %2.3f, y= %2.3f", t*Dtime,gsl_vector_get (com,0),gsl_vector_get (com,1));
-            //SDL_WM_SetCaption(titre, NULL);
+            //SDL_SetWindowTitle(window, titre);
             DrawMarker(com);
             DrawIndicators(uLINK,&Status,com,CoP,ground);
 
@@ -3136,7 +3172,7 @@ static const float dqlim=0.12;
 
 
             glFlush();
-            SDL_GL_SwapBuffers();
+            SDL_GL_SwapWindow(window);
 
             if (Video==1)
             {
@@ -3167,7 +3203,7 @@ static const float dqlim=0.12;
 
     }
 
-    SDL_Quit(); // Arrêt de la SDL
+    cleanup_sdl(); // ArrÃªt de la SDL
 
     gsl_vector_free(com);
     gsl_vector_free(CoP);

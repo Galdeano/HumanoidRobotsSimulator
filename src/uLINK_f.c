@@ -21,7 +21,7 @@ void SetupRobot_f(Struct_uLINK uLINK[],Struct_State *Status)
     double Lt=0.510f;
     double Lp=0.1104f;
 
-    // Eléments d'inertie du robot Sherpa - 20091021SK
+    // ElÃ©ments d'inertie du robot Sherpa - 20091021SK
     double mPelvis=6.1f; // [kg]
     double mUpperLimb=8.f;
     double mLowerLimb=10.9f;
@@ -219,7 +219,7 @@ void SetupRobot_f(Struct_uLINK uLINK[],Struct_State *Status)
     int  RARM = 16;
     int  LARM = 19;
 
-    // Eléments d'inertie du robot Sherpa - 20091021SK
+    // ElÃ©ments d'inertie du robot Sherpa - 20091021SK
     double mPelvis=6.1f; // [kg]
     double mUpperLimb=8.f;
     double mLowerLimb=10.9f;

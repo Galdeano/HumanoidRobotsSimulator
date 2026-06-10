@@ -1,13 +1,13 @@
-/* Mat.c  Module Matrice. Opérateurs de calcul matriciel.
+/* Mat.c  Module Matrice. OpÃ©rateurs de calcul matriciel.
 
 16:39 18/10/07 MB V
 
-Dans ce module on utilise une règle du C ANSI :
- les matrices sont mémorisées par rangées (ligne par ligne)
+Dans ce module on utilise une rÃ¨gle du C ANSI :
+ les matrices sont mÃ©morisÃ©es par rangÃ©es (ligne par ligne)
 c'est le dernier indice qui varie le plus vite; (K&R p 219)
 
-Un vecteur ligne est mémorisé de la même façon qu'un vecteur colonne,
-autrement dit transposer un vecteur en mêmoire ne le modifie pas.
+Un vecteur ligne est mÃ©morisÃ© de la mÃªme faÃ§on qu'un vecteur colonne,
+autrement dit transposer un vecteur en mÃªmoire ne le modifie pas.
 */
 
 
@@ -86,33 +86,33 @@ int MatTest()
     {
         // Test inversion pour jeu GB
         /*
-        Problème aboutissant à un système de 7 équations à 7 inconnues (6 équations indépendantes)
+        ProblÃ¨me aboutissant Ã  un systÃ¨me de 7 Ã©quations Ã  7 inconnues (6 Ã©quations indÃ©pendantes)
 
-        On à 7 clés à 7 positions codées de [-3 à +3]. Vecteur colonne Position vectP
+        On Ã  7 clÃ©s Ã  7 positions codÃ©es de [-3 Ã  +3]. Vecteur colonne Position vectP
 
               6 1
              5 0 2
               4 3
 
-        A partir d'une position initiale on veut mettre toutes les clés à 0. Vecteur colonne Résultat vectR
-        Mais quand on tourne une clé les autres tournent aussi selon la formule:
+        A partir d'une position initiale on veut mettre toutes les clÃ©s Ã  0. Vecteur colonne RÃ©sultat vectR
+        Mais quand on tourne une clÃ© les autres tournent aussi selon la formule:
         mat77 * vectC + vectP = vectR (Vecteur colonne Commande vectC)
         On cherche vectC pour avoir vectR = [0]
         */
 #define Ordre6 6
-        Reel mat77[] = // matrice symètrique complète mais 6 équations indépendantes, on en tire la 6,6 qui suit
+        Reel mat77[] = // matrice symÃ¨trique complÃ¨te mais 6 Ã©quations indÃ©pendantes, on en tire la 6,6 qui suit
         {
-            //0   1   2   3   4   5   6   // la diagonale à 1 traduit le mouvement propre de chaque clé
-            /*0*/ 1., 1., 1., 1., 1., 1., 1., // cette ligne traduit que chaque clé fait tourner la clé 0 de la même valeur
+            //0   1   2   3   4   5   6   // la diagonale Ã  1 traduit le mouvement propre de chaque clÃ©
+            /*0*/ 1., 1., 1., 1., 1., 1., 1., // cette ligne traduit que chaque clÃ© fait tourner la clÃ© 0 de la mÃªme valeur
             /*1*/ 1., 1., 1., 2., 3., 2., 1.,
-            /*2*/ 1., 1., 1., 1., 2., 3., 2., // ensuite pour 1 clé :
-            /*3*/ 1., 2., 1., 1., 1., 2., 3., //     les 2 clés adjacentes tournent de la même valeur
-            /*4*/ 1., 3., 2., 1., 1., 1., 2., //     la clé opposée 3 fois plus
-            /*5*/ 1., 2., 3., 2., 1., 1., 1., //     les 2 clés intermédiaires 2 fois plus
+            /*2*/ 1., 1., 1., 1., 2., 3., 2., // ensuite pour 1 clÃ© :
+            /*3*/ 1., 2., 1., 1., 1., 2., 3., //     les 2 clÃ©s adjacentes tournent de la mÃªme valeur
+            /*4*/ 1., 3., 2., 1., 1., 1., 2., //     la clÃ© opposÃ©e 3 fois plus
+            /*5*/ 1., 2., 3., 2., 1., 1., 1., //     les 2 clÃ©s intermÃ©diaires 2 fois plus
             /*6*/ 1., 1., 2., 3., 2., 1., 1.
-        } , // la colonne 0 traduit que la clé 0 fait tourner toutes les clés de la même valeur
+        } , // la colonne 0 traduit que la clÃ© 0 fait tourner toutes les clÃ©s de la mÃªme valeur
 
-        mat[] = // 6,6 en suppriment la dernière ligne et dernère colonne de la 7,7
+        mat[] = // 6,6 en suppriment la derniÃ¨re ligne et dernÃ¨re colonne de la 7,7
         {
             1., 1., 1., 1., 1., 1.,
             1., 1., 1., 2., 3., 2.,
@@ -124,12 +124,12 @@ int MatTest()
 
         matInv[Ordre6 * Ordre6] ,
         matUni[Ordre6 * Ordre6] ,
-        vectP[7] = {  0. ,  0. , -2. , -1. , -2. , -3. , 0. } , // position initiale réelle, vecteurs colonne
+        vectP[7] = {  0. ,  0. , -2. , -1. , -2. , -3. , 0. } , // position initiale rÃ©elle, vecteurs colonne
                    vectC[7] ,
                    vectR[7] ;
 //------------------
         MatPrint( "P Vecteur position initiale" , " %6.2f" , vectP , 1 , 7 ) ;
-        printf("\n\nSomme de P1+P3+P5-(P2+P4+P6) doit être nulle = %2d", // pourquoi ?
+        printf("\n\nSomme de P1+P3+P5-(P2+P4+P6) doit Ãªtre nulle = %2d", // pourquoi ?
                (int) ( vectP[1] - vectP[2] + vectP[3] - vectP[4] + vectP[5] - vectP[6] ) ) ;
 
         MatPseudoInv( matInv , mat , Ordre6 , Ordre6 ) ;
@@ -144,15 +144,15 @@ int MatTest()
 // C = - M(-1) * P
         MatMul( vectC , matInv , vectP , Ordre6 , Ordre6 , 1 ) ;
         MatMulScal( vectC , (Reel) -1. , vectC , Ordre6 , 1 ) ;
-        vectC[6] = (Reel) 0. ; // lié, on ne tourne pas la clé 6
+        vectC[6] = (Reel) 0. ; // liÃ©, on ne tourne pas la clÃ© 6
         MatPrint( "C Vecteur commande" , " %6.2f" , vectC , 1 , 7 ) ;
-// vectC[7] = { -2. , 0. , 2. , -1. , 0. , 1. , 0. } ; // résultat attendu
+// vectC[7] = { -2. , 0. , 2. , -1. , 0. , 1. , 0. } ; // rÃ©sultat attendu
 
-// Vérification M * C + P = vecteur 0
+// VÃ©rification M * C + P = vecteur 0
         MatMul( vectR , mat77 , vectC , 7 , 7 , 1 ) ;
 // vectC = { -2. , 0. , 2. , -1. , 0. , 1. , 0. }
         MatAdd( vectR , vectR , vectP , 7 , 1 ) ;
-        MatPrint( "Vecteur résultat doit être nul" , " %6.2f" , vectR , 1 , 7 ) ;
+        MatPrint( "Vecteur rÃ©sultat doit Ãªtre nul" , " %6.2f" , vectR , 1 , 7 ) ;
     } // Test inversion pour jeu GB
 
     {
@@ -208,7 +208,7 @@ int MatTest()
 
 
     {
-        // Test pseudo inversion générée sous Matlab par M=rand(10,4) et Pinv(M)
+        // Test pseudo inversion gÃ©nÃ©rÃ©e sous Matlab par M=rand(10,4) et Pinv(M)
 #define L 10
 #define C  4
 
@@ -242,7 +242,7 @@ int MatTest()
 
         MatMul( matUni , matInv , mat , C , L , C ) ;
         MatPrint( "I" , "%9.6f" , matUni , C , C ) ;
-    } // Test pseudo inversion générée sous Matlab par M=rand(10,4) et Pinv(M)
+    } // Test pseudo inversion gÃ©nÃ©rÃ©e sous Matlab par M=rand(10,4) et Pinv(M)
 
 
     {
@@ -292,12 +292,12 @@ int MatTest()
 void MatTrans( Reel *_trans , const Reel *_mat, int _m , int _n )
 {
     /*
-    Méthode : _mat est balayée ligne par ligne, _trans colonne par colonne.
+    MÃ©thode : _mat est balayÃ©e ligne par ligne, _trans colonne par colonne.
 
-    Abandonné la possibilité d'utiliser _mat pour y transférer la transposée.
+    AbandonnÃ© la possibilitÃ© d'utiliser _mat pour y transfÃ©rer la transposÃ©e.
     En plus c'est une n,m
     */
-    Reel *p ; // pointe un élément de _trans
+    Reel *p ; // pointe un Ã©lÃ©ment de _trans
     int j ,
     i ;
 //------------------
@@ -309,7 +309,7 @@ void MatTrans( Reel *_trans , const Reel *_mat, int _m , int _n )
 //----------------------------------------------------------
 void MatTransf( double *_trans , const double *_mat, int _m , int _n )
 {
-    double *p ; // pointe un élément de _trans
+    double *p ; // pointe un Ã©lÃ©ment de _trans
     int j ,
     i ;
 //------------------
@@ -321,10 +321,10 @@ void MatTransf( double *_trans , const double *_mat, int _m , int _n )
 //----------------------------------------------------------
 void MatMul( Reel *_resul , const Reel *_mat1 , const Reel *_mat2 , int _l , int _m , int _n )
 {
-// !!! voir en récursif ???
+// !!! voir en rÃ©cursif ???
     const Reel *pCol2 , // pointe une colonne de _mat2
-    *p1 ,    // pointe un élément de _mat1
-    *p2 ;    // pointe un élément de _mat2
+    *p1 ,    // pointe un Ã©lÃ©ment de _mat1
+    *p2 ;    // pointe un Ã©lÃ©ment de _mat2
     int i ,
     j ,
     k ;
@@ -357,8 +357,8 @@ void MatMul( Reel *_resul , const Reel *_mat1 , const Reel *_mat2 , int _l , int
 void MatMulf( double *_resul , const double *_mat1 , const double *_mat2 , int _l , int _m , int _n )
 {
     const double *pCol2 , // pointe une colonne de _mat2
-    *p1 ,    // pointe un élément de _mat1
-    *p2 ;    // pointe un élément de _mat2
+    *p1 ,    // pointe un Ã©lÃ©ment de _mat1
+    *p2 ;    // pointe un Ã©lÃ©ment de _mat2
     int i ,
     j ,
     k ;
@@ -389,21 +389,21 @@ void MatMulf( double *_resul , const double *_mat1 , const double *_mat2 , int _
 
 //----------------------------------------------------------
 void MatAdd( Reel *_resul , const Reel *_mat1 , const Reel *_mat2 , int _m , int _n )
-// voir direct _m * _n = _taille en paramètre !!!! idem Sub Scal Cpy Clr Set
+// voir direct _m * _n = _taille en paramÃ¨tre !!!! idem Sub Scal Cpy Clr Set
 {
     int i ;
 //------------------
-    for ( i = _m * _n ; i-- ; ) *_resul++ = *_mat1++ + *_mat2++ ; // _m * _n éléments
+    for ( i = _m * _n ; i-- ; ) *_resul++ = *_mat1++ + *_mat2++ ; // _m * _n Ã©lÃ©ments
 }
 
 
 //----------------------------------------------------------
 void MatAddf( double *_resul , const double *_mat1 , const double *_mat2 , int _m , int _n )
-// voir direct _m * _n = _taille en paramètre !!!! idem Sub Scal Cpy Clr Set
+// voir direct _m * _n = _taille en paramÃ¨tre !!!! idem Sub Scal Cpy Clr Set
 {
     int i ;
 //------------------
-    for ( i = _m * _n ; i-- ; ) *_resul++ = *_mat1++ + *_mat2++ ; // _m * _n éléments
+    for ( i = _m * _n ; i-- ; ) *_resul++ = *_mat1++ + *_mat2++ ; // _m * _n Ã©lÃ©ments
 }
 
 
@@ -412,7 +412,7 @@ void MatSub( Reel *_resul , const Reel *_mat1 , const Reel *_mat2 , int _m , int
 {
     int i ;
 //------------------
-    for ( i = _m * _n ; i-- ; ) *_resul++ = *_mat1++ - *_mat2++ ; // _m * _n éléments
+    for ( i = _m * _n ; i-- ; ) *_resul++ = *_mat1++ - *_mat2++ ; // _m * _n Ã©lÃ©ments
 }
 
 
@@ -421,7 +421,7 @@ void MatSubf( double *_resul , const double *_mat1 , const double *_mat2 , int _
 {
     int i ;
 //------------------
-    for ( i = _m * _n ; i-- ; ) *_resul++ = *_mat1++ - *_mat2++ ; // _m * _n éléments
+    for ( i = _m * _n ; i-- ; ) *_resul++ = *_mat1++ - *_mat2++ ; // _m * _n Ã©lÃ©ments
 }
 
 
@@ -430,7 +430,7 @@ void MatMulScal( Reel *_resul , Reel _scal , const Reel *_mat , int _m , int _n 
 {
     int i ;
 //------------------
-    for ( i = _m * _n ; i-- ; ) *_resul++ = _scal * *_mat++ ; // _m * _n éléments
+    for ( i = _m * _n ; i-- ; ) *_resul++ = _scal * *_mat++ ; // _m * _n Ã©lÃ©ments
 }
 
 
@@ -439,7 +439,7 @@ void MatMulScalf( double *_resul , double _scal , const double *_mat , int _m , 
 {
     int i ;
 //------------------
-    for ( i = _m * _n ; i-- ; ) *_resul++ = _scal * *_mat++ ; // _m * _n éléments
+    for ( i = _m * _n ; i-- ; ) *_resul++ = _scal * *_mat++ ; // _m * _n Ã©lÃ©ments
 }
 
 
@@ -449,14 +449,14 @@ void MatMulScalf( double *_resul , double _scal , const double *_mat , int _m , 
 //----------------------------------------------------------
 void MatCpy( Reel *_resul , const Reel *_mat , int _m , int _n ) // nom comme memcpy ou strcpy
 {
-    memcpy( _resul , _mat , _m * _n * sizeof( Reel ) ) ;    // 0 ou 1 marchent, sont testés
+    memcpy( _resul , _mat , _m * _n * sizeof( Reel ) ) ;    // 0 ou 1 marchent, sont testÃ©s
 }
 
 
 //----------------------------------------------------------
 void MatCpyf( double *_resul , const double *_mat , int _m , int _n ) // nom comme memcpy ou strcpy
 {
-    memcpy( _resul , _mat , _m * _n * sizeof( double ) ) ;    // 0 ou 1 marchent, sont testés
+    memcpy( _resul , _mat , _m * _n * sizeof( double ) ) ;    // 0 ou 1 marchent, sont testÃ©s
 }
 
 
@@ -465,7 +465,7 @@ void MatClr( Reel *_mat , int _m , int _n )
 {
     int i ;
 //------------------
-    for ( i = _m * _n ; i-- ; ) *_mat++ = (Reel) 0.f ; // _m * _n éléments
+    for ( i = _m * _n ; i-- ; ) *_mat++ = (Reel) 0.f ; // _m * _n Ã©lÃ©ments
 }
 
 
@@ -474,7 +474,7 @@ void MatClrf( double *_mat , int _m , int _n )
 {
     int i ;
 //------------------
-    for ( i = _m * _n ; i-- ; ) *_mat++ = 0.f ; // _m * _n éléments
+    for ( i = _m * _n ; i-- ; ) *_mat++ = 0.f ; // _m * _n Ã©lÃ©ments
 }
 
 
@@ -507,7 +507,7 @@ void MatSet( Reel *_mat , int _m , int _n , Reel _scal )
 {
     int i ;
 //------------------
-    for ( i = _m * _n ; i-- ; ) *_mat++ = _scal ; // _m * _n éléments
+    for ( i = _m * _n ; i-- ; ) *_mat++ = _scal ; // _m * _n Ã©lÃ©ments
 }
 
 
@@ -516,7 +516,7 @@ void MatSetf( double *_mat , int _m , int _n , double _scal )
 {
     int i ;
 //------------------
-    for ( i = _m * _n ; i-- ; ) *_mat++ = _scal ; // _m * _n éléments
+    for ( i = _m * _n ; i-- ; ) *_mat++ = _scal ; // _m * _n Ã©lÃ©ments
 }
 
 
@@ -544,11 +544,11 @@ void MatPrintf( const char *_titre , const char *_format , const double *_mat , 
 } // MatPrintf
 
 
-//---------------------------------------------------------- privé
+//---------------------------------------------------------- privÃ©
 static Reel NormeCarre( const Reel *_vect , int _n )
 {
     /*
-    Fonction : Carré de la norme d'un vecteur
+    Fonction : CarrÃ© de la norme d'un vecteur
 
     //MatMul( &retour , _vect , _vect , 1 , _n , 1) ; // normeCarre = t_vect * _vect serait plus long
     //retour = MatProScal( _vect , _vect , _n ) serait plus long
@@ -561,7 +561,7 @@ static Reel NormeCarre( const Reel *_vect , int _n )
 } // NormeCarre
 
 
-//---------------------------------------------------------- privé
+//---------------------------------------------------------- privÃ©
 static double NormeCarref( const double *_vect , int _n )
 {
     int  i ;
@@ -576,30 +576,30 @@ static double NormeCarref( const double *_vect , int _n )
 int MatPseudoInv( Reel *_inv , const Reel *_mat , int _m , int _n )
 {
     /*
-    Les noms des vecteurs de l'algorithme de Greville (d,b,c) ont été conservé
-    Biblio : Théorie Calcul Matriciel p 129 (bibli Lirmm n° 7068)
+    Les noms des vecteurs de l'algorithme de Greville (d,b,c) ont Ã©tÃ© conservÃ©
+    Biblio : ThÃ©orie Calcul Matriciel p 129 (bibli Lirmm nÂ° 7068)
 
-    _inv est calculé ligne par ligne
+    _inv est calculÃ© ligne par ligne
 
-    indice k = [0 à n[
+    indice k = [0 Ã  n[
 
     A   : matrice [m,n]
     A+  : pseudo [n,m]
     ak  : colonne k de A [m,1]
-    akT : transposée de ak ou ligne k de AT [1,m]
-    Ak  : matrice formée des k premières colonnes de A [m,k-1]
-    Ak+ : matrice formée des k premières lignes de A+ [k-1,m]
+    akT : transposÃ©e de ak ou ligne k de AT [1,m]
+    Ak  : matrice formÃ©e des k premiÃ¨res colonnes de A [m,k-1]
+    Ak+ : matrice formÃ©e des k premiÃ¨res lignes de A+ [k-1,m]
 
      !!! faire + rapide
-     !!! si _m < _n utiliser (A+)t = (At)+ si + rapide à mesurer sous RTX
-     !!! voir en récursif Non car le pas est complexe par rapport à l'ensemble de l'algorithme
-                              même si le test d'arrêt et le premier pas sont simples.
-     !!! voir pour k = 0 si on l'intégre dans la boucle
+     !!! si _m < _n utiliser (A+)t = (At)+ si + rapide Ã  mesurer sous RTX
+     !!! voir en rÃ©cursif Non car le pas est complexe par rapport Ã  l'ensemble de l'algorithme
+                              mÃªme si le test d'arrÃªt et le premier pas sont simples.
+     !!! voir pour k = 0 si on l'intÃ©gre dans la boucle
 
 
-    Pour mémoire :
-    - Pseudo inverse à droite : Pinv(M)=Mt*(M*Mt)^-1
-    - Pseudo inverse à gauche : Pinv(M)=(Mt*M)^-1*Mt
+    Pour mÃ©moire :
+    - Pseudo inverse Ã  droite : Pinv(M)=Mt*(M*Mt)^-1
+    - Pseudo inverse Ã  gauche : Pinv(M)=(Mt*M)^-1*Mt
     */
 
 #define Pr 0 // print dans la boucle de calcul
@@ -607,11 +607,11 @@ int MatPseudoInv( Reel *_inv , const Reel *_mat , int _m , int _n )
 #define EPS (Reel) 1e-16 // -12 chez Xavier
 
     int  k ;
-    Reel tmat[NMax * MMax] , // transposée de _mat(_n,_m)
+    Reel tmat[NMax * MMax] , // transposÃ©e de _mat(_n,_m)
     *pat ,              // pointe la ligne k de tmat (pour la colonne k de _mat)
     xnorm ,
-    xnul ,  // groupé avec xmax
-    d[NMax-1] ,    // vecteur colonne de taille k variable, maximum _n-1, utilisé aussi pour td (transposée de d)
+    xnul ,  // groupÃ© avec xmax
+    d[NMax-1] ,    // vecteur colonne de taille k variable, maximum _n-1, utilisÃ© aussi pour td (transposÃ©e de d)
     x ,
     matAux[( NMax - 1 ) * MMax] ,
     *ctPuisb ; // pointeur sur un vecteur ligne ct puis b , pointe la ligne k de _inv
@@ -623,28 +623,28 @@ int MatPseudoInv( Reel *_inv , const Reel *_mat , int _m , int _n )
         return 1 ;
     }
 
-    MatTrans( tmat , _mat , _m , _n ) ; // tmat(_n,_m) = transposée de _mat l'accé aux lignes y est plus pratique
+    MatTrans( tmat , _mat , _m , _n ) ; // tmat(_n,_m) = transposÃ©e de _mat l'accÃ© aux lignes y est plus pratique
 
     for ( xnul = (Reel) 0.f , k = _n ; k-- ; ) // sur les _n vecteurs lignes de tmat
     {
-        xnorm = NormeCarre( tmat + k * _m , _m ) ; // ligne k de tmat, tmat à _m colonnes
+        xnorm = NormeCarre( tmat + k * _m , _m ) ; // ligne k de tmat, tmat Ã  _m colonnes
         if ( xnorm > xnul ) xnul = xnorm ; // garder la plus grande
     }
-// Le dernier xnorm calculé est celui de la ligne 0 de tmat, soit la colonne 0 de _mat
+// Le dernier xnorm calculÃ© est celui de la ligne 0 de tmat, soit la colonne 0 de _mat
 
     if ( xnul > (Reel) 1e32 ) return 2 ; // erreur, n'est pas dans Xavier
     xnul *= EPS ;
 
-    pat     = tmat ; // on utilise les lignes de tmat plus facile d'accès que les colonnes de _mat
-    ctPuisb = _inv ; // on utilise la première ligne non encore calculée de _inv pour ranger ck puis bk
+    pat     = tmat ; // on utilise les lignes de tmat plus facile d'accÃ¨s que les colonnes de _mat
+    ctPuisb = _inv ; // on utilise la premiÃ¨re ligne non encore calculÃ©e de _inv pour ranger ck puis bk
 
 
 //si a0 = 0 alors A1+ = 0                    // ligne 0 seule de la speudo [1,m]
 //          sinon A1+ = (a0T * a0)^-1 * a0T  // ( 1 / ( [1,m] * [m,1] ) ) * [1,m] = [1,m]
 
-// Si la première colonne de _mat n'est pas nulle
-    if ( xnorm > xnul ) MatMulScal( ctPuisb , (Reel) 1.f / xnorm , pat , 1 , _m ) ; // init 1ère ligne de _inv k = 0
-    else                MatClr( ctPuisb , 1 , _m ) ; // clear 1ère ligne de _inv si la norme est nulle
+// Si la premiÃ¨re colonne de _mat n'est pas nulle
+    if ( xnorm > xnul ) MatMulScal( ctPuisb , (Reel) 1.f / xnorm , pat , 1 , _m ) ; // init 1Ã¨re ligne de _inv k = 0
+    else                MatClr( ctPuisb , 1 , _m ) ; // clear 1Ã¨re ligne de _inv si la norme est nulle
 
 #if Pr
     MatPrint( "_inv" , " %10.6f" , _inv , 1 , _m ) ; // k = 0
@@ -652,14 +652,14 @@ int MatPseudoInv( Reel *_inv , const Reel *_mat , int _m , int _n )
 
     for ( k = 1 ; k < _n ; k++ )
     {
-        pat     += _m ; // passe à la ligne suivante, pointe sur la ligne k de tmat (0 à n-1) colonne k de _mat
-        ctPuisb += _m ; // passe à la ligne suivante, pointe sur la ligne k de _inv
+        pat     += _m ; // passe Ã  la ligne suivante, pointe sur la ligne k de tmat (0 Ã  n-1) colonne k de _mat
+        ctPuisb += _m ; // passe Ã  la ligne suivante, pointe sur la ligne k de _inv
 
-        // d = Ak+ * ak     // [k,m] * [m,1] = [k,1] ce vecteur auxiliaire peut être écrasé à chaque boucle donc pas d'indice pour d
-        MatMul( d , _inv , pat , k , _m , 1 ) ; // at est identique à a
-        // ck = ak - Ak * d // [m,1] - [m,k] * [k,1] = [m,1] sera rangé provisoirement dans la ligne k de la pseudo, elle est libre
-        // Ak étant difficilement accessible on utilise la relation : _mat * d = t(td * tmat) ; [m,k] * [k,1] = t([1,k] * [k,m]) = [m,1]
-        MatMul( ctPuisb , d , tmat , 1 , k , _m ) ;  // utilise d pour transposé de d
+        // d = Ak+ * ak     // [k,m] * [m,1] = [k,1] ce vecteur auxiliaire peut Ãªtre Ã©crasÃ© Ã  chaque boucle donc pas d'indice pour d
+        MatMul( d , _inv , pat , k , _m , 1 ) ; // at est identique Ã  a
+        // ck = ak - Ak * d // [m,1] - [m,k] * [k,1] = [m,1] sera rangÃ© provisoirement dans la ligne k de la pseudo, elle est libre
+        // Ak Ã©tant difficilement accessible on utilise la relation : _mat * d = t(td * tmat) ; [m,k] * [k,1] = t([1,k] * [k,m]) = [m,1]
+        MatMul( ctPuisb , d , tmat , 1 , k , _m ) ;  // utilise d pour transposÃ© de d
         MatSub( ctPuisb , pat , ctPuisb , 1 , _m ) ; // ligne k de tmat et on utilise la place de _inv
 
         //si ck = 0 alors bk = (1 + dT * d)^-1 * dT * Ak+ // scalaire * [1,k] * [k,m] = [1,m]
@@ -670,14 +670,14 @@ int MatPseudoInv( Reel *_inv , const Reel *_mat , int _m , int _n )
         else             // Si cette norme est nulle
         {
             x = (Reel) 1.f / ( (Reel) 1.f + NormeCarre( d , k ) ) ;
-            MatMul( ctPuisb , d , _inv , 1 , k , _m ) ;    // cPuisb = td * _inv (les k 1ères lignes)
+            MatMul( ctPuisb , d , _inv , 1 , k , _m ) ;    // cPuisb = td * _inv (les k 1Ã¨res lignes)
             MatMulScal( ctPuisb , x , ctPuisb , 1 , _m ) ; // c'esr bk
         }
-        // le résultat du if/else est dans bk, c'est sur la ligne k de _inv, est déjà en place
+        // le rÃ©sultat du if/else est dans bk, c'est sur la ligne k de _inv, est dÃ©jÃ  en place
 
         // Ak+ = Ak+ - d * bk // [k,m] - [k,1] * [1,m] = [k,m]
         MatMul( matAux , d , ctPuisb , k , 1 , _m ) ; // matAux(k,m) = d(k) * cPuisb(_m)
-        MatSub( _inv , _inv , matAux , k , _m ) ;  // et bk est déjà en place sur la ligne suivante de _inv
+        MatSub( _inv , _inv , matAux , k , _m ) ;  // et bk est dÃ©jÃ  en place sur la ligne suivante de _inv
 
 #if Pr
         MatPrint( "_inv" , " %10.6f" , _inv , k + 1 , _m ) ;
@@ -696,11 +696,11 @@ int MatPseudoInvf( double *_inv , const double *_mat , int _m , int _n )
 #define EPSf (double) 1e-12 // -12 chez Xavier
 
     int  k ;
-    double tmat[NMax * MMax] , // transposée de _mat(_n,_m)
+    double tmat[NMax * MMax] , // transposÃ©e de _mat(_n,_m)
     *pat ,              // pointe la ligne k de tmat (pour la colonne k de _mat)
     xnorm ,
-    xnul ,  // groupé avec xmax
-    d[NMax-1] ,    // vecteur colonne de taille k variable, maximum _n-1, utilisé aussi pour td (transposée de d)
+    xnul ,  // groupÃ© avec xmax
+    d[NMax-1] ,    // vecteur colonne de taille k variable, maximum _n-1, utilisÃ© aussi pour td (transposÃ©e de d)
     x ,
     matAux[( NMax - 1 ) * MMax] ,
     *ctPuisb ; // pointeur sur un vecteur ligne ct puis b , pointe la ligne k de _inv
@@ -712,28 +712,28 @@ int MatPseudoInvf( double *_inv , const double *_mat , int _m , int _n )
         return 1 ;
     }
 
-    MatTransf( tmat , _mat , _m , _n ) ; // tmat(_n,_m) = transposée de _mat l'accé aux lignes y est plus pratique
+    MatTransf( tmat , _mat , _m , _n ) ; // tmat(_n,_m) = transposÃ©e de _mat l'accÃ© aux lignes y est plus pratique
 
     for ( xnul = 0.f , k = _n ; k-- ; ) // sur les _n vecteurs lignes de tmat
     {
-        xnorm = NormeCarref( tmat + k * _m , _m ) ; // ligne k de tmat, tmat à _m colonnes
+        xnorm = NormeCarref( tmat + k * _m , _m ) ; // ligne k de tmat, tmat Ã  _m colonnes
         if ( xnorm > xnul ) xnul = xnorm ; // garder la plus grande
     }
-// Le dernier xnorm calculé est celui de la ligne 0 de tmat, soit la colonne 0 de _mat
+// Le dernier xnorm calculÃ© est celui de la ligne 0 de tmat, soit la colonne 0 de _mat
 
     if ( xnul > (double) 1e32 ) return 2 ; // erreur, n'est pas dans Xavier
     xnul *= EPSf ;
 
-    pat     = tmat ; // on utilise les lignes de tmat plus facile d'accès que les colonnes de _mat
-    ctPuisb = _inv ; // on utilise la première ligne non encore calculée de _inv pour ranger ck puis bk
+    pat     = tmat ; // on utilise les lignes de tmat plus facile d'accÃ¨s que les colonnes de _mat
+    ctPuisb = _inv ; // on utilise la premiÃ¨re ligne non encore calculÃ©e de _inv pour ranger ck puis bk
 
 
 //si a0 = 0 alors A1+ = 0                    // ligne 0 seule de la speudo [1,m]
 //          sinon A1+ = (a0T * a0)^-1 * a0T  // ( 1 / ( [1,m] * [m,1] ) ) * [1,m] = [1,m]
 
-// Si la première colonne de _mat n'est pas nulle
-    if ( xnorm > xnul ) MatMulScalf( ctPuisb , 1.f / xnorm , pat , 1 , _m ) ; // init 1ère ligne de _inv k = 0
-    else                MatClrf( ctPuisb , 1 , _m ) ; // clear 1ère ligne de _inv si la norme est nulle
+// Si la premiÃ¨re colonne de _mat n'est pas nulle
+    if ( xnorm > xnul ) MatMulScalf( ctPuisb , 1.f / xnorm , pat , 1 , _m ) ; // init 1Ã¨re ligne de _inv k = 0
+    else                MatClrf( ctPuisb , 1 , _m ) ; // clear 1Ã¨re ligne de _inv si la norme est nulle
 
 #if Pr
     MatPrintf( "_inv" , " %10.6f" , _inv , 1 , _m ) ; // k = 0
@@ -741,14 +741,14 @@ int MatPseudoInvf( double *_inv , const double *_mat , int _m , int _n )
 
     for ( k = 1 ; k < _n ; k++ )
     {
-        pat     += _m ; // passe à la ligne suivante, pointe sur la ligne k de tmat (0 à n-1) colonne k de _mat
-        ctPuisb += _m ; // passe à la ligne suivante, pointe sur la ligne k de _inv
+        pat     += _m ; // passe Ã  la ligne suivante, pointe sur la ligne k de tmat (0 Ã  n-1) colonne k de _mat
+        ctPuisb += _m ; // passe Ã  la ligne suivante, pointe sur la ligne k de _inv
 
-        // d = Ak+ * ak     // [k,m] * [m,1] = [k,1] ce vecteur auxiliaire peut être écrasé à chaque boucle donc pas d'indice pour d
-        MatMulf( d , _inv , pat , k , _m , 1 ) ; // at est identique à a
-        // ck = ak - Ak * d // [m,1] - [m,k] * [k,1] = [m,1] sera rangé provisoirement dans la ligne k de la pseudo, elle est libre
-        // Ak étant difficilement accessible on utilise la relation : _mat * d = t(td * tmat) ; [m,k] * [k,1] = t([1,k] * [k,m]) = [m,1]
-        MatMulf( ctPuisb , d , tmat , 1 , k , _m ) ;  // utilise d pour transposé de d
+        // d = Ak+ * ak     // [k,m] * [m,1] = [k,1] ce vecteur auxiliaire peut Ãªtre Ã©crasÃ© Ã  chaque boucle donc pas d'indice pour d
+        MatMulf( d , _inv , pat , k , _m , 1 ) ; // at est identique Ã  a
+        // ck = ak - Ak * d // [m,1] - [m,k] * [k,1] = [m,1] sera rangÃ© provisoirement dans la ligne k de la pseudo, elle est libre
+        // Ak Ã©tant difficilement accessible on utilise la relation : _mat * d = t(td * tmat) ; [m,k] * [k,1] = t([1,k] * [k,m]) = [m,1]
+        MatMulf( ctPuisb , d , tmat , 1 , k , _m ) ;  // utilise d pour transposÃ© de d
         MatSubf( ctPuisb , pat , ctPuisb , 1 , _m ) ; // ligne k de tmat et on utilise la place de _inv
 
         //si ck = 0 alors bk = (1 + dT * d)^-1 * dT * Ak+ // scalaire * [1,k] * [k,m] = [1,m]
@@ -759,14 +759,14 @@ int MatPseudoInvf( double *_inv , const double *_mat , int _m , int _n )
         else             // Si cette norme est nulle
         {
             x = 1.f / ( 1.f + NormeCarref( d , k ) ) ;
-            MatMulf( ctPuisb , d , _inv , 1 , k , _m ) ;    // cPuisb = td * _inv (les k 1ères lignes)
+            MatMulf( ctPuisb , d , _inv , 1 , k , _m ) ;    // cPuisb = td * _inv (les k 1Ã¨res lignes)
             MatMulScalf( ctPuisb , x , ctPuisb , 1 , _m ) ; // c'esr bk
         }
-        // le résultat du if/else est dans bk, c'est sur la ligne k de _inv, est déjà en place
+        // le rÃ©sultat du if/else est dans bk, c'est sur la ligne k de _inv, est dÃ©jÃ  en place
 
         // Ak+ = Ak+ - d * bk // [k,m] - [k,1] * [1,m] = [k,m]
         MatMulf( matAux , d , ctPuisb , k , 1 , _m ) ; // matAux(k,m) = d(k) * cPuisb(_m)
-        MatSubf( _inv , _inv , matAux , k , _m ) ;  // et bk est déjà en place sur la ligne suivante de _inv
+        MatSubf( _inv , _inv , matAux , k , _m ) ;  // et bk est dÃ©jÃ  en place sur la ligne suivante de _inv
 
 #if Pr
         MatPrintf( "_inv" , " %10.6f" , _inv , k + 1 , _m ) ;
@@ -834,7 +834,7 @@ void MatProVectoriel( Reel *_resul , const Reel *_vect1 , const Reel *_vect2 )
         *_resul++ = *( _vect1 + j ) * *( _vect2 + k )  -  *( _vect1 + k ) * *( _vect2 + j ) ;
     } // for i
 
-#else // Méthode avec MatTilde
+#else // MÃ©thode avec MatTilde
 
     Reel tilde[3*3] ;
 //------------------
@@ -859,7 +859,7 @@ void MatProVectorielf( double *_resul , const double *_vect1 , const double *_ve
         *_resul++ = *( _vect1 + j ) * *( _vect2 + k )  -  *( _vect1 + k ) * *( _vect2 + j ) ;
     } // for i
 
-#else // Méthode avec MatTilde
+#else // MÃ©thode avec MatTilde
 
     double tilde[3*3] ;
 //------------------
@@ -919,7 +919,7 @@ double MatNormf( const double *_vect , int _n )
 
 Reel MatNormeInfini( const Reel * _v , int _n )
 {
-// élément le plus grand en valeur absolue d'un vecteur
+// Ã©lÃ©ment le plus grand en valeur absolue d'un vecteur
     int i ;
     Reel resultat	= (Reel) 0.f ;
 //------------------

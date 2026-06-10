@@ -7,14 +7,14 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 # Find packages
 find_package(OpenGL REQUIRED)
 find_package(GSL REQUIRED)
-find_package(SDL REQUIRED)
+find_package(SDL2 REQUIRED)
 
-# Add GSL, SDL, OpenGL include directories
+# Add GSL, SDL2, OpenGL include directories
 include_directories(
     src
     src/ezxml
     ${GSL_INCLUDE_DIRS}
-    ${SDL_INCLUDE_DIR}
+    ${SDL2_INCLUDE_DIRS}
 )
 
 # Collect root C source files and ezxml library sources
@@ -44,7 +44,8 @@ target_include_directories(SimuSherpaConsole PRIVATE
 # Target link libraries
 target_link_libraries(SimuSherpaConsole PRIVATE
     ${GSL_LIBRARIES}
-    ${SDL_LIBRARY}
+    SDL2::SDL2main
+    SDL2::SDL2
     OpenGL::GL
     OpenGL::GLU
 )

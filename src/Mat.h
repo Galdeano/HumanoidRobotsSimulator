@@ -1,14 +1,14 @@
-/* Mat.h  Module Matrice. OpÈrateurs de calcul matriciel et vectoriel.
+/* Mat.h  Module Matrice. Op√©rateurs de calcul matriciel et vectoriel.
 
 11:20 22/10/10 MB
 
-Les matrices sont passÈes en argument par un pointeur de Reel (ou tableau de Reel) et
+Les matrices sont pass√©es en argument par un pointeur de Reel (ou tableau de Reel) et
  des int donnant leurs dimensions.
 
 Si l'appelant utilise des tableaux bidimensionnels, lors de l'appel des fonctions de ce module,
 il lui faudra faire des 'cast' (Reel *).
 
-Pour Èviter ces 'cast' il suffit de dÈclarer les matrices comme des tableaux ‡ une dimension :
+Pour √©viter ces 'cast' il suffit de d√©clarer les matrices comme des tableaux √† une dimension :
 
 Reel mat[6 * 6] ,
      matrice[] =
@@ -19,7 +19,7 @@ Reel mat[6 * 6] ,
 */
 
 
-#include "Reel.h" // dÈfinition du type Reel : double ou double
+#include "Reel.h" // d√©finition du type Reel : double ou double
 
 
 //----------------------------------------------------------
@@ -28,9 +28,9 @@ void MatTransf( double *_trans , const double *_mat , int _m , int _n ) ;
 /*
 Fonction : transpose une matrice.
 
-EntrÈes : _mat matrice ‡ transposer, de _m lignes et _n colonnes (m et n >= 0)
+Entr√©es : _mat matrice √† transposer, de _m lignes et _n colonnes (m et n >= 0)
 
-Sortie  : _trans matrice transposÈe (de _n lignes et _m colonnes)
+Sortie  : _trans matrice transpos√©e (de _n lignes et _m colonnes)
 
 NB : dans le cas d'un vecteur un MatCpy serait plus rapide (_m ou _n = 1)
      mais en fait on ne fait jamais de transposition d'un vecteur.
@@ -44,7 +44,7 @@ void MatMulf( double *_resul , const double *_mat1 , const double *_mat2 , int _
 Fonction : multiplie deux matrices.
 
 Sortie   : _resul(l,n) = _mat1(l,m) * _mat2(m,n) ; avec l, m et n >= 0
-           _resul peut Ítre dans _mat1 ou _mat2 si l * n <= 12 * 12
+           _resul peut √™tre dans _mat1 ou _mat2 si l * n <= 12 * 12
 */
 
 
@@ -54,7 +54,7 @@ void MatAddf( double *_resul , const double *_mat1 , const double *_mat2 , int _
 /*
 Fonction : additionne deux matrices.
 
-Sortie   : _resul(m,n) = _mat1(m,n) + _mat2(m,n) ; _resul peut Ítre dans _mat1 ou _mat2
+Sortie   : _resul(m,n) = _mat1(m,n) + _mat2(m,n) ; _resul peut √™tre dans _mat1 ou _mat2
            avec _m lignes , _n colonnes (m et n >= 0)
 */
 
@@ -65,7 +65,7 @@ void MatSubf( double *_resul , const double *_mat1 , const double *_mat2 , int _
 /*
 Fonction : soustraie deux matrices.
 
-Sortie   : _resul(m,n) = _mat1(m,n) - _mat2(m,n) ; _resul peut Ítre dans _mat1 ou _mat2
+Sortie   : _resul(m,n) = _mat1(m,n) - _mat2(m,n) ; _resul peut √™tre dans _mat1 ou _mat2
            avec _m lignes , _n colonnes (m et n >= 0)
 */
 
@@ -76,7 +76,7 @@ void MatMulScalf( double *_resul , double _scal , const double *_mat , int _m , 
 /*
 Fonction : multiplie une matrice par un scalaire.
 
-Sortie   : _resul(m,n) = _scal * _mat(m,n) ; _resul peut Ítre dans _mat
+Sortie   : _resul(m,n) = _scal * _mat(m,n) ; _resul peut √™tre dans _mat
            avec _m lignes , _n colonnes (m et n >= 0)
 */
 
@@ -106,7 +106,7 @@ Fonction :  Clear,initialise une matrice avec des 0
 void MatI( Reel *_mat , int _n ) ;
 void MatIf( double *_mat , int _n ) ;
 /*
-Fonction : initialise une matrice unitÈe de dimension n
+Fonction : initialise une matrice unit√©e de dimension n
 
            (n >= 0)
 */
@@ -127,9 +127,9 @@ void MatPrintf( const char *_titre , const char *_format , const double *_mat , 
 /*
 Fonction : affiche une matrice avec un format f.
 
-EntrÈes  : _titre  ligne de texte prÈcÈdant l'affichage de _mat
+Entr√©es  : _titre  ligne de texte pr√©c√©dant l'affichage de _mat
                    MatPrint ajoute 2 sauts de ligne ('\n\n') avant le _titre
-           _format d'affichage de chaque ÈlÈment de _mat
+           _format d'affichage de chaque √©l√©ment de _mat
 
            avec _m lignes , _n colonnes (m et n >= 0)
 */
@@ -147,7 +147,7 @@ Sortie   : _inv(n,m) = _mat(m,n)* ;
 
 Retour   : 0 si Ok
 
-MÈthode : algorithme de Greville
+M√©thode : algorithme de Greville
 */
 
 
@@ -155,7 +155,7 @@ MÈthode : algorithme de Greville
 void MatTilde( Reel *_resul , const Reel *_vect ) ;
 void MatTildef( double *_resul , const double *_vect ) ;
 /*
-Fonction : ‡ partir d'un vecteur u de dimension 3 calcule une matrice 3x3 dÈfinie par
+Fonction : √† partir d'un vecteur u de dimension 3 calcule une matrice 3x3 d√©finie par
 
          [    0  - uz    uy ]
 _resul = [   uz     0  - ux ]
@@ -180,7 +180,7 @@ Fonction : produit scalaire de 2 vecteurs de dimension _n.
 
 Retour   : produit scalaire _vect1(n) * _vect2(n)
 
-           avec _n >=0  (_n = 0 -> retour = 0 , _n = 1 -> retour = produit algÈbrique)
+           avec _n >=0  (_n = 0 -> retour = 0 , _n = 1 -> retour = produit alg√©brique)
 */
 
 

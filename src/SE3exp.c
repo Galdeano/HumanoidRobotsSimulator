@@ -12,7 +12,7 @@
 void SE3exp(SuLINK uLINK[],int j)
 {
 //function [p2, R2] = SE3exp(j, dt)
-//SE3exp.m actualise la position et lforientation par lfutilisation de la vitesse spatiale.
+//SE3exp.m actualise la position et lÂforientation par lÂfutilisation de la vitesse spatiale.
 // see Murray, Li, Sastry p.42
 
     static gsl_vector * tmp;

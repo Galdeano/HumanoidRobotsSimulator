@@ -27,8 +27,8 @@
 
 struct UDP_data
 {
-    int statut; //Statut du message 0 pas de message ou message pas prêt à l'envoie ou pas de message recu, 1 un message de controle, 2 un message de bilan (le controle devient le statut de l'opérateur local)
-    int controle; //Donne des ordres à l'opérateur à distance, 0 message d'ouverture de la liaison, 1 message d'ordre absolu, 2 demande d'une sinusoide
+    int statut; //Statut du message 0 pas de message ou message pas prÃªt Ã  l'envoie ou pas de message recu, 1 un message de controle, 2 un message de bilan (le controle devient le statut de l'opÃ©rateur local)
+    int controle; //Donne des ordres Ã  l'opÃ©rateur Ã  distance, 0 message d'ouverture de la liaison, 1 message d'ordre absolu, 2 demande d'une sinusoide
     int Id; //Numero du message, si -1 alors les val n'ont aucune importance
     short val[21];
     clock_t time_log;
@@ -97,7 +97,7 @@ static int Send_Order(){ //ATTENTION, LA CONNECTION DOIT ETRE PARAMETREE AVANT D
         return 0;
     }
     else{
-        //connecte=1; // !!! Decommenter pour stopper la boucle au premier message envoyé
+        //connecte=1; // !!! Decommenter pour stopper la boucle au premier message envoyÃ©
         printf("        Ordre envoye \n");
 
         return 1;
@@ -120,7 +120,7 @@ static void Param_Order(int int_controle, int nb_Id){
 }
 static int Param_connec_locale(){
         Ini();
-        //  Création de la socket
+        //  CrÃ©ation de la socket
         sock = socket(AF_INET, SOCK_DGRAM, 0);
         //printf("Socket cree \n");
        //  Configuration de la connexion
@@ -142,7 +142,7 @@ static int Param_connec_locale(){
 }
 
 static int Param_connec(){
-        //  Création de la socket
+        //  CrÃ©ation de la socket
         sock = socket(AF_INET, SOCK_DGRAM, 0);
         //printf("Socket cree \n");
        //  Configuration de la connexion

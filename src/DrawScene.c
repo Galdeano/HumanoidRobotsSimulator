@@ -1,8 +1,9 @@
 
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #include "Setup.h"
+extern SDL_Window* window;
 #include "uLink.h"
 #include "CalcCoM.h"
 
@@ -269,7 +270,7 @@ void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
 
 
     //glFlush();
-    SDL_GL_SwapBuffers();
+    SDL_GL_SwapWindow(window);
     //SDL_Delay(5);
 
 //    static int i=0;

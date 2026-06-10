@@ -532,7 +532,7 @@ void findPlane( GLfloat plane[4], GLfloat v0[3], GLfloat v1[3], GLfloat v2[3] )
 void Init_light()
 {
 
-    //différents paramètres
+    //diffÃ©rents paramÃ¨tres
 //    GLfloat ambient[] = {0.25f,0.25f,0.25f,1.0f};
 //    GLfloat diffuse[] = {0.8f,0.8f,0.8f,1.0f};
     GLfloat ambient[] = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -548,7 +548,7 @@ void Init_light()
 
     init_material();
 
-    //positionnement de la lumière avec les différents paramètres
+    //positionnement de la lumiÃ¨re avec les diffÃ©rents paramÃ¨tres
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 #if colorsGL
@@ -571,7 +571,7 @@ void Init_light()
     //glLightf(GL_LIGHT0,GL_LINEAR_ATTENUATION,0.001f);
 #endif
 
-    //spécification de la réflexion sur les matériaux
+    //spÃ©cification de la rÃ©flexion sur les matÃ©riaux
     glEnable(GL_COLOR_MATERIAL);
 
     glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
