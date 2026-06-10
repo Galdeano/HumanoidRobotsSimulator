@@ -10,20 +10,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(OpenGL REQUIRED)
 find_package(GSL REQUIRED)
 find_package(SDL2 REQUIRED)
+find_package(pugixml REQUIRED)
 
 # Add GSL, SDL2, OpenGL include directories
 include_directories(
     src
-    src/ezxml
     ${GSL_INCLUDE_DIRS}
     ${SDL2_INCLUDE_DIRS}
 )
 
-# Collect root C++ source files and ezxml library sources
+# Collect root C++ source files
 file(GLOB ROOT_SOURCES "src/*.cpp")
 set(SOURCES
     ${ROOT_SOURCES}
-    src/ezxml/ezxml.c
 )
 
 # Optimization compile flags and definitions
@@ -50,6 +49,7 @@ target_link_libraries(SimuSherpaConsole PRIVATE
     SDL2::SDL2
     OpenGL::GL
     OpenGL::GLU
+    pugixml::pugixml
 )
 
 # Link Winsock on Windows

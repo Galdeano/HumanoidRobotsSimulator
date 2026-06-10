@@ -4,6 +4,7 @@
 #include <gsl/gsl_math.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "uLink.h"
 #include "uLINK_f.h"
@@ -19,7 +20,7 @@
 #include "LoadRobot.h"
 #include "PrintGSLMatrix.h"
 
-#include "./ezxml/ezxml.h"
+#include <pugixml.hpp>
 
 
 void LoadRobotXML(SuLINK uLINK[],State *Status,char* RobotFile)
@@ -409,22 +410,35 @@ void LoadRobotXML_f(Struct_uLINK uLINK[],Struct_State *Status,char* RobotFile)
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
+static void trim_copy(char* dest, const char* src, size_t dest_size) {
+    if (dest_size == 0) return;
+    while (*src && isspace((unsigned char)*src)) {
+        src++;
+    }
+    size_t len = strlen(src);
+    while (len > 0 && isspace((unsigned char)src[len - 1])) {
+        len--;
+    }
+    size_t copy_len = len < dest_size - 1 ? len : dest_size - 1;
+    strncpy(dest, src, copy_len);
+    dest[copy_len] = '\0';
+}
 
 void LoadRobotParserXML(SuLINK uLINK[],State *Status,char* RobotFile)
 {
-
     int i;
     int dof,numlink,body;
     double DegToRad = M_PI/180;
 
-    ezxml_t robot = (ezxml_t)ezxml_parse_file(RobotFile), State, Link, Contacts, Contact;
+    pugi::xml_document doc;
+    if (!doc.load_file(RobotFile))
+    {
+        perror("Error opening robot description file");
+        return;
+    }
+    pugi::xml_node robot = doc.child("Robot");
 
-
-    sscanf (ezxml_child(robot, "DoF")->txt,"%d",&dof);
-    //printf("dof: %d \n", dof);
+    dof = robot.child("DoF").text().as_int();
 
     for(i=1; i<(dof+2); i++)
     {
@@ -458,9 +472,8 @@ void LoadRobotParserXML(SuLINK uLINK[],State *Status,char* RobotFile)
         uLINK[i].I = gsl_matrix_calloc (3, 3);
     }
 
-
     Status->ddl=dof+6;
-    Status->support=0; //0:none,1:right,2:left,3:bothuLINK[j].u_joint
+    Status->support=0; //0:none,1:right,2:left,3:both
     Status->desired_support=0;
     Status->distribution_y=0.5;
     Status->integral_R=0;
@@ -473,123 +486,103 @@ void LoadRobotParserXML(SuLINK uLINK[],State *Status,char* RobotFile)
     Status->FootCenter_R=gsl_vector_calloc (3);
     Status->FootCenter_L=gsl_vector_calloc (3);
 
-    State = ezxml_child(robot, "State");
+    pugi::xml_node State = robot.child("State");
 
-    sscanf (ezxml_child(State, "right_foot_ID")->txt,"%d",&Status->right_foot_ID);
-    sscanf (ezxml_child(State, "left_foot_ID")->txt,"%d",&Status->left_foot_ID);
-//    printf("right_foot_ID: %d \n", Status->right_foot_ID);
-//    printf("left_foot_ID: %d \n", Status->left_foot_ID);
+    Status->right_foot_ID = State.child("right_foot_ID").text().as_int();
+    Status->left_foot_ID = State.child("left_foot_ID").text().as_int();
 
-    for (Link = ezxml_child(robot, "Link"); Link; Link = Link->next)
+    for (pugi::xml_node Link : robot.children("Link"))
     {
-        numlink = atoi(ezxml_attr(Link, "no"));
-        sscanf (ezxml_child(Link, "Name")->txt,"%s",&uLINK[numlink].name);
+        numlink = Link.attribute("no").as_int();
+        trim_copy(uLINK[numlink].name, Link.child("Name").text().as_string(), sizeof(uLINK[numlink].name));
 
-        sscanf (ezxml_child(Link, "m")->txt,"%lf",&uLINK[numlink].m);
-        if(ezxml_child(Link, "fixed")!=NULL)
+        uLINK[numlink].m = Link.child("m").text().as_double();
+        if(Link.child("fixed"))
         {
-            sscanf (ezxml_child(Link, "fixed")->txt,"%d",&uLINK[numlink].fixed);
+            uLINK[numlink].fixed = Link.child("fixed").text().as_int();
         }
-        sscanf (ezxml_child(Link, "color")->txt,"%d",&uLINK[numlink].color);
-        sscanf (ezxml_child(Link, "sister")->txt,"%d",&uLINK[numlink].sister);
-        sscanf (ezxml_child(Link, "child")->txt,"%d",&uLINK[numlink].child);
-        if(ezxml_child(Link, "qmin")!=NULL)
+        uLINK[numlink].color = Link.child("color").text().as_int();
+        uLINK[numlink].sister = Link.child("sister").text().as_int();
+        uLINK[numlink].child = Link.child("child").text().as_int();
+        if(Link.child("qmin"))
         {
-            sscanf (ezxml_child(Link, "qmin")->txt,"%lf",&uLINK[numlink].qmin);
+            uLINK[numlink].qmin = Link.child("qmin").text().as_double();
             uLINK[numlink].qmin*=DegToRad;
-            //ping(numlink);
         }
         else
         {
             uLINK[numlink].qmin=-M_PI;
         }
-        if(ezxml_child(Link, "qmax")!=NULL)
+        if(Link.child("qmax"))
         {
-            sscanf (ezxml_child(Link, "qmax")->txt,"%lf",&uLINK[numlink].qmax);
+            uLINK[numlink].qmax = Link.child("qmax").text().as_double();
             uLINK[numlink].qmax*=DegToRad;
-            //ping(numlink);
         }
         else
         {
             uLINK[numlink].qmax=M_PI;
         }
-        if(ezxml_child(Link, "qmoy")!=NULL)
+        if(Link.child("qmoy"))
         {
-            sscanf (ezxml_child(Link, "qmoy")->txt,"%lf",&uLINK[numlink].qmoy);
+            uLINK[numlink].qmoy = Link.child("qmoy").text().as_double();
             uLINK[numlink].qmoy*=DegToRad;
             uLINK[numlink].q=uLINK[numlink].qmoy;
-            //ping(numlink);
         }
         else
         {
             uLINK[numlink].qmoy=0;
         }
-        if(ezxml_child(Link, "umin")!=NULL)
+        if(Link.child("umin"))
         {
-            sscanf (ezxml_child(Link, "umin")->txt,"%lf",&uLINK[numlink].umin);
-            //ping(numlink);
+            uLINK[numlink].umin = Link.child("umin").text().as_double();
         }
         else
         {
             uLINK[numlink].umin=-100;
         }
-        if(ezxml_child(Link, "umax")!=NULL)
+        if(Link.child("umax"))
         {
-            sscanf (ezxml_child(Link, "umax")->txt,"%lf",&uLINK[numlink].umax);
-            //ping(numlink);
+            uLINK[numlink].umax = Link.child("umax").text().as_double();
         }
         else
         {
             uLINK[numlink].umax=100;
         }
-        sscanf (ezxml_child(Link, "a")->txt,"%lf %lf %lf",gsl_vector_ptr (uLINK[numlink].a, 0),gsl_vector_ptr (uLINK[numlink].a, 1),gsl_vector_ptr (uLINK[numlink].a, 2));
-        sscanf (ezxml_child(Link, "b")->txt,"%lf %lf %lf",gsl_vector_ptr (uLINK[numlink].b, 0),gsl_vector_ptr (uLINK[numlink].b, 1),gsl_vector_ptr (uLINK[numlink].b, 2));
-        sscanf (ezxml_child(Link, "p")->txt,"%lf %lf %lf",gsl_vector_ptr (uLINK[numlink].p, 0),gsl_vector_ptr (uLINK[numlink].p, 1),gsl_vector_ptr (uLINK[numlink].p, 2));
-        sscanf (ezxml_child(Link, "c")->txt,"%lf %lf %lf",gsl_vector_ptr (uLINK[numlink].c, 0),gsl_vector_ptr (uLINK[numlink].c, 1),gsl_vector_ptr (uLINK[numlink].c, 2));
-        sscanf (ezxml_child(Link, "R")->txt,"%lf %lf %lf %lf %lf %lf %lf %lf %lf",gsl_matrix_ptr (uLINK[numlink].R, 0,0),gsl_matrix_ptr (uLINK[numlink].R, 1,0),gsl_matrix_ptr (uLINK[numlink].R, 2,0)
+        sscanf (Link.child("a").text().as_string(), "%lf %lf %lf",gsl_vector_ptr (uLINK[numlink].a, 0),gsl_vector_ptr (uLINK[numlink].a, 1),gsl_vector_ptr (uLINK[numlink].a, 2));
+        sscanf (Link.child("b").text().as_string(), "%lf %lf %lf",gsl_vector_ptr (uLINK[numlink].b, 0),gsl_vector_ptr (uLINK[numlink].b, 1),gsl_vector_ptr (uLINK[numlink].b, 2));
+        sscanf (Link.child("p").text().as_string(), "%lf %lf %lf",gsl_vector_ptr (uLINK[numlink].p, 0),gsl_vector_ptr (uLINK[numlink].p, 1),gsl_vector_ptr (uLINK[numlink].p, 2));
+        sscanf (Link.child("c").text().as_string(), "%lf %lf %lf",gsl_vector_ptr (uLINK[numlink].c, 0),gsl_vector_ptr (uLINK[numlink].c, 1),gsl_vector_ptr (uLINK[numlink].c, 2));
+        sscanf (Link.child("R").text().as_string(), "%lf %lf %lf %lf %lf %lf %lf %lf %lf",gsl_matrix_ptr (uLINK[numlink].R, 0,0),gsl_matrix_ptr (uLINK[numlink].R, 1,0),gsl_matrix_ptr (uLINK[numlink].R, 2,0)
                                                                                  ,gsl_matrix_ptr (uLINK[numlink].R, 0,1),gsl_matrix_ptr (uLINK[numlink].R, 1,1),gsl_matrix_ptr (uLINK[numlink].R, 2,1)
                                                                                  ,gsl_matrix_ptr (uLINK[numlink].R, 0,2),gsl_matrix_ptr (uLINK[numlink].R, 1,2),gsl_matrix_ptr (uLINK[numlink].R, 2,2));
-        sscanf (ezxml_child(Link, "I")->txt,"%lf %lf %lf %lf %lf %lf %lf %lf %lf",gsl_matrix_ptr (uLINK[numlink].I, 0,0),gsl_matrix_ptr (uLINK[numlink].I, 1,0),gsl_matrix_ptr (uLINK[numlink].I, 2,0)
+        sscanf (Link.child("I").text().as_string(), "%lf %lf %lf %lf %lf %lf %lf %lf %lf",gsl_matrix_ptr (uLINK[numlink].I, 0,0),gsl_matrix_ptr (uLINK[numlink].I, 1,0),gsl_matrix_ptr (uLINK[numlink].I, 2,0)
                                                                                  ,gsl_matrix_ptr (uLINK[numlink].I, 0,1),gsl_matrix_ptr (uLINK[numlink].I, 1,1),gsl_matrix_ptr (uLINK[numlink].I, 2,1)
                                                                                  ,gsl_matrix_ptr (uLINK[numlink].I, 0,2),gsl_matrix_ptr (uLINK[numlink].I, 1,2),gsl_matrix_ptr (uLINK[numlink].I, 2,2));
 #if LoadObj
-        if(ezxml_child(Link, "obj")!=NULL)
+        if(Link.child("obj"))
         {
-            sscanf (ezxml_child(Link, "obj")->txt,"%s",&uLINK[numlink].obj);
+            trim_copy(uLINK[numlink].obj, Link.child("obj").text().as_string(), sizeof(uLINK[numlink].obj));
             load_obj(uLINK[numlink].obj,&(uLINK[numlink].Mesh_obj));
         }
         uLINK[numlink].obj_offset = gsl_vector_calloc (3);
-        if(ezxml_child(Link, "obj_offset")!=NULL)
+        if(Link.child("obj_offset"))
         {
-            sscanf (ezxml_child(Link, "obj_offset")->txt,"%lf %lf %lf",gsl_vector_ptr (uLINK[numlink].obj_offset, 0),gsl_vector_ptr (uLINK[numlink].obj_offset, 1),gsl_vector_ptr (uLINK[numlink].obj_offset, 2));
+            sscanf (Link.child("obj_offset").text().as_string(), "%lf %lf %lf",gsl_vector_ptr (uLINK[numlink].obj_offset, 0),gsl_vector_ptr (uLINK[numlink].obj_offset, 1),gsl_vector_ptr (uLINK[numlink].obj_offset, 2));
         }
 #endif
-        //printf("lim %d : %f %f \n",numlink,uLINK[numlink].qmin,uLINK[numlink].qmax);
-
-//        printf("numlink: %d \n", numlink);
-//        printf("Name: %s \n",uLINK[numlink].name);
-//        printf("m: %lf \n",uLINK[numlink].m);
-//        printf("color: %d \n",uLINK[numlink].color);
-//        printf("sister: %d \n",uLINK[numlink].sister);
-//        printf("child: %d \n",uLINK[numlink].child);
-//        PrintGSLVector(uLINK[numlink].c);
-//        PrintGSLMatrix(uLINK[numlink].I);
-//        printf(" \n");
     }
 
-    Contacts = ezxml_child(robot, "Contacts");
+    pugi::xml_node Contacts = robot.child("Contacts");
 
-    for (Contact = ezxml_child(Contacts, "Contact"); Contact; Contact = Contact->next)
+    for (pugi::xml_node Contact : Contacts.children("Contact"))
     {
-        sscanf (ezxml_child(Contact, "body")->txt,"%d",&body);
-        sscanf (ezxml_child(Contact, "supportHeight")->txt,"%lf",&uLINK[body].supportHeight);
-        sscanf (ezxml_child(Contact, "shape")->txt,"%lf %lf %lf", &(uLINK[body].shape[0]), &(uLINK[body].shape[1]), &(uLINK[body].shape[2]));
-        sscanf (ezxml_child(Contact, "com")->txt,"%lf %lf %lf", &(uLINK[body].com[0]), &(uLINK[body].com[1]), &(uLINK[body].com[2]));
+        body = Contact.child("body").text().as_int();
+        uLINK[body].supportHeight = Contact.child("supportHeight").text().as_double();
+        sscanf (Contact.child("shape").text().as_string(), "%lf %lf %lf", &(uLINK[body].shape[0]), &(uLINK[body].shape[1]), &(uLINK[body].shape[2]));
+        sscanf (Contact.child("com").text().as_string(), "%lf %lf %lf", &(uLINK[body].com[0]), &(uLINK[body].com[1]), &(uLINK[body].com[2]));
 
         SetupRigidBody(uLINK,body);
     }
-
-    ezxml_free(robot);
 
 
     Status->nb_limb=0;
