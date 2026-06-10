@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.15)
-project(SimuSherpaConsole C)
+project(SimuSherpaConsole C CXX)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Find packages
 find_package(OpenGL REQUIRED)
@@ -17,8 +19,8 @@ include_directories(
     ${SDL2_INCLUDE_DIRS}
 )
 
-# Collect root C source files and ezxml library sources
-file(GLOB ROOT_SOURCES "src/*.c")
+# Collect root C++ source files and ezxml library sources
+file(GLOB ROOT_SOURCES "src/*.cpp")
 set(SOURCES
     ${ROOT_SOURCES}
     src/ezxml/ezxml.c
@@ -28,7 +30,7 @@ set(SOURCES
 add_compile_definitions(HAVE_INLINE GSL_RANGE_CHECK_OFF)
 
 # Set compile options for MinGW
-if(CMAKE_COMPILER_IS_GNUCC)
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUCC)
     add_compile_options(-O3 -msse2 -fcommon)
 endif()
 

@@ -77,7 +77,7 @@ int write_bmp(const char *filename, int width, int height, char *rgb)
     fwrite(&bmph.biClrUsed, 4, 1, file);
     fwrite(&bmph.biClrImportant, 4, 1, file);
 
-    line = malloc(bytesPerLine);
+    line = (unsigned char *)malloc(bytesPerLine);
     if (line == NULL)
     {
         fprintf(stderr, "Can't allocate memory for BMP file.\n");

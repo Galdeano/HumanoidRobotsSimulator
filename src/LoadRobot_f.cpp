@@ -19,7 +19,7 @@ void LoadRobotParserXML_f(Struct_uLINK uLINK[],Struct_State *Status,char* RobotF
     int i;
     int dof,numlink;
 
-    ezxml_t robot = ezxml_parse_file(RobotFile), State, Link;
+    ezxml_t robot = (ezxml_t)ezxml_parse_file(RobotFile), State, Link;
 
     sscanf (ezxml_child(robot, "DoF")->txt,"%d",&dof);
     //printf("dof: %d \n", dof);

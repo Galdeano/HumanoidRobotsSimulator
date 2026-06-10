@@ -145,16 +145,16 @@ void load_obj(char *fName,MeshObj *obj)
     Normals * vn_temp;
     vn_temp= (Normals*) calloc(obj_size,sizeof(Normals));
 
-    obj->gl_v= calloc(3*obj_size,sizeof(GLfloat));
-    obj->gl_t= calloc(3*obj_size,sizeof(unsigned int));
-    obj->gl_vn= calloc(3*obj_size,sizeof(GLfloat));
+    obj->gl_v= (GLfloat *)calloc(3*obj_size,sizeof(GLfloat));
+    obj->gl_t= (unsigned int *)calloc(3*obj_size,sizeof(unsigned int));
+    obj->gl_vn= (GLfloat *)calloc(3*obj_size,sizeof(GLfloat));
 
 
     unsigned int *gl_tn;
-    gl_tn= calloc(3*obj_size,sizeof(unsigned int));
+    gl_tn= (unsigned int *)calloc(3*obj_size,sizeof(unsigned int));
 
     GLfloat *gl_vn_count;
-    gl_vn_count= calloc(obj_size,sizeof(GLfloat));
+    gl_vn_count= (GLfloat *)calloc(obj_size,sizeof(GLfloat));
 
     obj->vertexCount = 0;
     obj->triangleCount = 0;

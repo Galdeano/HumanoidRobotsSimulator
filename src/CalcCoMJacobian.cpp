@@ -41,7 +41,7 @@ void CalcCoMJacobian( SuLINK uLINK[],State *Status, gsl_matrix * J, int base_cal
         tmpv3_2 = gsl_vector_calloc (3);
         mother = gsl_vector_calloc((Status->ddl)-3);
         double_path = gsl_vector_calloc((Status->ddl)-3);
-        path=calloc((Status->ddl)+2-6,sizeof(int));
+        path=(int *)calloc((Status->ddl)+2-6,sizeof(int));
 
         mass=TotalMass(uLINK,1);
         init_tmp=0;
