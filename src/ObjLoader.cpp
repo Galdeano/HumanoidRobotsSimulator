@@ -401,7 +401,7 @@ void draw_model(MeshObj *obj, const glm::mat4 &Model)
     defaultShader.setVec3("view_Pos", CameraPosition);
     defaultShader.setVec3("light_Pos", glm::vec3(2.0f, -2.0f, 2.0f)); // Light position
     defaultShader.setVec3("light_Color", glm::vec3(1.0f, 1.0f, 1.0f));
-    defaultShader.setVec3("ambient_Color", glm::vec3(0.3f, 0.3f, 0.3f));
+    defaultShader.setVec3("ambient_Color", glm::vec3(1.0f, 1.0f, 1.0f));
 
     // Set default materials or flat shadow color
     if (shadowPassActive) {

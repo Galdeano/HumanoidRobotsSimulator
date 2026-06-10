@@ -559,9 +559,112 @@ void findPlane( GLfloat plane[4], GLfloat v0[3], GLfloat v1[3], GLfloat v2[3] )
 
 
 
+#include <vector>
+#include <cmath>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
+static unsigned int sphereVAO = 0;
+static unsigned int sphereVBO = 0;
+static unsigned int sphereEBO = 0;
+static int sphere_index_count = 0;
+static int sphere_initialized = 0;
+
+static void init_sphere() {
+    const unsigned int X_SEGMENTS = 16;
+    const unsigned int Y_SEGMENTS = 16;
+    std::vector<float> vertices;
+    std::vector<unsigned int> indices;
+
+    for (unsigned int y = 0; y <= Y_SEGMENTS; ++y) {
+        for (unsigned int x = 0; x <= X_SEGMENTS; ++x) {
+            float xSegment = (float)x / (float)X_SEGMENTS;
+            float ySegment = (float)y / (float)Y_SEGMENTS;
+            float xPos = std::cos(xSegment * 2.0f * M_PI) * std::sin(ySegment * M_PI);
+            float yPos = std::cos(ySegment * M_PI);
+            float zPos = std::sin(xSegment * 2.0f * M_PI) * std::sin(ySegment * M_PI);
+
+            vertices.push_back(xPos);
+            vertices.push_back(yPos);
+            vertices.push_back(zPos);
+            vertices.push_back(xPos); // normal x
+            vertices.push_back(yPos); // normal y
+            vertices.push_back(zPos); // normal z
+        }
+    }
+
+    for (unsigned int y = 0; y < Y_SEGMENTS; ++y) {
+        for (unsigned int x = 0; x < X_SEGMENTS; ++x) {
+            indices.push_back((y + 1) * (X_SEGMENTS + 1) + x);
+            indices.push_back(y * (X_SEGMENTS + 1) + x);
+            indices.push_back(y * (X_SEGMENTS + 1) + x + 1);
+
+            indices.push_back((y + 1) * (X_SEGMENTS + 1) + x);
+            indices.push_back(y * (X_SEGMENTS + 1) + x + 1);
+            indices.push_back((y + 1) * (X_SEGMENTS + 1) + x + 1);
+        }
+    }
+
+    glGenVertexArrays(1, &sphereVAO);
+    glGenBuffers(1, &sphereVBO);
+    glGenBuffers(1, &sphereEBO);
+
+    glBindVertexArray(sphereVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, sphereVBO);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sphereEBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+
+    // Position
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    // Normal
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glBindVertexArray(0);
+    sphere_index_count = indices.size();
+    sphere_initialized = 1;
+}
+
+extern Shader defaultShader;
+extern glm::mat4 ProjectionMatrix;
+extern glm::mat4 ViewMatrix;
+
+void draw_sphere(const glm::vec3 &position, float radius, materialStruct *mat) {
+    if (!sphere_initialized) {
+        init_sphere();
+    }
+
+    glm::mat4 Model = glm::translate(glm::mat4(1.0f), position);
+    Model = glm::scale(Model, glm::vec3(radius));
+    glm::mat4 MVP = ProjectionMatrix * ViewMatrix * Model;
+    glm::mat3 NormalMatrix = glm::transpose(glm::inverse(glm::mat3(Model)));
+
+    defaultShader.use();
+    defaultShader.setMat4("MVP", MVP);
+    defaultShader.setMat4("Model", Model);
+    defaultShader.setMat3("NormalMatrix", NormalMatrix);
+
+    set_material(mat);
+
+    glBindVertexArray(sphereVAO);
+    glDrawElements(GL_TRIANGLES, sphere_index_count, GL_UNSIGNED_INT, (void*)0);
+    glBindVertexArray(0);
+}
+
 void Init_light()
 {
     init_material();
+
+    // Draw the light source sphere
+    extern materialStruct shiny_gold;
+    glm::vec3 light0_position(2.0f, -2.0f, 2.0f);
+    draw_sphere(light0_position, 0.2f, &shiny_gold);
 }
 
 
