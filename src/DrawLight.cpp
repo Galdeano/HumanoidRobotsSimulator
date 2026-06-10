@@ -472,6 +472,7 @@ void set_material(materialStruct *mat)
     defaultShader.setVec3("material_Specular", glm::vec3(mat->Ks[0], mat->Ks[1], mat->Ks[2]));
     defaultShader.setFloat("material_Shininess", mat->n);
     defaultShader.setBool("use_Base_Color", false);
+    defaultShader.setBool("use_Flat_Color", false);
 
     // Sync activeColor with material's diffuse color so that flat lines use it too
     extern glm::vec3 activeColor;
