@@ -48,16 +48,22 @@ void LoadRobotParserXML_f(Struct_uLINK uLINK[],Struct_State *Status,char* RobotF
     Status->distribution_y=0.5;
 
     State = ezxml_child(robot, "State");
-    sscanf (ezxml_child(State, "right_foot_ID")->txt,"%d",&Status->right_foot_ID);
-    sscanf (ezxml_child(State, "left_foot_ID")->txt,"%d",&Status->left_foot_ID);
+    int temp_right_foot_ID, temp_left_foot_ID;
+    sscanf (ezxml_child(State, "right_foot_ID")->txt,"%d",&temp_right_foot_ID);
+    Status->right_foot_ID = (unsigned char)temp_right_foot_ID;
+    sscanf (ezxml_child(State, "left_foot_ID")->txt,"%d",&temp_left_foot_ID);
+    Status->left_foot_ID = (unsigned char)temp_left_foot_ID;
 
     for (Link = ezxml_child(robot, "Link"); Link; Link = Link->next)
     {
         numlink = atoi(ezxml_attr(Link, "no"));
         sscanf (ezxml_child(Link, "Name")->txt,"%s", &uLINK[numlink].name);
         sscanf (ezxml_child(Link, "m")->txt,"%lf", &uLINK[numlink].m);
-        sscanf (ezxml_child(Link, "sister")->txt,"%d", &uLINK[numlink].sister);
-        sscanf (ezxml_child(Link, "child")->txt,"%d", &uLINK[numlink].child);
+        int temp_sister, temp_child;
+        sscanf (ezxml_child(Link, "sister")->txt,"%d", &temp_sister);
+        uLINK[numlink].sister = (unsigned char)temp_sister;
+        sscanf (ezxml_child(Link, "child")->txt,"%d", &temp_child);
+        uLINK[numlink].child = (unsigned char)temp_child;
         sscanf (ezxml_child(Link, "a")->txt,"%lf %lf %lf", &uLINK[numlink].a[0], &uLINK[numlink].a[1], &uLINK[numlink].a[2]);
         sscanf (ezxml_child(Link, "b")->txt,"%lf %lf %lf", &uLINK[numlink].b[0], &uLINK[numlink].b[1], &uLINK[numlink].b[2]);
         sscanf (ezxml_child(Link, "p")->txt,"%lf %lf %lf", &uLINK[numlink].p[0], &uLINK[numlink].p[1], &uLINK[numlink].p[2]);

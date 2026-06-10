@@ -108,49 +108,17 @@ int main(int argc, char *argv[])
 
     printf("\n Choose your robot: \n");
 
-    DIR *d;
-    struct dirent *dir;
-    d = opendir("./Robots/");
-    int i=0,j=0;
+    int i=0, j=0;
     char szInput [25];
     char RobotFile[255];
-    strcpy( RobotFile, "./Robots/" );
-
-    if (d == NULL)
-        perror("");
-
-    if (d)
-    {
-        while ((dir = readdir(d)) != NULL)
-        {
-            i++;
-            printf("%ld -> %s\n",telldir(d), dir->d_name);
-        }
-        rewinddir(d);
-
-        do
-        {
-            //*fgets ( szInput, 25, stdin );
-            //j=atoi(szInput);
-            //j=24;
-            j=18;
-        }
-        while (!(j>2 && j<=i));
-
-        for(i=0; i<j; i++)
-        {
-            dir = readdir(d);
-        }
-        strcat( RobotFile, dir->d_name );
-
-
-#ifdef WIN32
+#if Sherpa
+    strcpy(RobotFile, "./Robots/RobotSherpa.xml");
+#elif Human
+    strcpy(RobotFile, "./Robots/Human.xml");
 #else
-        strcpy( RobotFile, "./Robots/HOAP3v7.xml" );
+    strcpy(RobotFile, "./Robots/RobotGeneric.xml");
 #endif
-        printf("\n%s\n", RobotFile);
-        closedir(d);
-    }
+    printf("\nLoading robot file: %s\n", RobotFile);
 
 
 
@@ -219,13 +187,25 @@ int main(int argc, char *argv[])
 
 //HWND Handle=NULL;
 
-    SDL_Init(SDL_INIT_VIDEO); // Initialisation de la SDL
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        FILE *err_file = fopen("sdl_error.txt", "w");
+        if (err_file) {
+            fprintf(err_file, "SDL_Init failed: %s\n", SDL_GetError());
+            fclose(err_file);
+        }
+        exit(101);
+    }
     atexit(SDL_Quit);
 
-SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0); // vertical retrace sync off
-    //SDL_SetVideoMode(640, 480, 32, SDL_OPENGL); // vga// Ouverture de la fenêtre
-    SDL_SetVideoMode(1024, 768, 32, SDL_OPENGL); // xga// Ouverture de la fenêtre
-    //SDL_SetVideoMode(1400, 1050, 32, SDL_OPENGL); // sxga+// Ouverture de la fenêtre
+    SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0); // vertical retrace sync off
+    if (SDL_SetVideoMode(1024, 768, 32, SDL_OPENGL) == NULL) {
+        FILE *err_file = fopen("sdl_error.txt", "w");
+        if (err_file) {
+            fprintf(err_file, "SDL_SetVideoMode failed: %s\n", SDL_GetError());
+            fclose(err_file);
+        }
+        exit(102);
+    }
 
     //SDL_Surface *screen = SDL_SetVideoMode(HORIZONTAL_RESOLUTION, VERTICAL_RESOLUTION,video->vfmt->BitsPerPixel, SDL_OPENGL);
 
