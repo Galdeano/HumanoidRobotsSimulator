@@ -4,6 +4,7 @@
 #include <gsl/gsl_math.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "uLink.h"
 #include "uLINK_f.h"
@@ -409,9 +410,19 @@ void LoadRobotXML_f(Struct_uLINK uLINK[],Struct_State *Status,char* RobotFile)
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
+static void trim_copy(char* dest, const char* src, size_t dest_size) {
+    if (dest_size == 0) return;
+    while (*src && isspace((unsigned char)*src)) {
+        src++;
+    }
+    size_t len = strlen(src);
+    while (len > 0 && isspace((unsigned char)src[len - 1])) {
+        len--;
+    }
+    size_t copy_len = len < dest_size - 1 ? len : dest_size - 1;
+    strncpy(dest, src, copy_len);
+    dest[copy_len] = '\0';
+}
 
 void LoadRobotParserXML(SuLINK uLINK[],State *Status,char* RobotFile)
 {
@@ -483,7 +494,7 @@ void LoadRobotParserXML(SuLINK uLINK[],State *Status,char* RobotFile)
     for (pugi::xml_node Link : robot.children("Link"))
     {
         numlink = Link.attribute("no").as_int();
-        strcpy(uLINK[numlink].name, Link.child("Name").text().as_string());
+        trim_copy(uLINK[numlink].name, Link.child("Name").text().as_string(), sizeof(uLINK[numlink].name));
 
         uLINK[numlink].m = Link.child("m").text().as_double();
         if(Link.child("fixed"))
@@ -550,7 +561,7 @@ void LoadRobotParserXML(SuLINK uLINK[],State *Status,char* RobotFile)
 #if LoadObj
         if(Link.child("obj"))
         {
-            strcpy(uLINK[numlink].obj, Link.child("obj").text().as_string());
+            trim_copy(uLINK[numlink].obj, Link.child("obj").text().as_string(), sizeof(uLINK[numlink].obj));
             load_obj(uLINK[numlink].obj,&(uLINK[numlink].Mesh_obj));
         }
         uLINK[numlink].obj_offset = gsl_vector_calloc (3);

@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 
 #include "uLINK_f.h"
@@ -12,6 +13,19 @@
 #include <pugixml.hpp>
 
 
+static void trim_copy(char* dest, const char* src, size_t dest_size) {
+    if (dest_size == 0) return;
+    while (*src && isspace((unsigned char)*src)) {
+        src++;
+    }
+    size_t len = strlen(src);
+    while (len > 0 && isspace((unsigned char)src[len - 1])) {
+        len--;
+    }
+    size_t copy_len = len < dest_size - 1 ? len : dest_size - 1;
+    strncpy(dest, src, copy_len);
+    dest[copy_len] = '\0';
+}
 
 void LoadRobotParserXML_f(Struct_uLINK uLINK[],Struct_State *Status,char* RobotFile)
 {
@@ -59,7 +73,7 @@ void LoadRobotParserXML_f(Struct_uLINK uLINK[],Struct_State *Status,char* RobotF
     for (pugi::xml_node Link : robot.children("Link"))
     {
         numlink = Link.attribute("no").as_int();
-        strcpy(uLINK[numlink].name, Link.child("Name").text().as_string());
+        trim_copy(uLINK[numlink].name, Link.child("Name").text().as_string(), sizeof(uLINK[numlink].name));
         uLINK[numlink].m = Link.child("m").text().as_double();
         int temp_sister = Link.child("sister").text().as_int();
         uLINK[numlink].sister = (unsigned char)temp_sister;
