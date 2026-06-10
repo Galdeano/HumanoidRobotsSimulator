@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
 #elif Human
     strcpy(RobotFile, "./Robots/Human.xml");
 #else
-    strcpy(RobotFile, "./Robots/RobotGeneric.xml");
+    strcpy(RobotFile, "./Robots/HOAP3v7.xml");
 #endif
     printf("\nLoading robot file: %s\n", RobotFile);
 
