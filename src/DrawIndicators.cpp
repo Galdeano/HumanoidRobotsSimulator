@@ -2,8 +2,7 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_math.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "OpenGLHeaders.h"
 #include "uLink.h"
 #include "DrawForceMarker.h"
 #include "CalcCoM.h"
@@ -99,51 +98,7 @@ void DrawIndicators(SuLINK uLINK[],State *Status,gsl_vector * com,gsl_vector * C
 
 
 #if VisuArticularsLimits
-
-    GLUquadric* params = gluNewQuadric();
-    gluQuadricDrawStyle(params,GLU_LINE);
-    GLdouble rotgl[16];
-    glLineWidth( 1.0f );
-#if colorsGL
-    glColor3ub(0,0,255);
-#endif;
-#if materials
-    set_material(&turquoise);
-#endif
-    for (j=0; j<(Status->ddl-6); j++)
-    {
-        glPushMatrix();
-
-//        glGetDoublev(GL_MODELVIEW_MATRIX, rotgl);//charge avec identitee
-//        for (i = 0; i < 3; ++i)
-//            for (k = 0; k < 3; ++k)
-//                rotgl[i*4+k] = gsl_matrix_get (uLINK[j+1].R, k,i);
-//
-//        glTranslated(gsl_vector_get (uLINK[j+2].p,0),gsl_vector_get (uLINK[j+2].p,1),gsl_vector_get (uLINK[j+2].p,2));
-
-
-        glGetDoublev(GL_MODELVIEW_MATRIX, rotgl);//charge avec identitee
-
-        for (i = 0; i < 3; ++i)
-        {
-            for (k = 0; k < 3; ++k)
-            {
-                rotgl[i*4+k] = gsl_matrix_get (uLINK[j+1].R, k,i);
-            }
-            rotgl[i+12]=gsl_vector_get(uLINK[j+2].p,i);
-        }
-
-        glMultMatrixd(rotgl);
-        if (gsl_vector_get (uLINK[j+2].a,0)==1)
-            glRotated(90,0,1,0);
-        if (gsl_vector_get (uLINK[j+2].a,1)==1)
-            glRotated(90,1,0,0);
-        gluPartialDisk(params,0.04,0.12,20,1,180+(uLINK[j+2].qmin)*RadToDeg,-1*(-uLINK[j+2].qmax+uLINK[j+2].qmin)*RadToDeg);
-        glPopMatrix();
-    }
-
-    gluDeleteQuadric(params);
-
+    // GLU quadrics and disk drawing are removed in modern OpenGL Core Profile
 #endif
 
 //    gsl_vector_free(pos);
@@ -154,86 +109,51 @@ void DrawIndicators(SuLINK uLINK[],State *Status,gsl_vector * com,gsl_vector * C
 
 void Hoap_calc_zmp_visu(SuLINK uLINK[],State *Status,zmp_calc* zmp)
 {
-    int i,k;
-    GLdouble rotgl[16];
-    glLineWidth( 10.0f );
-
-
-    glPushMatrix();
-    glGetDoublev(GL_MODELVIEW_MATRIX, rotgl);//charge avec identitee
-    for (i = 0; i < 3; ++i)
-    {
-        for (k = 0; k < 3; ++k)
-        {
-            rotgl[i*4+k] = gsl_matrix_get (uLINK[Status->right_foot_ID].R, k,i);
+    // Right foot ZMP visualization
+    glm::mat4 M_right(1.0f);
+    for (int i = 0; i < 3; ++i) {
+        for (int k = 0; k < 3; ++k) {
+            M_right[i][k] = (float)gsl_matrix_get(uLINK[Status->right_foot_ID].R, k, i);
         }
-        rotgl[i+12]=gsl_vector_get(uLINK[Status->right_foot_ID].p,i);
+        M_right[3][i] = (float)gsl_vector_get(uLINK[Status->right_foot_ID].p, i);
     }
-    rotgl[14]+=-0.04;
-    glMultMatrixd(rotgl);
+    M_right = glm::translate(M_right, glm::vec3(0.0f, 0.0f, -0.04f));
 
-    if (zmp->zmp_right.W>10)
-    {
-#if colorsGL
-        glColor3ub(0,0,255);
-#endif
-#if materials
+    if (zmp->zmp_right.W > 10) {
         set_material(&turquoise);
-#endif
-    }
-    else
-    {
-#if colorsGL
-        glColor3ub(255,0,0);
-#endif
-#if materials
+    } else {
         set_material(&ruby);
-#endif
     }
 
-    glBegin(GL_LINES);
-    //glColor3ub(0,0,255);
-    glVertex3d(zmp->zmp_right.x/1000,zmp->zmp_right.y/1000,0);
-    glVertex3d(zmp->zmp_right.x/1000,zmp->zmp_right.y/1000,zmp->zmp_right.W/100);
-    glEnd();
-    glPopMatrix();
+    glm::vec3 local_start_r(zmp->zmp_right.x / 1000.0f, zmp->zmp_right.y / 1000.0f, 0.0f);
+    glm::vec3 local_end_r(zmp->zmp_right.x / 1000.0f, zmp->zmp_right.y / 1000.0f, zmp->zmp_right.W / 100.0f);
+    
+    glm::vec3 global_start_r = glm::vec3(M_right * glm::vec4(local_start_r, 1.0f));
+    glm::vec3 global_end_r = glm::vec3(M_right * glm::vec4(local_end_r, 1.0f));
 
+    draw_line(global_start_r, global_end_r, activeColor, 10.0f);
 
-    glPushMatrix();
-    glGetDoublev(GL_MODELVIEW_MATRIX, rotgl);//charge avec identitee
-    for (i = 0; i < 3; ++i)
-    {
-        for (k = 0; k < 3; ++k)
-        {
-            rotgl[i*4+k] = gsl_matrix_get (uLINK[Status->left_foot_ID].R, k,i);
+    // Left foot ZMP visualization
+    glm::mat4 M_left(1.0f);
+    for (int i = 0; i < 3; ++i) {
+        for (int k = 0; k < 3; ++k) {
+            M_left[i][k] = (float)gsl_matrix_get(uLINK[Status->left_foot_ID].R, k, i);
         }
-        rotgl[i+12]=gsl_vector_get(uLINK[Status->left_foot_ID].p,i);
+        M_left[3][i] = (float)gsl_vector_get(uLINK[Status->left_foot_ID].p, i);
     }
-    rotgl[14]+=-0.04;
-    glMultMatrixd(rotgl);
+    M_left = glm::translate(M_left, glm::vec3(0.0f, 0.0f, -0.04f));
 
-    if (zmp->zmp_left.W>10)
-    {
-#if colorsGL
-        glColor3ub(0,0,255);
-#endif
-#if materials
+    if (zmp->zmp_left.W > 10) {
         set_material(&turquoise);
-#endif
-    }
-    else
-    {
-#if colorsGL
-        glColor3ub(255,0,0);
-#endif
-#if materials
+    } else {
         set_material(&ruby);
-#endif
     }
-    glBegin(GL_LINES);
-    //glColor3ub(0,0,255);
-    glVertex3d(zmp->zmp_left.x/1000,zmp->zmp_left.y/1000,0);
-    glVertex3d(zmp->zmp_left.x/1000,zmp->zmp_left.y/1000,zmp->zmp_left.W/100);
-    glEnd();
-    glPopMatrix();
+
+    glm::vec3 local_start_l(zmp->zmp_left.x / 1000.0f, zmp->zmp_left.y / 1000.0f, 0.0f);
+    glm::vec3 local_end_l(zmp->zmp_left.x / 1000.0f, zmp->zmp_left.y / 1000.0f, zmp->zmp_left.W / 100.0f);
+    
+    glm::vec3 global_start_l = glm::vec3(M_left * glm::vec4(local_start_l, 1.0f));
+    glm::vec3 global_end_l = glm::vec3(M_left * glm::vec4(local_end_l, 1.0f));
+
+    draw_line(global_start_l, global_end_l, activeColor, 10.0f);
 }

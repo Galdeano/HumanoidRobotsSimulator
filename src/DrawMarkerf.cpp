@@ -1,31 +1,11 @@
-
 #include "DrawMarkerf.h"
-
-#include <GL/gl.h>
-#include <GL/glu.h>
-
-
+#include "OpenGLHeaders.h"
 
 void DrawMarkerf(double *com)
 {
     double d = 0.1;
-
-    glLineWidth( 1.0f );
-    glBegin(GL_LINES);
-    glVertex3d(com[0]-d,com[1],com[2]);
-    glVertex3d(com[0]+d,com[1],com[2]);
-    glEnd();
-
-    glLineWidth( 1.0f );
-    glBegin(GL_LINES);
-    glVertex3d(com[0],com[1]-d,com[2]);
-    glVertex3d(com[0],com[1]+d,com[2]);
-    glEnd();
-
-    glLineWidth( 1.0f );
-    glBegin(GL_LINES);
-    glVertex3d(com[0],com[1],com[2]-d);
-    glVertex3d(com[0],com[1],com[2]+d);
-    glEnd();
-
+    glm::vec3 center((float)com[0], (float)com[1], (float)com[2]);
+    draw_line(center - glm::vec3(d, 0.0f, 0.0f), center + glm::vec3(d, 0.0f, 0.0f), activeColor, 1.0f);
+    draw_line(center - glm::vec3(0.0f, d, 0.0f), center + glm::vec3(0.0f, d, 0.0f), activeColor, 1.0f);
+    draw_line(center - glm::vec3(0.0f, 0.0f, d), center + glm::vec3(0.0f, 0.0f, d), activeColor, 1.0f);
 }

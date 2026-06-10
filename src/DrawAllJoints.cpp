@@ -6,8 +6,7 @@
 #include "uLink.h"
 #include "DrawAllJoints.h"
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "OpenGLHeaders.h"
 #include "DrawPolygon.h"
 #include "DrawCylinder.h"
 #include "Connect3D.h"
@@ -20,51 +19,28 @@ void DrawAllJoints(SuLINK uLINK[],int j)
     if (j != 0)
     {
 #if LoadObj
-        int i,k;
-        glPushMatrix();
-        GLdouble rotgl[16];
-
-
-        for (i = 0; i < 3; ++i)
-        {
-            for (k = 0; k < 3; ++k)
-            {
-                rotgl[i*4+k] = gsl_matrix_get (uLINK[j].R, k,i);
+        glm::mat4 Mj(1.0f);
+        for (int i = 0; i < 3; i++) {
+            for (int k = 0; k < 3; k++) {
+                Mj[i][k] = (float)gsl_matrix_get(uLINK[j].R, k, i);
             }
-            rotgl[i*4+3]=0.0;
-            //rotgl[i+12]=gsl_vector_get(uLINK[j].p,i);
+            Mj[3][i] = (float)gsl_vector_get(uLINK[j].p, i);
         }
-        for (i = 0; i < 3; ++i)
-        {
-            rotgl[i+12]=gsl_vector_get(uLINK[j].p,i);//+gsl_vector_get(uLINK[j].obj_offset,i);
+
+        glm::vec3 offset(
+            (float)gsl_vector_get(uLINK[j].obj_offset, 0),
+            (float)gsl_vector_get(uLINK[j].obj_offset, 1),
+            (float)gsl_vector_get(uLINK[j].obj_offset, 2)
+        );
+        glm::mat4 Model = glm::translate(Mj, offset);
+
+        if (shadowPassActive) {
+            extern float g_shadowMatrix[16];
+            glm::mat4 shadowMatrix = glm::make_mat4(g_shadowMatrix);
+            Model = shadowMatrix * Model;
         }
-        rotgl[15]=1.0;
-//0.035000 0.000000 0.125000
 
-        glMultMatrixd(rotgl);
-
-        for (i = 0; i < 3; ++i)
-        {
-            for (k = 0; k < 3; ++k)
-            {
-                rotgl[i*4+k] = 0;
-            }
-            rotgl[i*4+3]=0.0;
-
-        }
-        for (i = 0; i < 3; ++i)
-        {
-            rotgl[i+12]=gsl_vector_get(uLINK[j].obj_offset,i);
-        }
-        rotgl[0]=1.0;
-        rotgl[5]=1.0;
-        rotgl[10]=1.0;
-        rotgl[15]=1.0;
-        glMultMatrixd(rotgl);
-        draw_model(&(uLINK[j].Mesh_obj));
-
-        //DrawOBJ(uLINK[j].obj);
-        glPopMatrix();
+        draw_model(&(uLINK[j].Mesh_obj), Model);
 #else
 
         if (uLINK[j].isPolygon==1)

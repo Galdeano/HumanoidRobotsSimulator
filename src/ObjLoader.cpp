@@ -6,8 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "OpenGLHeaders.h"
 #include "uLink.h"
 #include "Setup.h"
 #include "DrawLight.h"
@@ -331,7 +330,12 @@ void load_obj(char *fName,MeshObj *obj)
 #endif
 
     obj->firstTime = 1;
-
+    obj->has_buffers = 0;
+    obj->vao = 0;
+    obj->vbo = 0;
+    obj->vbo_normal = 0;
+    obj->ebo = 0;
+    obj->index_count = 0;
 }
 
 
@@ -341,144 +345,83 @@ void load_mtl(char *fName)
 }
 
 
-void draw_model(MeshObj *obj)
+void buffer_model(MeshObj *obj)
 {
+    if (obj->has_buffers) return;
 
-#if (Use_vertexArrays+Use_vertexArraysHeavy)==1
-    {
-#if colorsGL
-        glColor3f(0.7f,0.7f,0.7f);
-#endif
-#if materials
-        set_material(&silver);
-#endif
-        //glColor3ub(200,200,200);
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_NORMAL_ARRAY);
-//glEnableClientState(GL_COLOR_ARRAY);
+    glGenVertexArrays(1, &obj->vao);
+    glGenBuffers(1, &obj->vbo);
+    glGenBuffers(1, &obj->vbo_normal);
+    glGenBuffers(1, &obj->ebo);
 
-        glVertexPointer(3,GL_FLOAT,0,obj->gl_v);
-        glNormalPointer(GL_FLOAT,0,obj->gl_vn);
-//glColorPointer(4,GL_FLOAT,0,colours);
+    glBindVertexArray(obj->vao);
 
-        glDrawElements(GL_TRIANGLES, 3*(obj->triangleCount), GL_UNSIGNED_INT, obj->gl_t);
-//glDrawElements(GL_LINE_STRIP, 3*(obj->triangleCount), GL_UNSIGNED_INT, obj->gl_t);
-//glDisableClientState(GL_COLOR_ARRAY);
-        glDisableClientState(GL_NORMAL_ARRAY);
-        glDisableClientState(GL_VERTEX_ARRAY);
+    // Position VBO
+    glBindBuffer(GL_ARRAY_BUFFER, obj->vbo);
+    glBufferData(GL_ARRAY_BUFFER, 9 * obj->triangleCount * sizeof(float), obj->gl_v, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
 
-    }
-#endif
+    // Normal VBO
+    glBindBuffer(GL_ARRAY_BUFFER, obj->vbo_normal);
+    glBufferData(GL_ARRAY_BUFFER, 9 * obj->triangleCount * sizeof(float), obj->gl_vn, GL_STATIC_DRAW);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(1);
 
-#if (Use_vertexBufferObjects+Use_vertexBufferObjectsHeavy)==1
-    {
-#if colorsGL
-        glColor3f(0.7f,0.7f,0.7f);
-#endif
-#if materials
-        set_material(&silver);
-#endif
-        //glColor3ub(200,200,200);
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_NORMAL_ARRAY);
-//glEnableClientState(GL_COLOR_ARRAY);
+    // EBO
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, obj->ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * obj->triangleCount * sizeof(unsigned int), obj->gl_t, GL_STATIC_DRAW);
 
-        glVertexPointer(3,GL_FLOAT,0,obj->gl_v);
-        glNormalPointer(GL_FLOAT,0,obj->gl_vn);
-//glColorPointer(4,GL_FLOAT,0,colours);
+    glBindVertexArray(0);
 
-        glDrawElements(GL_TRIANGLES, 3*(obj->triangleCount), GL_UNSIGNED_INT, obj->gl_t);
-//glDrawElements(GL_LINE_STRIP, 3*(obj->triangleCount), GL_UNSIGNED_INT, obj->gl_t);
-//glDisableClientState(GL_COLOR_ARRAY);
-        glDisableClientState(GL_NORMAL_ARRAY);
-        glDisableClientState(GL_VERTEX_ARRAY);
-
-    }
-#endif
-
-#if Use_displayList
-    //static int firstTime = 1;
-    //static GLuint displayList;
-    int i;
-    if (obj->firstTime)
-    {
-        obj->displayList = glGenLists(1);
-        glNewList(obj->displayList, GL_COMPILE_AND_EXECUTE);
-        glBegin(GL_TRIANGLES);
-#if colorsGL
-        glColor3f(0.7f,0.7f,0.7f);
-#endif
-#if materials
-        set_material(&silver);
-#endif
-        for (i=0; i<obj->triangleCount; i++)
-        {
-            //glNormal3f(obj->vn[obj->t[i].v1].vn1, obj->vn[obj->t[i].v1].vn2, obj->vn[obj->t[i].v1].vn3);
-            glNormal3f(obj->vn[i].vn1, obj->vn[i].vn2, obj->vn[i].vn3);
-
-            glVertex3f(obj->v[obj->t[i].v1].x , obj->v[obj->t[i].v1].y , obj->v[obj->t[i].v1].z );
-            glVertex3f(obj->v[obj->t[i].v2].x , obj->v[obj->t[i].v2].y , obj->v[obj->t[i].v2].z );
-            glVertex3f(obj->v[obj->t[i].v3].x , obj->v[obj->t[i].v3].y , obj->v[obj->t[i].v3].z );
-//        glVertex3f(v[t[i].v1-1].x * 0.25, v[t[i].v1-1].y * 0.25, v[t[i].v1-1].z * 0.25);
-//        glVertex3f(v[t[i].v2-1].x * 0.25, v[t[i].v2-1].y * 0.25, v[t[i].v2-1].z * 0.25);
-//        glVertex3f(v[t[i].v3-1].x * 0.25, v[t[i].v3-1].y * 0.25, v[t[i].v3-1].z * 0.25);
-        }
-        glEnd();
-        glEndList();
-        obj->firstTime = 0;
-    }
-    else
-    {
-        glCallList(obj->displayList);
-    }
-
-#endif
-
-#if No_opt
-    int i;
-
-    glBegin(GL_TRIANGLES);
-#if colorsGL
-    glColor3f(0.7f,0.7f,0.7f);
-#endif
-#if materials
-    set_material(&silver);
-#endif
-    for (i=0; i<obj->triangleCount; i++)
-    {
-        //glNormal3f(obj->vn[obj->t[i].v1].vn1, obj->vn[obj->t[i].v1].vn2, obj->vn[obj->t[i].v1].vn3);
-        glNormal3f(obj->vn[i].vn1, obj->vn[i].vn2, obj->vn[i].vn3);
-
-        glVertex3f(obj->v[obj->t[i].v1].x , obj->v[obj->t[i].v1].y , obj->v[obj->t[i].v1].z );
-        glVertex3f(obj->v[obj->t[i].v2].x , obj->v[obj->t[i].v2].y , obj->v[obj->t[i].v2].z );
-        glVertex3f(obj->v[obj->t[i].v3].x , obj->v[obj->t[i].v3].y , obj->v[obj->t[i].v3].z );
-//        glVertex3f(v[t[i].v1-1].x * 0.25, v[t[i].v1-1].y * 0.25, v[t[i].v1-1].z * 0.25);
-//        glVertex3f(v[t[i].v2-1].x * 0.25, v[t[i].v2-1].y * 0.25, v[t[i].v2-1].z * 0.25);
-//        glVertex3f(v[t[i].v3-1].x * 0.25, v[t[i].v3-1].y * 0.25, v[t[i].v3-1].z * 0.25);
-    }
-    glEnd();
-
-    glBegin(GL_POINTS);
-#if colorsGL
-    glColor3f(0.7f,0.7f,0.7f);
-#endif
-#if materials
-    set_material(&silver);
-#endif
-
-
-    for (i=0; i<obj->triangleCount; i++)
-    {
-        glVertex3f(obj->v[obj->t[i].v1].x , obj->v[obj->t[i].v1].y , obj->v[obj->t[i].v1].z );
-        //printf("%d %f %f %f \n",obj->triangleCount,obj->v[obj->t[i].v1].x , obj->v[obj->t[i].v1].y , obj->v[obj->t[i].v1].z);
-    }
-    glEnd();
-
-
-#endif
+    obj->index_count = 3 * obj->triangleCount;
+    obj->has_buffers = 1;
 }
 
-void setMaterialsAndTex(Material mats,GLuint tex)
+extern Shader defaultShader;
+extern glm::mat4 ProjectionMatrix;
+extern glm::mat4 ViewMatrix;
+extern glm::vec3 CameraPosition;
+
+void draw_model(MeshObj *obj, const glm::mat4 &Model)
+{
+    if (!obj->has_buffers) return;
+
+    defaultShader.use();
+
+    // Set matrices
+    glm::mat4 MVP = ProjectionMatrix * ViewMatrix * Model;
+    glm::mat3 NormalMatrix = glm::transpose(glm::inverse(glm::mat3(Model)));
+
+    defaultShader.setMat4("MVP", MVP);
+    defaultShader.setMat4("Model", Model);
+    defaultShader.setMat3("NormalMatrix", NormalMatrix);
+
+    // Set lighting & camera uniforms
+    defaultShader.setVec3("view_Pos", CameraPosition);
+    defaultShader.setVec3("light_Pos", glm::vec3(2.0f, -2.0f, 2.0f)); // Light position
+    defaultShader.setVec3("light_Color", glm::vec3(1.0f, 1.0f, 1.0f));
+    defaultShader.setVec3("ambient_Color", glm::vec3(0.3f, 0.3f, 0.3f));
+
+    // Set default materials or flat shadow color
+    if (shadowPassActive) {
+        defaultShader.setBool("use_Flat_Color", true);
+        defaultShader.setVec3("base_Color", glm::vec3(0.1f, 0.1f, 0.1f));
+    } else {
+        defaultShader.setBool("use_Flat_Color", false);
+        defaultShader.setVec3("material_Ambient", glm::vec3(0.19225f, 0.19225f, 0.19225f));
+        defaultShader.setVec3("material_Diffuse", glm::vec3(0.50754f, 0.50754f, 0.50754f));
+        defaultShader.setVec3("material_Specular", glm::vec3(0.508273f, 0.508273f, 0.508273f));
+        defaultShader.setFloat("material_Shininess", 51.2f);
+        defaultShader.setBool("use_Base_Color", false);
+    }
+
+    glBindVertexArray(obj->vao);
+    glDrawElements(GL_TRIANGLES, obj->index_count, GL_UNSIGNED_INT, (void*)0);
+    glBindVertexArray(0);
+}
+
+void setMaterialsAndTex(Material mats, GLuint tex)
 {
 
 }

@@ -1,5 +1,5 @@
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "OpenGLHeaders.h"
+#include "Shader.h"
 #include "DrawLight.h"
 
 float g_shadowMatrix[16];
@@ -462,24 +462,20 @@ void init_material()
 
 }
 
+extern Shader defaultShader;
+
 void set_material(materialStruct *mat)
 {
+    defaultShader.use();
+    defaultShader.setVec3("material_Ambient", glm::vec3(mat->Ka[0], mat->Ka[1], mat->Ka[2]));
+    defaultShader.setVec3("material_Diffuse", glm::vec3(mat->Kd[0], mat->Kd[1], mat->Kd[2]));
+    defaultShader.setVec3("material_Specular", glm::vec3(mat->Ks[0], mat->Ks[1], mat->Ks[2]));
+    defaultShader.setFloat("material_Shininess", mat->n);
+    defaultShader.setBool("use_Base_Color", false);
 
-    //glEnable(GL_COLOR_MATERIAL);
-
-//    glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
-//    glColorMaterial(GL_FRONT,GL_DIFFUSE); //the following glColor3f sets diffuse reflection property
-//    glColor3f(1.0,1.0,1.0);
-//    glColorMaterial(GL_FRONT,GL_SPECULAR);//the following glColor3f sets specular reflection property
-//    glColor3f(1.0,1.0,1.0);
-
-    glMaterialfv (GL_FRONT_AND_BACK, GL_AMBIENT, mat->Ka);
-    glMaterialfv (GL_FRONT_AND_BACK, GL_DIFFUSE, mat->Kd);
-    glMaterialfv (GL_FRONT_AND_BACK, GL_SPECULAR, mat->Ks);
-    glMaterialf (GL_FRONT_AND_BACK, GL_SHININESS, mat->n);
-
-    //glColor3f(0.1,0.1,0.1);
-
+    // Sync activeColor with material's diffuse color so that flat lines use it too
+    extern glm::vec3 activeColor;
+    activeColor = glm::vec3(mat->Kd[0], mat->Kd[1], mat->Kd[2]);
 }
 
 
@@ -565,66 +561,7 @@ void findPlane( GLfloat plane[4], GLfloat v0[3], GLfloat v1[3], GLfloat v2[3] )
 
 void Init_light()
 {
-
-    //différents paramètres
-//    GLfloat ambient[] = {0.25f,0.25f,0.25f,1.0f};
-//    GLfloat diffuse[] = {0.8f,0.8f,0.8f,1.0f};
-    GLfloat ambient[] = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat diffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat specular0[] = {1.0f, 1.0f, 1.0f, 1.0f}; // Is term - White
-    GLfloat light0_position [] = {2.0f, -2.0f, 2.0f, 1.0f};
-    //GLfloat specular_reflexion[] = {0.8f,0.8f,0.8f,1.0f};
-    GLdouble specular_reflexion[] = {1.0f,1.0f,1.0f,1.0f};
-    GLubyte shiny_obj = 10;
-
-
-
-
     init_material();
-
-    //positionnement de la lumière avec les différents paramètres
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-#if colorsGL
-    GLfloat light_model_ambient[]= {.5,.5,.5,1.0};
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT,light_model_ambient);
-#endif
-#if materials
-    GLfloat light_model_ambient[]= {1.0f,1.0f,1.0f,1.0f};
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT,light_model_ambient);
-#endif
-    glLightfv(GL_LIGHT0,GL_POSITION,light0_position);
-    glLightfv(GL_LIGHT0,GL_AMBIENT,ambient);
-    glLightfv(GL_LIGHT0,GL_DIFFUSE,diffuse);
-    glLightfv(GL_LIGHT0,GL_SPECULAR, specular0);
-    //glLightf(GL_LIGHT0,GL_LINEAR_ATTENUATION,0.4f);
-#if colorsGL
-    glLightf(GL_LIGHT0,GL_LINEAR_ATTENUATION,0.4f);
-#endif
-#if materials
-    //glLightf(GL_LIGHT0,GL_LINEAR_ATTENUATION,0.001f);
-#endif
-
-    //spécification de la réflexion sur les matériaux
-    glEnable(GL_COLOR_MATERIAL);
-
-    glColorMaterial(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE);
-    glColorMaterial(GL_FRONT,GL_DIFFUSE); //the following glColor3f sets diffuse reflection property
-    glColor3f(1.0,1.0,1.0);
-    glColorMaterial(GL_FRONT,GL_SPECULAR);//the following glColor3f sets specular reflection property
-    glColor3f(1.0,1.0,1.0);
-
-
-    glPushMatrix();
-    set_material(&shiny_gold);
-    GLUquadric* params = gluNewQuadric();
-    glLineWidth( 1.0f );
-    glTranslated(light0_position[0], light0_position[1], light0_position[2]);
-    gluQuadricDrawStyle(params,GLU_FILL);
-    gluSphere(params,0.2,8,8);
-    gluDeleteQuadric(params);
-    glPopMatrix();
-
 }
 
 

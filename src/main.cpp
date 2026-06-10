@@ -25,8 +25,13 @@
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_math.h>
 #include <SDL2/SDL.h>
+#include "Shader.h"
+#include "DefaultShaders.h"
 SDL_Window* window = NULL;
 SDL_GLContext gl_context = NULL;
+Shader defaultShader;
+glm::vec3 activeColor(1.0f, 1.0f, 1.0f);
+bool shadowPassActive = false;
 
 void cleanup_sdl(void) {
     if (gl_context) {
@@ -37,8 +42,7 @@ void cleanup_sdl(void) {
     }
     SDL_Quit();
 }
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "OpenGLHeaders.h"
 
 
 #include<time.h>
@@ -209,6 +213,10 @@ int main(int argc, char *argv[])
     }
     atexit(cleanup_sdl);
 
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
     window = SDL_CreateWindow("Visualisation", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1024, 768, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
     if (window == NULL) {
         FILE *err_file = fopen("sdl_error.txt", "w");
@@ -227,18 +235,20 @@ int main(int argc, char *argv[])
         }
         exit(103);
     }
+
+    glewExperimental = GL_TRUE;
+    GLenum err = glewInit();
+    if (err != GLEW_OK) {
+        FILE *err_file = fopen("glew_error.txt", "w");
+        if (err_file) {
+            fprintf(err_file, "glewInit failed: %s\n", glewGetErrorString(err));
+            fclose(err_file);
+        }
+        exit(104);
+    }
+
     SDL_GL_SetSwapInterval(0); // vertical retrace sync off
     SDL_Event event;
-
-//Handle=FindWindow("SDL_app","Visualisation");
-//SetWindowPos(Handle,HWND_TOPMOST,1,1,640,480,SWP_SHOWWINDOW);
-
-    glMatrixMode( GL_PROJECTION );
-    glLoadIdentity( );
-
-    //gluPerspective(70, 640/480, 0.001, 1000);// vga
-    gluPerspective(70, 1024/768, 0.001, 1000);// xga
-    //gluPerspective(70, 1400/1050, 0.001, 1000);// sxga+
 
 
 
@@ -250,10 +260,17 @@ int main(int argc, char *argv[])
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
-    //glEnable(GL_LINE_SMOOTH);
-    glEnable(GL_NORMALIZE);
-//glShadeModel(GL_SMOOTH);
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
+    // gl_context init complete
+
+    // Initialize defaultShader
+    defaultShader = Shader(DEFAULT_VERTEX_SHADER, DEFAULT_FRAGMENT_SHADER);
+
+    // Buffer robot model meshes
+    for(i = 1; i < Status.ddl + 2; i++) {
+        if (strlen(uLINK[i].obj) > 0) {
+            buffer_model(&(uLINK[i].Mesh_obj));
+        }
+    }
 
     double Lc=0.5073;
     double Lt=0.510;

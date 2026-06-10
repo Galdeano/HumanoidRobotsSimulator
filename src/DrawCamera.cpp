@@ -1,6 +1,5 @@
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "OpenGLHeaders.h"
 #include <SDL2/SDL.h>
 
 #include "uLink.h"
@@ -99,18 +98,30 @@ void OnMouseButton(CamParam_s *CamParam, SDL_MouseButtonEvent event)
     }
 }
 
+glm::mat4 ProjectionMatrix(1.0f);
+glm::mat4 ViewMatrix(1.0f);
+glm::vec3 CameraPosition(0.0f);
+
 void Camlook(State *Status, CamParam_s *CamParam)
 {
-    gluLookAt(CamParam->distance, 0, 0, 0, 0, 0, 0, 0, 1);
-//    gluLookAt(CamParam->distance,0,0,
-//              0,0,0,
-//              0,0,1); // la caméra regarde le centre (0,0,0) et est sur l'axe X à une certaine distance du centre donc (_distance,0,0)
-    glTranslated(CamParam->X, CamParam->Y, CamParam->Z);
-    glRotated(CamParam->angleY,0,1,0); //la scène est tournée autour de l'axe Y
-    glRotated(CamParam->angleZ,0,0,1); //la scène est tournée autour de l'axe Z
+    // Projection matrix (70 degrees FOV, aspect ratio 1024/768, near 0.001, far 1000)
+    ProjectionMatrix = glm::perspective(glm::radians(70.0f), 1024.0f / 768.0f, 0.001f, 1000.0f);
 
-//printf("cam: %f %f %f %f %f %f \n",CamParam->angleY,CamParam->angleZ,CamParam->distance,CamParam->X,CamParam->Y,CamParam->Z);
+    // Initial View Matrix from gluLookAt
+    glm::vec3 eye(CamParam->distance, 0.0f, 0.0f);
+    glm::vec3 center(0.0f, 0.0f, 0.0f);
+    glm::vec3 up(0.0f, 0.0f, 1.0f);
+    glm::mat4 V = glm::lookAt(eye, center, up);
 
+    // Combine with translation and rotations
+    glm::mat4 T = glm::translate(glm::mat4(1.0f), glm::vec3(CamParam->X, CamParam->Y, CamParam->Z));
+    glm::mat4 Ry = glm::rotate(glm::mat4(1.0f), glm::radians((float)CamParam->angleY), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 Rz = glm::rotate(glm::mat4(1.0f), glm::radians((float)CamParam->angleZ), glm::vec3(0.0f, 0.0f, 1.0f));
+
+    ViewMatrix = V * T * Ry * Rz;
+
+    // Camera position in world space is the translation part of inv(ViewMatrix)
+    CameraPosition = glm::vec3(glm::inverse(ViewMatrix) * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 }
 
 

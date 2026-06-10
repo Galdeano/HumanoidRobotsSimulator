@@ -3,8 +3,6 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_math.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
 #include "uLink.h"
 #include "InvDyn.h"
 #include "CalcCoM.h"

@@ -1,6 +1,5 @@
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "OpenGLHeaders.h"
 #include <SDL2/SDL.h>
 #include "Setup.h"
 extern SDL_Window* window;
@@ -55,8 +54,6 @@ void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
 
 
 
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity();
     Camlook(Status,CamParam);
 
     //glRotated(angular_z,0,0,1);
@@ -110,29 +107,16 @@ void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
 //            GL_INCR);   // stencil pass, depth pass
 //glStencilMask(0xFFFFFFFF );
 
-    glDisable( GL_LIGHTING );
     glDisable( GL_DEPTH_TEST );
     glEnable( GL_BLEND );
-    glDisable(GL_COLOR_MATERIAL);
 
-    glPushMatrix();
-    {
-        // Load the teapot's shadow matrix
-        glMultMatrixf( g_shadowMatrix );
-
-        glColor3f(0.1f, 0.1f, 0.1f); // shadow color
-
-        {
-            DrawAllJoints(uLINK,1);
-        }
-    }
-    glPopMatrix();
+    shadowPassActive = true;
+    DrawAllJoints(uLINK,1);
+    shadowPassActive = false;
 
     glEnable( GL_DEPTH_TEST );
     glDisable( GL_BLEND );
-    glEnable( GL_LIGHTING );
     glDisable( GL_STENCIL_TEST );
-    glEnable(GL_COLOR_MATERIAL);
 
 
 //#if colorsGL

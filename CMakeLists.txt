@@ -11,12 +11,15 @@ find_package(OpenGL REQUIRED)
 find_package(GSL REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(pugixml REQUIRED)
+find_package(GLEW REQUIRED)
+find_package(glm REQUIRED)
 
 # Add GSL, SDL2, OpenGL include directories
 include_directories(
     src
     ${GSL_INCLUDE_DIRS}
     ${SDL2_INCLUDE_DIRS}
+    ${GLEW_INCLUDE_DIRS}
 )
 
 # Collect root C++ source files
@@ -48,7 +51,8 @@ target_link_libraries(SimuSherpaConsole PRIVATE
     SDL2::SDL2main
     SDL2::SDL2
     OpenGL::GL
-    OpenGL::GLU
+    GLEW::GLEW
+    glm::glm
     pugixml::pugixml
 )
 

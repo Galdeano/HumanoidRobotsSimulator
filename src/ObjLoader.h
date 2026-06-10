@@ -1,8 +1,7 @@
 #ifndef H_ObjLoader
 #define H_ObjLoader
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "OpenGLHeaders.h"
 #include "uLink.h"
 #include "Setup.h"
 
@@ -62,10 +61,18 @@ typedef struct
     //float *vertice,*normals,*textures,*colours;
     int vertexCount, triangleCount, normalsCount;
     Material materiaux[10];
+    // Modern OpenGL buffer handles
+    unsigned int vao;
+    unsigned int vbo;
+    unsigned int vbo_normal;
+    unsigned int ebo;
+    int index_count;
+    int has_buffers;
 } MeshObj;
 
 
 void load_obj(char *fName,MeshObj *obj);
+void buffer_model(MeshObj *obj);
 /* void charger_obj(std::string,MeshObj *first=NULL);
    Charge un fichier OBJ et son MTL, prend en arguments le nom du modèle à charger et le pointeur de la première frame si le modèle appartient à une animation (sinon laissez-le à NULL). Cette fonction est appelée par le constructeur.
    Aucune valeur de retour.
@@ -79,7 +86,8 @@ void load_mtl(char *fName);
    Aucune valeur de retour.
 */
 
-void draw_model(MeshObj *obj);
+#include "Shader.h"
+void draw_model(MeshObj *obj, const glm::mat4 &Model);
 /* void draw_model(bool nor=true,bool tex=false);
    Dessine le modèle, prend en arguments deux booléens représentant respectivement les normales et la texture. Si nor vaut true alors on prend en compte les normales, et si tex vaut true alors on applique la texture.
    Aucune valeur de retour.

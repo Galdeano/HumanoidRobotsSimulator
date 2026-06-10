@@ -25,6 +25,8 @@ typedef struct
     double Z;
 } CamParam_s ;
 
+#include "OpenGLHeaders.h"
+
 void CamInit(CamParam_s *CamParam);
 
 void OnMouseMotion(CamParam_s *CamParam, SDL_MouseMotionEvent event);
@@ -33,4 +35,8 @@ void OnMouseButton(CamParam_s *CamParam, SDL_MouseButtonEvent event);
 
 void Camlook(State *Status, CamParam_s *CamParam);
 
-#endif
+extern glm::mat4 ProjectionMatrix;
+extern glm::mat4 ViewMatrix;
+extern glm::vec3 CameraPosition;
+
+#endif // H_DrawCamera

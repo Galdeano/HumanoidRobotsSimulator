@@ -3,116 +3,138 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_math.h>
+#include <vector>
 #include "uLink.h"
 #include "DrawCylinder.h"
 #include "Setup.h"
+#include "OpenGLHeaders.h"
+#include "Shader.h"
 
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include "DrawLight.h"
+static unsigned int cylVAO = 0;
+static unsigned int cylVBO = 0;
+static unsigned int cylEBO = 0;
+static int cyl_index_count = 0;
+static int cyl_initialized = 0;
 
-void   DrawCylinder(SuLINK uLINK[],int j)
-{
+extern Shader defaultShader;
+extern glm::mat4 ProjectionMatrix;
+extern glm::mat4 ViewMatrix;
 
-    double radius    = 0.015;
-    double len       = 0.045;
-//    double radius    = 0.02;
-//    double len       = 0.06;
-    int i,k;
-    int faces =12;
-    double RadToDeg = 180/M_PI;
+static void init_cylinder() {
+    const int faces = 12;
+    std::vector<float> vertices;
+    std::vector<unsigned int> indices;
 
-    glPushMatrix();
-    //glLoadIdentity();
-    GLUquadric* params = gluNewQuadric();
-    glLineWidth( 1.0f );
+    for (int i = 0; i <= faces; i++) {
+        float angle = (float)i * 2.0f * M_PI / faces;
+        float c = cos(angle);
+        float s = sin(angle);
 
-    GLdouble rotgl[16];
+        // bottom ring
+        vertices.push_back(c); // pos x
+        vertices.push_back(s); // pos y
+        vertices.push_back(-0.5f); // pos z
+        vertices.push_back(c); // normal x
+        vertices.push_back(s); // normal y
+        vertices.push_back(0.0f); // normal z
 
-    //glGetDoublev(GL_MODELVIEW_MATRIX, rotgl);//charge avec identitee
-    for (i = 0; i < 3; ++i)
-    {
-        for (k = 0; k < 3; ++k)
-        {
-            rotgl[i*4+k] = gsl_matrix_get (uLINK[j].R, k,i);
-        }
-        rotgl[i*4+3]=0.0;
-        //rotgl[i+12]=gsl_vector_get(uLINK[j].p,i);
+        // top ring
+        vertices.push_back(c); // pos x
+        vertices.push_back(s); // pos y
+        vertices.push_back(0.5f); // pos z
+        vertices.push_back(c); // normal x
+        vertices.push_back(s); // normal y
+        vertices.push_back(0.0f); // normal z
     }
-    for (i = 0; i < 3; ++i)
-    {
-        rotgl[i+12]=gsl_vector_get(uLINK[j].p,i);
+
+    for (int i = 0; i < faces; i++) {
+        int b0 = i * 2;
+        int t0 = i * 2 + 1;
+        int b1 = (i + 1) * 2;
+        int t1 = (i + 1) * 2 + 1;
+
+        indices.push_back(b0);
+        indices.push_back(t0);
+        indices.push_back(b1);
+
+        indices.push_back(b1);
+        indices.push_back(t0);
+        indices.push_back(t1);
     }
-    rotgl[i+12]=1.0;
 
-//DrawMarker(uLINK[j].p);
-    //glTranslated(gsl_vector_get(uLINK[j].p,0),gsl_vector_get(uLINK[j].p,1),gsl_vector_get(uLINK[j].p,2));
+    glGenVertexArrays(1, &cylVAO);
+    glGenBuffers(1, &cylVBO);
+    glGenBuffers(1, &cylEBO);
 
+    glBindVertexArray(cylVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, cylVBO);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
 
-    glMultMatrixd(rotgl);
-    if (gsl_vector_get (uLINK[j].a,0)==1)
-        glRotated(90,0,1,0);
-    if (gsl_vector_get (uLINK[j].a,1)==1)
-        glRotated(90,1,0,0);
-    glTranslated(0,0,-len/2);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cylEBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
-    gluQuadricDrawStyle(params,GLU_FILL);
-    //GLU_LINE
-#if colorsGL
-#if !VisuTorquesColor
-    if (uLINK[j].color==0)//red
-        glColor3ub(255,0,0);
-    if (uLINK[j].color==1)//green
-        glColor3ub(0,255,0);
-    if (uLINK[j].color==2)//blue
-        glColor3ub(0,0,255);
-    if (uLINK[j].color==3)//grey
-        glColor3ub(124,124,124);
-    if (uLINK[j].color==4)//yellow
-        glColor3ub(255,255,0);
-    if (uLINK[j].color==5)//cyan
-        glColor3ub(0,255,255);
-    if (uLINK[j].color==6)//magenta
-        glColor3ub(255,0,255);
-#endif
-#if VisuTorquesColor
-    int colorT;
-    if (uLINK[j].u_joint>0)
-    {
-        colorT=(int)((uLINK[j].u_joint/uLINK[j].umax)*255);
-        glColor3ub(colorT,255-colorT,0);
-    }
-    else
-    {
-        colorT=(int)((uLINK[j].u_joint/uLINK[j].umin)*255);
-        glColor3ub(colorT,255-colorT,colorT);
-    }
-#endif
-#endif
-#if materials
-        set_material(&emerald);
-#endif
-    gluCylinder(params,radius,radius,len,faces,1);
+    // Position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
 
-    glRotated(180,0,1,0);
-    gluDisk(params,0,radius,faces,1);
-    glRotated(-180,0,1,0);
-    glTranslated(0,0,len);
-    gluDisk(params,0,radius,faces,1);
-    glTranslated(0,0,-len);
-    gluQuadricDrawStyle(params,GLU_LINE);
-#if colorsGL
-        glColor3ub(0,0,0);
-#endif
-#if materials
-        set_material(&black_rubber);
-#endif
-    gluCylinder(params,radius,radius,len,faces,1);
-#if VisuArticularsLimits
-    gluPartialDisk(params,0.04,0.12,20,1,180+(uLINK[j+2].qmin)*RadToDeg,-1*(-uLINK[j+2].qmax+uLINK[j+2].qmin)*RadToDeg);
-#endif
-    gluDeleteQuadric(params);
-    glPopMatrix();
+    // Normal attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
+    glBindVertexArray(0);
+
+    cyl_index_count = indices.size();
+    cyl_initialized = 1;
 }
 
+void DrawCylinder(SuLINK uLINK[], int j) {
+    if (!cyl_initialized) {
+        init_cylinder();
+    }
+
+    double radius = 0.015;
+    double len = 0.045;
+
+    glm::mat4 Mj(1.0f);
+    for (int i = 0; i < 3; i++) {
+        for (int k = 0; k < 3; k++) {
+            Mj[i][k] = (float)gsl_matrix_get(uLINK[j].R, k, i);
+        }
+        Mj[3][i] = (float)gsl_vector_get(uLINK[j].p, i);
+    }
+
+    glm::mat4 R(1.0f);
+    if (gsl_vector_get(uLINK[j].a, 0) == 1)
+        R = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    else if (gsl_vector_get(uLINK[j].a, 1) == 1)
+        R = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+    glm::mat4 S = glm::scale(glm::mat4(1.0f), glm::vec3((float)radius, (float)radius, (float)len));
+
+    extern float g_shadowMatrix[16];
+    glm::mat4 Model = Mj * R * S;
+    if (shadowPassActive) {
+        glm::mat4 shadowMatrix = glm::make_mat4(g_shadowMatrix);
+        Model = shadowMatrix * Model;
+    }
+    glm::mat4 MVP = ProjectionMatrix * ViewMatrix * Model;
+    glm::mat3 NormalMatrix = glm::transpose(glm::inverse(glm::mat3(Model)));
+
+    defaultShader.use();
+    defaultShader.setMat4("MVP", MVP);
+    defaultShader.setMat4("Model", Model);
+    defaultShader.setMat3("NormalMatrix", NormalMatrix);
+
+    if (shadowPassActive) {
+        defaultShader.setBool("use_Flat_Color", true);
+        defaultShader.setVec3("base_Color", glm::vec3(0.1f, 0.1f, 0.1f));
+    } else {
+        defaultShader.setBool("use_Flat_Color", false);
+        defaultShader.setBool("use_Base_Color", true);
+        defaultShader.setVec3("base_Color", glm::vec3(0.5f, 0.5f, 0.5f));
+    }
+
+    glBindVertexArray(cylVAO);
+    glDrawElements(GL_TRIANGLES, cyl_index_count, GL_UNSIGNED_INT, (void*)0);
+    glBindVertexArray(0);
+}
