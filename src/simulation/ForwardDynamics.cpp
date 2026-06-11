@@ -3,6 +3,7 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_math.h>
+#include <vector>
 #include "uLink.h"
 #include "InvDyn.h"
 #include "CalcCoM.h"
@@ -47,7 +48,8 @@
 void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 {
 
-    static Struct_uLINK *uLINKc;
+    static std::vector<Struct_uLINK> uLINKc_vec;
+    static Struct_uLINK *uLINKc = nullptr;
     static gsl_matrix * Inertia_Motor;
     static gsl_matrix *A;
     static gsl_vector *b;
@@ -80,7 +82,8 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
     if (init==1)
     {
 
-        uLINKc = (Struct_uLINK *)calloc((Status->ddl)+2-6,sizeof(Struct_uLINK));
+        uLINKc_vec.resize((Status->ddl)+2-6);
+        uLINKc = uLINKc_vec.data();
         Inertia_Motor = gsl_matrix_calloc (nDoF, nDoF);
         A = gsl_matrix_calloc (nDoF, nDoF);
         b = gsl_vector_calloc (nDoF);
@@ -196,14 +199,20 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
     if ((t%(int)(Te/Dtime))==0)
     {
         static int init_com=1;
-        static double *uPD;
-        static double *qd;
-        static double *dqd;
+        static std::vector<double> uPD_vec;
+        static std::vector<double> qd_vec;
+        static std::vector<double> dqd_vec;
+        static double *uPD = nullptr;
+        static double *qd = nullptr;
+        static double *dqd = nullptr;
         if (init_com==1)
         {
-            uPD = (double *)calloc((Status->ddl)-6,sizeof(double));
-            qd = (double *)calloc((Status->ddl)-6,sizeof(double));
-            dqd = (double *)calloc((Status->ddl)-6,sizeof(double));
+            uPD_vec.resize((Status->ddl)-6);
+            qd_vec.resize((Status->ddl)-6);
+            dqd_vec.resize((Status->ddl)-6);
+            uPD = uPD_vec.data();
+            qd = qd_vec.data();
+            dqd = dqd_vec.data();
             init_com=0;
         }
 
@@ -301,17 +310,25 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
 
 
-        static double *uG;
-        static double *fG;
-        static double *tG;
-        static double *uStab;
+        static std::vector<double> uG_vec;
+        static std::vector<double> fG_vec;
+        static std::vector<double> tG_vec;
+        static std::vector<double> uStab_vec;
+        static double *uG = nullptr;
+        static double *fG = nullptr;
+        static double *tG = nullptr;
+        static double *uStab = nullptr;
         static int init_G=1;
         if (init_G==1)
         {
-            uG = (double *)calloc((Status->ddl)-6,sizeof(double));
-            fG = (double *)calloc((Status->ddl)-6,sizeof(double));
-            tG = (double *)calloc((Status->ddl)-6,sizeof(double));
-            uStab = (double *)calloc((Status->ddl)-6,sizeof(double));
+            uG_vec.resize((Status->ddl)-6);
+            fG_vec.resize((Status->ddl)-6);
+            tG_vec.resize((Status->ddl)-6);
+            uStab_vec.resize((Status->ddl)-6);
+            uG = uG_vec.data();
+            fG = fG_vec.data();
+            tG = tG_vec.data();
+            uStab = uStab_vec.data();
             init_G=0;
         }
 

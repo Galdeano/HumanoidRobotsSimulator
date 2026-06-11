@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <dirent.h>
+#include <vector>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_blas.h>
@@ -163,9 +164,8 @@ int main(int argc, char *argv[])
     fclose(f);
 
 
-    SuLINK *uLINK;
-    uLINK = (SuLINK *)calloc(dof+2,sizeof(SuLINK));
-    //SuLINK uLINK[NbLinks];
+    std::vector<SuLINK> uLINK_vec(dof + 2);
+    SuLINK *uLINK = uLINK_vec.data();
 
     State Status;
 

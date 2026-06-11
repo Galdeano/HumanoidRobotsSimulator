@@ -11,6 +11,9 @@
 #endif
 #include "butterworth.h"
 
+#include <utility>
+#include <cstring>
+
 /** \file uLink.h
  *  \brief Link initialisation and declarations
  *  \author    David Galdeano
@@ -81,6 +84,165 @@ struct StuLINK
     gsl_vector * obj_offset;
     #endif
     ButterworthData filter;
+
+    StuLINK() {
+        memset(name, 0, sizeof(name));
+        fixed = 0;
+        sister = 0;
+        child = 0;
+        mother = 0;
+        upper = 0;
+        color = 0;
+        isPolygon = 0;
+        m = 0.0;
+        q = 0.0;
+        dq = 0.0;
+        ddq = 0.0;
+        Ir = 0.0;
+        gr = 0.0;
+        u = 0.0;
+        ug = 0.0;
+        uef = 0.0;
+        u_joint = 0.0;
+        umin = 0.0;
+        umax = 0.0;
+        supportHeight = 0.0;
+        qmin = 0.0;
+        qmax = 0.0;
+        qmoy = 0.0;
+        a = nullptr;
+        b = nullptr;
+        c = nullptr;
+        p = nullptr;
+        v = nullptr;
+        vo = nullptr;
+        w = nullptr;
+        dvo = nullptr;
+        dw = nullptr;
+        hw = nullptr;
+        hv = nullptr;
+        isContact = nullptr;
+        memset(com, 0, sizeof(com));
+        memset(shape, 0, sizeof(shape));
+        R = nullptr;
+        I = nullptr;
+        vert = nullptr;
+        face = nullptr;
+        normalface = nullptr;
+        contact = nullptr;
+        pcontact = nullptr;
+        fcontact = nullptr;
+        iscontact = nullptr;
+        posContact = nullptr;
+        forContact = nullptr;
+        memset(obj, 0, sizeof(obj));
+        #if LoadObj
+        obj_offset = nullptr;
+        #endif
+    }
+
+    ~StuLINK() {
+        if (a) gsl_vector_free(a);
+        if (b) gsl_vector_free(b);
+        if (c) gsl_vector_free(c);
+        if (p) gsl_vector_free(p);
+        if (v) gsl_vector_free(v);
+        if (vo) gsl_vector_free(vo);
+        if (w) gsl_vector_free(w);
+        if (dvo) gsl_vector_free(dvo);
+        if (dw) gsl_vector_free(dw);
+        if (hw) gsl_vector_free(hw);
+        if (hv) gsl_vector_free(hv);
+        if (isContact) gsl_vector_free(isContact);
+        if (R) gsl_matrix_free(R);
+        if (I) gsl_matrix_free(I);
+        if (vert) gsl_matrix_free(vert);
+        if (face) gsl_matrix_free(face);
+        if (normalface) gsl_matrix_free(normalface);
+        if (contact) gsl_matrix_free(contact);
+        if (pcontact) gsl_matrix_free(pcontact);
+        if (fcontact) gsl_matrix_free(fcontact);
+        if (iscontact) gsl_vector_free(iscontact);
+        if (posContact) gsl_matrix_free(posContact);
+        if (forContact) gsl_matrix_free(forContact);
+        #if LoadObj
+        if (obj_offset) gsl_vector_free(obj_offset);
+        #endif
+    }
+
+    // Disable copy semantics
+    StuLINK(const StuLINK&) = delete;
+    StuLINK& operator=(const StuLINK&) = delete;
+
+    // Enable move semantics
+    StuLINK(StuLINK&& other) noexcept {
+        *this = std::move(other);
+    }
+    StuLINK& operator=(StuLINK&& other) noexcept {
+        if (this != &other) {
+            this->~StuLINK();
+
+            memcpy(name, other.name, sizeof(name));
+            fixed = other.fixed;
+            sister = other.sister;
+            child = other.child;
+            mother = other.mother;
+            upper = other.upper;
+            color = other.color;
+            isPolygon = other.isPolygon;
+            m = other.m;
+            q = other.q;
+            dq = other.dq;
+            ddq = other.ddq;
+            Ir = other.Ir;
+            gr = other.gr;
+            u = other.u;
+            ug = other.ug;
+            uef = other.uef;
+            u_joint = other.u_joint;
+            umin = other.umin;
+            umax = other.umax;
+            supportHeight = other.supportHeight;
+            qmin = other.qmin;
+            qmax = other.qmax;
+            qmoy = other.qmoy;
+            memcpy(com, other.com, sizeof(com));
+            memcpy(shape, other.shape, sizeof(shape));
+            memcpy(obj, other.obj, sizeof(obj));
+            #if LoadObj
+            Mesh_obj = std::move(other.Mesh_obj);
+            #endif
+            filter = other.filter;
+
+            a = other.a; other.a = nullptr;
+            b = other.b; other.b = nullptr;
+            c = other.c; other.c = nullptr;
+            p = other.p; other.p = nullptr;
+            v = other.v; other.v = nullptr;
+            vo = other.vo; other.vo = nullptr;
+            w = other.w; other.w = nullptr;
+            dvo = other.dvo; other.dvo = nullptr;
+            dw = other.dw; other.dw = nullptr;
+            hw = other.hw; other.hw = nullptr;
+            hv = other.hv; other.hv = nullptr;
+            isContact = other.isContact; other.isContact = nullptr;
+            R = other.R; other.R = nullptr;
+            I = other.I; other.I = nullptr;
+            vert = other.vert; other.vert = nullptr;
+            face = other.face; other.face = nullptr;
+            normalface = other.normalface; other.normalface = nullptr;
+            contact = other.contact; other.contact = nullptr;
+            pcontact = other.pcontact; other.pcontact = nullptr;
+            fcontact = other.fcontact; other.fcontact = nullptr;
+            iscontact = other.iscontact; other.iscontact = nullptr;
+            posContact = other.posContact; other.posContact = nullptr;
+            forContact = other.forContact; other.forContact = nullptr;
+            #if LoadObj
+            obj_offset = other.obj_offset; other.obj_offset = nullptr;
+            #endif
+        }
+        return *this;
+    }
 };
 
 typedef struct  StuLINK  SuLINK ;
@@ -90,7 +252,7 @@ typedef struct  StuLINK  SuLINK ;
  * \struct State uLink.h
  * \brief State contain some global information about the robot state
  */
-typedef struct
+struct State
 {
     char RobotFile[255]; /*!< Path of XML file for robot description */
     int desired_support;/*!< Desired foot of support: 0:none,1:right,2:left,3:both */
@@ -113,8 +275,79 @@ typedef struct
     gsl_vector * FootCenter_R;/*!< Right foot position 3*1 [m] */
     gsl_vector * FootCenter_L;/*!< Left foot position 3*1 [m] */
     gsl_vector * limbID;
-} State ;
 
+    State() {
+        memset(RobotFile, 0, sizeof(RobotFile));
+        desired_support = 0;
+        ddl = 0;
+        support = 0;
+        right_foot_ID = 0;
+        left_foot_ID = 0;
+        nb_limb = 0;
+        right_scale = 0;
+        left_scale = 0;
+        integral_R = 0;
+        integral_L = 0;
+        distribution_y = 0;
+        distribution_x = 0;
+        com_old = nullptr;
+        posCoP_R = nullptr;
+        forCoP_R = nullptr;
+        posCoP_L = nullptr;
+        forCoP_L = nullptr;
+        FootCenter_R = nullptr;
+        FootCenter_L = nullptr;
+        limbID = nullptr;
+    }
+
+    ~State() {
+        if (com_old) gsl_vector_free(com_old);
+        if (posCoP_R) gsl_vector_free(posCoP_R);
+        if (forCoP_R) gsl_vector_free(forCoP_R);
+        if (posCoP_L) gsl_vector_free(posCoP_L);
+        if (forCoP_L) gsl_vector_free(forCoP_L);
+        if (FootCenter_R) gsl_vector_free(FootCenter_R);
+        if (FootCenter_L) gsl_vector_free(FootCenter_L);
+        if (limbID) gsl_vector_free(limbID);
+    }
+
+    // Disable copy semantics
+    State(const State&) = delete;
+    State& operator=(const State&) = delete;
+
+    // Enable move semantics
+    State(State&& other) noexcept {
+        *this = std::move(other);
+    }
+    State& operator=(State&& other) noexcept {
+        if (this != &other) {
+            this->~State();
+            memcpy(RobotFile, other.RobotFile, sizeof(RobotFile));
+            desired_support = other.desired_support;
+            ddl = other.ddl;
+            support = other.support;
+            right_foot_ID = other.right_foot_ID;
+            left_foot_ID = other.left_foot_ID;
+            nb_limb = other.nb_limb;
+            right_scale = other.right_scale;
+            left_scale = other.left_scale;
+            integral_R = other.integral_R;
+            integral_L = other.integral_L;
+            distribution_y = other.distribution_y;
+            distribution_x = other.distribution_x;
+
+            com_old = other.com_old; other.com_old = nullptr;
+            posCoP_R = other.posCoP_R; other.posCoP_R = nullptr;
+            forCoP_R = other.forCoP_R; other.forCoP_R = nullptr;
+            posCoP_L = other.posCoP_L; other.posCoP_L = nullptr;
+            forCoP_L = other.forCoP_L; other.forCoP_L = nullptr;
+            FootCenter_R = other.FootCenter_R; other.FootCenter_R = nullptr;
+            FootCenter_L = other.FootCenter_L; other.FootCenter_L = nullptr;
+            limbID = other.limbID; other.limbID = nullptr;
+        }
+        return *this;
+    }
+};
 
 /**
  * \fn void SetupRobot(SuLINK uLINK[],State *Status)

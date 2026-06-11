@@ -46,7 +46,10 @@ typedef struct
     char name[16];
 } Material;
 
-typedef struct
+#include <utility>
+#include <cstring>
+
+struct MeshObj
 {
     GLuint texture;
     GLuint displayList;
@@ -68,7 +71,81 @@ typedef struct
     unsigned int ebo;
     int index_count;
     int has_buffers;
-} MeshObj;
+
+    MeshObj() {
+        texture = 0;
+        displayList = 0;
+        n_data = 0;
+        firstTime = 0;
+        v = nullptr;
+        t = nullptr;
+        vn = nullptr;
+        gl_v = nullptr;
+        gl_t = nullptr;
+        gl_vn = nullptr;
+        vertexCount = 0;
+        triangleCount = 0;
+        normalsCount = 0;
+        memset(materiaux, 0, sizeof(materiaux));
+        vao = 0;
+        vbo = 0;
+        vbo_normal = 0;
+        ebo = 0;
+        index_count = 0;
+        has_buffers = 0;
+    }
+
+    ~MeshObj() {
+        if (v) ::free(v);
+        if (t) ::free(t);
+        if (vn) ::free(vn);
+        if (gl_v) ::free(gl_v);
+        if (gl_t) ::free(gl_t);
+        if (gl_vn) ::free(gl_vn);
+        if (has_buffers) {
+            glDeleteVertexArrays(1, &vao);
+            glDeleteBuffers(1, &vbo);
+            glDeleteBuffers(1, &vbo_normal);
+            glDeleteBuffers(1, &ebo);
+        }
+    }
+
+    // Disable copy semantics to prevent double free of pointers and buffers
+    MeshObj(const MeshObj&) = delete;
+    MeshObj& operator=(const MeshObj&) = delete;
+
+    // Enable move semantics
+    MeshObj(MeshObj&& other) noexcept {
+        *this = std::move(other);
+    }
+    MeshObj& operator=(MeshObj&& other) noexcept {
+        if (this != &other) {
+            this->~MeshObj();
+
+            texture = other.texture;
+            displayList = other.displayList;
+            n_data = other.n_data;
+            firstTime = other.firstTime;
+            v = other.v; other.v = nullptr;
+            t = other.t; other.t = nullptr;
+            vn = other.vn; other.vn = nullptr;
+            gl_v = other.gl_v; other.gl_v = nullptr;
+            gl_t = other.gl_t; other.gl_t = nullptr;
+            gl_vn = other.gl_vn; other.gl_vn = nullptr;
+            vertexCount = other.vertexCount;
+            triangleCount = other.triangleCount;
+            normalsCount = other.normalsCount;
+            memcpy(materiaux, other.materiaux, sizeof(materiaux));
+            vao = other.vao; other.vao = 0;
+            vbo = other.vbo; other.vbo = 0;
+            vbo_normal = other.vbo_normal; other.vbo_normal = 0;
+            ebo = other.ebo; other.ebo = 0;
+            index_count = other.index_count;
+            has_buffers = other.has_buffers; other.has_buffers = 0;
+        }
+        return *this;
+    }
+};
 
 
 void load_obj(char *fName,MeshObj *obj);
