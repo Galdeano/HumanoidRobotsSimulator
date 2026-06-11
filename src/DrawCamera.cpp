@@ -102,6 +102,8 @@ glm::mat4 ProjectionMatrix(1.0f);
 glm::mat4 ViewMatrix(1.0f);
 glm::vec3 CameraPosition(0.0f);
 
+extern double angular_z;
+
 void Camlook(State *Status, CamParam_s *CamParam)
 {
     // Projection matrix (70 degrees FOV, aspect ratio 1024/768, near 0.001, far 1000)
@@ -116,7 +118,7 @@ void Camlook(State *Status, CamParam_s *CamParam)
     // Combine with translation and rotations
     glm::mat4 T = glm::translate(glm::mat4(1.0f), glm::vec3(CamParam->X, CamParam->Y, CamParam->Z));
     glm::mat4 Ry = glm::rotate(glm::mat4(1.0f), glm::radians((float)CamParam->angleY), glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::mat4 Rz = glm::rotate(glm::mat4(1.0f), glm::radians((float)CamParam->angleZ), glm::vec3(0.0f, 0.0f, 1.0f));
+    glm::mat4 Rz = glm::rotate(glm::mat4(1.0f), glm::radians((float)CamParam->angleZ) + (float)angular_z, glm::vec3(0.0f, 0.0f, 1.0f));
 
     ViewMatrix = V * T * Ry * Rz;
 

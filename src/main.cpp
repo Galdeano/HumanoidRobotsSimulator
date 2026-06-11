@@ -32,6 +32,7 @@ SDL_GLContext gl_context = NULL;
 Shader defaultShader;
 glm::vec3 activeColor(1.0f, 1.0f, 1.0f);
 bool shadowPassActive = false;
+double angular_z = 0.0;
 
 void cleanup_sdl(void) {
     if (gl_context) {
@@ -184,7 +185,7 @@ int main(int argc, char *argv[])
     gsl_vector * pos = gsl_vector_calloc (3);
     long t=0;
     char titre[40] = "Visualisation t=0";
-    double angular_z=0;
+    angular_z=0;
 
 
 #if Video
@@ -2451,8 +2452,11 @@ static const float dqlim=0.12;
 #else //reseau
         for(j=0; j<(dof); j++)
         {
-            buff_data.val[j]=rad2deg*motor_rotation[j]*(uLINK[map[j]].q+0.001*gsl_vector_get(dq,map[j]-2))*209;
-            //buff_data.val[j]=rad2deg*motor_rotation[j]*uLINK[map[j]].q*209;
+            if(uLINK[map[j]].fixed==0)
+            {
+                uLINK[map[j]].q = uLINK[map[j]].q + 0.1 * gsl_vector_get(dq, map[j]-2);
+            }
+            buff_data.val[j]=rad2deg*motor_rotation[j]*uLINK[map[j]].q*209;
         }
 #endif //reseau
 
@@ -3112,6 +3116,22 @@ static const float dqlim=0.12;
                 break;
             }
             break;
+        case SDL_MOUSEMOTION: //la souris est bougée, ça n'intéresse que la caméra
+            OnMouseMotion(&CamParam,event.motion);
+            break;
+        case SDL_MOUSEBUTTONUP:
+        case SDL_MOUSEBUTTONDOWN:
+            OnMouseButton(&CamParam,event.button); //tous les événements boutons (up ou down) sont donnés à la caméra
+            break;
+        case SDL_MOUSEWHEEL:
+            {
+                SDL_MouseButtonEvent dummy_btn_event;
+                memset(&dummy_btn_event, 0, sizeof(dummy_btn_event));
+                dummy_btn_event.type = SDL_MOUSEBUTTONDOWN;
+                dummy_btn_event.button = (event.wheel.y > 0) ? SDL_BUTTON_WHEELUP : SDL_BUTTON_WHEELDOWN;
+                OnMouseButton(&CamParam, dummy_btn_event);
+            }
+            break;
         }
 
 
@@ -3128,14 +3148,7 @@ static const float dqlim=0.12;
         if (t%frame_skip==0)
         {
             sprintf(titre,"Visualisation t= %3.3f", t*Dtime);
-            //sprintf(titre,"Visualisation t= %3.3f, %1.6f", t*Dtime, Lc+Lt+Lp-gsl_vector_get (uLINK[0][1].p, 2) );
-            //sprintf(titre,"Visualisation t= %2.3f cop=%f center=%f", t*Dtime,Status[0].integral_R,Status[0].integral_L);
             SDL_SetWindowTitle(window, titre);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glMatrixMode( GL_MODELVIEW );
-            glLoadIdentity( );
-            glRotated(angular_z,0,0,1);
-
 
 #if StaticCOM
             gsl_vector_set (uLINK[1].p, 2, Lc+Lt+Lp-0.07);
@@ -3160,36 +3173,9 @@ static const float dqlim=0.12;
             uLINK[12].q=gsl_vector_get (q,4);
             uLINK[13].q=gsl_vector_get (q,5);
             ForwardKinematics(uLINK,1);
-            DrawAllJoints(uLINK,1);
-            DrawGround(2.0,0.0,-0.05,6.0,6.0,0.1);
-            CalcCoM(uLINK,com);
-            glColor3ub(0,0,255);
-            if (!ground)
-            {
-                gsl_vector_set (com, 2, 0);
-            }
-            //sprintf(titre,"Visualisation t= %2.3f, x= %2.3f, y= %2.3f", t*Dtime,gsl_vector_get (com,0),gsl_vector_get (com,1));
-            //SDL_SetWindowTitle(window, titre);
-            DrawMarker(com);
-            DrawIndicators(uLINK,&Status,com,CoP,ground);
-
 #endif
 
-
-#if !StaticCOM
-
-            //ForwardDynamics(uLINK,&Status,t);
-            //IntegrateEuler(uLINK,1);
-            DrawAllJoints(uLINK,1);
-            DrawIndicators(uLINK,&Status,com,CoP,ground);
-            DrawGround(2.0,0.0,-0.05,6.0,6.0,0.1);
-
-#endif
-
-
-
-            glFlush();
-            SDL_GL_SwapWindow(window);
+            DrawScene(uLINK, &Status, &CamParam);
 
             if (Video==1)
             {

@@ -12,6 +12,7 @@ extern SDL_Window* window;
 #include "DrawGround.h"
 #include "DrawMarker.h"
 #include "DrawAllJoints.h"
+#include "DrawIndicators.h"
 #include "bmp.h"
 #include "DrawScene.h"
 
@@ -20,6 +21,7 @@ void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
 
     static int init_tmp=1;
     static gsl_vector * com;
+    static gsl_vector * CoP;
     static gsl_vector * offset;
     if (init_tmp==1)
     {
@@ -37,6 +39,7 @@ void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
 //        }
         offset = gsl_vector_calloc (3);
         com = gsl_vector_calloc (3);
+        CoP = gsl_vector_calloc (3);
         init_tmp=0;
     }
     //gsl_vector * com = gsl_vector_calloc (3);
@@ -195,23 +198,7 @@ void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
 //    DrawMarker(zmp_moy);
 //#endif //zmp_filtering
 
-    CalcCoM(uLINK,com);
-#if colorsGL
-    glColor3ub(0,0,255);
-#endif //colorsGL
-#if materials
-    set_material(&turquoise);
-#endif //materials
-    gsl_vector_set (com, 2, 0);
-    //DrawMarker(com);
-
-#if colorsGL
-    glColor3ub(255,0,0);
-#endif //colorsGL
-#if materials
-    set_material(&ruby);
-#endif //materials
-    //Hoap_calc_zmp_visu(uLINK,&Status,&zmp_c);
+    DrawIndicators(uLINK, Status, com, CoP, 0);
 
 
 //gsl_vector_set(offset,0,0.015);
