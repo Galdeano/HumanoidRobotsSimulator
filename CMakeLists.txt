@@ -14,19 +14,21 @@ find_package(pugixml REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(glm REQUIRED)
 
-# Add GSL, SDL2, OpenGL include directories
+# Add include directories
 include_directories(
     src
+    src/math
+    src/renderer
+    src/simulation
+    src/control
+    src/utils
     ${GSL_INCLUDE_DIRS}
     ${SDL2_INCLUDE_DIRS}
     ${GLEW_INCLUDE_DIRS}
 )
 
-# Collect root C++ source files
-file(GLOB ROOT_SOURCES "src/*.cpp")
-set(SOURCES
-    ${ROOT_SOURCES}
-)
+# Collect C++ source files recursively
+file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 # Optimization compile flags and definitions
 add_compile_definitions(HAVE_INLINE GSL_RANGE_CHECK_OFF)
