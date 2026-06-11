@@ -103,7 +103,16 @@ void cleanup_sdl(void) {
 
 //#include "Rdtsc.h"
 
-
+void ReadTrajectory(double *opd, int pos) {
+#if file_human
+    Ext_op_trajectory2(opd, pos);
+#elif file_walk
+    Ext_walk_trajectory(opd, pos);
+#else
+    (void)opd;
+    (void)pos;
+#endif
+}
 
 int main(int argc, char *argv[])
 {
@@ -1251,41 +1260,23 @@ int main(int argc, char *argv[])
 
 
 #if file_human
-
     static double foot_Z_offset=0.04;
     static double CoM_Z_offset=0.00;
-//    static double foot_Z_offset=0.08;
-//    static double CoM_Z_offset=0.22;
+#endif
 
-    Ext_op_trajectory2(opd, 0);
-
+#if (file_human || file_walk)
+    ReadTrajectory(opd, 0);
     for(j=0; j<9; j++)
     {
         opd_old[j]=opd[j];
         opd_old2[j]=opd[j];
     }
+#endif
 
-//    gsl_vector_set (uLINK[baseFoot].p, 0, opd[6]);
-//    gsl_vector_set (uLINK[baseFoot].p, 1, opd[7]);
-//    gsl_vector_set (uLINK[baseFoot].p, 2, opd[8]+foot_Z_offset);
-//    gsl_vector_scale(uLINK[baseFoot].p,0.352);//scale F2F
-
-#elif file_walk
-    Ext_walk_trajectory(opd, 0);
-
-    for(j=0; j<9; j++)
-    {
-        opd_old[j]=opd[j];
-        opd_old2[j]=opd[j];
-    }
-
+#if !file_human
     gsl_vector_set_zero(uLINK[baseFoot].p);
     gsl_vector_set (uLINK[baseFoot].p, 2, 0.04);
-
-#else //file_human
-    gsl_vector_set_zero(uLINK[baseFoot].p);
-    gsl_vector_set (uLINK[baseFoot].p, 2, 0.04);
-#endif //file_human
+#endif
 
 
 #if file_hoap
@@ -1584,59 +1575,44 @@ int main(int argc, char *argv[])
 
         //gsl_vector_set_zero(p);
 
+#if (file_human || file_walk)
+        static double vitesse =
 #if file_human
-        static double vitesse=0.5;
-        static double gain_1,gain_2;
-        static int pos_in_file=1;
-        if((t2)>=t_stand_zmp)
+            0.5;
+#else
+            1.0;
+#endif
+
+        static double t_start =
+#if file_human
+            t_stand_zmp;
+#else
+            t_init;
+#endif
+
+        static double gain_1, gain_2;
+        static int pos_in_file = 1;
+        if((t2) >= t_start)
         {
-            while(((t2-t_stand_zmp)*vitesse)>(0.005*pos_in_file))
+            while(((t2 - t_start) * vitesse) > (0.005 * pos_in_file))
             {
                 for(j=0; j<9; j++)
                 {
-                    opd_old2[j]=opd_old[j];
+                    opd_old2[j] = opd_old[j];
                 }
-                Ext_op_trajectory2(opd_old, pos_in_file);
+                ReadTrajectory(opd_old, pos_in_file);
                 pos_in_file++;
             }
 
             // interpolation of data
-            gain_1=-(((t2-t_stand_zmp)*vitesse)-(0.005*pos_in_file))/0.005;
-            gain_2=1+(((t2-t_stand_zmp)*vitesse)-(0.005*pos_in_file))/0.005;
+            gain_1 = -(((t2 - t_start) * vitesse) - (0.005 * pos_in_file)) / 0.005;
+            gain_2 = 1 + (((t2 - t_start) * vitesse) - (0.005 * pos_in_file)) / 0.005;
             for(j=0; j<9; j++)
             {
-                opd[j]=gain_1*opd_old2[j]+gain_2*opd_old[j];
+                opd[j] = gain_1 * opd_old2[j] + gain_2 * opd_old[j];
             }
-
         }
-
-#elif file_walk
-
-        static double vitesse=1.0;
-        static double gain_1,gain_2;
-        static int pos_in_file=1;
-        if((t2)>=t_init)
-        {
-            while(((t2-t_init)*vitesse)>(0.005*pos_in_file))
-            {
-                for(j=0; j<9; j++)
-                {
-                    opd_old2[j]=opd_old[j];
-                }
-                Ext_walk_trajectory(opd_old, pos_in_file);
-                pos_in_file++;
-            }
-
-            // interpolation of data
-            gain_1=-(((t2-t_init)*vitesse)-(0.005*pos_in_file))/0.005;
-            gain_2=1+(((t2-t_init)*vitesse)-(0.005*pos_in_file))/0.005;
-            for(j=0; j<9; j++)
-            {
-                opd[j]=gain_1*opd_old2[j]+gain_2*opd_old[j];
-            }
-
-        }
-#endif //file_human
+#endif
 
 
 
@@ -1691,16 +1667,8 @@ int main(int argc, char *argv[])
         static double z_f=1.0;
         static double F2F_y=-0.078;
         static double F2F_min=-0.067;
-        //static double F2F_min=-0.074;
         static double correction;
-        if((t2)>=t_stand_zmp)
-        {
-            gsl_vector_set (p, 0, (opd[3]-opd[6]));
-            gsl_vector_set (p, 1, (opd[4]-opd[7]));
-            gsl_vector_set (p, 2, (opd[5]-opd[8])*z_f);
-            gsl_vector_scale(p,scale_task_F2F);
-        }
-        else if((t2>t_init) && (t2<t_stand_zmp))
+        if(t2 > t_init)
         {
             gsl_vector_set (p, 0, (opd[3]-opd[6]));
             gsl_vector_set (p, 1, (opd[4]-opd[7]));
@@ -1724,8 +1692,6 @@ int main(int argc, char *argv[])
         {
             correction=0.0;
         }
-        //printf("%f \n",correction);
-
 
         if((t2)>=t_init)
         {
@@ -1740,7 +1706,6 @@ int main(int argc, char *argv[])
             dt=dt*(t_init-(t2))/t_init;
             Rodrigues(R,error,dt);
         }
-        //gsl_matrix_memcpy(R,Init_task_F2F_R);
 
 #elif file_walk
 
@@ -1749,7 +1714,6 @@ int main(int argc, char *argv[])
             gsl_vector_set (p, 0, opd[3]);
             gsl_vector_set (p, 1, opd[4]);
             gsl_vector_set (p, 2, opd[5]);
-
         }
         else
         {
@@ -1759,33 +1723,11 @@ int main(int argc, char *argv[])
             gsl_vector_set(p,2,(gsl_vector_get(p,2)*(t_init-(t2))/t_init)+(opd[5]*(t2)/t_init));
         }
 
-        if((t2)>=t_init)
-        {
-            //gsl_matrix_set_identity(R);
-            gsl_vector_set (error, 0, -opd[6]);
-            gsl_vector_set (error, 1, -opd[7]);
-            gsl_vector_set (error, 2, -opd[8]);
-            dt=1.0;
-            Rodrigues(R,error,dt);
-        }
-        else
-        {
-//            gsl_matrix_memcpy(R,Init_task_F2F_R);
-//            rot2omega(R,error);
-//            dt = gsl_blas_dnrm2 (error);
-//            gsl_vector_scale (error, 1/dt);
-//            dt=dt*(t_init-(t2))/t_init;
-//            Rodrigues(R,error,dt);
-
-            gsl_vector_set (error, 0, -opd[6]);
-            gsl_vector_set (error, 1, -opd[7]);
-            gsl_vector_set (error, 2, -opd[8]);
-            dt=1.0;
-            Rodrigues(R,error,dt);
-        }
-
-
-        //gsl_matrix_memcpy(R,Init_task_F2F_R);
+        gsl_vector_set (error, 0, -opd[6]);
+        gsl_vector_set (error, 1, -opd[7]);
+        gsl_vector_set (error, 2, -opd[8]);
+        dt=1.0;
+        Rodrigues(R,error,dt);
 
 #else //file_human
         static double F2F_y=-0.078;
@@ -1800,7 +1742,6 @@ int main(int argc, char *argv[])
             gsl_vector_set(p,0,gsl_vector_get(p,0)*(t_init-(t2))/t_init);
             gsl_vector_set(p,1,(gsl_vector_get(p,1)*(t_init-(t2))/t_init)+(F2F_y*(t2)/t_init));
             gsl_vector_set(p,2,gsl_vector_get(p,2)*(t_init-(t2))/t_init);
-
         }
 
         if((t2)>=t_init)
@@ -1816,7 +1757,6 @@ int main(int argc, char *argv[])
             dt=dt*(t_init-(t2))/t_init;
             Rodrigues(R,error,dt);
         }
-        //gsl_matrix_memcpy(R,Init_task_F2F_R);
 #endif //file_human
 
 
@@ -1846,35 +1786,24 @@ int main(int argc, char *argv[])
 #if file_human
 
         static double foot_h;
-        if(t2>t_stand_zmp)
+        if(t2>t_init)
         {
+            double z_val = opd[2]-opd[8]-CoM_Z_offset;
+            if(t2>t_stand_zmp)
+            {
+                z_val -= foot_h;
+            }
             gsl_vector_set (p, 0, opd[0]-opd[6]);
             gsl_vector_set (p, 1, opd[1]-opd[7]);
-            gsl_vector_set (p, 2, opd[2]-opd[8]-foot_h-CoM_Z_offset);
-            //gsl_vector_scale(p,scale_task_CoM);
+            gsl_vector_set (p, 2, z_val);
             gsl_vector_scale(p,scale_task_F2F);
-        }
-        else if((t2>t_init) && (t2<t_stand_zmp))
-        {
-            gsl_vector_set (p, 0, opd[0]-opd[6]);
-            gsl_vector_set (p, 1, opd[1]-opd[7]);
-            gsl_vector_set (p, 2, opd[2]-opd[8]-CoM_Z_offset);
-            //gsl_vector_scale(p,scale_task_CoM);
-            gsl_vector_scale(p,scale_task_F2F);
-            //foot_h=opd[8];
         }
         else
         {
             gsl_vector_memcpy(p,Init_task_CoM);
-
             gsl_vector_set(p,0,((gsl_vector_get(p,0))*(t_init-(t2))/t_init)+((opd[0]-opd[6])*scale_task_F2F*(t2)/t_init));
             gsl_vector_set(p,1,((gsl_vector_get(p,1))*(t_init-(t2))/t_init)+((opd[1]-opd[7])*scale_task_F2F*(t2)/t_init));
             gsl_vector_set(p,2,((gsl_vector_get(p,2))*(t_init-(t2))/t_init)+((opd[2]-opd[8]-CoM_Z_offset)*scale_task_F2F*(t2)/t_init));
-//foot_h=opd[8];
-//            gsl_vector_set(p,0,((gsl_vector_get(p,0))*(t_init-(t2))/t_init)+(opd[0]*scale_task_CoM*(t2)/t_init));
-//            gsl_vector_set(p,1,((gsl_vector_get(p,1))*(t_init-(t2))/t_init)+(opd[1]*scale_task_CoM*(t2)/t_init));
-//            gsl_vector_set(p,2,((gsl_vector_get(p,2))*(t_init-(t2))/t_init)+((opd[2]-0.05)*scale_task_CoM*(t2)/t_init));
-
         }
 
 
