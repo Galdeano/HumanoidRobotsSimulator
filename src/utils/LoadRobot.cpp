@@ -61,7 +61,7 @@ void LoadRobotXML(SuLINK uLINK[], State *Status, char* RobotFile)
         uLINK[i].I.setZero();
     }
 
-    Status->ddl = dof + 6;
+    Status->dof = dof + 6;
     Status->support = 0; // 0:none,1:right,2:left,3:both
     Status->desired_support = 0;
     Status->distribution_y = 0.5;
@@ -300,7 +300,7 @@ void LoadRobotParserXML(SuLINK uLINK[], State *Status, char* RobotFile)
         uLINK[i].I.setZero();
     }
 
-    Status->ddl = dof + 6;
+    Status->dof = dof + 6;
     Status->support = 0; // 0:none,1:right,2:left,3:both
     Status->desired_support = 0;
     Status->distribution_y = 0.5;

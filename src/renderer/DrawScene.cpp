@@ -147,7 +147,7 @@ void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
 //DrawMarker(offset);
 
 
-// active la transparence, penser a changer material.kd[3]
+// activates transparency, remember to change material.kd[3]
 //glEnable(GL_BLEND);
 //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

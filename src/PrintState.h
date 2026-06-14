@@ -28,8 +28,8 @@ typedef struct
     double w[3];/*!< Absolute orientation velocity 3*1 [rad/s] */
     double dvo[3];/*!< Main body linear acceleration 3*1 [m/s^2] */
     double dw[3];/*!< Absolute orientation acceleration 3*1 [rad/s^2] */
-    double hw[3];/*!< Axe of rotation in world reference 3*1 [-] */
-    double hv[3];/*!< Axe of rotation in world reference cross by position of the link 3*1 */
+    double hw[3];/*!< Axis of rotation in world reference 3*1 [-] */
+    double hv[3];/*!< Axis of rotation in world reference cross by position of the link 3*1 */
     double R[9];/*!< Absolute orientation 3*3 [-] */
 } SaveLINK ;
 

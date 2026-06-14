@@ -23,7 +23,7 @@ void SetupRobot(SuLINK uLINK[],State *Status)
     double Lt=0.510;
     double Lp=0.1104;
 
-    // Eléments d'inertie du robot Sherpa - 20091021SK
+    // Inertia elements of the Sherpa robot - 20091021SK
     double mPelvis=3.2+1.9+1; // [kg]
     double mUpperLimb=5+3;
     double mLowerLimb=9.9+1;
@@ -50,7 +50,7 @@ void SetupRobot(SuLINK uLINK[],State *Status)
     }
 
 
-    Status->ddl=12+6;
+    Status->dof=12+6;
     Status->support=0; //0:none,1:right,2:left,3:both
     Status->desired_support=0;
     Status->distribution_y=0.5;
@@ -399,7 +399,7 @@ void SetupRobot(SuLINK uLINK[],State *Status)
 
     int  NbLinks = 22;
 
-    // Eléments d'inertie du robot Sherpa - 20091021SK
+    // Inertia elements of the Sherpa robot - 20091021SK
     double mPelvis=3.2+1.9+1; // [kg]
     double mUpperLimb=5+3;
     double mLowerLimb=9.9+1;
@@ -426,7 +426,7 @@ void SetupRobot(SuLINK uLINK[],State *Status)
     }
 
 
-    Status->ddl=20+6;
+    Status->dof=20+6;
     Status->support=0; //0:none,1:right,2:left,3:both
     Status->desired_support=0;
     Status->distribution_y=0.5;

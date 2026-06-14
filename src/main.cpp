@@ -90,7 +90,7 @@ void cleanup_sdl(void) {
 #include "Hoap_calc_zmp.h"
 #include "butterworth.h"
 #include "NPD.h"
-#include "lecture_ecriture.h"
+#include "read_write.h"
 
 #if mathGL
 #include <mgl2/mgl_cf.h>
@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
     Eigen::VectorXd q = Eigen::VectorXd::Zero(6);
     Eigen::Vector3d pos = Eigen::Vector3d::Zero();
     long t=0;
-    char titre[40] = "Visualisation t=0";
+    char title[40] = "Visualisation t=0";
     angular_z=0;
 
 
@@ -353,7 +353,7 @@ int main(int argc, char *argv[])
         NodeForwardKinematics(uLINK,Status.right_foot_ID,0);
     }
 
-    int quitt=0;
+    int quit=0;
 
     CamParam_s CamParamt;
     CamInit(&CamParamt);
@@ -373,7 +373,7 @@ int main(int argc, char *argv[])
 //begin = clock();
 
 
-        if (quitt==1)
+        if (quit==1)
         {
             break;
         }
@@ -384,7 +384,7 @@ int main(int argc, char *argv[])
         {
         case SDL_QUIT:
 #if save_data_quick
-            quitt=1;
+            quit=1;
             continue;
 #else //save_data_quick
             exit(0);
@@ -392,7 +392,7 @@ int main(int argc, char *argv[])
             break;
 #if Light
         case SDL_KEYDOWN:
-            quitt=1;
+            quit=1;
             break;
 #endif
 #if !Light
@@ -404,12 +404,12 @@ int main(int argc, char *argv[])
                 break;
             }
             break;
-        case SDL_MOUSEMOTION: //la souris est bougée, ça n'intéresse que la caméra
+        case SDL_MOUSEMOTION: // mouse is moved, only concerns the camera
             OnMouseMotion(&CamParamt,event.motion);
             break;
         case SDL_MOUSEBUTTONUP:
         case SDL_MOUSEBUTTONDOWN:
-            OnMouseButton(&CamParamt,event.button); //tous les événements boutons (up ou down) sont donnés à la caméra
+            OnMouseButton(&CamParamt,event.button); // all button events (up or down) are passed to the camera
             break;
         case SDL_MOUSEWHEEL:
             {
@@ -1225,7 +1225,7 @@ int main(int argc, char *argv[])
     zmp_f.zmp_left.x=0;
     zmp_f.zmp_left.y=0;
 
-#if reseau
+#if network
     HoapSensor sensor;
     HoapControl control;
 
@@ -1252,7 +1252,7 @@ int main(int argc, char *argv[])
     }
     printf("\n");
     hoapControl(hoap, &sensor, &control);
-#else //reseau
+#else //network
     for(j=0; j<(dof); j++)
     {
         buff_data.val[j]=rad2deg*motor_rotation[j]*uLINK[map[j]].q*209;
@@ -1266,7 +1266,7 @@ int main(int argc, char *argv[])
         printf("%4.6f ",rad2deg*uLINK[map[i]].q);
     }
     printf("\n");
-#endif //reseau
+#endif //network
 
 
 
@@ -1482,12 +1482,12 @@ int main(int argc, char *argv[])
                 break;
             }
             break;
-        case SDL_MOUSEMOTION: //la souris est bougée, ça n'intéresse que la caméra
+        case SDL_MOUSEMOTION: // mouse is moved, only concerns the camera
             OnMouseMotion(&CamParam,event.motion);
             break;
         case SDL_MOUSEBUTTONUP:
         case SDL_MOUSEBUTTONDOWN:
-            OnMouseButton(&CamParam,event.button); //tous les événements boutons (up ou down) sont donnés à la caméra
+            OnMouseButton(&CamParam,event.button); // all button events (up or down) are passed to the camera
             break;
         case SDL_MOUSEWHEEL:
             {
@@ -1505,7 +1505,7 @@ int main(int argc, char *argv[])
 
 
 
-#if reseau
+#if network
         hoapSensor(hoap, &sensor);
 
         for(j=0; j<(dof); j++)
@@ -1521,7 +1521,7 @@ int main(int argc, char *argv[])
         }
         Hoap_calc_zmp(&sensor,&zmp_c);
 
-#endif //reseau
+#endif //network
 
 #if file_motor
         for(j=0; j<10; j++)
@@ -1587,7 +1587,7 @@ int main(int argc, char *argv[])
         //p.setZero();
 
 #if (file_human || file_walk)
-        static double vitesse =
+        static double speed =
 #if file_human
             0.5;
 #else
@@ -1605,7 +1605,7 @@ int main(int argc, char *argv[])
         static int pos_in_file = 1;
         if((t2) >= t_start)
         {
-            while(((t2 - t_start) * vitesse) > (0.005 * pos_in_file))
+            while(((t2 - t_start) * speed) > (0.005 * pos_in_file))
             {
                 for(j=0; j<9; j++)
                 {
@@ -1616,8 +1616,8 @@ int main(int argc, char *argv[])
             }
 
             // interpolation of data
-            gain_1 = -(((t2 - t_start) * vitesse) - (0.005 * pos_in_file)) / 0.005;
-            gain_2 = 1 + (((t2 - t_start) * vitesse) - (0.005 * pos_in_file)) / 0.005;
+            gain_1 = -(((t2 - t_start) * speed) - (0.005 * pos_in_file)) / 0.005;
+            gain_2 = 1 + (((t2 - t_start) * speed) - (0.005 * pos_in_file)) / 0.005;
             for(j=0; j<9; j++)
             {
                 opd[j] = gain_1 * opd_old2[j] + gain_2 * opd_old[j];
@@ -1629,12 +1629,12 @@ int main(int argc, char *argv[])
 
 
 #if file_hoap
-        static double vitesse=1.0;
+        static double speed=1.0;
         static double gain_1,gain_2;
         static int pos_in_file=1;
         if((t2)>=t_stand_zmp)
         {
-            while(((t2-t_stand_zmp)*vitesse)>(0.001*pos_in_file))
+            while(((t2-t_stand_zmp)*speed)>(0.001*pos_in_file))
             {
                 for(j=0; j<dof; j++)
                 {
@@ -1645,8 +1645,8 @@ int main(int argc, char *argv[])
             }
 
             // interpolation of data
-            gain_1=-(((t2-t_stand_zmp)*vitesse)-(0.001*pos_in_file))/0.001;
-            gain_2=1+(((t2-t_stand_zmp)*vitesse)-(0.001*pos_in_file))/0.001;
+            gain_1=-(((t2-t_stand_zmp)*speed)-(0.001*pos_in_file))/0.001;
+            gain_2=1+(((t2-t_stand_zmp)*speed)-(0.001*pos_in_file))/0.001;
             for(j=0; j<dof; j++)
             {
                 oqd[j]=gain_1*oqd_old2[j]+gain_2*oqd_old[j];
@@ -2281,7 +2281,7 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
         }
 
 
-#if reseau
+#if network
 static const float dqlim=0.12;
 
 
@@ -2383,7 +2383,7 @@ static const float dqlim=0.12;
 //            uLINK[map[j]].q = deg2rad*control.q[j]*motor_rotation[j]/209;
 //        }
 
-#else //reseau
+#else //network
         for(j=0; j<(dof); j++)
         {
             if(uLINK[map[j]].fixed==0)
@@ -2392,7 +2392,7 @@ static const float dqlim=0.12;
             }
             buff_data.val[j]=rad2deg*motor_rotation[j]*uLINK[map[j]].q*209;
         }
-#endif //reseau
+#endif //network
 
 
 
@@ -2462,13 +2462,13 @@ static const float dqlim=0.12;
 
 
 
-#endif //reseau
+#endif //network
 
         ForwardKinematics(uLINK,1);
 
 #if !Light
-        sprintf(titre,"Visualisation t= %3.3f", t2);
-        SDL_SetWindowTitle(window, titre);
+        sprintf(title,"Visualisation t= %3.3f", t2);
+        SDL_SetWindowTitle(window, title);
 
 
         DrawScene(uLINK,&Status, &CamParam);
@@ -2486,9 +2486,9 @@ static const float dqlim=0.12;
     fclose(file);
 #endif //file_motor
 
-#if reseau
+#if network
     hoapDisconnect(hoap);
-#endif //reseau
+#endif //network
 
 
 #if save_data_long
@@ -3050,12 +3050,12 @@ static const float dqlim=0.12;
                 break;
             }
             break;
-        case SDL_MOUSEMOTION: //la souris est bougée, ça n'intéresse que la caméra
+        case SDL_MOUSEMOTION: // mouse is moved, only concerns the camera
             OnMouseMotion(&CamParam,event.motion);
             break;
         case SDL_MOUSEBUTTONUP:
         case SDL_MOUSEBUTTONDOWN:
-            OnMouseButton(&CamParam,event.button); //tous les événements boutons (up ou down) sont donnés à la caméra
+            OnMouseButton(&CamParam,event.button); // all button events (up or down) are passed to the camera
             break;
         case SDL_MOUSEWHEEL:
             {
@@ -3069,7 +3069,7 @@ static const float dqlim=0.12;
         }
 
 
-        if (t*Dtime>180) //Arret du programme à x sacondes de simulation pour vidéo
+        if (t*Dtime>180) // Stop the program at x seconds of simulation for video
         {
             break;
         }
@@ -3081,8 +3081,8 @@ static const float dqlim=0.12;
 
         if (t%frame_skip==0)
         {
-            sprintf(titre,"Visualisation t= %3.3f", t*Dtime);
-            SDL_SetWindowTitle(window, titre);
+            sprintf(title,"Visualisation t= %3.3f", t*Dtime);
+            SDL_SetWindowTitle(window, title);
 
 #if StaticCOM
             uLINK[1].p(2) = Lc+Lt+Lp-0.07;

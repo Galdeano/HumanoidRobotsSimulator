@@ -53,7 +53,7 @@ struct StuLINK
     double qmax;/*!< Joint high limit [rad] */
     double qmoy;/*!< Joint natural value [rad] */
     
-    Eigen::Vector3d a;/*!< Axe of rotation 3*1 [-] */
+    Eigen::Vector3d a;/*!< Axis of rotation 3*1 [-] */
     Eigen::Vector3d b;/*!< Link dimensions 3*1 [m] */
     Eigen::Vector3d c;/*!< Center of gravity 3*1 [m] */
     Eigen::Vector3d p;/*!< Absolute link position 3*1 [m]  */
@@ -62,8 +62,8 @@ struct StuLINK
     Eigen::Vector3d w;/*!< Absolute orientation velocity 3*1 [rad/s] */
     Eigen::Vector3d dvo;/*!< Main body linear acceleration 3*1 [m/s^2] (only used for main body) */
     Eigen::Vector3d dw;/*!< Absolute orientation acceleration 3*1 [rad/s^2] */
-    Eigen::Vector3d hw;/*!< Axe of rotation in world reference 3*1 [-] */
-    Eigen::Vector3d hv;/*!< Axe of rotation in world reference cross by position of the link 3*1 */
+    Eigen::Vector3d hw;/*!< Axis of rotation in world reference 3*1 [-] */
+    Eigen::Vector3d hv;/*!< Axis of rotation in world reference cross by position of the link 3*1 */
     Eigen::VectorXd isContact;/*!< is the link corner in contact */
     double com[3] = {0.0, 0.0, 0.0};
     double shape[3] = {0.0, 0.0, 0.0};
@@ -145,7 +145,7 @@ struct State
 {
     char RobotFile[255]; /*!< Path of XML file for robot description */
     int desired_support;/*!< Desired foot of support: 0:none,1:right,2:left,3:both */
-    int ddl;/*!< Number of Degrees of freedom */
+    int dof;/*!< Number of Degrees of freedom */
     int support;/*!< Foot of support: 0:none,1:right,2:left,3:both */
     int right_foot_ID;/*!< Right foot ID */
     int left_foot_ID;/*!< Right foot ID */
@@ -168,7 +168,7 @@ struct State
     State() {
         memset(RobotFile, 0, sizeof(RobotFile));
         desired_support = 0;
-        ddl = 0;
+        dof = 0;
         support = 0;
         right_foot_ID = 0;
         left_foot_ID = 0;

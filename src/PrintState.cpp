@@ -12,7 +12,7 @@ void SaveStateXML(SuLINK uLINK[], State *Status, double t)
     
     fprintf(f, "<Sherpa t=\"%f\">\n", t);
     int i;
-    for (i = 1; i < ((Status->ddl) - 6 + 2); i++)
+    for (i = 1; i < ((Status->dof) - 6 + 2); i++)
     {
         fprintf(f, "\t<Link no=\"%d\">\n", i);
         fprintf(f, "\t\t<Name>\n");
@@ -86,7 +86,7 @@ void SaveRobotXML(SuLINK uLINK[], State *Status)
     fprintf(f, "<Robot>\n");
     int i;
     fprintf(f, "\t<DoF>\n");
-    fprintf(f, "\t\t%d\n", ((Status->ddl) - 6));
+    fprintf(f, "\t\t%d\n", ((Status->dof) - 6));
     fprintf(f, "\t</DoF>\n");
     fprintf(f, "\t<Name>\n");
     fprintf(f, "\t\t%s\n", "Generic");
@@ -101,7 +101,7 @@ void SaveRobotXML(SuLINK uLINK[], State *Status)
     fprintf(f, "\t\t</left_foot_ID>\n");
     fprintf(f, "\t</State>\n");
 
-    for (i = 1; i < (Status->ddl - 4); i++)
+    for (i = 1; i < (Status->dof - 4); i++)
     {
         fprintf(f, "\t<Link no=\"%d\">\n", i);
         fprintf(f, "\t\t<Name>\n");
@@ -155,13 +155,13 @@ void SaveRobotXML(SuLINK uLINK[], State *Status)
 
 void SaveState(SuLINK uLINK[], State *Status, long *t)
 {
-    SaveLINK *CopyuLINK = (SaveLINK *)calloc((Status->ddl) + 2 - 6, sizeof(SaveLINK));
+    SaveLINK *CopyuLINK = (SaveLINK *)calloc((Status->dof) + 2 - 6, sizeof(SaveLINK));
     SaveStuctLink(uLINK, CopyuLINK, Status);
 
     FILE *f = fopen("SherpaState.bin", "wb");
     if (f)
     {
-        fwrite(CopyuLINK, ((Status->ddl) + 2 - 6) * sizeof(SaveLINK), 1, f);
+        fwrite(CopyuLINK, ((Status->dof) + 2 - 6) * sizeof(SaveLINK), 1, f);
         fclose(f);
     }
     free(CopyuLINK);
@@ -178,7 +178,7 @@ void SaveStuctLink(SuLINK uLINK[], SaveLINK CopyuLINK[], State *Status)
 {
     int i, j, k;
 
-    for (i = 1; i < ((Status->ddl) - 6 + 2); i++)
+    for (i = 1; i < ((Status->dof) - 6 + 2); i++)
     {
         CopyuLINK[i].q = uLINK[i].q;
         CopyuLINK[i].dq = uLINK[i].dq;
@@ -207,12 +207,12 @@ void SaveStuctLink(SuLINK uLINK[], SaveLINK CopyuLINK[], State *Status)
 
 void LoadState(SuLINK uLINK[], State *Status, long *t)
 {
-    SaveLINK *CopyuLINK = (SaveLINK *)calloc((Status->ddl) + 2 - 6, sizeof(SaveLINK));
+    SaveLINK *CopyuLINK = (SaveLINK *)calloc((Status->dof) + 2 - 6, sizeof(SaveLINK));
 
     FILE *f = fopen("SherpaState.bin", "rb");
     if (f)
     {
-        fread(CopyuLINK, ((Status->ddl) + 2 - 6) * sizeof(SaveLINK), 1, f);
+        fread(CopyuLINK, ((Status->dof) + 2 - 6) * sizeof(SaveLINK), 1, f);
         fclose(f);
     }
 
@@ -231,7 +231,7 @@ void LoadStuctLink(SuLINK uLINK[], SaveLINK CopyuLINK[], State *Status)
 {
     int i, j, k;
 
-    for (i = 1; i < ((Status->ddl) - 6 + 2); i++)
+    for (i = 1; i < ((Status->dof) - 6 + 2); i++)
     {
         uLINK[i].q = CopyuLINK[i].q;
         uLINK[i].dq = CopyuLINK[i].dq;

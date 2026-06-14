@@ -22,7 +22,7 @@ void InvDyn(SuLINK uLINK[], State *Status, int j, Eigen::VectorXd & u)
         uLINK[1].dw(j-4) = 1.0;
     }
 
-    for (n=1; n<((Status->ddl)-6+2-1); n++)
+    for (n=1; n<((Status->dof)-6+2-1); n++)
     {
         if (n == j-6)
             uLINK[n+1].ddq = 1.0;
@@ -42,7 +42,7 @@ void InvDyn(SuLINK uLINK[], State *Status, int j, Eigen::VectorXd & u)
     {
         u(n+3) = t(n);
     }
-    for (n=0; n<((Status->ddl)-6); n++)
+    for (n=0; n<((Status->dof)-6); n++)
     {
         u(n+6) = uLINK[n+2].u;
     }

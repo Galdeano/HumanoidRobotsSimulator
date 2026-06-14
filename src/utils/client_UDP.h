@@ -27,16 +27,16 @@
 
 struct UDP_data
 {
-    int statut; //Statut du message 0 pas de message ou message pas prêt à l'envoie ou pas de message recu, 1 un message de controle, 2 un message de bilan (le controle devient le statut de l'opérateur local)
-    int controle; //Donne des ordres à l'opérateur à distance, 0 message d'ouverture de la liaison, 1 message d'ordre absolu, 2 demande d'une sinusoide
-    int Id; //Numero du message, si -1 alors les val n'ont aucune importance
+    int status; // Message status: 0 no message/not ready/not received, 1 control message, 2 report message (local status becomes status of remote controller)
+    int control; // Control commands for remote operator: 0 open link, 1 absolute command, 2 request sinusoid
+    int Id; // Message ID, if -1 then the values are not used
     short val[21];
     clock_t time_log;
 };
 typedef struct UDP_data UDP_data;
 
-static int controle_actuel;
-static int controle_en_cours;
+static int current_control;
+static int active_control;
 static int Id_act;
 static int Id_max;
 static UDP_data client_data;
@@ -48,10 +48,10 @@ static int sin_size=sizeof(sock_sin);
 static int Ini();
 static void End();
 static int Send_Order();
-static void Set_Order(int int_controle, int nb_Id, int tab[21]);
+static void Set_Order(int int_control, int nb_Id, int tab[21]);
 static int Param_connec_locale();
 static int Receive_Data();
-static void Param_Order(int int_controle, int nb_Id);
+static void Param_Order(int int_control, int nb_Id);
 static void Print_data(UDP_data D);
 
 
@@ -83,51 +83,51 @@ static void End(){
         #endif
 
 }
-static int Send_Order(){ //ATTENTION, LA CONNECTION DOIT ETRE PARAMETREE AVANT D'UTILISER .Send_Order()
+static int Send_Order(){ // WARNING: CONNECTION MUST BE CONFIGURED BEFORE CALLING Send_Order()
     Id_act=0;
     Id_max=client_data.Id;
-    if (client_data.statut!=1){
-    printf("Attention, message de type non-controle, verification recommandee\n");
-    //return 0; //A decommenter si on veux qu'une alerte empeche l'envoi du message et/ou l'arret du code.
+    if (client_data.status!=1){
+    printf("Warning: message type is not control, verification recommended\n");
+    //return 0; // Uncomment if you want to block sending on warning and/or stop the program.
     //exit(1);
     }
 
     if(sendto(sock,(const char *)&client_data,sizeof(client_data),0,(SOCKADDR *)&sock_sin,sin_size)<0){
-        printf("         Echec de l'envoie Send_Ordre\n");
+        printf("         Failed to send Send_Order\n");
         return 0;
     }
     else{
-        //connecte=1; // !!! Decommenter pour stopper la boucle au premier message envoyé
-        printf("        Ordre envoye \n");
+        //connecte=1; // !!! Uncomment to stop the loop after the first message is sent
+        printf("        Order sent \n");
 
         return 1;
     }
 
 }
-static void Set_Order(int int_controle, int nb_Id, int tab[21]){
-    client_data.controle=int_controle;
+static void Set_Order(int int_control, int nb_Id, int tab[21]){
+    client_data.control=int_control;
     client_data.Id=nb_Id;
-    client_data.statut=1;
+    client_data.status=1;
     int k=0;
     for(k=0;k<21;k++){
 		client_data.val[k]=tab[k];
 		}
 }
-static void Param_Order(int int_controle, int nb_Id){
-    client_data.controle=int_controle;
+static void Param_Order(int int_control, int nb_Id){
+    client_data.control=int_control;
     client_data.Id=nb_Id;
-    client_data.statut=1;
+    client_data.status=1;
 }
 static int Param_connec_locale(){
         Ini();
-        //  Création de la socket
+        //  Socket creation
         sock = socket(AF_INET, SOCK_DGRAM, 0);
-        //printf("Socket cree \n");
-       //  Configuration de la connexion
+        //printf("Socket created \n");
+       //  Connection configuration
         sock_sin.sin_addr.s_addr =inet_addr("127.0.0.1");//inet_addr("127.0.0.1"); //inet_addr("10.59.145.197");
         sock_sin.sin_family = AF_INET;
         sock_sin.sin_port = htons(PORT);
-        printf("socket cree en mode local");
+        printf("socket created in local mode");
 
 #ifdef WIN32
         u_long mode = 1;
@@ -142,14 +142,14 @@ static int Param_connec_locale(){
 }
 
 static int Param_connec(){
-        //  Création de la socket
+        //  Socket creation
         sock = socket(AF_INET, SOCK_DGRAM, 0);
-        //printf("Socket cree \n");
-       //  Configuration de la connexion
+        //printf("Socket created \n");
+       //  Connection configuration
         sock_sin.sin_addr.s_addr =inet_addr("10.59.145.197");//inet_addr("127.0.0.1"); //inet_addr("10.59.145.197");
         sock_sin.sin_family = AF_INET;
         sock_sin.sin_port = htons(PORT);
-        printf("socket cree en mode local");
+        printf("socket created in local mode");
 
 #ifdef WIN32
         u_long mode = 1;
@@ -169,9 +169,9 @@ static int Receive_Data(){
         return 0;
         }
     else {
-        if (buff_data.statut!=2){
-            printf("Attention : Donnee recu de type non-rapport, verification recommandee\n");
-            //return 0; //A decommenter si l'on veux empecher l'utilisation du message de mauvais statut
+        if (buff_data.status!=2){
+            printf("Warning: Received data is not report type, verification recommended\n");
+            //return 0; // Uncomment if you want to prevent using message with incorrect status
             //exit(1);
             }
         return 1;
@@ -180,8 +180,8 @@ static int Receive_Data(){
 }
 
 static void iniclientdata(){
-    client_data.statut=1;
-    client_data.controle=0;
+    client_data.status=1;
+    client_data.control=0;
     client_data.Id=-1;
     client_data.time_log=clock();
     int k=0;
@@ -190,8 +190,8 @@ static void iniclientdata(){
     }
 }
 static void inibuffdata(){
-    buff_data.statut=0;
-    buff_data.controle=0;
+    buff_data.status=0;
+    buff_data.control=0;
     buff_data.Id=0;
     buff_data.time_log=clock();
     int k=0;

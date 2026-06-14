@@ -33,7 +33,7 @@ void LoadSherpa(SuLINK uLINK[],State *Status)
         uLINK[i].isPolygon=0;
     }
 
-    Status->ddl=12+6;
+    Status->dof=12+6;
     Status->support=0; //0:none,1:right,2:left,3:both
     Status->desired_support=0;
     Status->distribution_y=0.5;

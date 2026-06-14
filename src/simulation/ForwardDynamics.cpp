@@ -63,7 +63,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
     static Eigen::MatrixXd A2;
 
 
-    int nDoF = Status->ddl;
+    int nDoF = Status->dof;
     int n,i,j;
 
 //    gsl_matrix * A = gsl_matrix_calloc (nDoF, nDoF);
@@ -81,7 +81,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
     if (init==1)
     {
 
-        uLINKc_vec.resize((Status->ddl)+2-6);
+        uLINKc_vec.resize((Status->dof)+2-6);
         uLINKc = uLINKc_vec.data();
         Inertia_Motor.resize(nDoF, nDoF); Inertia_Motor.setZero();
         A.resize(nDoF, nDoF); A.setZero();
@@ -175,14 +175,14 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 //    }
 //    printf(" \n");
 
-//% Prise en compte de l inertie des moteurs
+//% Taking into account the motor inertia
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //for n=7:nDoF
 //    j = n-6+1;
 //    A(n,n) = A(n,n) + uLINK(j).Ir * uLINK(j).gr^2;
 //end
 
-// Prise en compte de l inertie des moteurs
+// Taking into account the motor inertia
 //PrintGSLMatrix(A);
     A += Inertia_Motor;
 
@@ -196,9 +196,9 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         static Eigen::VectorXd dqd;
         if (init_com==1)
         {
-            uPD.resize(Status->ddl); uPD.setZero();
-            qd.resize(Status->ddl); qd.setZero();
-            dqd.resize(Status->ddl); dqd.setZero();
+            uPD.resize(Status->dof); uPD.setZero();
+            qd.resize(Status->dof); qd.setZero();
+            dqd.resize(Status->dof); dqd.setZero();
             init_com=0;
         }
 
@@ -302,10 +302,10 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         static int init_G=1;
         if (init_G==1)
         {
-            uG_vec.resize((Status->ddl)-6);
-            fG_vec.resize((Status->ddl)-6);
-            tG_vec.resize((Status->ddl)-6);
-            uStab_vec.resize((Status->ddl)-6);
+            uG_vec.resize((Status->dof)-6);
+            fG_vec.resize((Status->dof)-6);
+            tG_vec.resize((Status->dof)-6);
+            uStab_vec.resize((Status->dof)-6);
             uG = uG_vec.data();
             fG = fG_vec.data();
             tG = tG_vec.data();

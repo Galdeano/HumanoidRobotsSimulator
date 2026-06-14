@@ -8,11 +8,11 @@
 
 void CamInit(CamParam_s *CamParam)
 {
-    CamParam->holdl = 0; //au départ on part du principe que le bouton n'est pas maintenu
-    CamParam->holdw = 0; //au départ on part du principe que le bouton n'est pas maintenu
+    CamParam->holdl = 0; // initially assume the button is not pressed
+    CamParam->holdw = 0; // initially assume the button is not pressed
     CamParam->angleY = 23;
     CamParam->angleZ = 94;
-    CamParam->distance = 0.1; //distance initiale de la caméra avec le centre de la scène
+    CamParam->distance = 0.1; // initial distance of the camera from the scene center
     CamParam->motionSensivity = 0.3;
     CamParam->scrollSensivity = 0.1;
     CamParam->strafeSensivity = 0.002;
@@ -24,11 +24,11 @@ void CamInit(CamParam_s *CamParam)
 
 //void CamInit(CamParam_s *CamParam)
 //{
-//    CamParam->holdl = 0; //au départ on part du principe que le bouton n'est pas maintenu
-//    CamParam->holdw = 0; //au départ on part du principe que le bouton n'est pas maintenu
+//    CamParam->holdl = 0; // initially assume the button is not pressed
+//    CamParam->holdw = 0; // initially assume the button is not pressed
 //    CamParam->angleY = 30;
 //    CamParam->angleZ = 45;
-//    CamParam->distance = 1.3; //distance initiale de la caméra avec le centre de la scène
+//    CamParam->distance = 1.3; // initial distance of the camera from the scene center
 //    CamParam->motionSensivity = 0.3;
 //    CamParam->scrollSensivity = 0.1;
 //    CamParam->strafeSensivity = 0.002;
@@ -40,60 +40,60 @@ void CamInit(CamParam_s *CamParam)
 
 void OnMouseMotion(CamParam_s *CamParam, SDL_MouseMotionEvent event)
 {
-    if (CamParam->holdl) //si nous maintenons le bouton gauche enfoncé
+    if (CamParam->holdl) // if we are holding the left button down
     {
-        CamParam->angleZ += event.xrel*CamParam->motionSensivity; //mouvement sur X de la souris -> changement de la rotation horizontale
-        CamParam->angleY += event.yrel*CamParam->motionSensivity; //mouvement sur Y de la souris -> changement de la rotation verticale
-        //pour éviter certains problèmes, on limite la rotation verticale à des angles entre -90° et 90°
+        CamParam->angleZ += event.xrel*CamParam->motionSensivity; // mouse motion on X -> change horizontal rotation
+        CamParam->angleY += event.yrel*CamParam->motionSensivity; // mouse motion on Y -> change vertical rotation
+        // to avoid some issues, we limit the vertical rotation to angles between -90 and 90 degrees
         if (CamParam->angleY > 90)
             CamParam->angleY = 90;
         else if (CamParam->angleY < -90)
             CamParam->angleY = -90;
     }
-    if (CamParam->holdw) //si nous maintenons le bouton millieu enfoncé
+    if (CamParam->holdw) // if we are holding the middle button down
     {
-        CamParam->Y += event.xrel*CamParam->strafeSensivity; //mouvement sur X de la souris -> changement de la rotation horizontale
-        CamParam->Z -= event.yrel*CamParam->strafeSensivity; //mouvement sur Y de la souris -> changement de la rotation verticale
-        //pour éviter certains problèmes, on limite la rotation verticale à des angles entre -90° et 90°
+        CamParam->Y += event.xrel*CamParam->strafeSensivity; // mouse motion on X -> change horizontal translation
+        CamParam->Z -= event.yrel*CamParam->strafeSensivity; // mouse motion on Y -> change vertical translation
+        // to avoid some issues, we limit vertical rotation to angles between -90 and 90 degrees
     }
 }
 
 void OnMouseButton(CamParam_s *CamParam, SDL_MouseButtonEvent event)
 {
-    if (event.button == SDL_BUTTON_LEFT) //l'événement concerne le bouton gauche
+    if (event.button == SDL_BUTTON_LEFT) // event concerns the left button
     {
-        if ((CamParam->holdl)&&(event.type == SDL_MOUSEBUTTONUP)) //relâchement alors qu'on était enfoncé
+        if ((CamParam->holdl)&&(event.type == SDL_MOUSEBUTTONUP)) // release while pressed
         {
-            CamParam->holdl = 0; //falsele mouvement de la souris ne fera plus bouger la scène
-            //SDL_SetCursor(_hand1); //on met le curseur normal
+            CamParam->holdl = 0; // mouse movement will no longer move the scene
+            //SDL_SetCursor(_hand1); // set normal cursor
         }
-        else if ((!CamParam->holdl)&&(event.type == SDL_MOUSEBUTTONDOWN)) //appui alors qu'on était relâché
+        else if ((!CamParam->holdl)&&(event.type == SDL_MOUSEBUTTONDOWN)) // press while released
         {
-            CamParam->holdl = 1; //true le mouvement de la souris fera bouger la scène
-            //SDL_SetCursor(_hand2); //on met le curseur spécial
+            CamParam->holdl = 1; // mouse movement will move the scene
+            //SDL_SetCursor(_hand2); // set special cursor
         }
     }
-    else if ((event.button == SDL_BUTTON_WHEELUP)&&(event.type == SDL_MOUSEBUTTONDOWN)) //coup de molette vers le haut
+    else if ((event.button == SDL_BUTTON_WHEELUP)&&(event.type == SDL_MOUSEBUTTONDOWN)) // scroll wheel up
     {
-        CamParam->distance -= CamParam->scrollSensivity; //on zoome, donc rapproche la caméra du centre
-        if (CamParam->distance < 0.1) //distance minimale, à changer si besoin (avec un attribut par exemple)
+        CamParam->distance -= CamParam->scrollSensivity; // zoom in, bring camera closer to center
+        if (CamParam->distance < 0.1) // minimum distance, can be changed if needed (e.g. with an attribute)
             CamParam->distance = 0.1;
     }
-    else if ((event.button == SDL_BUTTON_WHEELDOWN)&&(event.type == SDL_MOUSEBUTTONDOWN)) //coup de molette vers le bas
+    else if ((event.button == SDL_BUTTON_WHEELDOWN)&&(event.type == SDL_MOUSEBUTTONDOWN)) // scroll wheel down
     {
-        CamParam->distance += CamParam->scrollSensivity; //on dézoome donc éloigne la caméra
+        CamParam->distance += CamParam->scrollSensivity; // zoom out, move camera away
     }
-    else if (event.button == SDL_BUTTON_MIDDLE) //l'événement concerne le molette
+    else if (event.button == SDL_BUTTON_MIDDLE) // event concerns the middle button/wheel
     {
-        if ((CamParam->holdw)&&(event.type == SDL_MOUSEBUTTONUP)) //relâchement alors qu'on était enfoncé
+        if ((CamParam->holdw)&&(event.type == SDL_MOUSEBUTTONUP)) // release while pressed
         {
-            CamParam->holdw = 0; //falsele mouvement de la souris ne fera plus bouger la scène
-            //SDL_SetCursor(_hand1); //on met le curseur normal
+            CamParam->holdw = 0; // mouse movement will no longer move the scene
+            //SDL_SetCursor(_hand1); // set normal cursor
         }
-        else if ((!CamParam->holdw)&&(event.type == SDL_MOUSEBUTTONDOWN)) //appui alors qu'on était relâché
+        else if ((!CamParam->holdw)&&(event.type == SDL_MOUSEBUTTONDOWN)) // press while released
         {
-            CamParam->holdw = 1; //true le mouvement de la souris fera bouger la scène
-            //SDL_SetCursor(_hand2); //on met le curseur spécial
+            CamParam->holdw = 1; // mouse movement will move the scene
+            //SDL_SetCursor(_hand2); // set special cursor
         }
     }
 }

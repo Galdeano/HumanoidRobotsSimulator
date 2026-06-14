@@ -30,15 +30,15 @@ void CalcCoMJacobian(SuLINK uLINK[], State *Status, Eigen::MatrixXd & J, int bas
     {
         a.setZero();
         error.setZero();
-        mc = Eigen::MatrixXd::Zero((Status->ddl) - 3, 3);
-        m = Eigen::VectorXd::Zero((Status->ddl) - 3);
-        store_mc = Eigen::MatrixXd::Zero((Status->ddl) - 3, 3);
-        store_m = Eigen::VectorXd::Zero((Status->ddl) - 3);
+        mc = Eigen::MatrixXd::Zero((Status->dof) - 3, 3);
+        m = Eigen::VectorXd::Zero((Status->dof) - 3);
+        store_mc = Eigen::MatrixXd::Zero((Status->dof) - 3, 3);
+        store_m = Eigen::VectorXd::Zero((Status->dof) - 3);
         tmpv3.setZero();
         tmpv3_2.setZero();
-        mother = Eigen::VectorXd::Zero((Status->ddl) - 3);
-        double_path = Eigen::VectorXd::Zero((Status->ddl) - 3);
-        path.resize((Status->ddl) + 2 - 6);
+        mother = Eigen::VectorXd::Zero((Status->dof) - 3);
+        double_path = Eigen::VectorXd::Zero((Status->dof) - 3);
+        path.resize((Status->dof) + 2 - 6);
 
         mass = TotalMass(uLINK, 1);
         init_tmp = 0;
@@ -177,11 +177,11 @@ void CalcCoMJacobian(SuLINK uLINK[], State *Status, Eigen::MatrixXd & J, int bas
         store_m += m;
     }
 
-    for (n = 1; n < ((Status->ddl) + 2 - 6 + 1); n++)
+    for (n = 1; n < ((Status->dof) + 2 - 6 + 1); n++)
     {
         j = n;
         err = 0;
-        for (i = 1; i < ((Status->ddl) + 2 - 6 + 1); i++)
+        for (i = 1; i < ((Status->dof) + 2 - 6 + 1); i++)
         {
             if (j == (int)mother(i))
             {

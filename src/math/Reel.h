@@ -1,13 +1,13 @@
-/* Reel.h  définition du type Reel
+/* Reel.h  Definition of Reel type
 
 17:06 25/07/06 MB V
 
-Reel est défini comme double ou double suivant la précision souhaitée.
+Reel is defined as double depending on the desired precision.
 
-Il est utilisé dans le module Mat et déclaré séparément ici.
+It is used in the Mat module and declared separately here.
 
-La plupart du temps le type double est suffisant.
-Toutefois l'utilisation de MatPseudoInv avec une matrice mal conditionnée peut nécessiter le type double.
+Most of the time the double type is sufficient.
+However, using MatPseudoInv with an ill-conditioned matrix may require the double type.
 */
 
 typedef double Reel ;
