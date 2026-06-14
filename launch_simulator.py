@@ -9,7 +9,7 @@ def main():
     env = os.environ.copy()
     if os.path.exists(msys_bin):
         env["PATH"] = msys_bin + os.pathsep + env.get("PATH", "")
-    env["SDL_VIDEODRIVER"] = "windib"
+    # env["SDL_VIDEODRIVER"] = "windib"
     env["SDL_VIDEO_CENTRED"] = "1"
 
     # 2. Ensure Simu_data directories exist to prevent crashes when files are opened

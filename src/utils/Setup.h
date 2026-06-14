@@ -127,19 +127,19 @@
 */
 
 //Choose Robot model
-#define Sherpa 0
-/*! \def Sherpa
+#define ROBOT_SHERPA 0
+/*! \def ROBOT_SHERPA
     \brief Sherpa robot model is used
 */
-#define Generic 1
-/*! \def Generic
+#define ROBOT_GENERIC 1
+/*! \def ROBOT_GENERIC
     \brief Generic robot model is used
 */
-#define Human 0
-/*! \def Human
+#define ROBOT_HUMAN 0
+/*! \def ROBOT_HUMAN
     \brief Human model is used
 */
-#if (Sherpa + Generic + Human)!=1
+#if (ROBOT_SHERPA + ROBOT_GENERIC + ROBOT_HUMAN)!=1
 #error Both Sherpa and Generic robot model are specified
 #error Check Sherpa and Generic defs
 #endif
@@ -147,20 +147,20 @@
 
 
 //Choose Command
-#define PD 0
-/*! \def PD
+#define CMD_PD 0
+/*! \def CMD_PD
     \brief Proportional derivative command is used
 */
-#define Dynamic 0
-/*! \def Dynamic
+#define CMD_DYNAMIC 0
+/*! \def CMD_DYNAMIC
     \brief Dynamic command is used
 */
-#define Task 1
-/*! \def Task
+#define CMD_TASK 1
+/*! \def CMD_TASK
     \brief Task control is used
 */
 
-#if (PD+ Dynamic + Task)!=1
+#if (CMD_PD + CMD_DYNAMIC + CMD_TASK)!=1
 #error Both PD and Dynamic command are specified
 #error Check PD and Dynamic defs
 #endif

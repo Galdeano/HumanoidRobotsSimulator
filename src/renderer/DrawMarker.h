@@ -1,8 +1,7 @@
 #ifndef H_DrawMarker
 #define H_DrawMarker
 
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
+#include <Eigen/Dense>
 
 /** \file DrawMarker.h
  *  \brief Draw a cross in 3D
@@ -11,15 +10,12 @@
  *
  */
 
-
 /**
- * \fn void DrawMarker(gsl_vector * com)
+ * \fn void DrawMarker(const Eigen::Vector3d & com)
  * \brief Draw a cross in 3D
- *
  *
  * \param com position of the marker
  */
-void DrawMarker(gsl_vector * com);
-
+void DrawMarker(const Eigen::Vector3d & com);
 
 #endif

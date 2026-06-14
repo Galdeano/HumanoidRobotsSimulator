@@ -1,5 +1,5 @@
 
-#include <gsl/gsl_math.h>
+#include <cmath>
 #include "NPD.h"
 
 double npd(double e,double alpha,double sigma)

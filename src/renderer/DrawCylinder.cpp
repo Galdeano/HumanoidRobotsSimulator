@@ -1,8 +1,3 @@
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_blas.h>
-#include <gsl/gsl_linalg.h>
-#include <gsl/gsl_math.h>
 #include <vector>
 #include "uLink.h"
 #include "DrawCylinder.h"
@@ -98,15 +93,15 @@ void DrawCylinder(SuLINK uLINK[], int j) {
     glm::mat4 Mj(1.0f);
     for (int i = 0; i < 3; i++) {
         for (int k = 0; k < 3; k++) {
-            Mj[i][k] = (float)gsl_matrix_get(uLINK[j].R, k, i);
+            Mj[i][k] = (float)uLINK[j].R(k, i);
         }
-        Mj[3][i] = (float)gsl_vector_get(uLINK[j].p, i);
+        Mj[3][i] = (float)uLINK[j].p(i);
     }
 
     glm::mat4 R(1.0f);
-    if (gsl_vector_get(uLINK[j].a, 0) == 1)
+    if (uLINK[j].a(0) == 1)
         R = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    else if (gsl_vector_get(uLINK[j].a, 1) == 1)
+    else if (uLINK[j].a(1) == 1)
         R = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
     glm::mat4 S = glm::scale(glm::mat4(1.0f), glm::vec3((float)radius, (float)radius, (float)len));

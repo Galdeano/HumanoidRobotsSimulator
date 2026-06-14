@@ -1,8 +1,3 @@
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_blas.h>
-#include <gsl/gsl_linalg.h>
-#include <gsl/gsl_math.h>
 #include "uLink.h"
 #include "Connect3D.h"
 #include "Setup.h"

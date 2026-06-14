@@ -1,8 +1,3 @@
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_blas.h>
-#include <gsl/gsl_linalg.h>
-#include <gsl/gsl_math.h>
 #include "uLink.h"
 #include "DrawAllJoints.h"
 
@@ -22,15 +17,15 @@ void DrawAllJoints(SuLINK uLINK[],int j)
         glm::mat4 Mj(1.0f);
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 3; k++) {
-                Mj[i][k] = (float)gsl_matrix_get(uLINK[j].R, k, i);
+                Mj[i][k] = (float)uLINK[j].R(k, i);
             }
-            Mj[3][i] = (float)gsl_vector_get(uLINK[j].p, i);
+            Mj[3][i] = (float)uLINK[j].p(i);
         }
 
         glm::vec3 offset(
-            (float)gsl_vector_get(uLINK[j].obj_offset, 0),
-            (float)gsl_vector_get(uLINK[j].obj_offset, 1),
-            (float)gsl_vector_get(uLINK[j].obj_offset, 2)
+            (float)uLINK[j].obj_offset(0),
+            (float)uLINK[j].obj_offset(1),
+            (float)uLINK[j].obj_offset(2)
         );
         glm::mat4 Model = glm::translate(Mj, offset);
 

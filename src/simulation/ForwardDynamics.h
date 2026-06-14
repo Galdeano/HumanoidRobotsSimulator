@@ -1,8 +1,7 @@
 #ifndef H_ForwardDynamics
 #define H_ForwardDynamics
 
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
+#include "uLink.h"
 
 /** \file ForwardDynamics.h
  *  \brief Compute the Forward dynamic of the robot

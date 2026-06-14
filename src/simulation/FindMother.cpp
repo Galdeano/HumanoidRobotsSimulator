@@ -1,9 +1,7 @@
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
 #include "uLink.h"
 #include "FindMother.h"
 
-void FindMother(SuLINK uLINK[],State *Status,int j)
+void FindMother(SuLINK uLINK[], State *Status, int j)
 {
     if (j != 0)
     {
@@ -15,21 +13,19 @@ void FindMother(SuLINK uLINK[],State *Status,int j)
         {
             uLINK[uLINK[j].child].mother = j;
             uLINK[uLINK[j].child].upper = j;
-            FindMother(uLINK,Status,uLINK[j].child);
+            FindMother(uLINK, Status, uLINK[j].child);
         }
 
         if (uLINK[j].sister != 0)
         {
             uLINK[uLINK[j].sister].mother = uLINK[j].mother;
             uLINK[uLINK[j].sister].upper = j;
-            FindMother(uLINK,Status,uLINK[j].sister);
+            FindMother(uLINK, Status, uLINK[j].sister);
         }
         if ((uLINK[j].sister == 0) && (uLINK[j].child == 0))
         {
-            gsl_vector_set(Status->limbID,Status->nb_limb,j);
-            Status->nb_limb=Status->nb_limb+1;
+            Status->limbID(Status->nb_limb) = j;
+            Status->nb_limb = Status->nb_limb + 1;
         }
-
     }
-    //printf("%d \n",uLINK[j].mother);
 }

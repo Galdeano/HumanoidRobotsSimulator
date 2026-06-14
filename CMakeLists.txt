@@ -8,21 +8,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Find packages
 find_package(OpenGL REQUIRED)
-find_package(GSL REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(pugixml REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(glm REQUIRED)
+find_package(Eigen3 REQUIRED)
 
 # Add include directories
 include_directories(
-    src
-    src/math
-    src/renderer
-    src/simulation
-    src/control
-    src/utils
-    ${GSL_INCLUDE_DIRS}
+    ${PROJECT_SOURCE_DIR}/src
+    ${PROJECT_SOURCE_DIR}/src/math
+    ${PROJECT_SOURCE_DIR}/src/renderer
+    ${PROJECT_SOURCE_DIR}/src/simulation
+    ${PROJECT_SOURCE_DIR}/src/control
+    ${PROJECT_SOURCE_DIR}/src/utils
     ${SDL2_INCLUDE_DIRS}
     ${GLEW_INCLUDE_DIRS}
 )
@@ -43,19 +42,18 @@ add_executable(SimuSherpaConsole ${SOURCES})
 
 # Target include directories
 target_include_directories(SimuSherpaConsole PRIVATE
-    ${GSL_INCLUDE_DIRS}
     ${SDL_INCLUDE_DIR}
 )
 
 # Target link libraries
 target_link_libraries(SimuSherpaConsole PRIVATE
-    ${GSL_LIBRARIES}
     SDL2::SDL2main
     SDL2::SDL2
     OpenGL::GL
     GLEW::GLEW
     glm::glm
     pugixml::pugixml
+    Eigen3::Eigen
 )
 
 # Link Winsock on Windows

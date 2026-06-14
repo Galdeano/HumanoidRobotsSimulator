@@ -1,9 +1,6 @@
 #ifndef H_DrawGround
 #define H_DrawGround
 
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
-
 /** \file DrawGround.h
  *  \brief Draw ground
  *  \author    David Galdeano

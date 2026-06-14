@@ -1,12 +1,8 @@
 #ifndef H_vec2tab
 #define H_vec2tab
 
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
+#include <Eigen/Dense>
 
-
-
-
-void vec2tab(double *tab, gsl_vector *vec);
+void vec2tab(double * tab, const Eigen::VectorXd & vec);
 
 #endif

@@ -1,8 +1,4 @@
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_blas.h>
-#include <gsl/gsl_linalg.h>
-#include <gsl/gsl_math.h>
+#include <Eigen/Dense>
 #include "DrawMarker.h"
 #include "OpenGLHeaders.h"
 #include "Shader.h"
@@ -10,6 +6,7 @@
 extern Shader defaultShader;
 extern glm::mat4 ProjectionMatrix;
 extern glm::mat4 ViewMatrix;
+extern glm::vec3 activeColor;
 
 void draw_line(const glm::vec3 &start, const glm::vec3 &end, const glm::vec3 &color, float width) {
     static unsigned int lineVAO = 0;
@@ -46,13 +43,13 @@ void draw_line(const glm::vec3 &start, const glm::vec3 &end, const glm::vec3 &co
     glBindVertexArray(0);
 }
 
-void DrawMarker(gsl_vector * com)
+void DrawMarker(const Eigen::Vector3d & com)
 {
     double d = 0.05;
     glm::vec3 center(
-        (float)gsl_vector_get(com, 0),
-        (float)gsl_vector_get(com, 1),
-        (float)gsl_vector_get(com, 2)
+        (float)com(0),
+        (float)com(1),
+        (float)com(2)
     );
     draw_line(center - glm::vec3(d, 0.0f, 0.0f), center + glm::vec3(d, 0.0f, 0.0f), activeColor, 5.0f);
     draw_line(center - glm::vec3(0.0f, d, 0.0f), center + glm::vec3(0.0f, d, 0.0f), activeColor, 5.0f);

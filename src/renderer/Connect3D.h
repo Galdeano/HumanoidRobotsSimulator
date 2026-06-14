@@ -1,9 +1,6 @@
 #ifndef H_Connect3D
 #define H_Connect3D
 
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
-
 /** \file Connect3D.h
  *  \brief Draw a line between two link position
  *  \author    David Galdeano

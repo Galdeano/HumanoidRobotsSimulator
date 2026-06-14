@@ -1,8 +1,7 @@
 
-#include "InverseSherpaKinematics_f.h"
-#include "Spline_f.h"
+#include "InverseSherpaKinematics.h"
+#include "Spline.h"
 #include "Scenarios.h"
-#include <gsl/gsl_math.h>
 
 #include "Setup.h"
 
@@ -22,30 +21,30 @@ void Scenario_desired_trajectory(double *qd, double t, int *desired_support, dou
                        } ;//Posture dans l'espace operationel
         *distribution=0.5f;	//repartition de l'effort de contact
         *desired_support=3;	//Pied de support: 0:none,1:right,2:left,3:both
-        InverseSherpaKinematics_f(qd, pos);
-        InverseSherpaKinematics_f(qd+6, pos+3);
+        InverseSherpaKinematics(qd, pos);
+        InverseSherpaKinematics(qd+6, pos+3);
     }
 
     if (t>=t1 && t<t2)
     {
-        double pos[6] = { 0.f , 0.f , Spline_f((double)t,t1,t2,-1.01729f,-0.9f,0.f,0.f) ,
-                         0.f , 0.f , Spline_f((double)t,t1,t2,-1.01729f,-0.9f,0.f,0.f)
+        double pos[6] = { 0.f , 0.f , Spline((double)t,t1,t2,-1.01729f,-0.9f,0.f,0.f) ,
+                         0.f , 0.f , Spline((double)t,t1,t2,-1.01729f,-0.9f,0.f,0.f)
                        } ;//Posture dans l'espace operationel
         *distribution=0.5f;
         *desired_support=3;
-        InverseSherpaKinematics_f(qd, pos);
-        InverseSherpaKinematics_f(qd+6, pos+3);
+        InverseSherpaKinematics(qd, pos);
+        InverseSherpaKinematics(qd+6, pos+3);
     }
 
     if (t>=t2 && t<t3)
     {
-        double pos[6] = { 0.f , 0.f , Spline_f((double)t,t2,t3,-0.9f,-1.01729f,0.f,0.f) ,
-                         0.f , 0.f , Spline_f((double)t,t2,t3,-0.9f,-1.01729f,0.f,0.f)
+        double pos[6] = { 0.f , 0.f , Spline((double)t,t2,t3,-0.9f,-1.01729f,0.f,0.f) ,
+                         0.f , 0.f , Spline((double)t,t2,t3,-0.9f,-1.01729f,0.f,0.f)
                        } ;//Posture dans l'espace operationel
         *distribution=0.5f;
         *desired_support=3;
-        InverseSherpaKinematics_f(qd, pos);
-        InverseSherpaKinematics_f(qd+6, pos+3);
+        InverseSherpaKinematics(qd, pos);
+        InverseSherpaKinematics(qd+6, pos+3);
     }
 
     if (t>=t3)
@@ -55,8 +54,8 @@ void Scenario_desired_trajectory(double *qd, double t, int *desired_support, dou
                        } ;
         *distribution=0.5;
         *desired_support=3;
-        InverseSherpaKinematics_f(qd, pos);
-        InverseSherpaKinematics_f(qd+6, pos+3);
+        InverseSherpaKinematics(qd, pos);
+        InverseSherpaKinematics(qd+6, pos+3);
     }
 
 }
@@ -85,54 +84,54 @@ void Scenario_desired_trajectory(double *qd, double t, int *desired_support, dou
                        } ;//Posture dans l'espace operationel
         *distribution=0.5f;	//repartition de l'effort de contact
         *desired_support=3;	//Pied de support: 0:none,1:right,2:left,3:both
-        InverseSherpaKinematics_f(qd, pos);
-        InverseSherpaKinematics_f(qd+6, pos+3);
+        InverseSherpaKinematics(qd, pos);
+        InverseSherpaKinematics(qd+6, pos+3);
     }
 
     if (t>=t1 && t<t2)
     {
-        double pos[6] = { 0.f , 0.f , C2Spline_f((double)t,t1,(t1+t2)/2,t2,-1.01729f,-1.f,-0.95f,0.f,0.f) ,
-                         0.f , 0.f , C2Spline_f((double)t,t1,(t1+t2)/2,t2,-1.01729f,-1.f,-0.95f,0.f,0.f)
+        double pos[6] = { 0.f , 0.f , C2Spline((double)t,t1,(t1+t2)/2,t2,-1.01729f,-1.f,-0.95f,0.f,0.f) ,
+                         0.f , 0.f , C2Spline((double)t,t1,(t1+t2)/2,t2,-1.01729f,-1.f,-0.95f,0.f,0.f)
                        } ;//Posture dans l'espace operationel
         *distribution=0.5f;
         *desired_support=3;
-        InverseSherpaKinematics_f(qd, pos);
-        InverseSherpaKinematics_f(qd+6, pos+3);
+        InverseSherpaKinematics(qd, pos);
+        InverseSherpaKinematics(qd+6, pos+3);
     }
 
     if (t>=t2 && t<t3)
     {
-        double pos[6] = { Spline_f((double)t,t2,t3,0.f,-0.05f,0.f,0.f) , Spline_f((double)t,t2,t3,0.f,com_y,0.f,0.f) , -0.95f ,
-                         Spline_f((double)t,t2,t3,0.f,-0.05f,0.f,0.f) , Spline_f((double)t,t2,t3,0.f,com_y,0.f,0.f) , -0.95f
+        double pos[6] = { Spline((double)t,t2,t3,0.f,-0.05f,0.f,0.f) , Spline((double)t,t2,t3,0.f,com_y,0.f,0.f) , -0.95f ,
+                         Spline((double)t,t2,t3,0.f,-0.05f,0.f,0.f) , Spline((double)t,t2,t3,0.f,com_y,0.f,0.f) , -0.95f
                        } ;
-        *distribution=Spline_f((double)t,t2,t3,0.5f,0.f,0.f,0.f);
+        *distribution=Spline((double)t,t2,t3,0.5f,0.f,0.f,0.f);
         *desired_support=3;
-        InverseSherpaKinematics_f(qd, pos);
-        InverseSherpaKinematics_f(qd+6, pos+3);
+        InverseSherpaKinematics(qd, pos);
+        InverseSherpaKinematics(qd+6, pos+3);
     }
 
 
     if (t>=t3 && t<t4)
     {
-        double pos[6] = { Spline_f((double)t,t3,t4,-0.05f,0.f,0.f,0.f) , Spline_f((double)t,t3,t4,com_y,0.f,0.f,0.f) , -0.95f ,
-                         Spline_f((double)t,t3,t4,-0.05f,0.f,0.f,0.f) , Spline_f((double)t,t3,t4,com_y,0.f,0.f,0.f) , -0.95f
+        double pos[6] = { Spline((double)t,t3,t4,-0.05f,0.f,0.f,0.f) , Spline((double)t,t3,t4,com_y,0.f,0.f,0.f) , -0.95f ,
+                         Spline((double)t,t3,t4,-0.05f,0.f,0.f,0.f) , Spline((double)t,t3,t4,com_y,0.f,0.f,0.f) , -0.95f
                        } ;
-        *distribution=Spline_f((double)t,t3,t4,0.f,0.5f,0.f,0.f);
+        *distribution=Spline((double)t,t3,t4,0.f,0.5f,0.f,0.f);
         *desired_support=3;
-        InverseSherpaKinematics_f(qd, pos);
-        InverseSherpaKinematics_f(qd+6, pos+3);
+        InverseSherpaKinematics(qd, pos);
+        InverseSherpaKinematics(qd+6, pos+3);
     }
 
 
     if (t>=t4 && t<t5)
     {
-        double pos[6] = { 0.f , 0.f , C2Spline_f((double)t,t4,(t4+t5)/2,t5,-0.95f,-1.f,-1.01729f,0.f,0.f) ,
-                         0.f , 0.f , C2Spline_f((double)t,t4,(t4+t5)/2,t5,-0.95f,-1.f,-1.01729f,0.f,0.f)
+        double pos[6] = { 0.f , 0.f , C2Spline((double)t,t4,(t4+t5)/2,t5,-0.95f,-1.f,-1.01729f,0.f,0.f) ,
+                         0.f , 0.f , C2Spline((double)t,t4,(t4+t5)/2,t5,-0.95f,-1.f,-1.01729f,0.f,0.f)
                        } ;
         *distribution=0.5;
         *desired_support=3;
-        InverseSherpaKinematics_f(qd, pos);
-        InverseSherpaKinematics_f(qd+6, pos+3);
+        InverseSherpaKinematics(qd, pos);
+        InverseSherpaKinematics(qd+6, pos+3);
     }
 
     if (t>=t5)
@@ -142,8 +141,8 @@ void Scenario_desired_trajectory(double *qd, double t, int *desired_support, dou
                        } ;
         *distribution=0.5;
         *desired_support=3;
-        InverseSherpaKinematics_f(qd, pos);
-        InverseSherpaKinematics_f(qd+6, pos+3);
+        InverseSherpaKinematics(qd, pos);
+        InverseSherpaKinematics(qd+6, pos+3);
     }
 
 }
@@ -167,8 +166,8 @@ void Scenario_desired_trajectory(double *qd, double t, int *desired_support, dou
 //                       } ;//Posture dans l'espace operationel
 //        *distribution=0.5f;	//repartition de l'effort de contact
 //        *desired_support=3;	//Pied de support: 0:none,1:right,2:left,3:both
-//        InverseSherpaKinematics_f(qd, pos);
-//        InverseSherpaKinematics_f(qd+6, pos+3);
+//        InverseSherpaKinematics(qd, pos);
+//        InverseSherpaKinematics(qd+6, pos+3);
 
         qd[1]=0;
         qd[4]=0;
@@ -182,15 +181,15 @@ void Scenario_desired_trajectory(double *qd, double t, int *desired_support, dou
 
     if (t>=t1 && t<t2)
     {
-//        double pos[6] = { 0.f , 0.f , Spline_f((double)t,t1,t2,-1.01729f,-0.9f,0.f,0.f) ,
-//                         0.f , 0.f , Spline_f((double)t,t1,t2,-1.01729f,-0.9f,0.f,0.f)
+//        double pos[6] = { 0.f , 0.f , Spline((double)t,t1,t2,-1.01729f,-0.9f,0.f,0.f) ,
+//                         0.f , 0.f , Spline((double)t,t1,t2,-1.01729f,-0.9f,0.f,0.f)
 //                       } ;//Posture dans l'espace operationel
 //        *distribution=0.5f;
 //        *desired_support=3;
-//        InverseSherpaKinematics_f(qd, pos);
-//        InverseSherpaKinematics_f(qd+6, pos+3);
+//        InverseSherpaKinematics(qd, pos);
+//        InverseSherpaKinematics(qd+6, pos+3);
 
-        temp=Spline_f((double)t,t1,t2,0.f,.1f,0.f,0.f);
+        temp=Spline((double)t,t1,t2,0.f,.1f,0.f,0.f);
         qd[1]=temp;
         qd[4]=-temp;
         qd[7]=temp;
@@ -203,14 +202,14 @@ void Scenario_desired_trajectory(double *qd, double t, int *desired_support, dou
 
     if (t>=t2 && t<t3)
     {
-//        double pos[6] = { 0.f , 0.f , Spline_f((double)t,t2,t3,-0.9f,-1.01729f,0.f,0.f) ,
-//                         0.f , 0.f , Spline_f((double)t,t2,t3,-0.9f,-1.01729f,0.f,0.f)
+//        double pos[6] = { 0.f , 0.f , Spline((double)t,t2,t3,-0.9f,-1.01729f,0.f,0.f) ,
+//                         0.f , 0.f , Spline((double)t,t2,t3,-0.9f,-1.01729f,0.f,0.f)
 //                       } ;//Posture dans l'espace operationel
 //        *distribution=0.5f;
 //        *desired_support=3;
-//        InverseSherpaKinematics_f(qd, pos);
-//        InverseSherpaKinematics_f(qd+6, pos+3);
-        temp=Spline_f((double)t,t2,t3,0.1f,0.02f,0.f,0.f);
+//        InverseSherpaKinematics(qd, pos);
+//        InverseSherpaKinematics(qd+6, pos+3);
+        temp=Spline((double)t,t2,t3,0.1f,0.02f,0.f,0.f);
         qd[1]=temp;
         qd[4]=-temp;
         qd[7]=temp;
@@ -228,8 +227,8 @@ void Scenario_desired_trajectory(double *qd, double t, int *desired_support, dou
 //                       } ;
 //        *distribution=0.5;
 //        *desired_support=3;
-//        InverseSherpaKinematics_f(qd, pos);
-//        InverseSherpaKinematics_f(qd+6, pos+3);
+//        InverseSherpaKinematics(qd, pos);
+//        InverseSherpaKinematics(qd+6, pos+3);
 
         //qd[1]=0;
         //qd[4]=0;
@@ -266,7 +265,7 @@ void Scenario_desired_trajectory(double *qd, double t, int *desired_support, dou
     if (t<t1)
     {
 
-        temp=Spline_f((double)t,0,t1,0.f,-offset,0.f,0.f);
+        temp=Spline((double)t,0,t1,0.f,-offset,0.f,0.f);
         qd[RARM-1]=temp;
         qd[LARM-1]=temp;
 
@@ -330,7 +329,7 @@ void Scenario_desired_trajectory(double *qd, double t, int *desired_support, dou
     if (t>=t5 && t<t6)
     {
 
-        temp=Spline_f((double)t,t5,t6,-offset,0.f,0.f,0.f);
+        temp=Spline((double)t,t5,t6,-offset,0.f,0.f,0.f);
         qd[RARM-1]=temp;
         qd[LARM-1]=temp;
 
@@ -371,7 +370,7 @@ void Scenario_desired_trajectory(double *qd, double t, int *desired_support, dou
     if (t<t1)
     {
 
-        temp=0;//Spline_f((double)t,0,t1,0.f,-offset,0.f,0.f);
+        temp=0;//Spline((double)t,0,t1,0.f,-offset,0.f,0.f);
         qd[SPINE-2]=temp;
 
         *distribution=0.5f;	//repartition de l'effort de contact
@@ -422,7 +421,7 @@ void Scenario_desired_trajectory(double *qd, double t, int *desired_support, dou
     if (t<t1)
     {
 
-        temp=Spline_f((double)t,0,t1,0.f,offset,0.f,0.f);
+        temp=Spline((double)t,0,t1,0.f,offset,0.f,0.f);
         qd[SPINE-2]=temp;
 
         *distribution=0.5f;	//repartition de l'effort de contact
@@ -469,8 +468,8 @@ void Scenario_desired_trajectory(double *qd, double t, int *desired_support, dou
 //                       } ;//Posture dans l'espace operationel
 //        *distribution=0.5f;	//repartition de l'effort de contact
 //        *desired_support=3;	//Pied de support: 0:none,1:right,2:left,3:both
-//        InverseSherpaKinematics_f(qd, pos);
-//        InverseSherpaKinematics_f(qd+6, pos+3);
+//        InverseSherpaKinematics(qd, pos);
+//        InverseSherpaKinematics(qd+6, pos+3);
 
         qd[0]=0;
         qd[5]=0;
@@ -484,15 +483,15 @@ void Scenario_desired_trajectory(double *qd, double t, int *desired_support, dou
 
     if (t>=t1 && t<t2)
     {
-//        double pos[6] = { 0.f , 0.f , Spline_f((double)t,t1,t2,-1.01729f,-0.9f,0.f,0.f) ,
-//                         0.f , 0.f , Spline_f((double)t,t1,t2,-1.01729f,-0.9f,0.f,0.f)
+//        double pos[6] = { 0.f , 0.f , Spline((double)t,t1,t2,-1.01729f,-0.9f,0.f,0.f) ,
+//                         0.f , 0.f , Spline((double)t,t1,t2,-1.01729f,-0.9f,0.f,0.f)
 //                       } ;//Posture dans l'espace operationel
 //        *distribution=0.5f;
 //        *desired_support=3;
-//        InverseSherpaKinematics_f(qd, pos);
-//        InverseSherpaKinematics_f(qd+6, pos+3);
+//        InverseSherpaKinematics(qd, pos);
+//        InverseSherpaKinematics(qd+6, pos+3);
 
-        temp=Spline_f((double)t,t1,t2,0.f,.1f,0.f,0.f);
+        temp=Spline((double)t,t1,t2,0.f,.1f,0.f,0.f);
         qd[0]=-temp;
         qd[5]=temp;
         qd[6]=-temp;
@@ -505,14 +504,14 @@ void Scenario_desired_trajectory(double *qd, double t, int *desired_support, dou
 
     if (t>=t2 && t<t3)
     {
-//        double pos[6] = { 0.f , 0.f , Spline_f((double)t,t2,t3,-0.9f,-1.01729f,0.f,0.f) ,
-//                         0.f , 0.f , Spline_f((double)t,t2,t3,-0.9f,-1.01729f,0.f,0.f)
+//        double pos[6] = { 0.f , 0.f , Spline((double)t,t2,t3,-0.9f,-1.01729f,0.f,0.f) ,
+//                         0.f , 0.f , Spline((double)t,t2,t3,-0.9f,-1.01729f,0.f,0.f)
 //                       } ;//Posture dans l'espace operationel
 //        *distribution=0.5f;
 //        *desired_support=3;
-//        InverseSherpaKinematics_f(qd, pos);
-//        InverseSherpaKinematics_f(qd+6, pos+3);
-        temp=Spline_f((double)t,t2,t3,0.1f,0.0f,0.f,0.f);
+//        InverseSherpaKinematics(qd, pos);
+//        InverseSherpaKinematics(qd+6, pos+3);
+        temp=Spline((double)t,t2,t3,0.1f,0.0f,0.f,0.f);
         qd[0]=-temp;
         qd[5]=temp;
         qd[6]=-temp;
@@ -530,8 +529,8 @@ void Scenario_desired_trajectory(double *qd, double t, int *desired_support, dou
 //                       } ;
 //        *distribution=0.5;
 //        *desired_support=3;
-//        InverseSherpaKinematics_f(qd, pos);
-//        InverseSherpaKinematics_f(qd+6, pos+3);
+//        InverseSherpaKinematics(qd, pos);
+//        InverseSherpaKinematics(qd+6, pos+3);
 
         qd[0]=0;
         qd[5]=0;

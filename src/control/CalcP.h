@@ -1,11 +1,9 @@
 #ifndef H_CalcP
 #define H_CalcP
 
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
+#include <Eigen/Dense>
+#include "uLink.h"
 
-
-void CalcP( SuLINK uLINK[], gsl_vector * P, int j);
-
+void CalcP(SuLINK uLINK[], Eigen::Vector3d & P, int j);
 
 #endif

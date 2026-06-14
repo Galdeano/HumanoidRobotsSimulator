@@ -1,11 +1,9 @@
 #ifndef H_OneFootTrajectory
 #define H_OneFootTrajectory
 
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
+#include <Eigen/Dense>
+#include "uLink.h"
 
-
-void OneFootTrajectory(SuLINK uLINK[],State *Status, gsl_vector * u, double t);
-
+void OneFootTrajectory(SuLINK uLINK[], State *Status, Eigen::VectorXd & u, double t);
 
 #endif

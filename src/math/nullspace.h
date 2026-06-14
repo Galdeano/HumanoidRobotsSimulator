@@ -1,6 +1,8 @@
 #ifndef NULLSPACE_H_INCLUDED
 #define NULLSPACE_H_INCLUDED
 
-void nullspace( gsl_matrix *A, gsl_matrix *Anull);
+#include <Eigen/Dense>
+
+void nullspace(const Eigen::MatrixXd & A, Eigen::MatrixXd & Anull);
 
 #endif // NULLSPACE_H_INCLUDED

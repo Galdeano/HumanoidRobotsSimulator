@@ -1,38 +1,23 @@
-
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_blas.h>
-#include <gsl/gsl_math.h>
+#include <Eigen/Dense>
 #include "rot2omega.h"
+#include <cmath>
 
-
-
-int rot2omega(gsl_matrix * R,gsl_vector * w)
+int rot2omega(const Eigen::Matrix3d & R, Eigen::Vector3d & w)
 {
+    double alpha = (R.trace() - 1.0) / 2.0;
 
-    double alpha,th;
-
-    #ifndef GSL_RANGE_CHECK_OFF
-    if ((R->size1 !=3) || (R->size2 !=3) || (w->size !=3))
-    {GSL_ERROR ("invalid length", GSL_EBADLEN);}
-    #endif
-
-    alpha=(gsl_matrix_get(R,0,0)+gsl_matrix_get(R,1,1)+gsl_matrix_get(R,2,2)-1)/2;
-
-    if (fabs(alpha-1) <0.0000001)
+    if (std::abs(alpha - 1.0) < 0.0000001)
     {
-        gsl_vector_set_zero(w);
-        return GSL_SUCCESS;
+        w.setZero();
+        return 0;
     }
 
-    th= acos(alpha);
-    gsl_vector_set(w,0,gsl_matrix_get(R,2,1)-gsl_matrix_get(R,1,2));
-    gsl_vector_set(w,1,gsl_matrix_get(R,0,2)-gsl_matrix_get(R,2,0));
-    gsl_vector_set(w,2,gsl_matrix_get(R,1,0)-gsl_matrix_get(R,0,1));
+    double th = std::acos(alpha);
+    w(0) = R(2, 1) - R(1, 2);
+    w(1) = R(0, 2) - R(2, 0);
+    w(2) = R(1, 0) - R(0, 1);
 
-    gsl_vector_scale (w, 0.5*th/sin(th));
+    w *= 0.5 * th / std::sin(th);
 
-    return GSL_SUCCESS;
-
+    return 0;
 }
-

@@ -1,9 +1,6 @@
 #ifndef H_PrintState
 #define H_PrintState
 
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
-
 /** \file PrintState.h
  *  \brief Save and load states
  *  \author    David Galdeano

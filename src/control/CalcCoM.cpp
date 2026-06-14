@@ -1,38 +1,21 @@
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_blas.h>
+#include <Eigen/Dense>
 #include "uLink.h"
 #include "CalcMC.h"
 #include "TotalMass.h"
 #include "CalcCoM.h"
 
-
-
-
-void CalcCoM(SuLINK uLINK[],gsl_vector * com)
+void CalcCoM(SuLINK uLINK[], Eigen::Vector3d & com)
 {
-    /*
-    //function com = calcCoM()
-    //global uLINK
-    //M  = TotalMass(1);
-    //MC = calcMC(1);
-    //com = MC / M;
-    */
-
     static double M;
-    static int init_tmp=1;
-    if (init_tmp==1)
+    static int init_tmp = 1;
+    if (init_tmp == 1)
     {
-        M = TotalMass(uLINK,1);
-        init_tmp=0;
+        M = TotalMass(uLINK, 1);
+        init_tmp = 0;
     }
 
-    //double M;
-    gsl_vector_set_zero(com);
-    //M = TotalMass(uLINK,1);
-    CalcMC(uLINK,com,1);
-    gsl_vector_scale (com, 1/M);
-
+    com.setZero();
+    Eigen::Vector3d MC = Eigen::Vector3d::Zero();
+    CalcMC(uLINK, MC, 1);
+    com = MC / M;
 }
-
-

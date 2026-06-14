@@ -1,9 +1,6 @@
 #ifndef H_DrawPolygon
 #define H_DrawPolygon
 
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
-
 /** \file DrawPolygon.h
  *  \brief Draw polygon faces, vectices and local contact forces
  *  \author    David Galdeano

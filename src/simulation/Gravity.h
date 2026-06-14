@@ -1,11 +1,8 @@
 #ifndef H_Gravity
 #define H_Gravity
 
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
+#include "uLink.h"
 
-
-void Gravity(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector * t);
-
+void Gravity(SuLINK uLINK[], State *Status, int j, Eigen::Vector3d & f, Eigen::Vector3d & t);
 
 #endif

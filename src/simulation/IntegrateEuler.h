@@ -1,9 +1,8 @@
 #ifndef H_IntegrateEuler
 #define H_IntegrateEuler
 
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
+#include "uLink.h"
 
-void IntegrateEuler(SuLINK uLINK[],int j);
+void IntegrateEuler(SuLINK uLINK[], int j);
 
 #endif

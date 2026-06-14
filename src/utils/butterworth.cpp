@@ -1,4 +1,4 @@
-#include <gsl/gsl_math.h>
+#include <cmath>
 #include "butterworth.h"
 
 void ButterworthFilterInit (ButterworthData *data,double wc)
@@ -44,14 +44,17 @@ void ButterworthFilterInit (ButterworthData *data,double wc)
 //    bk2=bk2./ak2(1)
 //    ak2=ak2./ak2(1)
 
-    data->a[0]= 8+8*wc+4*gsl_pow_2(wc)+gsl_pow_3(wc);
-    data->a[1]= -24-8*wc+4*gsl_pow_2(wc)+3*gsl_pow_3(wc);
-    data->a[2]= 24-8*wc-4*gsl_pow_2(wc)+3*gsl_pow_3(wc);
-    data->a[3]= -8+8*wc-4*gsl_pow_2(wc)+gsl_pow_3(wc);
-    data->b[0]= gsl_pow_3(wc);
-    data->b[1]= 3*gsl_pow_3(wc);
-    data->b[2]= 3*gsl_pow_3(wc);
-    data->b[3]= gsl_pow_3(wc);
+    double wc2 = wc * wc;
+    double wc3 = wc2 * wc;
+
+    data->a[0]= 8 + 8*wc + 4*wc2 + wc3;
+    data->a[1]= -24 - 8*wc + 4*wc2 + 3*wc3;
+    data->a[2]= 24 - 8*wc - 4*wc2 + 3*wc3;
+    data->a[3]= -8 + 8*wc - 4*wc2 + wc3;
+    data->b[0]= wc3;
+    data->b[1]= 3*wc3;
+    data->b[2]= 3*wc3;
+    data->b[3]= wc3;
 
     for(i=4;i--; )
     {

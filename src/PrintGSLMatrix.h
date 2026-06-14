@@ -1,14 +1,12 @@
 #ifndef H_PrintGSLMatrix
 #define H_PrintGSLMatrix
 
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
+#include <Eigen/Dense>
 
+void PrintGSLMatrix(const Eigen::MatrixXd & M);
 
-void PrintGSLMatrix(gsl_matrix * M);
+void PrintGSLMatrixTranspose(const Eigen::MatrixXd & M);
 
-void PrintGSLMatrixTranspose(gsl_matrix * M);
-
-void PrintGSLVector(gsl_vector * V);
+void PrintGSLVector(const Eigen::VectorXd & V);
 
 #endif

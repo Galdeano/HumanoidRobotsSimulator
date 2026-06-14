@@ -11,7 +11,7 @@
 #include "Setup.h"
 #include "DrawLight.h"
 
-#include "Cross_f.h"
+#include "Cross.h"
 #include "ObjLoader.h"
 #include "ping.h"
 
@@ -35,8 +35,8 @@ void DrawOBJ(char *fName)
     int triangleCount = 0;
     int normalsCount = 0;
 
-    double tmp[3];
-    double tmp2[3];
+    Eigen::Vector3d tmp;
+    Eigen::Vector3d tmp2;
 
     char line[100];
 
@@ -100,7 +100,7 @@ void DrawOBJ(char *fName)
             tmp2[0]=v[t[i].v1-1].x-v[t[i].v3-1].x;
             tmp2[1]=v[t[i].v1-1].y-v[t[i].v3-1].y;
             tmp2[2]=v[t[i].v1-1].z-v[t[i].v3-1].z;
-            Cross_f( tmp, tmp2, 0);
+            Cross( tmp, tmp2, 0);
             glNormal3f(tmp[0], tmp[1], tmp[2]);
             //glNormal3f(vn.vn1, vn.vn2, vn.vn3);
         }
@@ -131,8 +131,8 @@ void load_obj(char *fName,MeshObj *obj)
     int i;
     int obj_size=500000;
 
-    double tmp[3];
-    double tmp2[3];
+    Eigen::Vector3d tmp;
+    Eigen::Vector3d tmp2;
 
     char line[100];
 
@@ -224,7 +224,7 @@ void load_obj(char *fName,MeshObj *obj)
             tmp2[0]=obj->v[obj->t[i].v1].x-obj->v[obj->t[i].v3].x;
             tmp2[1]=obj->v[obj->t[i].v1].y-obj->v[obj->t[i].v3].y;
             tmp2[2]=obj->v[obj->t[i].v1].z-obj->v[obj->t[i].v3].z;
-            Cross_f( tmp, tmp2, 0);
+            Cross( tmp, tmp2, 0);
 
             obj->vn[i].vn1=-tmp[0];
             obj->vn[i].vn2=-tmp[1];

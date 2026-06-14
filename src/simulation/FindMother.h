@@ -1,9 +1,7 @@
-
 #ifndef H_FindMother
 #define H_FindMother
 
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
+#include "uLink.h"
 
 /** \file FindMother.h
  *  \brief Recursive mother ID search
@@ -12,19 +10,17 @@
  *
  */
 
-
 /**
- * \fn void FindMother(SuLINK uLINK[],int j)
+ * \fn void FindMother(SuLINK uLINK[],State *Status,int j)
  * \brief Recursively find the ID ok the mother link
  *
  * Must be used as follow:
- * \code FindMother(uLINK,1); \endcode
- *
+ * \code FindMother(uLINK,Status,1); \endcode
  *
  * \param uLINK[] Structure wich describe the robot link by link
+ * \param Status Structure representing the state
  * \param j ID of the link
  */
-void FindMother(SuLINK uLINK[],State *Status,int j);
-
+void FindMother(SuLINK uLINK[], State *Status, int j);
 
 #endif

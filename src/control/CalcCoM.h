@@ -1,8 +1,7 @@
 #ifndef H_CalcCoM
 #define H_CalcCoM
 
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
+#include "uLink.h"
 
 /** \file CalcCoM.h
  *  \brief Compute the Center of Mass position
@@ -11,14 +10,13 @@
  *
  */
 
-
 /**
- * \fn void CalcCoM(SuLINK uLINK[],gsl_vector * com)
+ * \fn void CalcCoM(SuLINK uLINK[], Eigen::Vector3d & com)
  * \brief Compute the Center of Mass position
  *
  * \param uLINK[] Structure wich describe the robot link by link
  * \param com Out: vector containing the CoM position as result
  */
-void CalcCoM(SuLINK uLINK[],gsl_vector * com);
+void CalcCoM(SuLINK uLINK[], Eigen::Vector3d & com);
 
 #endif

@@ -1,11 +1,9 @@
 #ifndef H_InvDyn
 #define H_InvDyn
 
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
+#include <Eigen/Dense>
+#include "uLink.h"
 
-
-void InvDyn(SuLINK uLINK[],State *Status,int j,gsl_vector * u);
-
+void InvDyn(SuLINK uLINK[], State *Status, int j, Eigen::VectorXd & u);
 
 #endif

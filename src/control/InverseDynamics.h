@@ -1,10 +1,9 @@
 #ifndef H_InverseDynamics
 #define H_InverseDynamics
 
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
+#include <Eigen/Dense>
+#include "uLink.h"
 
-
-void InverseDynamics(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector * t);
+void InverseDynamics(SuLINK uLINK[], State *Status, int j, Eigen::Vector3d & f, Eigen::Vector3d & t);
 
 #endif

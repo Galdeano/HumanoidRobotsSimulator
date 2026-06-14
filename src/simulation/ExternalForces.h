@@ -1,11 +1,8 @@
 #ifndef H_ExternalForces
 #define H_ExternalForces
 
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
+#include "uLink.h"
 
-
-void ExternalForces(SuLINK uLINK[],State *Status,int j,gsl_vector * f,gsl_vector * t);
-
+void ExternalForces(SuLINK uLINK[], State *Status, int j, Eigen::Vector3d & f, Eigen::Vector3d & t);
 
 #endif

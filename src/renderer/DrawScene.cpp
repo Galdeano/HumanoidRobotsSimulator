@@ -19,30 +19,17 @@ extern SDL_Window* window;
 void DrawScene(SuLINK uLINK[],State *Status,CamParam_s *CamParam)
 {
 
-    static int init_tmp=1;
-    static gsl_vector * com;
-    static gsl_vector * CoP;
-    static gsl_vector * offset;
-    if (init_tmp==1)
+    static int init_tmp = 1;
+    static Eigen::Vector3d com;
+    static Eigen::Vector3d CoP;
+    static Eigen::Vector3d offset;
+    if (init_tmp == 1)
     {
-//        char buf[256];
-//        DIR *d;
-//        struct dirent *dir;
-//        d = opendir("./Robots/");
-//        d = opendir("./../Simu_images/");
-//
-//        while(dir = readdir(d))
-//        {
-//            //printf("%s\n",dir->d_name);
-//            sprintf(buf, "%s/%s", "./../../Simu_images/", dir->d_name);
-//            remove(buf);
-//        }
-        offset = gsl_vector_calloc (3);
-        com = gsl_vector_calloc (3);
-        CoP = gsl_vector_calloc (3);
-        init_tmp=0;
+        offset.setZero();
+        com.setZero();
+        CoP.setZero();
+        init_tmp = 0;
     }
-    //gsl_vector * com = gsl_vector_calloc (3);
 
 #if !Light
 

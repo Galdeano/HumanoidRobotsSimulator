@@ -1,17 +1,10 @@
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_blas.h>
-
+#include <Eigen/Dense>
 #include "vec2tab.h"
 
-
-void vec2tab(double *tab, gsl_vector *vec)
+void vec2tab(double * tab, const Eigen::VectorXd & vec)
 {
-    int i;
-    for (i=0; i<vec->size; i++)
+    for (int i = 0; i < vec.size(); i++)
     {
-       tab[i]=gsl_vector_get(vec, i);
+        tab[i] = vec(i);
     }
-
 }
-

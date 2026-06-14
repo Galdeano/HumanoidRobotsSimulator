@@ -1,8 +1,7 @@
 #ifndef H_DrawForceMarker
 #define H_DrawForceMarker
 
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
+#include <Eigen/Dense>
 
 /** \file DrawForceMarker.h
  *  \brief Draw a line in 3D
@@ -11,16 +10,13 @@
  *
  */
 
-
 /**
- * \fn void DrawForceMarker(gsl_vector * ori,gsl_vector * vec)
+ * \fn void DrawForceMarker(const Eigen::Vector3d & ori, const Eigen::Vector3d & vec)
  * \brief Draw a line in 3D
- *
  *
  * \param ori vector containing the origin position
  * \param vec vector containing the magnitude
  */
-void DrawForceMarker(gsl_vector * ori,gsl_vector * vec);
-
+void DrawForceMarker(const Eigen::Vector3d & ori, const Eigen::Vector3d & vec);
 
 #endif

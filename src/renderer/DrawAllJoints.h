@@ -1,9 +1,6 @@
 #ifndef H_DrawAllJoints
 #define H_DrawAllJoints
 
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
-
 /** \file DrawAllJoints.h
  *  \brief Draw recursively the model of the robot
  *  \author    David Galdeano
