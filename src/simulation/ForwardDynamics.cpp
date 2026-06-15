@@ -194,233 +194,8 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         static Eigen::VectorXd uPD;
         static Eigen::VectorXd qd;
         static Eigen::VectorXd dqd;
-        if (init_com==1)
-        {
-            uPD.resize(Status->dof); uPD.setZero();
-            qd.resize(Status->dof); qd.setZero();
-            dqd.resize(Status->dof); dqd.setZero();
-            init_com=0;
-        }
-
-        static Eigen::Vector3d com;
-
-
-        for(n=2; n<nDoF-6+2; n++)
-        {
-            //uLINKc[n].dq = (uLINK[n].q - uLINKc[n].q)/Te;
-            uLINKc[n].dq = uLINK[n].dq;
-            uLINKc[n].q = uLINK[n].q;
-        }
-
-
-        for(i=0; i<3; i++)
-        {
-            for(j=0; j<3; j++)
-            {
-                uLINKc[1].R(i, j) = uLINK[1].R(i, j);
-            }
-        }
-
-//        for(i=0; i<3; i++)
-//        {
-//                uLINKc[1].p[i]=gsl_vector_get (uLINK[1].p, i);
-//        }
-
-
-        ForwardKinematics(uLINKc,1);
-
-        static Eigen::Vector3d FootR; FootR << 0.0853, 0, -0.11;
-        Statusc.FootCenter_R = uLINKc[7].R * FootR + uLINKc[7].p;
-
-        static Eigen::Vector3d FootL; FootL << 0.0853, 0, -0.11;
-        Statusc.FootCenter_L = uLINKc[13].R * FootL + uLINKc[13].p;
-
-        CalcCoM(uLINKc,com);
-        //DrawMarkerf(com);
-
-#if Trajectories
-        OneFootTrajectory(uLINKc, &Statusc, u, t*Dtime);
-        
-
-        OneFootTrajectory(uLINK, Status, u, t*Dtime);
-        
-#endif
-
-#if Scenarios
-        Scenario_desired_trajectory(qd.data(), t*Dtime, &Statusc.desired_support, &Statusc.distribution_y);
-        Scenario_desired_trajectory(dqd.data(), t*Dtime-Dtime, &Statusc.desired_support, &Statusc.distribution_y);
-
-        Scenario_desired_trajectory(qd.data(), t*Dtime, &Status->desired_support, &Status->distribution_y);
-        Scenario_desired_trajectory(dqd.data(), t*Dtime-Dtime, &Status->desired_support, &Status->distribution_y);
-#endif
-
-#if Ext_traj
-        for(n=0; n<nDoF-6; n++)
-        {
-            dqd[n]=qd[n];
-        }
-        Ext_q_trajectory(qd,0);
-
-#endif
-
-
-
-
-#if CMD_PD
-#if ROBOT_SHERPA
-        double kd=3;
-        double kp=1000;
-#endif
-#if ROBOT_GENERIC
-//        double kd=1;
-//        double kp=300;
-        double kd=100;
-        double kp=3000;
-#endif
-#if ROBOT_HUMAN
-        double kd=1;
-        double kp=500;
-#endif
-
-        for(n=0; n<nDoF-6; n++)
-        {
-            uPD[n]=kd*(((qd(n+1)-dqd(n+1))/Te)-uLINKc[n+2].dq)+kp*(qd(n+1)-uLINKc[n+2].q);
-            //uPD[n]=kd*(((0)/Te)-uLINKc[n+2].dq)+kp*(0-uLINKc[n+2].q);
-            
-        }
-
-
-
-        static std::vector<double> uG_vec;
-        static std::vector<double> fG_vec;
-        static std::vector<double> tG_vec;
-        static std::vector<double> uStab_vec;
-        static double *uG = nullptr;
-        static double *fG = nullptr;
-        static double *tG = nullptr;
-        static double *uStab = nullptr;
-        static int init_G=1;
-        if (init_G==1)
-        {
-            uG_vec.resize((Status->dof)-6);
-            fG_vec.resize((Status->dof)-6);
-            tG_vec.resize((Status->dof)-6);
-            uStab_vec.resize((Status->dof)-6);
-            uG = uG_vec.data();
-            fG = fG_vec.data();
-            tG = tG_vec.data();
-            uStab = uStab_vec.data();
-            init_G=0;
-        }
-
-        Gravity_f( uLINKc, &Statusc, 1, fG, tG);
-        for (n=0; n<nDoF-6; n++)
-        {
-            uG[n]=uLINKc[n+2].ug;
-        }
-
-        //Stabilizator(uLINK,Status,stab,Dtime,t*Dtime);
-        //gsl_vector_add (u,stab);
-
-
-        //Stabilizator_f( uLINKc, &Statusc, uStab);
-#endif
-
-
-#if CMD_DYNAMIC
-#if ROBOT_SHERPA
-        double kd=3;
-        double kp=1000;
-#endif
-#if ROBOT_GENERIC
-        double kd=0.001;
-        double kp=1;
-#endif
-
-        //static double uG[NbLinks-2];
-
-        static double uG[NbLinks-2], fG[NbLinks-2], tG[NbLinks-2];
-        Gravity_f( uLINKc, &Statusc, 1, fG, tG);
-        for (n=0; n<nDoF-6; n++)
-        {
-            uG[n]=uLINKc[n+2].ug;
-        }
-        for(n=0; n<nDoF-6; n++)
-        {
-            uPD[n]=kd*(((0)/Te)-uLINKc[n+2].dq)+kp*(0-uLINKc[n+2].q);
-            uG[n] = g(n+6) + b(n+6);
-        }
-
-#endif
-
-
-
-        if (Visualisation)
-        {
-            FILE *q_file=fopen("./../Simu_data/q.txt","a");
-            for(n=0; n<nDoF-6; n++)
-            {
-                fprintf(q_file,"%f ",uLINKc[n+2].q);
-            }
-            fprintf(q_file,"\n");
-            fclose(q_file);
-
-            FILE *qd_file=fopen("./../Simu_data/qd.txt","a");
-            for(n=0; n<nDoF-6; n++)
-            {
-                fprintf(qd_file,"%f ",qd[n]);
-            }
-            fprintf(qd_file,"\n");
-            fclose(qd_file);
-
-            FILE *t_file=fopen("./../Simu_data/t.txt","a");
-            fprintf(t_file,"%f \n",t*Dtime);
-            fclose(t_file);
-
-
-            FILE *pBody_file=fopen("./../Simu_data/pBody.txt","a");
-            for(n=0; n<3; n++)
-            {
-                fprintf(pBody_file,"%f ",uLINK[1].p(n));
-            }
-            fprintf(pBody_file,"\n");
-            fclose(pBody_file);
-
-
-#if CMD_PD
-            FILE *uq_file=fopen("./../Simu_data/uq.txt","a");
-            for(n=0; n<nDoF-6; n++)
-            {
-                fprintf(uq_file,"%f ",uPD[n]);
-            }
-            fprintf(uq_file,"\n");
-            fclose(uq_file);
-
-            FILE *ug1_file=fopen("./../Simu_data/ug.txt","a");
-            for(n=0; n<nDoF-6; n++)
-            {
-                DoF-6;
-                fprintf(ug1_file,"%f ",uLINKc[n+2].ug);
-            }
-            fprintf(ug1_file,"\n");
-            fclose(ug1_file);
-
-            FILE *ustab_file=fopen("./../Simu_data/ustab.txt","a");
-            for(n=0; n<nDoF-6; n++)
-            {
-                fprintf(ustab_file,"%f ",uStab[n]);
-            }
-            fprintf(ustab_file,"\n");
-            fclose(ustab_file);
-#endif
-
-        }
-
-
-
-#if CMD_TASK
-
-
+        static Eigen::VectorXd uG_vec;
+        static Eigen::VectorXd uStab_vec;
 
         static Eigen::VectorXd idx1;
         static Eigen::VectorXd idx2;
@@ -451,28 +226,35 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         static Eigen::VectorXd dqtmp2;
         static Eigen::VectorXd dq_old;
         static Eigen::VectorXd ddq_task;
-
-        static double *opd;
+        static double *opd = nullptr;
         static Eigen::Vector3d trace;
-
         static Eigen::VectorXd adphi;
-        static double *qdev;
+        static double *qdev = nullptr;
         static Eigen::Vector3d CoP;
- //       static double f=0.0;
         static Eigen::Vector3d zmp;
         static Eigen::Vector3d dzmp;
-
         static Eigen::VectorXd q_pd;
 
         static int path1[8] = {7, 7, 6, 5, 4, 3, 2, 1};
         static int path2[14] = {13, 13, 12, 11, 10, 9, 8, 2, 3, 4, 5, 6, 7, 7};
+        static double *Jf = nullptr;
+        static double *invf = nullptr;
+        static double *pf = nullptr;
+        static double *Rf = nullptr;
+        static double *taskf = nullptr;
+        static double *dqf = nullptr;
 
-        static double *Jf;
-        static double *invf;
-        static double *pf;
-        static double *Rf;
-        static double *taskf;
-        static double *dqf;
+        if (init_com==1)
+        {
+            uPD.resize(Status->dof); uPD.setZero();
+            qd.resize(Status->dof); qd.setZero();
+            dqd.resize(Status->dof); dqd.setZero();
+            uG_vec.resize(Status->dof); uG_vec.setZero();
+            uStab_vec.resize(Status->dof); uStab_vec.setZero();
+            init_com=0;
+        }
+
+        static Eigen::Vector3d com;
 
         static int init_task=1;
         if (init_task==1)
@@ -517,16 +299,10 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
             q_pd.resize(nDoF-6); q_pd.setZero();
 
-            init_task=0;
-
-            //static int path1[8] = {7, 7, 6, 5, 4, 3, 2, 1};
-            //int path1[8] = {1, 2, 3, 4, 5, 6, 7, 7};
             for(i=0; i<8; i++)
             {
                 idx1(i) = path1[i];
             }
-
-            //static int path2[14] = {7, 7, 6, 5, 4, 3, 2, 8, 9, 10, 11, 12, 13, 13};
 
             for(i=0; i<14; i++)
             {
@@ -537,19 +313,212 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
             {
                 qdev[i]=fmin(fabs(uLINK[i+2].qmin-uLINK[i+2].qmoy),fabs(uLINK[i+2].qmax-uLINK[i+2].qmoy))*2;
             }
+            init_task=0;
+        }
 
 
-            Jf = (double *)calloc(6*(nDoF-6),sizeof(double));
-            pf = (double *)calloc(3,sizeof(double));
-            Rf = (double *)calloc(9,sizeof(double));
-            taskf = (double *)calloc(6,sizeof(double));
-            invf = (double *)calloc((nDoF-6)*6,sizeof(double));
-            dqf = (double *)calloc((nDoF-6),sizeof(double));
+        for(n=2; n<nDoF-6+2; n++)
+        {
+            //uLINKc[n].dq = (uLINK[n].q - uLINKc[n].q)/Te;
+            uLINKc[n].dq = uLINK[n].dq;
+            uLINKc[n].q = uLINK[n].q;
+        }
+
+
+        for(i=0; i<3; i++)
+        {
+            for(j=0; j<3; j++)
+            {
+                uLINKc[1].R(i, j) = uLINK[1].R(i, j);
+            }
+        }
+
+//        for(i=0; i<3; i++)
+//        {
+//                uLINKc[1].p[i]=gsl_vector_get (uLINK[1].p, i);
+//        }
+
+
+        ForwardKinematics(uLINKc,1);
+
+        static Eigen::Vector3d FootR; FootR << 0.0853, 0, -0.11;
+        Statusc.FootCenter_R = uLINKc[7].R * FootR + uLINKc[7].p;
+
+        static Eigen::Vector3d FootL; FootL << 0.0853, 0, -0.11;
+        Statusc.FootCenter_L = uLINKc[13].R * FootL + uLINKc[13].p;
+
+        CalcCoM(uLINKc,com);
+        //DrawMarkerf(com);
+
+if (Trajectories)
+        {
+OneFootTrajectory(uLINKc, &Statusc, u, t*Dtime);
+        
+
+        OneFootTrajectory(uLINK, Status, u, t*Dtime);
+        }
+
+if (Scenarios)
+        {
+Scenario_desired_trajectory(qd.data(), t*Dtime, &Statusc.desired_support, &Statusc.distribution_y);
+        Scenario_desired_trajectory(dqd.data(), t*Dtime-Dtime, &Statusc.desired_support, &Statusc.distribution_y);
+
+        Scenario_desired_trajectory(qd.data(), t*Dtime, &Status->desired_support, &Status->distribution_y);
+        Scenario_desired_trajectory(dqd.data(), t*Dtime-Dtime, &Status->desired_support, &Status->distribution_y);
+        }
+
+if (Ext_traj)
+        {
+for(n=0; n<nDoF-6; n++)
+        {
+            dqd[n]=qd[n];
+        }
+        Ext_q_trajectory(qd.data(),0);
         }
 
 
 
-//        CalcJacobianModif_f(uLINKc,Jf,path2,14,nDoF-6);
+
+if (CMD_PD)
+        {
+        double kd = 3.0;
+        double kp = 1000.0;
+if (ROBOT_SHERPA) {
+kd=3;
+        kp=1000;
+}
+else if (ROBOT_GENERIC) {
+//        kd=1;
+//        kp=300;
+        kd=100;
+        kp=3000;
+}
+else if (ROBOT_HUMAN) {
+kd=1;
+        kp=500;
+}
+
+        for(n=0; n<nDoF-6; n++)
+        {
+            uPD[n]=kd*(((qd(n+1)-dqd(n+1))/Te)-uLINKc[n+2].dq)+kp*(qd(n+1)-uLINKc[n+2].q);
+            //uPD[n]=kd*(((0)/Te)-uLINKc[n+2].dq)+kp*(0-uLINKc[n+2].q);
+            
+        }
+
+
+
+        Eigen::Vector3d fG_local = Eigen::Vector3d::Zero();
+        Eigen::Vector3d tG_local = Eigen::Vector3d::Zero();
+        Gravity( uLINKc, &Statusc, 1, fG_local, tG_local);
+        for (n=0; n<nDoF-6; n++)
+        {
+            uG_vec[n]=uLINKc[n+2].ug;
+        }
+
+        //Stabilizator(uLINK,Status,stab,Dtime,t*Dtime);
+        //gsl_vector_add (u,stab);
+
+
+        //Stabilizator_f( uLINKc, &Statusc, uStab);
+        }
+
+
+if (CMD_DYNAMIC)
+        {
+        double kd=0.001;
+        double kp=1;
+if (ROBOT_SHERPA) {
+                kd=3;
+                kp=1000;
+            }
+else if (ROBOT_GENERIC) {
+                kd=0.001;
+                kp=1;
+            }
+
+        //static double uG[NbLinks-2];
+
+        Eigen::Vector3d fG_local = Eigen::Vector3d::Zero();
+        Eigen::Vector3d tG_local = Eigen::Vector3d::Zero();
+        Gravity( uLINKc, &Statusc, 1, fG_local, tG_local);
+        for (n=0; n<nDoF-6; n++)
+        {
+            uG_vec[n]=uLINKc[n+2].ug;
+        }
+        for(n=0; n<nDoF-6; n++)
+        {
+            uPD[n]=kd*(((0)/Te)-uLINKc[n+2].dq)+kp*(0-uLINKc[n+2].q);
+            uG_vec[n] = g(n+6) + b(n+6);
+        }
+        }
+
+
+
+        if (Visualisation)
+        {
+            FILE *q_file=fopen("./../Simu_data/q.txt","a");
+            for(n=0; n<nDoF-6; n++)
+            {
+                fprintf(q_file,"%f ",uLINKc[n+2].q);
+            }
+            fprintf(q_file,"\n");
+            fclose(q_file);
+
+            FILE *qd_file=fopen("./../Simu_data/qd.txt","a");
+            for(n=0; n<nDoF-6; n++)
+            {
+                fprintf(qd_file,"%f ",qd[n]);
+            }
+            fprintf(qd_file,"\n");
+            fclose(qd_file);
+
+            FILE *t_file=fopen("./../Simu_data/t.txt","a");
+            fprintf(t_file,"%f \n",t*Dtime);
+            fclose(t_file);
+
+
+            FILE *pBody_file=fopen("./../Simu_data/pBody.txt","a");
+            for(n=0; n<3; n++)
+            {
+                fprintf(pBody_file,"%f ",uLINK[1].p(n));
+            }
+            fprintf(pBody_file,"\n");
+            fclose(pBody_file);
+
+
+if (CMD_PD)
+        {
+FILE *uq_file=fopen("./../Simu_data/uq.txt","a");
+            for(n=0; n<nDoF-6; n++)
+            {
+                fprintf(uq_file,"%f ",uPD[n]);
+            }
+            fprintf(uq_file,"\n");
+            fclose(uq_file);
+
+            FILE *ug1_file=fopen("./../Simu_data/ug.txt","a");
+            for(n=0; n<nDoF-6; n++)
+            {
+                fprintf(ug1_file,"%f ",uLINKc[n+2].ug);
+            }
+            fprintf(ug1_file,"\n");
+            fclose(ug1_file);
+
+            FILE *ustab_file=fopen("./../Simu_data/ustab.txt","a");
+            for(n=0; n<nDoF-6; n++)
+            {
+                fprintf(ustab_file,"%f ",uStab_vec[n]);
+            }
+            fprintf(ustab_file,"\n");
+            fclose(ustab_file);
+        }
+
+        }
+
+
+
+if (CMD_TASK)
+        {
         CalcJacobianModif( uLINK,J1,idx1);
         CalcJacobianModif( uLINK,J2,idx2);
         CalcCoMJacobian(uLINK,Status, JCoMR, Status->right_foot_ID);
@@ -885,11 +854,9 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
             fclose(taskCoML_file);
 
         }
-
-#endif
-
-#if Ext_traj
-        Ext_op_trajectory(opd, 0);
+        }if (Ext_traj)
+        {
+Ext_op_trajectory(opd, 0);
 
         R.setIdentity();
         p.setZero();
@@ -904,10 +871,7 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
         taskCoML(2) = opd[2]-0.1;
         CalcCoM(uLINK,CoM);
         taskCoML -= CoM;
-
-
-
-#endif
+        }
 
 #if 0
         if ((t*Dtime)>=0.5)
@@ -1204,27 +1168,26 @@ void ForwardDynamics(SuLINK uLINK[],State *Status,long t)
 
             if (Statusc.desired_support!=0 || Suspendu)
             {
-#if CMD_PD
-                uLINK[n].u_joint = uPD[n-2]+uG[n-2]+uStab[n-2];
-#endif
-#if CMD_DYNAMIC
-                uLINK[n].u_joint = uPD[n-2]+uG[n-2];
-#endif
-
+                if (CMD_PD)
+                {
+                    uLINK[n].u_joint = uPD[n-2]+uG_vec[n-2]+uStab_vec[n-2];
+                }
+                else if (CMD_DYNAMIC)
+                {
+                    uLINK[n].u_joint = uPD[n-2]+uG_vec[n-2];
+                }
             }
             else
             {
-#if CMD_PD
-                uLINK[n].u_joint = uPD[n-2]+uStab[n-2];
-#endif
-#if CMD_DYNAMIC
-                uLINK[n].u_joint = uPD[n-2]+uG[n-2];
-#endif
+                if (CMD_PD)
+                {
+                    uLINK[n].u_joint = uPD[n-2]+uStab_vec[n-2];
+                }
+                else if (CMD_DYNAMIC)
+                {
+                    uLINK[n].u_joint = uPD[n-2]+uG_vec[n-2];
+                }
             }
-#if CMD_TASK
-
-
-#endif
 
             for (i=0; i<(nDoF-6); i++)
             {

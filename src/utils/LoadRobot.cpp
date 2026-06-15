@@ -416,20 +416,21 @@ void LoadRobotParserXML(SuLINK uLINK[], State *Status, char* RobotFile)
                             inertia[1], inertia[4], inertia[7],
                             inertia[2], inertia[5], inertia[8];
 
-#if LoadObj
-        if (Link.child("obj"))
+        if (LoadObj)
         {
-            trim_copy(uLINK[numlink].obj, Link.child("obj").text().as_string(), sizeof(uLINK[numlink].obj));
-            load_obj(uLINK[numlink].obj, &(uLINK[numlink].Mesh_obj));
+            if (Link.child("obj"))
+            {
+                trim_copy(uLINK[numlink].obj, Link.child("obj").text().as_string(), sizeof(uLINK[numlink].obj));
+                load_obj(uLINK[numlink].obj, &(uLINK[numlink].Mesh_obj));
+            }
+            uLINK[numlink].obj_offset.setZero();
+            if (Link.child("obj_offset"))
+            {
+                double ox, oy, oz;
+                sscanf(Link.child("obj_offset").text().as_string(), "%lf %lf %lf", &ox, &oy, &oz);
+                uLINK[numlink].obj_offset << ox, oy, oz;
+            }
         }
-        uLINK[numlink].obj_offset.setZero();
-        if (Link.child("obj_offset"))
-        {
-            double ox, oy, oz;
-            sscanf(Link.child("obj_offset").text().as_string(), "%lf %lf %lf", &ox, &oy, &oz);
-            uLINK[numlink].obj_offset << ox, oy, oz;
-        }
-#endif
     }
 
     pugi::xml_node Contacts = robot.child("Contacts");

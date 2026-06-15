@@ -4,9 +4,7 @@
 #include <Eigen/Dense>
 #include "Setup.h"
 
-#if LoadObj
 #include "ObjLoader.h"
-#endif
 #include "butterworth.h"
 
 #include <utility>
@@ -80,10 +78,8 @@ struct StuLINK
     Eigen::MatrixXd posContact;/*!< absolute position of contacts */
     Eigen::MatrixXd forContact;/*!< force of contacts */
     char obj[50] = {0}; /*!< obj path */
-    #if LoadObj
     MeshObj Mesh_obj;
     Eigen::Vector3d obj_offset;
-    #endif
     ButterworthData filter;
 
     StuLINK() {
@@ -126,9 +122,7 @@ struct StuLINK
         isContact = Eigen::VectorXd::Zero(8);
         R.setIdentity();
         I.setZero();
-        #if LoadObj
         obj_offset.setZero();
-        #endif
     }
 
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW

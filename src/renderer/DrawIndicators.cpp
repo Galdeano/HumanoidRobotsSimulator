@@ -28,12 +28,12 @@ void DrawIndicators(SuLINK uLINK[], State *Status, Eigen::Vector3d & com, Eigen:
     }
 
     CalcCoM(uLINK, com);
-#if colorsGL
-    glColor3ub(0, 0, 255);
-#endif
-#if materials
-    set_material(&turquoise);
-#endif
+    if (colorsGL) {
+        glColor3ub(0, 0, 255);
+    }
+    if (materials) {
+        set_material(&turquoise);
+    }
     if (!ground)
     {
         com(2) = 0.0;
@@ -45,17 +45,17 @@ void DrawIndicators(SuLINK uLINK[], State *Status, Eigen::Vector3d & com, Eigen:
     f = CalcCoP(uLINK, CoP, 1);
     if (f != 0.0)
     {
-#if colorsGL
-        glColor3ub(255, 0, 0);
-#endif
+        if (colorsGL) {
+            glColor3ub(255, 0, 0);
+        }
         CoP /= f;
         CoP(2) = 0.0;
         DrawMarker(CoP);
     }
 
-#if colorsGL
-    glColor3ub(0, 255, 0);
-#endif
+    if (colorsGL) {
+        glColor3ub(0, 255, 0);
+    }
     if (Status->desired_support == 1)
     {
         DrawMarker(Status->FootCenter_R);
@@ -70,9 +70,9 @@ void DrawIndicators(SuLINK uLINK[], State *Status, Eigen::Vector3d & com, Eigen:
         DrawMarker(Status->FootCenter_L);
     }
 
-#if colorsGL
-    glColor3ub(0, 255, 255);
-#endif
+    if (colorsGL) {
+        glColor3ub(0, 255, 255);
+    }
     if (Status->right_scale != 0.0)
     {
         pos = Status->posCoP_R / Status->right_scale;

@@ -92,8 +92,26 @@ void cleanup_sdl(void) {
 #include "NPD.h"
 #include "read_write.h"
 
-#if mathGL
+#if __has_include(<mgl2/mgl_cf.h>)
 #include <mgl2/mgl_cf.h>
+#define HAVE_MATHGL 1
+#else
+#define HAVE_MATHGL 0
+typedef void* HMGL;
+inline HMGL mgl_create_graph(int, int) { return nullptr; }
+inline int mgl_create_data() { return 0; }
+inline void mgl_data_set_double(int, double*, int, int, int) {}
+inline int mgl_data_subdata(int, int, int, int) { return 0; }
+inline void mgl_set_range_dat(HMGL, char, int, int) {}
+inline void mgl_adjust_ticks(HMGL, const char*) {}
+inline void mgl_axis(HMGL, const char*, const char*) {}
+inline void mgl_label(HMGL, char, const char*) {}
+inline void mgl_box_str(HMGL, const char*, int) {}
+inline void mgl_plot_xy(HMGL, int, int, const char*, const char*) {}
+inline void mgl_write_png(HMGL, const char*, const char*) {}
+inline void mgl_write_eps(HMGL, const char*, const char*) {}
+inline void mgl_delete_data(int) {}
+inline void mgl_delete_graph(HMGL) {}
 #endif
 
 #ifdef WIN32
@@ -105,18 +123,46 @@ void cleanup_sdl(void) {
 //#include "Rdtsc.h"
 
 void ReadTrajectory(double *opd, int pos) {
-#if file_human
+if (file_human) {
     Ext_op_trajectory2(opd, pos);
-#elif file_walk
+} else if (file_walk) {
     Ext_walk_trajectory(opd, pos);
-#else
+} else {
     (void)opd;
     (void)pos;
-#endif
+}
 }
 
 int main(int argc, char *argv[])
 {
+    // Dynamic configuration variables declared at outer scope to prevent compilation/scoping errors
+    config.loadFromFile("config.xml");
+    FILE *q_file = nullptr;
+    FILE *qd_file = nullptr;
+    FILE *t_file = nullptr;
+    FILE *dq_file = nullptr;
+    FILE *file = nullptr; // for file_motor
+    HoapSensor *buff_sensor = nullptr;
+    zmp_calc *buff_zmp_c = nullptr;
+    zmp_calc *buff_zmp_f = nullptr;
+    double *buff_t = nullptr;
+    double *buff_temp = nullptr;
+    int temp_size = 29;
+    const int buf_size = 200000;
+    Hoap hoap; // for network
+    HoapSensor sensor;
+    HoapControl control;
+    float qd[22];
+    int nb_scan = 0;
+    double scale_task_F2F = 1.0;
+    double scale_task_CoM = 1.0;
+    double foot_Z_offset = 0.04;
+    double CoM_Z_offset = 0.00;
+    double foot_h = 0.0;
+    double z_f = 1.0;
+    FILE *temp_file = nullptr;
+    CamParam_s CamParam;
+    CamInit(&CamParam);
     setvbuf(stdout, NULL, _IONBF, 0);
     setvbuf(stderr, NULL, _IONBF, 0);
 
@@ -135,13 +181,13 @@ int main(int argc, char *argv[])
     int i=0, j=0;
     char szInput [25];
     char RobotFile[255];
-#if ROBOT_SHERPA
+if (ROBOT_SHERPA) {
     strcpy(RobotFile, "./Robots/RobotSherpa.xml");
-#elif ROBOT_HUMAN
+} else if (ROBOT_HUMAN) {
     strcpy(RobotFile, "./Robots/Human.xml");
-#else
+} else {
     strcpy(RobotFile, "./Robots/HOAP3v7.xml");
-#endif
+}
     printf("\nLoading robot file: %s\n", RobotFile);
 
 
@@ -195,17 +241,20 @@ int main(int argc, char *argv[])
     angular_z=0;
 
 
-#if Video
+if (Video) {
     char buf[256];
-    d = opendir("./../Simu_images/");
-
-    while(dir = readdir(d))
-    {
-        //printf("%s\n",dir->d_name);
-        sprintf(buf, "%s/%s", "./../../Simu_images/", dir->d_name);
-        remove(buf);
+    DIR *d = opendir("./../Simu_images/");
+    struct dirent *dir = nullptr;
+    if (d != nullptr) {
+        while((dir = readdir(d)))
+        {
+            //printf("%s\n",dir->d_name);
+            sprintf(buf, "%s/%s", "./../../Simu_images/", dir->d_name);
+            remove(buf);
+        }
+        closedir(d);
     }
-#endif //Video
+}
 
 
 
@@ -383,44 +432,46 @@ int main(int argc, char *argv[])
         switch (event.type)
         {
         case SDL_QUIT:
-#if save_data_quick
+if (save_data_quick) {
             quit=1;
             continue;
-#else //save_data_quick
+} else {
             exit(0);
-#endif //save_data_quick
+}
             break;
-#if Light
         case SDL_KEYDOWN:
-            quit=1;
-            break;
-#endif
-#if !Light
-        case SDL_KEYDOWN:
-            switch (event.key.keysym.sym)
-            {
-
-            default:
-                break;
+            if (Light) {
+                quit=1;
+            } else {
+                switch (event.key.keysym.sym)
+                {
+                default:
+                    break;
+                }
             }
             break;
         case SDL_MOUSEMOTION: // mouse is moved, only concerns the camera
-            OnMouseMotion(&CamParamt,event.motion);
+            if (!Light) {
+                OnMouseMotion(&CamParamt,event.motion);
+            }
             break;
         case SDL_MOUSEBUTTONUP:
         case SDL_MOUSEBUTTONDOWN:
-            OnMouseButton(&CamParamt,event.button); // all button events (up or down) are passed to the camera
-            break;
-        case SDL_MOUSEWHEEL:
-            {
-                SDL_MouseButtonEvent dummy_btn_event;
-                memset(&dummy_btn_event, 0, sizeof(dummy_btn_event));
-                dummy_btn_event.type = SDL_MOUSEBUTTONDOWN;
-                dummy_btn_event.button = (event.wheel.y > 0) ? SDL_BUTTON_WHEELUP : SDL_BUTTON_WHEELDOWN;
-                OnMouseButton(&CamParamt, dummy_btn_event);
+            if (!Light) {
+                OnMouseButton(&CamParamt,event.button); // all button events (up or down) are passed to the camera
             }
             break;
-#endif //!Light
+        case SDL_MOUSEWHEEL:
+            if (!Light) {
+                {
+                    SDL_MouseButtonEvent dummy_btn_event;
+                    memset(&dummy_btn_event, 0, sizeof(dummy_btn_event));
+                    dummy_btn_event.type = SDL_MOUSEBUTTONDOWN;
+                    dummy_btn_event.button = (event.wheel.y > 0) ? SDL_BUTTON_WHEELUP : SDL_BUTTON_WHEELDOWN;
+                    OnMouseButton(&CamParamt, dummy_btn_event);
+                }
+            }
+            break;
         default:
             break;
         }
@@ -436,7 +487,7 @@ int main(int argc, char *argv[])
         val_ = ((unsigned long long) tv.tv_sec * 1000000) + tv.tv_usec;
 #endif //WIN32
 
-#if !Light
+if (!Light) {
         printf("fps: %f \n",1/(((double)(val_ - baseTime_) * freq_ )-t2));
 
 //        static uint64_t time,time2;
@@ -444,7 +495,7 @@ int main(int argc, char *argv[])
 //        printf("fps: %d %f \n",(double)(3200000000/(double)(time-time2)));
 //        time2=time;
 
-#endif //!Light
+}
         t2=(double)(val_ - baseTime_) * freq_;
 
 
@@ -876,13 +927,13 @@ int main(int argc, char *argv[])
 
 
 
-#if Suspendu
+if (Suspendu) {
     uLINK[1].p(2) = Lc+Lt+Lp+0.1;
     uLINK[1].supportHeight=Lc+Lt+Lp+0.13;
-#endif //Suspendu
+}
 
 
-#if Ext_traj
+if (Ext_traj) {
     double *qd;
     qd = (double *)calloc(dof,sizeof(double));
     Ext_trajectory_init(qd);
@@ -893,11 +944,11 @@ int main(int argc, char *argv[])
     }
     free (qd);
     ForwardKinematics(uLINK,1);
-#endif //Ext_traj
+}
 
 
 
-#if CMD_TASK
+if (CMD_TASK) {
     const int nDoF=dof+6;
     const double rad2deg=180/M_PI;
     const double deg2rad=M_PI/180;
@@ -961,54 +1012,51 @@ int main(int argc, char *argv[])
 
 
 
-#if file_motor
-    static double *qd;
-    qd = (double *)calloc(22,sizeof(double));
-    FILE *file=fopen("./Trajectories/motor.dat","r");
+if (file_motor) {
+    file=fopen("./Trajectories/motor.dat","r");
     if (file== NULL) perror ("Error opening robot trajectory file");
-    int nb_scan;
-#endif //file_motor
+}
 
 
-#if save_data_long
-    FILE *q_file=fopen("./../../Simu_data/q.txt","w");
+if (save_data_long) {
+    q_file=fopen("./../../Simu_data/q.txt","w");
     //fclose(q_file);
 
-    FILE *qd_file=fopen("./../../Simu_data/qd.txt","w");
+    qd_file=fopen("./../../Simu_data/qd.txt","w");
     //fclose(qd_file);
 
-    FILE *t_file=fopen("./../../Simu_data/t.txt","w");
+    t_file=fopen("./../../Simu_data/t.txt","w");
     //fclose(t_file);
 
-    FILE *dq_file=fopen("./../../Simu_data/dq.txt","w");
+    dq_file=fopen("./../../Simu_data/dq.txt","w");
     //fclose(dq_file);
 
-//    FILE *q_file=fopen("./../Simu_data/q.txt","a");
-//    FILE *qd_file=fopen("./../Simu_data/qd.txt","a");
-//    FILE *t_file=fopen("./../Simu_data/t.txt","a");
-//    FILE *dq_file=fopen("./../Simu_data/dq.txt","a");
-#endif //save_data_long
-#if save_data_quick
+//    q_file=fopen("./../Simu_data/q.txt","a");
+//    qd_file=fopen("./../Simu_data/qd.txt","a");
+//    t_file=fopen("./../Simu_data/t.txt","a");
+//    dq_file=fopen("./../Simu_data/dq.txt","a");
+}
+if (save_data_quick) {
 
-    const int buf_size=200000;
-    HoapSensor *buff_sensor;
+    
+    
     buff_sensor = (HoapSensor *)calloc(buf_size,sizeof(HoapSensor));
-    zmp_calc *buff_zmp_c;
+    
     buff_zmp_c = (zmp_calc *)calloc(buf_size,sizeof(zmp_calc));
-    zmp_calc *buff_zmp_f;
+    
     buff_zmp_f = (zmp_calc *)calloc(buf_size,sizeof(zmp_calc));
-    double  *buff_t;
+    
     buff_t = (double *)calloc(buf_size,sizeof(double));
 
-#if save_data_quick_temp
-    int temp_size=29;
-    double  *buff_temp;
+if (save_data_quick_temp) {
+    
+    
     buff_temp = (double *)calloc(buf_size*temp_size,sizeof(double));
     if (buff_temp==NULL)
     {
         printf("error allocation buff_temp");
     }
-#endif //save_data_quick_temp
+}
 
     for(i=0; i<=buf_size; i++)
     {
@@ -1017,13 +1065,13 @@ int main(int argc, char *argv[])
         buff_zmp_c[i].zmp_right.W=0;
         buff_zmp_f[i].zmp_right.W=0;
         buff_t[i]=0;
-#if save_data_quick_temp
+if (save_data_quick_temp) {
         buff_temp[i*temp_size]=0;
-#endif //save_data_quick_temp
+}
     }
 
 
-#endif //save_data_quick
+}
 
     static Eigen::VectorXd idx1;
     static Eigen::VectorXd idx2;
@@ -1194,7 +1242,7 @@ int main(int argc, char *argv[])
         }
     }
 
-#if zmp_filtering
+if (zmp_filtering) {
 
     static Eigen::Vector3d zmp_left = Eigen::Vector3d::Zero();
     static Eigen::Vector3d zmp_right = Eigen::Vector3d::Zero();
@@ -1210,11 +1258,11 @@ int main(int argc, char *argv[])
 
         init_task_zmp=0;
     }
-#endif //zmp_filtering
+}
 
 
-    CamParam_s CamParam;
-    CamInit(&CamParam);
+    // CamParam_s CamParam; (moved to main scope)
+    // CamInit(&CamParam); (moved to main scope)
 
     zmp_calc zmp_c;
     zmp_calc zmp_f;
@@ -1225,12 +1273,8 @@ int main(int argc, char *argv[])
     zmp_f.zmp_left.x=0;
     zmp_f.zmp_left.y=0;
 
-#if network
-    HoapSensor sensor;
-    HoapControl control;
-
-
-    Hoap hoap = hoapConnect("10.59.145.197", 55000, &sensor);
+if (network) {
+    hoap = hoapConnect("10.59.145.197", 55000, &sensor);
     hoapSensor(hoap, &sensor);
 
     for(j=0; j<(dof); j++)
@@ -1252,7 +1296,7 @@ int main(int argc, char *argv[])
     }
     printf("\n");
     hoapControl(hoap, &sensor, &control);
-#else //network
+} else {
     for(j=0; j<(dof); j++)
     {
         buff_data.val[j]=rad2deg*motor_rotation[j]*uLINK[map[j]].q*209;
@@ -1266,31 +1310,31 @@ int main(int argc, char *argv[])
         printf("%4.6f ",rad2deg*uLINK[map[i]].q);
     }
     printf("\n");
-#endif //network
+}
 
 
 
-#if file_human
-    static double foot_Z_offset=0.04;
-    static double CoM_Z_offset=0.00;
-#endif
+if (file_human) {
+    foot_Z_offset=0.04;
+    CoM_Z_offset=0.00;
+}
 
-#if (file_human || file_walk)
+if ((file_human || file_walk)) {
     ReadTrajectory(opd, 0);
     for(j=0; j<9; j++)
     {
         opd_old[j]=opd[j];
         opd_old2[j]=opd[j];
     }
-#endif
+}
 
-#if !file_human
+if (!file_human) {
     uLINK[baseFoot].p.setZero();
     uLINK[baseFoot].p(2) = 0.04;
-#endif
+}
 
 
-#if file_hoap
+if (file_hoap) {
 
     Ext_q_hoap_trajectory(oqd_old, 0);
 
@@ -1299,7 +1343,7 @@ int main(int argc, char *argv[])
         oqd[j]=(short)(oqd_old[j]);
         oqd_old2[j]=oqd_old[j];
     }
-#endif //file_hoap
+}
 
 
 
@@ -1346,8 +1390,7 @@ int main(int argc, char *argv[])
     PrintGSLVector(Init_task_F2F_p);
     //PrintGSLMatrix(Init_task_F2F_R);
 
-#if file_human
-    double scale_task_F2F, scale_task_CoM;
+if (file_human) {
 
     p(0) = (opd[3]-opd[6]);
     p(1) = (opd[4]-opd[7]);
@@ -1364,11 +1407,11 @@ int main(int argc, char *argv[])
     scale_task_CoM=Init_task_CoM.norm()/p.norm();
     printf("scale_task_CoM %f \n",scale_task_CoM);
 
-#elif file_walk
+} else if (file_walk) {
 
 
 
-#endif //file_human
+}
 
 
 
@@ -1416,12 +1459,12 @@ int main(int argc, char *argv[])
 //begin = clock();
 
 
-#if save_data_quick
+if (save_data_quick) {
         if (i>=buf_size)
         {
             break;
         }
-#endif //save_data_quick
+}
         if (quit==1)
         {
             break;
@@ -1438,74 +1481,71 @@ int main(int argc, char *argv[])
         switch (event.type)
         {
         case SDL_QUIT:
-#if save_data_quick
+if (save_data_quick) {
             quit=1;
             continue;
-#else //save_data_quick
+} else {
             exit(0);
-#endif //save_data_quick
+}
             break;
-#if Light
         case SDL_KEYDOWN:
-            quit=1;
-            break;
-#endif
-#if !Light
-        case SDL_KEYDOWN:
-            switch (event.key.keysym.sym)
-            {
-            case SDLK_LEFT:
-                move_com_y-=0.0005;
-                break;
-            case SDLK_RIGHT:
-                move_com_y+=0.0005;
-                break;
-            case SDLK_DOWN:
-                move_com_z-=0.0005;
-                break;
-            case SDLK_UP:
-                move_com_z+=0.0005;
-                break;
-            case SDLK_PAGEDOWN:
-                move_com_x-=0.0005;
-                break;
-            case SDLK_PAGEUP:
-                move_com_x+=0.0005;
-                break;
-//            case SDLK_LEFT:
-//                angular_z-=M_PI*0.05;
-//                break;
-//            case SDLK_RIGHT:
-//                angular_z+=M_PI*0.05;
-//                break;
-            default:
-                break;
+            if (Light) {
+                quit=1;
+            } else {
+                switch (event.key.keysym.sym)
+                {
+                case SDLK_LEFT:
+                    move_com_y-=0.0005;
+                    break;
+                case SDLK_RIGHT:
+                    move_com_y+=0.0005;
+                    break;
+                case SDLK_DOWN:
+                    move_com_z-=0.0005;
+                    break;
+                case SDLK_UP:
+                    move_com_z+=0.0005;
+                    break;
+                case SDLK_PAGEDOWN:
+                    move_com_x-=0.0005;
+                    break;
+                case SDLK_PAGEUP:
+                    move_com_x+=0.0005;
+                    break;
+                default:
+                    break;
+                }
             }
             break;
         case SDL_MOUSEMOTION: // mouse is moved, only concerns the camera
-            OnMouseMotion(&CamParam,event.motion);
+            if (!Light) {
+                OnMouseMotion(&CamParam,event.motion);
+            }
             break;
         case SDL_MOUSEBUTTONUP:
         case SDL_MOUSEBUTTONDOWN:
-            OnMouseButton(&CamParam,event.button); // all button events (up or down) are passed to the camera
-            break;
-        case SDL_MOUSEWHEEL:
-            {
-                SDL_MouseButtonEvent dummy_btn_event;
-                memset(&dummy_btn_event, 0, sizeof(dummy_btn_event));
-                dummy_btn_event.type = SDL_MOUSEBUTTONDOWN;
-                dummy_btn_event.button = (event.wheel.y > 0) ? SDL_BUTTON_WHEELUP : SDL_BUTTON_WHEELDOWN;
-                OnMouseButton(&CamParam, dummy_btn_event);
+            if (!Light) {
+                OnMouseButton(&CamParam,event.button); // all button events (up or down) are passed to the camera
             }
             break;
-#endif //!Light
+        case SDL_MOUSEWHEEL:
+            if (!Light) {
+                {
+                    SDL_MouseButtonEvent dummy_btn_event;
+                    memset(&dummy_btn_event, 0, sizeof(dummy_btn_event));
+                    dummy_btn_event.type = SDL_MOUSEBUTTONDOWN;
+                    dummy_btn_event.button = (event.wheel.y > 0) ? SDL_BUTTON_WHEELUP : SDL_BUTTON_WHEELDOWN;
+                    OnMouseButton(&CamParam, dummy_btn_event);
+                }
+            }
+            break;
         default:
             break;
         }
 
 
 
-#if network
+if (network) {
         hoapSensor(hoap, &sensor);
 
         for(j=0; j<(dof); j++)
@@ -1521,9 +1561,9 @@ int main(int argc, char *argv[])
         }
         Hoap_calc_zmp(&sensor,&zmp_c);
 
-#endif //network
+}
 
-#if file_motor
+if (file_motor) {
         for(j=0; j<10; j++)
         {
             nb_scan=fscanf(file, "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f", &qd[0], &qd[1], &qd[2], &qd[3], &qd[4], &qd[5], &qd[6], &qd[7], &qd[8], &qd[9], &qd[10], &qd[11], &qd[12], &qd[13], &qd[14], &qd[15], &qd[16], &qd[17], &qd[18], &qd[19], &qd[20], &qd[21]);
@@ -1538,11 +1578,11 @@ int main(int argc, char *argv[])
         {
             uLINK[map[j]].q = deg2rad*qd[j+1]*motor_rotation[j]/209;
         }
-#endif //file_motor
+}
 
 
-#if Tasks
-#if !Video
+if (Tasks) {
+if (!Video) {
 #ifdef WIN32
         static unsigned __int64 val_;
         QueryPerformanceCounter( (LARGE_INTEGER *)&val_ );
@@ -1553,13 +1593,13 @@ int main(int argc, char *argv[])
         val_ = ((unsigned long long) tv.tv_sec * 1000000) + tv.tv_usec;
 #endif //WIN32
 
-#if !Light
+if (!Light) {
         printf("fps: %f \n",1/(((double)(val_ - baseTime_) * freq_ )-t2));
-#endif //!Light
+}
         t2=(double)(val_ - baseTime_) * freq_;
-#else //!Video
+} else {
         t2+=0.04;
-#endif //!Video
+}
         //t=i*10;
 
 
@@ -1586,20 +1626,9 @@ int main(int argc, char *argv[])
 
         //p.setZero();
 
-#if (file_human || file_walk)
-        static double speed =
-#if file_human
-            0.5;
-#else
-            1.0;
-#endif
-
-        static double t_start =
-#if file_human
-            t_stand_zmp;
-#else
-            t_init;
-#endif
+if ((file_human || file_walk)) {
+        static double speed = file_human ? 0.5 : 1.0;
+        static double t_start = file_human ? t_stand_zmp : t_init;
 
         static double gain_1, gain_2;
         static int pos_in_file = 1;
@@ -1623,12 +1652,12 @@ int main(int argc, char *argv[])
                 opd[j] = gain_1 * opd_old2[j] + gain_2 * opd_old[j];
             }
         }
-#endif
+}
 
 
 
 
-#if file_hoap
+if (file_hoap) {
         static double speed=1.0;
         static double gain_1,gain_2;
         static int pos_in_file=1;
@@ -1671,11 +1700,10 @@ int main(int argc, char *argv[])
         }
         //CalcCoM(uLINK,CoM);
 
-#endif //file_hoap
+}
 
 
-#if file_human
-        static double z_f=1.0;
+if (file_human) {
         static double F2F_y=-0.078;
         static double F2F_min=-0.067;
         static double correction;
@@ -1718,7 +1746,7 @@ int main(int argc, char *argv[])
             Rodrigues(R,error,dt);
         }
 
-#elif file_walk
+} else if (file_walk) {
 
         if((t2)>=t_init)
         {
@@ -1740,7 +1768,7 @@ int main(int argc, char *argv[])
         dt=1.0;
         Rodrigues(R,error,dt);
 
-#else //file_human
+} else {
         static double F2F_y=-0.078;
         if((t2)>=t_init)
         {
@@ -1768,7 +1796,7 @@ int main(int argc, char *argv[])
             dt=dt*(t_init-(t2))/t_init;
             Rodrigues(R,error,dt);
         }
-#endif //file_human
+}
 
 
 //
@@ -1794,9 +1822,8 @@ int main(int argc, char *argv[])
 
 
 
-#if file_human
+if (file_human) {
 
-        static double foot_h;
         if(t2>t_init)
         {
             double z_val = opd[2]-opd[8]-CoM_Z_offset;
@@ -1821,7 +1848,7 @@ int main(int argc, char *argv[])
         //p(1) = p(1+correction/2);
 
 
-#elif file_walk
+} else if (file_walk) {
 
 
         if(t2>t_init)
@@ -1838,18 +1865,18 @@ int main(int argc, char *argv[])
             p(2) = ((p(2)*(t_init-(t2))/t_init)+(opd[2]*(t2)/t_init));
         }
 
-#else //file_human
+} else {
 static float wi;
 //wi=wO-(t2-t_stand_zmp)*1/25;
 //wi=3.0*exp(-(t2-t_stand_zmp)/50);
 //wi=1.5*exp(-(t2-t_stand_zmp)/100);
 wi=1.1*exp(-(t2-t_stand_zmp)/170);
 
-#if save_data_quick_temp
+if (save_data_quick_temp) {
 
         buff_temp[(i-1)*temp_size+19]=wi;
 
-#endif //save_data_quick_temp
+}
 
         if(t2>t_stand_zmp)
         {
@@ -1879,7 +1906,7 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
             //it's ok
         }
 
-#endif //file_human
+}
 
         //taskCoMR = uLINK[Status.right_foot_ID].R * p;
         taskCoML = p;//-foot.p
@@ -1893,7 +1920,7 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
 
 
 
-#if zmp_filtering
+if (zmp_filtering) {
         static Eigen::Vector3d zmp_left = Eigen::Vector3d::Zero();
         static Eigen::Vector3d zmp_right = Eigen::Vector3d::Zero();
         static Eigen::Vector3d zmp_moy = Eigen::Vector3d::Zero();
@@ -1937,7 +1964,7 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
             zmp_right(1) = zmp_f.zmp_right.y/1000;
 
 
-#if !old_zmp
+if (!old_zmp) {
 
 
             static double alpha;
@@ -2000,7 +2027,7 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
                     taskZMP(1) = zmp_y_magin;
                 }
                 taskZMP(2) = 0.0;
-#if zmp_feedback
+if (zmp_feedback) {
 
             if(t2>t_init)
             {
@@ -2011,10 +2038,10 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
                 //taskCoML += zmpsp;
                 taskCoML += taskZMP;
             }
-#endif
+}
 
 //limites sur taskzmp et sa derivee
-#if save_data_quick_temp
+if (save_data_quick_temp) {
 //                buff_temp[(i-1)*temp_size]=taskCoML(0);
 //                buff_temp[(i-1)*temp_size+1]=taskCoML(1);
 //                buff_temp[(i-1)*temp_size+2]=taskCoML(2);
@@ -2034,11 +2061,11 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
         buff_temp[(i-1)*temp_size+26]=taskZMP(0);
         buff_temp[(i-1)*temp_size+27]=taskZMP(1);
         buff_temp[(i-1)*temp_size+28]=taskZMP(2);
-#endif //save_data_quick_temp
+}
             }
-#endif //!old_zmp
+}
 
-#if old_zmp
+if (old_zmp) {
             zmp_left += uLINK[Status.left_foot_ID].p;
             zmp_right += uLINK[Status.right_foot_ID].p;
 
@@ -2092,9 +2119,9 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
                 }
 
 
-#if zmp_feedback
+if (zmp_feedback) {
                 taskCoML += taskZMP;
-#endif
+}
 
 //limites sur taskzmp et sa derivee
 //#if save_data_quick_temp
@@ -2111,15 +2138,15 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
 
 
             }
-#endif //old_zmp
+}
 
         }
 
-#endif //zmp_filtering
+}
 
 
 
-#if save_data_quick_temp
+if (save_data_quick_temp) {
         CalcCoM(uLINK,CoM);//-foot.p
 
         p.setZero();
@@ -2151,7 +2178,7 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
         buff_temp[(i-1)*temp_size+17]=CoM(1);
         buff_temp[(i-1)*temp_size+18]=CoM(2);
 
-#endif //save_data_quick_temp
+}
 
 
 
@@ -2199,7 +2226,7 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
 //debug -= dq;
 //PrintGSLVector(debug);
 
-#if oritrunk
+if (oritrunk) {
     CalcJacobianModif(uLINK,J1,idx1);
     gsl_matrix_get_row_m(J1_l, J1, 3);
     gsl_matrix_get_part2_m(J1_3, J1, 3, 6,0, dof);
@@ -2237,7 +2264,7 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
         dq += dqtmp;
 
 
-#endif // oritrunk
+}
 
 
 //        for (i=0; i<(nDoF-6); i++)
@@ -2253,17 +2280,17 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
         }
 
         // fourth task
-#if oritrunk
+if (oritrunk) {
         Ptilde = P2;
 //        pinv(invJCoM,Jtilde);
 //        Ptmp = invJCoM * Jtilde;
         pinv(invJtilde2,Jtilde2);
         Ptmp = invJtilde2 * Jtilde2;
-#else
+} else {
         Ptilde = P1;
         pinv(invJCoM,Jtilde);
         Ptmp = invJCoM * Jtilde;
-#endif // oritrunk
+}
         Ptilde -= Ptmp;
 
 
@@ -2281,7 +2308,7 @@ wi=1.1*exp(-(t2-t_stand_zmp)/170);
         }
 
 
-#if network
+if (network) {
 static const float dqlim=0.12;
 
 
@@ -2325,7 +2352,7 @@ static const float dqlim=0.12;
 
         }
 
-#if file_hoap
+if (file_hoap) {
 
 //            for(j=0; j<21; j++)
 //            {
@@ -2337,12 +2364,12 @@ static const float dqlim=0.12;
             control.q[j]=(short)(oqd[j]);
         }
 
-#endif //file_hoap
+}
 
         hoapControl(hoap, &sensor, &control);
 
 
-#if save_data_long
+if (save_data_long) {
 
         for(j=0; j<dof; j++)
         {
@@ -2355,9 +2382,7 @@ static const float dqlim=0.12;
             fprintf(qd_file,"%d ",control.q[j]);
         }
         fprintf(qd_file,"\n");
-//        static unsigned __int64 val;
-//        QueryPerformanceCounter( (LARGE_INTEGER *)&val );
-        fprintf(t_file,"%f \n",(double)(val - baseTime_) * freq_);
+        fprintf(t_file,"%f \n", t2);
 
         for(j=0; j<dof; j++)
         {
@@ -2365,8 +2390,8 @@ static const float dqlim=0.12;
         }
         fprintf(dq_file,"\n");
 
-#endif //save_data_long
-#if save_data_quick
+}
+if (save_data_quick) {
         buff_sensor[i-1]=sensor;
         //buff_control[i-1]=control;
         buff_zmp_c[i-1]=zmp_c;
@@ -2375,7 +2400,7 @@ static const float dqlim=0.12;
 //        QueryPerformanceCounter( (LARGE_INTEGER *)&val_ );
 //        buff_t[i-1]=(double)(val_ - baseTime_) * freq_;
         buff_t[i-1]=t2;
-#endif //save_data_quick
+}
 
 
 //        for(j=0; j<(dof); j++)
@@ -2383,7 +2408,7 @@ static const float dqlim=0.12;
 //            uLINK[map[j]].q = deg2rad*control.q[j]*motor_rotation[j]/209;
 //        }
 
-#else //network
+} else {
         for(j=0; j<(dof); j++)
         {
             if(uLINK[map[j]].fixed==0)
@@ -2392,7 +2417,7 @@ static const float dqlim=0.12;
             }
             buff_data.val[j]=rad2deg*motor_rotation[j]*uLINK[map[j]].q*209;
         }
-#endif //network
+}
 
 
 
@@ -2427,14 +2452,14 @@ static const float dqlim=0.12;
 //        }
 
 
-#if file_human
+if (file_human) {
         uLINK[baseFoot].p(0) = opd[6];
         uLINK[baseFoot].p(1) = opd[7];
         uLINK[baseFoot].p(2) = opd[8]*z_f+foot_h+foot_Z_offset;
         uLINK[baseFoot].p *= scale_task_F2F;
         uLINK[baseFoot].R.setIdentity();
         NodeForwardKinematics(uLINK,baseFoot,0);
-#else //file_human
+} else {
         if(uLINK[Status.right_foot_ID].p(2)<uLINK[Status.left_foot_ID].p(2))
         {
             uLINK[Status.right_foot_ID].p(2) = 0.04;
@@ -2454,7 +2479,7 @@ static const float dqlim=0.12;
 
 //        uLINK[baseFoot].p.setZero();
 //        uLINK[baseFoot].p(2) = 0.04;
-#endif //file_human
+}
 
 
 //        uLINK[baseFoot].R.setIdentity();
@@ -2462,11 +2487,11 @@ static const float dqlim=0.12;
 
 
 
-#endif //network
+}
 
         ForwardKinematics(uLINK,1);
 
-#if !Light
+if (!Light) {
         sprintf(title,"Visualisation t= %3.3f", t2);
         SDL_SetWindowTitle(window, title);
 
@@ -2477,38 +2502,38 @@ static const float dqlim=0.12;
 
 
 
-#endif //!Light
+}
 
 
     }
 
-#if file_motor
+if (file_motor) {
     fclose(file);
-#endif //file_motor
+}
 
-#if network
+if (network) {
     hoapDisconnect(hoap);
-#endif //network
+}
 
 
-#if save_data_long
+if (save_data_long) {
     fclose(q_file);
     fclose(qd_file);
     fclose(t_file);
     fclose(dq_file);
-#endif //save_data_long
+}
 
-#if save_data_quick
+if (save_data_quick) {
 
     FILE *sensor_file=fopen("./../../Simu_data/sensor.txt","w");
     //FILE *control_file=fopen("./../../Simu_data/control.txt","w");
     FILE *zmp_file=fopen("./../../Simu_data/zmp.txt","w");
     FILE *zmpf_file=fopen("./../../Simu_data/zmpf.txt","w");
-    FILE *t_file=fopen("./../../Simu_data/t.txt","w");
+    t_file=fopen("./../../Simu_data/t.txt","w");
 
-#if save_data_quick_temp
-    FILE *temp_file=fopen("./../../Simu_data/temp.txt","w");
-#endif //save_data_quick_temp
+if (save_data_quick_temp) {
+    temp_file=fopen("./../../Simu_data/temp.txt","w");
+}
 
     double  *temp;
     temp = (double *)calloc(((i-2)*21),sizeof(double));
@@ -2586,13 +2611,13 @@ static const float dqlim=0.12;
         fprintf(t_file,"%f ",buff_t[k]);
         fprintf(t_file,"\n");
 
-#if save_data_quick_temp
+if (save_data_quick_temp) {
         for(j=0; j<temp_size; j++)
         {
             fprintf(temp_file,"%f ",buff_temp[k*temp_size+j]);
         }
         fprintf(temp_file,"\n");
-#endif //save_data_quick_temp
+}
 
     }
 //    fwrite(&buff_sensor, (i-2)*sizeof(HoapSensor), 1, sensor_file);
@@ -2603,11 +2628,12 @@ static const float dqlim=0.12;
 //    fclose(control_file);
     fclose(zmp_file);
     fclose(t_file);
-#if save_data_quick_temp
+if (save_data_quick_temp) {
     fclose(temp_file);
-#endif //save_data_quick_temp
+}
 
-#if mathGL
+if (mathGL) {
+#if HAVE_MATHGL
     int dat,dat2,datt;
     int dat_q[21];
     HMGL gr = mgl_create_graph(1024, 768);//600,400);
@@ -2671,12 +2697,13 @@ static const float dqlim=0.12;
     mgl_delete_data (datt);
     mgl_delete_graph(gr);
 
-#endif //mathGL
+#endif
+}
 
     free(buff_sensor);
     free(buff_zmp_c);
     free(buff_t);
-#endif //save_data_quick
+}
 
 
 
@@ -2729,7 +2756,7 @@ static const float dqlim=0.12;
 
 
 
-#if Ext_traj
+#if 0 // Obsolete GSL-based Ext_traj block
     for (i = 0; i < 50; i++)
     {
 
@@ -2912,7 +2939,7 @@ static const float dqlim=0.12;
 //    return EXIT_SUCCESS; // Fermeture du programme
 #endif
 
-#endif
+}
 
 
 
@@ -2933,13 +2960,13 @@ static const float dqlim=0.12;
 
     if (Visualisation)
     {
-        FILE *q_file=fopen("./../Simu_data/q.txt","w");
+        q_file=fopen("./../Simu_data/q.txt","w");
         fclose(q_file);
 
-        FILE *qd_file=fopen("./../Simu_data/qd.txt","w");
+        qd_file=fopen("./../Simu_data/qd.txt","w");
         fclose(qd_file);
 
-        FILE *t_file=fopen("./../Simu_data/t.txt","w");
+        t_file=fopen("./../Simu_data/t.txt","w");
         fclose(t_file);
 
         FILE *pBody_file=fopen("./../Simu_data/pBody.txt","w");
@@ -2965,7 +2992,7 @@ static const float dqlim=0.12;
         FILE *deb2_file=fopen("./../Simu_data/deb2.txt","w");
         fclose(deb2_file);
 
-        FILE *dq_file=fopen("./../Simu_data/dq.txt","w");
+        dq_file=fopen("./../Simu_data/dq.txt","w");
         fclose(dq_file);
 
         FILE *p_file=fopen("./../Simu_data/p.txt","w");
@@ -3084,7 +3111,7 @@ static const float dqlim=0.12;
             sprintf(title,"Visualisation t= %3.3f", t*Dtime);
             SDL_SetWindowTitle(window, title);
 
-#if StaticCOM
+if (StaticCOM) {
             uLINK[1].p(2) = Lc+Lt+Lp-0.07;
             pos(0) = -0.10;
             pos(1) = 0.21;
@@ -3107,7 +3134,7 @@ static const float dqlim=0.12;
             uLINK[12].q=q(4);
             uLINK[13].q=q(5);
             ForwardKinematics(uLINK,1);
-#endif
+}
 
             DrawScene(uLINK, &Status, &CamParam);
 
@@ -3126,7 +3153,7 @@ static const float dqlim=0.12;
             //angular_z+=M_PI*0.02;
 
         }
-#if !StaticCOM
+if (!StaticCOM) {
         //else
         {
             //uLINK[1].p.setZero();
@@ -3136,7 +3163,7 @@ static const float dqlim=0.12;
             IntegrateEuler(uLINK,1);
             /// \todo Runge kuta
         }
-#endif
+}
 
     }
 

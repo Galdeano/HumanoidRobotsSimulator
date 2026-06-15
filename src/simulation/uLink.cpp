@@ -12,9 +12,9 @@
 
 #include "Setup.h"
 
-#if ROBOT_SHERPA
-void SetupRobot(SuLINK uLINK[],State *Status)
+void SetupRobotSherpa(SuLINK uLINK[],State *Status)
 {
+    int NbLinks = 14;
 
 
     double Hy=0.155*2;
@@ -352,7 +352,7 @@ void SetupRobot(SuLINK uLINK[],State *Status)
 
 
 
-    FindMother(uLINK,1);
+    FindMother(uLINK,Status,1);
 
     ForwardKinematics(uLINK,1);
 
@@ -373,15 +373,13 @@ void SetupRobot(SuLINK uLINK[],State *Status)
 
 
 }
-#endif
 
 //----------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------
 
 
-#if ROBOT_GENERIC
-void SetupRobot(SuLINK uLINK[],State *Status)
+void SetupRobotGeneric(SuLINK uLINK[],State *Status)
 {
 
 
@@ -391,11 +389,7 @@ void SetupRobot(SuLINK uLINK[],State *Status)
     double Lt=0.510;
     double Lp=0.1104;
 
-    int  RLEG = 2;
-    int  LLEG = 8;
-    int  SPINE = 14;
-    int  RARM = 16;
-    int  LARM = 19;
+    // Generic joint indices are defined as macros in Setup.h
 
     int  NbLinks = 22;
 
@@ -927,7 +921,15 @@ void SetupRobot(SuLINK uLINK[],State *Status)
     
 
 }
-#endif
+
+void SetupRobot(SuLINK uLINK[],State *Status)
+{
+    if (ROBOT_SHERPA) {
+        SetupRobotSherpa(uLINK, Status);
+    } else {
+        SetupRobotGeneric(uLINK, Status);
+    }
+}
 
 
 

@@ -1,217 +1,126 @@
 #ifndef H_Setup
 #define H_Setup
 
-/** \file Setup.h
- *  \brief Contain setup of simulations
- *  \author    David Galdeano
- *  \date      10/2011
- */
+#include <string>
 
+struct SimuConfig {
+    int play_csv;
+    int zmp_filtering;
+    int zmp_feedback;
+    int old_zmp;
+    int save_data_long;
+    int save_data_quick;
+    int save_data_quick_temp;
+    int file_motor;
+    int network;
+    int local;
+    int replay;
+    int Tasks;
+    int file_human;
+    int file_hoap;
+    int file_walk;
+    int Light;
+    int shadow;
+    int colorsGL;
+    int materials;
+    int mathGL;
+    int GroundResolution;
+    int oritrunk;
+    int oritrunk3;
+    int LoadObj;
+    int Scenarios;
+    int Trajectories;
+    int Ext_traj;
+    int Video;
+    int Suspendu;
+    int Visualisation;
+    double Te;
+    double Dtime;
+    int ROBOT_SHERPA;
+    int ROBOT_GENERIC;
+    int ROBOT_HUMAN;
+    int CMD_PD;
+    int CMD_DYNAMIC;
+    int CMD_TASK;
+    int StaticCOM;
+    int VisuArticularsLimits;
+    int VisuTorquesColor;
+    int baseFoot;
+    int xContact;
+    int yContact;
+    int linearDamper;
+    int nonLinearDamper;
+    int active_scenario;
 
-#define play_csv 0
-#define zmp_filtering 1
-#define zmp_feedback 1//
-#define old_zmp 0
-#define save_data_long 0
-#define save_data_quick 1
-#define save_data_quick_temp 1
+    bool loadFromFile(const std::string& filepath);
+};
 
-#define file_motor 0
-#define network 0
+extern SimuConfig config;
 
-#define local 1//
-#define replay 0
-#define Tasks 1
-#define file_human 0
-#define file_hoap 0
-#define file_walk 1//
+#ifndef BUILD_SETUP_CPP
+// For compatibility, define macros that expand to config fields:
+#define play_csv config.play_csv
+#define zmp_filtering config.zmp_filtering
+#define zmp_feedback config.zmp_feedback
+#define old_zmp config.old_zmp
+#define save_data_long config.save_data_long
+#define save_data_quick config.save_data_quick
+#define save_data_quick_temp config.save_data_quick_temp
+#define file_motor config.file_motor
+#define network config.network
+#define local config.local
+#define replay config.replay
+#define Tasks config.Tasks
+#define file_human config.file_human
+#define file_hoap config.file_hoap
+#define file_walk config.file_walk
+#define Light config.Light
+#define shadow config.shadow
+#define colorsGL config.colorsGL
+#define materials config.materials
+#define mathGL config.mathGL
+#define GroundResolution config.GroundResolution
+#define oritrunk config.oritrunk
+#define oritrunk3 config.oritrunk3
+#define LoadObj config.LoadObj
+#define Scenarios config.Scenarios
+#define Trajectories config.Trajectories
+#define Ext_traj config.Ext_traj
+#define Video config.Video
+#define Suspendu config.Suspendu
+#define Visualisation config.Visualisation
+#define Te config.Te
+#define Dtime config.Dtime
+#define ROBOT_SHERPA config.ROBOT_SHERPA
+#define ROBOT_GENERIC config.ROBOT_GENERIC
+#define ROBOT_HUMAN config.ROBOT_HUMAN
+#define CMD_PD config.CMD_PD
+#define CMD_DYNAMIC config.CMD_DYNAMIC
+#define CMD_TASK config.CMD_TASK
+#define StaticCOM config.StaticCOM
+#define VisuArticularsLimits config.VisuArticularsLimits
+#define VisuTorquesColor config.VisuTorquesColor
+#define baseFoot config.baseFoot
+#define xContact config.xContact
+#define yContact config.yContact
+#define linearDamper config.linearDamper
+#define nonLinearDamper config.nonLinearDamper
 
-#define Light 0//
-#define shadow 1
-#define colorsGL 0
-#define materials 1
-#define mathGL 0
-#define GroundResolution 20
-
-#define oritrunk 1//
-#define oritrunk3 1//
-
-#define LoadObj 1
-/*! \def LoadObj
-    \brief 1: Load and displays the mechs associated to the model if they exists
-*/
-
-
-#define Scenarios 0
-/*! \def Scenarios
-    \brief Uses trajectories from scenarios for demonstrations purposes
-*/
-#define Trajectories 1
-/*! \def Trajectories
-    \brief Uses trajectories for tasks
-*/
-#define Ext_traj 0
-/*! \def Ext_traj
-    \brief Uses trajectories from file
-*/
-#if (Scenarios + Trajectories + Ext_traj)!=1
-#error Choose between Typical scenarios or Task trajectories
-#error Check Sc* defs
+// Scenario macro definitions for scenario selection
+#define Sc1 (config.active_scenario == 1)
+#define Sc2 (config.active_scenario == 2)
+#define Sc3 (config.active_scenario == 3)
+#define Sc4 (config.active_scenario == 4)
+#define Sc5 (config.active_scenario == 5)
+#define Sc6 (config.active_scenario == 6)
+#define Sc7 (config.active_scenario == 7)
 #endif
 
-
-
-
-#if Scenarios
-//Choose scenario
-#define Sc1 0
-/*! \def Sc1
-    \brief Scenario 1: Squat task, variation of Hip Cartesian position on z axis
-*/
-#define Sc2 0
-/*! \def Sc2
-    \brief Scenario 2: Variation of Hip carthesian position on y axis
-*/
-#define Sc3 0
-/*! \def Sc3
-    \brief Scenario 3: Variation of Ankle articular orientation around y axis
-*/
-#define Sc4 1
-/*! \def Sc4
-    \brief Scenario 4: Variation of Arm articular orientation around y axis
-*/
-#define Sc5 0
-/*! \def Sc5
-    \brief Scenario 5: Variation of Trunk articular orientation around y axis
-*/
-#define Sc6 0
-/*! \def Sc6
-    \brief Scenario 6: Variation of Trunk and Arm articular orientation around y axis
-*/
-#define Sc7 0
-/*! \def Sc7
-    \brief Scenario 7: Variation of Hip and Ankle articular orientation around x axis
-*/
-
-#if (Sc1 + Sc2 + Sc3 + Sc4 + Sc5 + Sc6+ Sc7)!=1
-#error Only one scenario can be choose
-#error Check Sc* defs
-#endif
-#endif
-
-
-
-
-#define Video 0
-/*! \def Video
-    \brief Record images of the simulation
-*/
-#define Suspendu 0
-/*! \def Suspendu
-    \brief 1 if the robot is hanged and dont touch the ground
-*/
-#define Visualisation 1
-/*! \def Visualisation
-    \brief Record variables of the simulation
-*/
-
-
-#define Te 0.005
-/*! \def Te
-    \brief Sampling period of control loop in second
-*/
-
-#define Dtime 0.0001
-/*! \def Dtime
-    \brief Simulation sampling period
-*/
-
-//Choose Robot model
-#define ROBOT_SHERPA 0
-/*! \def ROBOT_SHERPA
-    \brief Sherpa robot model is used
-*/
-#define ROBOT_GENERIC 1
-/*! \def ROBOT_GENERIC
-    \brief Generic robot model is used
-*/
-#define ROBOT_HUMAN 0
-/*! \def ROBOT_HUMAN
-    \brief Human model is used
-*/
-#if (ROBOT_SHERPA + ROBOT_GENERIC + ROBOT_HUMAN)!=1
-#error Both Sherpa and Generic robot model are specified
-#error Check Sherpa and Generic defs
-#endif
-
-
-
-//Choose Command
-#define CMD_PD 0
-/*! \def CMD_PD
-    \brief Proportional derivative command is used
-*/
-#define CMD_DYNAMIC 0
-/*! \def CMD_DYNAMIC
-    \brief Dynamic command is used
-*/
-#define CMD_TASK 1
-/*! \def CMD_TASK
-    \brief Task control is used
-*/
-
-#if (CMD_PD + CMD_DYNAMIC + CMD_TASK)!=1
-#error Both PD and Dynamic command are specified
-#error Check PD and Dynamic defs
-#endif
+// Generic Robot model joint index definitions
+#define RLEG 2
+#define LLEG 8
+#define SPINE 14
+#define RARM 16
+#define LARM 19
 
 #endif
-
-
-//Debug
-#define StaticCOM 0
-/*! \def StaticCOM
-    \brief 1: do not compute the dynamic of the robot
-
-    For debug use only
-*/
-
-
-#define VisuArticularsLimits 0
-/*! \def VisuArticulaLimits
-    \brief 1: display articular range of motion
-*/
-
-#define VisuTorquesColor 1
-/*! \def VisuTorquesColor
-    \brief 1: display toques via color change on joints articulation
-*/
-
-#define baseFoot 13
-/*! \def base
-    \brief base link for computation
-*/
-
-
-// Contacts
-#define xContact 5
-#define yContact 4
-#define linearDamper 1
-/*! \def linearDamper
-    \brief 1: Use a spring damper contact
-*/
-
-#define nonLinearDamper 0
-/*! \def nonLinearDamper
-    \brief 1: Use a non linear damper contact
-*/
-
-#if (linearDamper + nonLinearDamper)!=1
-#error Both linearDamper and nonLinearDamper contact model are specified
-#error Check linearDamper and nonLinearDamper defs
-#endif
-
-
-
-
-

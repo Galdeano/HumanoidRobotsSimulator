@@ -72,24 +72,25 @@ void ExternalForces(SuLINK uLINK[], State *Status, int j, Eigen::Vector3d & f, E
                 Eigen::Vector3d pos_i = uLINK[j].pcontact.col(i);
                 Eigen::Vector3d v = uLINK[j].w.cross(pos_i) + uLINK[j].vo;
 
-#if linearDamper
-                double Kf = 500000.0;
-                double Df = 700.0;
-                ftmp(0) = Df * v(0);
-                ftmp(1) = Df * v(1);
-                ftmp(2) = Kf * (uLINK[j].pcontact(2, i) - uLINK[j].supportHeight) + Df * v(2);
-#endif
-
-#if nonLinearDamper
-                double Kf = 5750.0;
-                double Df = 60.0;
-                double Df2 = 450.0;
-                double pp = 1.2;
-                double pd = 0.02;
-                ftmp(0) = Df * v(0);
-                ftmp(1) = Df * v(1);
-                ftmp(2) = Kf * std::pow(uLINK[j].pcontact(2, i) - uLINK[j].supportHeight, pp) + Df2 * v(2) * std::pow(uLINK[j].pcontact(2, i) - uLINK[j].supportHeight, pd);
-#endif
+                if (linearDamper)
+                {
+                    double Kf = 500000.0;
+                    double Df = 700.0;
+                    ftmp(0) = Df * v(0);
+                    ftmp(1) = Df * v(1);
+                    ftmp(2) = Kf * (uLINK[j].pcontact(2, i) - uLINK[j].supportHeight) + Df * v(2);
+                }
+                else if (nonLinearDamper)
+                {
+                    double Kf = 5750.0;
+                    double Df = 60.0;
+                    double Df2 = 450.0;
+                    double pp = 1.2;
+                    double pd = 0.02;
+                    ftmp(0) = Df * v(0);
+                    ftmp(1) = Df * v(1);
+                    ftmp(2) = Kf * std::pow(uLINK[j].pcontact(2, i) - uLINK[j].supportHeight, pp) + Df2 * v(2) * std::pow(uLINK[j].pcontact(2, i) - uLINK[j].supportHeight, pd);
+                }
 
                 if (ftmp(2) > 0.0)
                 {
