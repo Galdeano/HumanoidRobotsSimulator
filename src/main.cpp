@@ -136,7 +136,11 @@ if (file_human) {
 int main(int argc, char *argv[])
 {
     // Dynamic configuration variables declared at outer scope to prevent compilation/scoping errors
-    config.loadFromFile("config.xml");
+    std::string config_path = "config.xml";
+    if (argc > 1) {
+        config_path = argv[1];
+    }
+    config.loadFromFile(config_path);
     FILE *q_file = nullptr;
     FILE *qd_file = nullptr;
     FILE *t_file = nullptr;

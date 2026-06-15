@@ -44,7 +44,10 @@ def main():
     
     # 4. Start the process without redirecting stdout/stderr so that 
     # the console/graphics output is visible directly.
-    process = subprocess.Popen([exe_path], cwd=project_root, env=env)
+    args = [exe_path]
+    if len(sys.argv) > 2:
+        args.append(sys.argv[2])
+    process = subprocess.Popen(args, cwd=project_root, env=env)
     
     # Allow custom run duration via command line argument (default to 5.0 seconds)
     run_duration = 5.0
