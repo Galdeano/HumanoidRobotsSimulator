@@ -53,6 +53,7 @@ void init_default_config() {
     config.linearDamper = 1;
     config.nonLinearDamper = 0;
     config.active_scenario = 4;
+    config.integrator = "symplectic";
 }
 
 bool SimuConfig::loadFromFile(const std::string& filepath) {
@@ -121,6 +122,7 @@ bool SimuConfig::loadFromFile(const std::string& filepath) {
     PARSE_INT(linearDamper)
     PARSE_INT(nonLinearDamper)
     PARSE_INT(active_scenario)
+    if (root.child("integrator")) { integrator = root.child("integrator").text().as_string(); }
 
     #undef PARSE_INT
     #undef PARSE_DOUBLE

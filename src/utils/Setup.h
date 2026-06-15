@@ -51,6 +51,7 @@ struct SimuConfig {
     int linearDamper;
     int nonLinearDamper;
     int active_scenario;
+    std::string integrator;
 
     bool loadFromFile(const std::string& filepath);
 };
@@ -58,6 +59,7 @@ struct SimuConfig {
 extern SimuConfig config;
 
 #ifndef BUILD_SETUP_CPP
+#define IntegratorMode config.integrator
 // For compatibility, define macros that expand to config fields:
 #define play_csv config.play_csv
 #define zmp_filtering config.zmp_filtering

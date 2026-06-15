@@ -54,6 +54,8 @@ void cleanup_sdl(void) {
 #include "PrintState.h"
 #include "bmp.h"
 #include "IntegrateEuler.h"
+#include "IntegrateSymplectic.h"
+#include "IntegrateRK4.h"
 #include "ForwardDynamics.h"
 #include "ForwardKinematics.h"
 #include "LoadRobot.h"
@@ -3164,8 +3166,13 @@ if (!StaticCOM) {
             //uLINK[1].p(2) = 1.2;
             //uLINK[1].vo.setZero();
             ForwardDynamics(uLINK,&Status,t);
-            IntegrateEuler(uLINK,1);
-            /// \todo Runge kuta
+            if (IntegratorMode == "symplectic") {
+                IntegrateSymplectic(uLINK, 1);
+            } else if (IntegratorMode == "rk4") {
+                IntegrateRK4(uLINK, &Status, (double)t);
+            } else {
+                IntegrateEuler(uLINK, 1);
+            }
         }
 }
 

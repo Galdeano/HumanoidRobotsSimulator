@@ -46,4 +46,5 @@
     <linearDamper>1</linearDamper>
     <nonLinearDamper>0</nonLinearDamper>
     <active_scenario>4</active_scenario>
+    <integrator>symplectic</integrator>
 </Config>
